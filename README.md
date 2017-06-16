@@ -9,26 +9,26 @@ This is fully working end to end sample including:
 * Persistence set up to allow access to DB entities using Hibernate/JPA  
 * Connects to the Config database to retrieve DB connection strings and Keycloak config
 
-##API Information  
+## API Information  
 
 The project is setup as follows.
 
-####database  
+#### database  
 Contains all the Java DB entities for the tables in the models folder and PersistenceManager which handles the connections to the DB.
  
-####endpoints  
+#### endpoints  
 Contains all the endpoints for the API where most of the code is held
 
-####framework
+#### framework
 Contains standard exception classes and swagger bootstrap code.  This is also where the Metrics are initialised on loading
 
-####json
+#### json
 JSON representations of the DB entities to allow communication between frontend and backend
 
-####Metrics 
+#### Metrics 
 Contains the standard implementations for the metrics code
 
-####Running API
+#### Running API
 create a run configuration in intelliJ using Tomcat -> Local.  
 In deployment tab, click + choose Artifact and select API:war exploded
 In the startup tab, click on debug and add these options into the environment variables. 
@@ -39,12 +39,12 @@ CONFIG_JDBC_URL=jdbc:postgresql://localhost:5432/config
 
 Click run and it should be up and running.
 
-##Frontend Information
+## Frontend Information
 This is using Angular CLI so use this for creating any new components.  https://cli.angular.io/ for more information.
 
 service.ts files are used to communicate with the API.
 
-####Running Frontend.  
+#### Running Frontend.  
 Create a run configuration in intelliJ using npm
 in the script input type start
 Click run and it should start running on [http://localhost:4200](http://localhost:4200/) 
