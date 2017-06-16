@@ -20,7 +20,7 @@ public class SwaggerBootstrap extends HttpServlet {
                 .title("Information Model API")
                 .description("Information Model API");
 
-        System.out.println("hello!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("API is running!!!");
 
         String baseAuthUrl = ConfigService.instance().getAuthConfig().getAuthServerUrl() +
                 "/realms/" + ConfigService.instance().getAuthConfig().getRealm() + "/protocol/openid-connect";

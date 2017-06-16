@@ -34,7 +34,7 @@ public class InformationModelEndpoint {
                         @ApiParam(value = "Optional Name of concept") @QueryParam("conceptName") String conceptName,
                         @ApiParam(value = "Optional Array of concept Ids") @QueryParam("conceptIdList") List<Integer> conceptIdList
     ) throws Exception {
-        System.out.println("ohhhhhh yes");
+        System.out.println("Get Called");
 
         if (conceptId == null && conceptName == null && conceptIdList.size() == 0) {
             return getAllConcepts();
