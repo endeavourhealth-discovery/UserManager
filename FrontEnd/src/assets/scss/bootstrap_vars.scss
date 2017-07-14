@@ -3,7 +3,7 @@
 // Copy settings from this file into the provided `_custom.scss` to override
 // the Bootstrap defaults without modifying key, versioned files.
 
-$global_rem_scale: (14/16)rem !default;
+$global_rem_scale: (14rem/16) !default; // Browser default typically `16px` so scale to 14px
 
 // Table of Contents
 //
