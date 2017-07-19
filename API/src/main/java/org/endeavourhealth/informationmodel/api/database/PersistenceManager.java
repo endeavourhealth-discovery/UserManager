@@ -30,7 +30,7 @@ public class PersistenceManager {
             return;
         }
 
-        JsonNode json = ConfigManager.getConfigurationAsJson("informationmodelDB");
+        JsonNode json = ConfigManager.getConfigurationAsJson("database");
         String url = json.get("url").asText();
         String user = json.get("username").asText();
         String pass = json.get("password").asText();
@@ -41,6 +41,6 @@ public class PersistenceManager {
         properties.put("hibernate.connection.username", user);
         properties.put("hibernate.connection.password", pass);
 
-        entityManagerFactory = Persistence.createEntityManagerFactory("informationmodel", properties);
+        entityManagerFactory = Persistence.createEntityManagerFactory("OrganisationManager", properties);
     }
 }

@@ -2,35 +2,40 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import {KeycloakService} from "eds-angular4/dist/keycloak/keycloak.service";
-import {keycloakHttpFactory} from "eds-angular4/dist/keycloak/keycloak.http";
-import {Http, HttpModule, RequestOptions, XHRBackend} from "@angular/http";
-import {LayoutComponent} from "eds-angular4/dist/layout/layout.component";
-import {LayoutModule, MenuService} from "eds-angular4";
-import {AppMenuService} from "./app-menu.service";
-import {SettingsComponent} from "./settings/settings/settings.component";
-import {SettingsModule} from "./settings/settings.module";
-import {ConceptModellerComponent} from "./concept-modeller/concept-modeller/concept-modeller.component";
-import {ConceptModellerModule} from "./concept-modeller/concept-modeller.module";
+import {KeycloakService} from 'eds-angular4/dist/keycloak/keycloak.service';
+import {keycloakHttpFactory} from 'eds-angular4/dist/keycloak/keycloak.http';
+import {Http, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
+import {LayoutComponent} from 'eds-angular4/dist/layout/layout.component';
+import {LayoutModule, MenuService} from 'eds-angular4';
+import {AppMenuService} from './app-menu.service';
+import {SettingsComponent} from './settings/settings/settings.component';
+import {SettingsModule} from './settings/settings.module';
+import {ConceptModellerComponent} from './concept-modeller/concept-modeller/concept-modeller.component';
+import {ConceptModellerModule} from './concept-modeller/concept-modeller.module';
+import {OrganisationModule} from './organisation/organisation.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { OrganisationComponent } from './organisation/organisation/organisation.component';
+import { OrganisationOverviewComponent } from './organisation/organisation-overview/organisation-overview.component';
 
 export class DummyComponent {}
 
 const appRoutes: Routes = [
   { path: 'conceptModeller', component: ConceptModellerComponent },
   { path: 'settings', component: SettingsComponent },
-  { path: 'eds-user-manager', component: DummyComponent }
+  { path: 'organisation', component: OrganisationOverviewComponent}
 ];
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     BrowserModule,
     HttpModule,
     LayoutModule,
     SettingsModule,
     ConceptModellerModule,
-    RouterModule.forRoot(appRoutes)
+    OrganisationModule,
+    RouterModule.forRoot(appRoutes),
+    NgbModule.forRoot()
   ],
   providers: [
     KeycloakService,

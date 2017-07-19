@@ -59,7 +59,7 @@
     <!-- startup class, initializes config manager -->
     <context-param>
         <param-name>app_id</param-name>
-        <param-value>eds-information-modeller</param-value>
+        <param-value>data-sharing-manager</param-value>
     </context-param>
     <listener>
         <listener-class>
