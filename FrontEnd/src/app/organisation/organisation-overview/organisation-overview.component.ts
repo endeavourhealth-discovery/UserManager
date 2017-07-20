@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {Organisation} from '../models/Organisation';
@@ -7,6 +7,8 @@ import {OrganisationService} from '../organisation.service';
 // import {Region} from '../region/models/Region';
 import {OrganisationManagerStatistics} from '../models/OrganisationManagerStatistics';
 import {FileUpload} from '../models/FileUpload';
+import {LoggerService} from 'eds-angular4';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-organisation-overview',
@@ -31,8 +33,10 @@ export class OrganisationOverviewComponent {
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
               // private adminService: AdminService,
-              // private log: LoggerService,
-              private router: Router) {
+              private log: LoggerService,
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
     this.getOverview();
   }
 
@@ -49,7 +53,8 @@ export class OrganisationOverviewComponent {
     const vm = this;
     vm.organisationService.getOrganisationStatistics()
       .subscribe(result => {
-          vm.orgStats = result
+          vm.orgStats = result;
+          vm.log.success('Got the new stuff', null, 'Success');
         },
         error => console.log('Failed to load organisation statistics', error, 'Load service statistics')
       );

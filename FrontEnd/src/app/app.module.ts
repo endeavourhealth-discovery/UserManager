@@ -6,7 +6,7 @@ import {KeycloakService} from 'eds-angular4/dist/keycloak/keycloak.service';
 import {keycloakHttpFactory} from 'eds-angular4/dist/keycloak/keycloak.http';
 import {Http, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
 import {LayoutComponent} from 'eds-angular4/dist/layout/layout.component';
-import {LayoutModule, MenuService} from 'eds-angular4';
+import {LayoutModule, MenuService } from 'eds-angular4';
 import {AppMenuService} from './app-menu.service';
 import {SettingsComponent} from './settings/settings/settings.component';
 import {SettingsModule} from './settings/settings.module';
@@ -16,6 +16,8 @@ import {OrganisationModule} from './organisation/organisation.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { OrganisationComponent } from './organisation/organisation/organisation.component';
 import { OrganisationOverviewComponent } from './organisation/organisation-overview/organisation-overview.component';
+import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export class DummyComponent {}
 
@@ -29,13 +31,15 @@ const appRoutes: Routes = [
   declarations: [],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     LayoutModule,
     SettingsModule,
     ConceptModellerModule,
     OrganisationModule,
     RouterModule.forRoot(appRoutes),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    ToastModule.forRoot()
   ],
   providers: [
     KeycloakService,
