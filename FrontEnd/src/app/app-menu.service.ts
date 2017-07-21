@@ -11,7 +11,7 @@ export class AppMenuService implements  MenuService {
     return [
       {caption: 'Concept Modeller', state: 'conceptModeller', icon: 'fa fa-sitemap'},
       {caption: 'IM Settings', state: 'settings', icon: 'fa fa-cogs'},
-      {caption: 'Organisation', state: 'organisation', icon: 'fa fa-cogs'}
+      {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-cogs'}
     ];
   }
 }

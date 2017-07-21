@@ -1,4 +1,4 @@
-import {Component, Input, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnInit, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {Organisation} from '../models/Organisation';
@@ -15,7 +15,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
   templateUrl: './organisation-overview.component.html',
   styleUrls: ['./organisation-overview.component.css']
 })
-export class OrganisationOverviewComponent {
+export class OrganisationOverviewComponent implements OnInit {
   organisations: Organisation[];
   // regions: Region[] = [];
   services: Organisation[];
@@ -38,6 +38,9 @@ export class OrganisationOverviewComponent {
               public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
     this.getOverview();
+  }
+
+  ngOnInit() {
   }
 
   getOverview() {
@@ -239,11 +242,11 @@ export class OrganisationOverviewComponent {
     this.existingOrg = null;
 
   }*/
-/*
-  goToOrganisations() {
-    this.router.navigate('app.organisation', {mode: 'organisations'});
-  }
 
+  goToOrganisations() {
+    this.router.navigate(['/organisations', {mode: 'organisations'}]);
+  }
+/*
   goToServices() {
     this.$state.go('app.organisationManager', {mode: 'services'});
   }

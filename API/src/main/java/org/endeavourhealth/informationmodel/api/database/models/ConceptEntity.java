@@ -4,35 +4,31 @@ import org.endeavourhealth.informationmodel.api.database.PersistenceManager;
 import org.endeavourhealth.informationmodel.api.json.JsonConcept;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Entity
 @Table(name = "concept", schema = "information_model")
 public class ConceptEntity {
-    private long id;
+    private Integer id;
     private String name;
     private Byte status;
     private String shortName;
-    private String structureType;
-    private Long structureId;
-    private long count;
+    private String description;
+    private Integer clazz;
 
     @Id
     @Column(name = "id", nullable = false)
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 250)
+    @Column(name = "name", nullable = true, length = 250)
     public String getName() {
         return name;
     }
@@ -61,36 +57,6 @@ public class ConceptEntity {
         this.shortName = shortName;
     }
 
-    @Basic
-    @Column(name = "structure_type", nullable = true, length = 3)
-    public String getStructureType() {
-        return structureType;
-    }
-
-    public void setStructureType(String structureType) {
-        this.structureType = structureType;
-    }
-
-    @Basic
-    @Column(name = "structure_id", nullable = true)
-    public Long getStructureId() {
-        return structureId;
-    }
-
-    public void setStructureId(Long structureId) {
-        this.structureId = structureId;
-    }
-
-    @Basic
-    @Column(name = "count", nullable = false)
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,13 +65,9 @@ public class ConceptEntity {
         ConceptEntity that = (ConceptEntity) o;
 
         if (id != that.id) return false;
-        if (count != that.count) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (shortName != null ? !shortName.equals(that.shortName) : that.shortName != null) return false;
-        if (structureType != null ? !structureType.equals(that.structureType) : that.structureType != null)
-            return false;
-        if (structureId != null ? !structureId.equals(that.structureId) : that.structureId != null) return false;
 
         return true;
     }
@@ -116,10 +78,27 @@ public class ConceptEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
-        result = 31 * result + (structureType != null ? structureType.hashCode() : 0);
-        result = 31 * result + (structureId != null ? structureId.hashCode() : 0);
-        result = 31 * result + (int) (count ^ (count >>> 32));
         return result;
+    }
+
+    @Basic
+    @Column(name = "description", nullable = true, length = 10000)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Basic
+    @Column(name = "class", nullable = true)
+    public Integer getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Integer clazz) {
+        this.clazz = clazz;
     }
 
     public static List<ConceptEntity> getAllConcepts() throws Exception {
@@ -146,7 +125,7 @@ public class ConceptEntity {
         return ret;
     }
 
-    public static List<ConceptEntity> getConceptsByName(String conceptName) throws Exception {
+    public static List<ConceptEntity> getConceptsByName(String conceptName, Integer pageNumber, Integer pageSize) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -156,8 +135,30 @@ public class ConceptEntity {
         Predicate predicate = cb.like(cb.upper(rootEntry.get("name")), "%" + conceptName.toUpperCase() + "%");
 
         cq.where(predicate);
+        cq.orderBy(cb.asc(rootEntry.get("name")));
         TypedQuery<ConceptEntity> query = entityManager.createQuery(cq);
+        query.setFirstResult((pageNumber - 1) * pageSize);
+        query.setMaxResults(pageSize);
         List<ConceptEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static Long getCountOfConceptSearch(String conceptName) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<ConceptEntity> rootEntry = cq.from(ConceptEntity.class);
+
+        Predicate predicate = cb.like(cb.upper(rootEntry.get("name")), "%" + conceptName.toUpperCase() + "%");
+
+        cq.select((cb.countDistinct(rootEntry)));
+        cq.where(predicate);
+        Long ret = entityManager.createQuery(cq).getSingleResult();
+
 
         entityManager.close();
 
@@ -167,8 +168,7 @@ public class ConceptEntity {
     public static void deleteConcept(Integer conceptId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        Long conceptLong = Integer.toUnsignedLong(conceptId);
-        ConceptEntity conceptEntity = entityManager.find(ConceptEntity.class, conceptLong);
+        ConceptEntity conceptEntity = entityManager.find(ConceptEntity.class, conceptId);
         entityManager.getTransaction().begin();
         entityManager.remove(conceptEntity);
         entityManager.getTransaction().commit();
@@ -195,40 +195,32 @@ public class ConceptEntity {
         return ret;
     }
 
-    public static void saveConcept(JsonConcept concept) throws Exception {
+    public static JsonConcept saveConcept(JsonConcept concept) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        ConceptEntity conceptEntity = new ConceptEntity();
+        ConceptEntity conceptEntity = null;
+
+        if (concept.getId() != null)
+            conceptEntity = entityManager.find(ConceptEntity.class, concept.getId());
+        else {
+            conceptEntity = new ConceptEntity();
+            //Integer id = TableIdentityEntity.getNextId("Concept");
+            //conceptEntity.setId(id);
+            //concept.setId(id);
+        }
+
         entityManager.getTransaction().begin();
-        conceptEntity.setId(concept.getId());
         conceptEntity.setName(concept.getName());
         conceptEntity.setStatus(concept.getStatus());
-        conceptEntity.setShortName(concept.getShort_name());
-        conceptEntity.setStructureType(concept.getStructure_type());
-        conceptEntity.setStructureId(concept.getStructure_id());
-        conceptEntity.setCount(concept.getCount());
+        conceptEntity.setShortName(concept.getShortName());
+        conceptEntity.setDescription(concept.getDescription());
+        conceptEntity.setClazz(concept.getClazz());
         entityManager.persist(conceptEntity);
         entityManager.getTransaction().commit();
 
         entityManager.close();
-    }
 
-    public static void updateConcept(JsonConcept concept) throws Exception {
-        EntityManager entityManager = PersistenceManager.getEntityManager();
-
-        ConceptEntity cohortEntity = entityManager.find(ConceptEntity.class, concept.getId());
-        entityManager.getTransaction().begin();
-        cohortEntity.setId(concept.getId());
-        cohortEntity.setName(concept.getName());
-        cohortEntity.setStatus(concept.getStatus());
-        cohortEntity.setShortName(concept.getShort_name());
-        cohortEntity.setStructureType(concept.getStructure_type());
-        cohortEntity.setStructureId(concept.getStructure_id());
-        cohortEntity.setCount(1);
-        entityManager.persist(cohortEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        return concept;
     }
 
     public static List<ConceptEntity> getCommonConcepts(Integer limit) throws Exception {
@@ -238,7 +230,14 @@ public class ConceptEntity {
         CriteriaQuery<ConceptEntity> cq = cb.createQuery(ConceptEntity.class);
         Root<ConceptEntity> rootEntry = cq.from(ConceptEntity.class);
 
-        cq.orderBy(cb.desc(rootEntry.get("count")));
+        cq.where(
+                cb.and(
+                        cb.notEqual(rootEntry.get("clazz"), 1),
+                        cb.notEqual(rootEntry.get("clazz"), 15)
+                )
+        );
+
+        cq.orderBy(cb.asc(rootEntry.get("name")));
         TypedQuery<ConceptEntity> query = entityManager.createQuery(cq);
 
         query.setMaxResults(limit);
@@ -247,5 +246,77 @@ public class ConceptEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static void bulkSaveConcepts(List<ConceptEntity> conceptEntities) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+        int batchSize = 100000;
+        entityManager.getTransaction().begin();
+
+        for(int i = 0; i < conceptEntities.size(); ++i) {
+            ConceptEntity conceptEntity = conceptEntities.get(i);
+            entityManager.merge(conceptEntity);
+            if(i % batchSize == 0) {
+                //System.out.println(i + " completed");
+                entityManager.flush();
+                entityManager.clear();
+                entityManager.getTransaction().commit();
+
+                entityManager.getTransaction().begin();
+
+            }
+        }
+
+        entityManager.flush();
+        entityManager.clear();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
+    public static Integer setInactiveSnomedCodes(List<Integer> inactiveSnomedConcepts) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery(
+                "UPDATE ConceptEntity c set c.status = 0 where c.id in :inactive");
+        query.setParameter("inactive", inactiveSnomedConcepts);
+
+        int updatedCount = query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        System.out.println(updatedCount + " deleted");
+        entityManager.close();
+        return updatedCount;
+    }
+
+    public static List<ConceptEntity> getRelationshipConcepts() throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+        Query query = entityManager.createQuery(
+                "Select c from ConceptEntity c " +
+                        "where c.clazz = :clazz " +
+                        "order by c.id asc");
+        query.setParameter("clazz", 15);
+
+        List<ConceptEntity> resultList = query.getResultList();
+
+        entityManager.close();
+
+        return resultList;
+    }
+
+    public static List<ConceptEntity> getClassConcepts() throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+        Query query = entityManager.createQuery(
+                "Select c from ConceptEntity c " +
+                        "where c.clazz = :clazz " +
+                        "order by c.id asc");
+        query.setParameter("clazz", 1);
+
+        List<ConceptEntity> resultList = query.getResultList();
+
+        entityManager.close();
+
+        return resultList;
     }
 }

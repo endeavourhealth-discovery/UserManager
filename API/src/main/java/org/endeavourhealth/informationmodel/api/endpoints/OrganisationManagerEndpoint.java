@@ -460,7 +460,7 @@ public final class OrganisationManagerEndpoint extends AbstractEndpoint {
     private Response getOrganisations(String searchData, boolean searchServices,
                             Integer pageNumber, Integer pageSize,
                             String orderColumn, boolean descending) throws Exception {
-        Iterable<OrganisationEntity> organisations = OrganisationEntity.getOrganisations(searchData, searchServices,
+        List<OrganisationEntity> organisations = OrganisationEntity.getOrganisations(searchData, searchServices,
                 pageNumber, pageSize, orderColumn, descending);
 
         clearLogbackMarkers();

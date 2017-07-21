@@ -8,14 +8,17 @@ public class JsonConcept {
     private Integer id = null;
     private String name = null;
     private byte status = 0;
-    private String short_name = null;
-    private String structure_type = null;
-    private Long structure_id = null;
-    private Integer count = null;
+    private String shortName = null;
+    private String description = null;
+    private Integer clazz = null;
+//    private String structureType = null;
+//    private Long structureId = null;
+//    private Integer count = null;
 
     public Integer getId() {
         return id;
     }
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -37,35 +40,51 @@ public class JsonConcept {
         this.status = status;
     }
 
-    public String getShort_name() {
-        return short_name;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setShort_name(String short_name) {
-        this.short_name = short_name;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
-    public String getStructure_type() {
-        return structure_type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStructure_type(String structure_type) {
-        this.structure_type = structure_type;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Long getStructure_id() {
-        return structure_id;
+//    public String getStructureType() {
+//        return structureType;
+//    }
+//
+//    public void setStructureType(String structureType) {
+//        this.structureType = structureType;
+//    }
+//
+//    public Long getStructureId() {
+//        return structureId;
+//    }
+//
+//    public void setStructureId(Long structureId) {
+//        this.structureId = structureId;
+//    }
+//
+//    public Integer getCount() {
+//        return count;
+//    }
+//
+//    public void setCount(Integer count) {
+//        this.count = count;
+//    }
+
+    public Integer getClazz() {
+        return clazz;
     }
 
-    public void setStructure_id(Long structure_id) {
-        this.structure_id = structure_id;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setClazz(Integer clazz) {
+        this.clazz = clazz;
     }
 }

@@ -176,7 +176,7 @@ public class ConceptRelationshipEntity {
         conceptRelationshipEntity.setTargetConcept(conceptRelationship.getTargetConcept());
         conceptRelationshipEntity.setTargetLabel(conceptRelationship.getTargetLabel());
         conceptRelationshipEntity.setRelationshipOrder(conceptRelationship.getRelationship_order());
-        conceptRelationshipEntity.setRelationshipType(conceptRelationship.getRelationship_type());
+        //conceptRelationshipEntity.setRelationshipType(conceptRelationship.getRelationship_type());
         conceptRelationshipEntity.setCount((long)(1));
         entityManager.persist(conceptRelationshipEntity);
         entityManager.getTransaction().commit();

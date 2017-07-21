@@ -1,6 +1,5 @@
 package org.endeavourhealth.informationmodel.api.database.models;
 
-import org.endeavourhealth.core.data.admin.models.Organisation;
 import org.endeavourhealth.informationmodel.api.database.PersistenceManager;
 import org.endeavourhealth.informationmodel.api.json.JsonOrganisationManager;
 
@@ -89,8 +88,8 @@ public class OrganisationEntity {
     }
 
     public static List<OrganisationEntity> getOrganisations(String expression, boolean searchServices,
-                                                                                                          Integer pageNumber, Integer pageSize,
-                                                                                                          String orderColumn, boolean descending) throws Exception {
+                                                              Integer pageNumber, Integer pageSize,
+                                                              String orderColumn, boolean descending) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -420,7 +419,7 @@ public class OrganisationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.informationmodel.api.database.models.OrganisationEntity that = (org.endeavourhealth.informationmodel.api.database.models.OrganisationEntity) o;
+        OrganisationEntity that = (OrganisationEntity) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (alternativeName != null ? !alternativeName.equals(that.alternativeName) : that.alternativeName != null)

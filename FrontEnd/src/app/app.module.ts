@@ -24,7 +24,8 @@ export class DummyComponent {}
 const appRoutes: Routes = [
   { path: 'conceptModeller', component: ConceptModellerComponent },
   { path: 'settings', component: SettingsComponent },
-  { path: 'organisation', component: OrganisationOverviewComponent}
+  { path: 'organisationOverview', component: OrganisationOverviewComponent},
+  { path: 'organisations', component: OrganisationComponent}
 ];
 
 @NgModule({
