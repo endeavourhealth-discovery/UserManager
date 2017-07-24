@@ -2,16 +2,16 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
     <persistence-unit name="DataSharing">
-        <class>org.endeavourhealth.informationmodel.api.database.models.RegionEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.OrganisationEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.AddressEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataFlowEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataProcessingAgreementEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataSharingAgreementEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataSharingSummaryEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.MasterMappingEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.PurposeEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DocumentationEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataFlowEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataProcessingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.PurposeEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/organisationManager"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
@@ -20,18 +20,18 @@
     </persistence-unit>
 
     <persistence-unit name="informationmodel">
-        <class>org.endeavourhealth.informationmodel.api.database.models.ConceptEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.ConceptRelationshipEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.RegionEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.OrganisationEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.AddressEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataFlowEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataProcessingAgreementEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataSharingAgreementEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DataSharingSummaryEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.MasterMappingEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.PurposeEntity</class>
-        <class>org.endeavourhealth.informationmodel.api.database.models.DocumentationEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.ConceptEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.ConceptRelationshipEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataFlowEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataProcessingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.PurposeEntity</class>
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/information_model?rewriteBatchedStatements=true"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>

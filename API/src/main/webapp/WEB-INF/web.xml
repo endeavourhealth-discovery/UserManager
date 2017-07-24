@@ -8,7 +8,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>io.swagger.jaxrs.listing,org.endeavourhealth.informationmodel.api.endpoints</param-value>
+            <param-value>io.swagger.jaxrs.listing,org.endeavourhealth.datasharingmanager.api.endpoints</param-value>
         </init-param>
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
@@ -16,7 +16,7 @@
                 io.swagger.jaxrs.listing.ApiListingResource,
                 io.swagger.jaxrs.listing.SwaggerSerializers,
                 org.endeavourhealth.common.security.CustomRolesAllowedFeature,
-                org.endeavourhealth.informationmodel.api.framework.exceptions.BaseExceptionMapper
+                org.endeavourhealth.datasharingmanager.api.framework.exceptions.BaseExceptionMapper
             </param-value>
         </init-param>
 
@@ -72,7 +72,7 @@
     <!-- ============================================ -->
     <servlet>
         <servlet-name>swaggerBootstrap</servlet-name>
-        <servlet-class>org.endeavourhealth.informationmodel.api.framework.SwaggerBootstrap</servlet-class>
+        <servlet-class>org.endeavourhealth.datasharingmanager.api.framework.SwaggerBootstrap</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
 
@@ -148,10 +148,10 @@
 
 
     <listener>
-        <listener-class>org.endeavourhealth.informationmodel.api.metrics.InformationManagerMetricListener</listener-class>
+        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerMetricListener</listener-class>
     </listener>
     <listener>
-        <listener-class>org.endeavourhealth.informationmodel.api.metrics.InformationManagerInstrumentedFilterContextListener</listener-class>
+        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerInstrumentedFilterContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>metrics</servlet-name>
