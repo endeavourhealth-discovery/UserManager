@@ -1,23 +1,23 @@
-import {Documentation} from "../../documention/models/Documentation";
+import {Documentation} from '../../documentation/models/Documentation';
 export class Dpa {
-    uuid : string;
-    name : string;
-    description : string;
-    derivation : string;
-    publisherInformation : string;
-    publisherContractInformation : string;
-    publisherDataSet : string;
-    dsaStatusId : number;
-    dataFlow : string;
-    returnToSenderPolicy : string;
-    startDate : string;
-    endDate : string;
-    dataFlows : { [key:string]:string; };
-    cohorts : { [key:string]:string; };
-    dataSets : { [key:string]:string; };
-    documentations : Documentation[];
+    uuid: string;
+    name: string;
+    description: string;
+    derivation: string;
+    publisherInformation: string;
+    publisherContractInformation: string;
+    publisherDataSet: string;
+    dsaStatusId: number;
+    dataFlow: string;
+    returnToSenderPolicy: string;
+    startDate: string;
+    endDate: string;
+    dataFlows: { [key: string]: string; };
+    cohorts: { [key: string]: string; };
+    dataSets: { [key: string]: string; };
+    documentations: Documentation[];
 
-    getDisplayItems() :any[] {
+    getDisplayItems(): any[] {
         return [
             {label: 'Description', property: 'description'},
             {label: 'Derivation', property: 'derivation'},

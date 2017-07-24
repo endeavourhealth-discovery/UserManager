@@ -16,7 +16,7 @@ export class DataflowPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, dataFlows: DataFlow[]) {
     const modalRef = modalService.open(DataflowPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = jQuery.extend(true, [], dataFlows);
+    modalRef.componentInstance.resultData = dataFlows;
 
     return modalRef;
   }
@@ -41,9 +41,9 @@ export class DataflowPickerComponent implements OnInit {
   }
 
   private addToSelection(match: DataFlow) {
-    if ($.grep(this.resultData, function(o: DataFlow) { return o.uuid === match.uuid; }).length === 0) {
+    /*if ($.grep(this.resultData, function(o: DataFlow) { return o.uuid === match.uuid; }).length === 0) {
       this.resultData.push(match);
-    }
+    }*/
   }
 
   private removeFromSelection(match: DataFlow) {

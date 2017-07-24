@@ -18,7 +18,7 @@ import { OrganisationComponent } from './organisation/organisation/organisation.
 import { OrganisationOverviewComponent } from './organisation/organisation-overview/organisation-overview.component';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {OrganisationEditorComponent} from "./organisation/organisation-editor/organisation-editor.component";
+import {OrganisationEditorComponent} from './organisation/organisation-editor/organisation-editor.component';
 
 export class DummyComponent {}
 
@@ -27,7 +27,7 @@ const appRoutes: Routes = [
   { path: 'settings', component: SettingsComponent },
   { path: 'organisationOverview', component: OrganisationOverviewComponent},
   { path: 'organisations', component: OrganisationComponent},
-  { path: 'organisation', component: OrganisationEditorComponent}
+  { path: 'organisation/:id/:mode', component: OrganisationEditorComponent}
 ];
 
 @NgModule({

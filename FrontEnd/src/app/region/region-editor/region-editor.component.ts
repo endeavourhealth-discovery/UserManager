@@ -10,6 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
 import {RegionPickerComponent} from "../region-picker/region-picker.component";
 import {Dsa} from "../../data-sharing-agreement/models/Dsa";
+import {DataSharingAgreementPickerComponent} from "../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component";
 
 @Component({
   selector: 'app-region-editor',
@@ -86,7 +87,7 @@ export class RegionEditorComponent implements OnInit {
 
     // Populate organisations before save
     vm.region.organisations = {};
-    for (const idx of this.organisations) {
+    for (const idx in this.organisations) {
       let organisation: Organisation = this.organisations[idx];
       this.region.organisations[organisation.uuid] = organisation.name;
     }
@@ -115,15 +116,14 @@ export class RegionEditorComponent implements OnInit {
     vm.regionService.saveRegion(vm.region)
       .subscribe(saved => {
           vm.log.success('Item saved', vm.region, 'Saved');
-          if (close) { this.$state.go('app.organisationManagerOverview'); }
+          if (close) { this.router.navigate(['/organisationManagerOverview']); }
         },
         error => vm.log.error('Error saving', error, 'Error')
       );
   }
 
   close() {
-    this.adminService.clearPendingChanges();
-    this.$state.go('app.organisationManagerOverview');
+    this.router.navigate(['/organisationManagerOverview']);
   }
 
   private getRegionOrganisations() {
@@ -200,7 +200,7 @@ export class RegionEditorComponent implements OnInit {
 
   private editSharingAgreements() {
     const vm = this;
-    DsaPickerComponent.open(vm.$modal, vm.sharingAgreements)
+    DataSharingAgreementPickerComponent.open(vm.$modal, vm.sharingAgreements)
       .result.then(function (result: Dsa[]) {
       vm.sharingAgreements = result;
     });

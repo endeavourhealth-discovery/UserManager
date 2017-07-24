@@ -14,9 +14,10 @@ export class PurposeAddComponent implements OnInit {
   title = '';
   detail = '';
 
-  public static open(modalService: NgbModal, purposes: Purpose[]) {
+  public static open(modalService: NgbModal, purposes: Purpose[], type : string) {
     const modalRef = modalService.open(PurposeAddComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = jQuery.extend(true, [], purposes);
+    modalRef.componentInstance.resultData = purposes;
+    modalRef.componentInstance.type = type;
 
     return modalRef;
   }

@@ -11,6 +11,7 @@ import {Dsa} from '../models/Dsa';
 import {DataflowPickerComponent} from '../../data-flow/dataflow-picker/dataflow-picker.component';
 import {RegionPickerComponent} from '../../region/region-picker/region-picker.component';
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
+import {PurposeAddComponent} from "../purpose-add/purpose-add.component";
 
 @Component({
   selector: 'app-data-sharing-agreement-editor',
@@ -183,7 +184,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
   private editPurposes() {
     const vm = this;
-    PurposeAddDialog.open(vm.$modal, vm.purposes, 'Purpose')
+    PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose')
       .result.then(function
       (result: Purpose[]) { vm.purposes = result; },
       () => vm.log.info('Edit Purposes cancelled')
@@ -192,7 +193,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
   private editBenefits() {
     const vm = this;
-    PurposeAddDialog.open(vm.$modal, vm.benefits, 'Benefit')
+    PurposeAddComponent.open(vm.$modal, vm.benefits, 'Benefit')
       .result.then(function
       (result: Purpose[]) { vm.benefits = result; },
       () => vm.log.info('Edit Benefits cancelled')

@@ -17,7 +17,7 @@ export class DataSetPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, dataSets: DataSet[]) {
     const modalRef = modalService.open(DataSetPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = jQuery.extend(true, [], dataSets);
+    modalRef.componentInstance.resultData = dataSets;
 
     return modalRef;
   }
@@ -45,14 +45,15 @@ export class DataSetPickerComponent implements OnInit {
   }
 
   private addToSelection(match: DataSet) {
-    if ($.grep(this.resultData, function(o: DataSet) { return o.uuid === match.uuid; }).length === 0)
-      this.resultData.push(match);
+    /*if ($.grep(this.resultData, function(o: DataSet) { return o.uuid === match.uuid; }).length === 0)
+      this.resultData.push(match);*/
   }
 
   private removeFromSelection(match: DataSet) {
     const index = this.resultData.indexOf(match, 0);
-    if (index > -1)
+    if (index > -1) {
       this.resultData.splice(index, 1);
+    }
   }
 
   ok() {

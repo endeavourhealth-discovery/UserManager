@@ -87,9 +87,9 @@
           </div>
         </div>
 
-        <accordion>
-          <accordion-group *ngIf="organisation.isService === 0" [panelClass]="accordionClass" #regs>
-            <div accordion-heading>
+        <ngb-accordion>
+          <ngb-panel id="regs" *ngIf="organisation.isService === 0">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Regions
@@ -101,21 +101,23 @@
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editRegions()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="regions"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Regions'"
-              [model]="'region'"
-              [detailsToShow]="regionDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group *ngIf="organisation.isService === 0" [panelClass]="accordionClass" #childOrgs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="regions"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Regions'"
+                [model]="'region'"
+                [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel *ngIf="organisation.isService === 0" id="childOrgs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Child Organisations
@@ -127,21 +129,23 @@
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editChildOrganisations()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="childOrganisations"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Child Organisation'"
-              [model]="'organisation'"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #parentOrgs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="childOrganisations"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Child Organisation'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>>
+          <ngb-panel id="parentOrgs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Parent Organisations
@@ -153,21 +157,23 @@
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editParentOrganisations()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="parentOrganisations"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Parent Organisation'"
-              [model]="'organisation'"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group *ngIf="organisation.isService === 0" [panelClass]="accordionClass" #servs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="parentOrganisations"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Parent Organisation'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel *ngIf="organisation.isService === 0" id="servs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Services
@@ -179,20 +185,22 @@
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editServices()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="services"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Service'"
-              [model]="'organisation'"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-        </accordion>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="services"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Service'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
       </form>
 
       <br>

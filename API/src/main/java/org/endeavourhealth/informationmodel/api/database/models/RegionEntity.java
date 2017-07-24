@@ -1,7 +1,8 @@
 package org.endeavourhealth.informationmodel.api.database.models;
 
 import org.endeavourhealth.core.mySQLDatabase.PersistenceManager;
-import org.endeavourhealth.coreui.json.JsonRegion;
+import org.endeavourhealth.informationmodel.api.json.JsonRegion;
+
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;

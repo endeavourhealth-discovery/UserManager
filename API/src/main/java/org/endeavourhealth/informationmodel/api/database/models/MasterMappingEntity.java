@@ -1,6 +1,6 @@
 package org.endeavourhealth.informationmodel.api.database.models;
 
-import org.endeavourhealth.core.mySQLDatabase.MapType;
+import org.endeavourhealth.informationmodel.api.database.MapType;
 import org.endeavourhealth.informationmodel.api.database.PersistenceManager;
 import org.endeavourhealth.informationmodel.api.database.models.MasterMappingEntityPK;
 import org.endeavourhealth.informationmodel.api.json.*;

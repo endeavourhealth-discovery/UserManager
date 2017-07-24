@@ -16,7 +16,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 })
 export class OrganisationOverviewComponent implements OnInit {
   organisations: Organisation[];
-  // regions: Region[] = [];
+  regions: Region[] = [];
   services: Organisation[];
   private file: File;
   existingOrg: Organisation;
@@ -35,10 +35,10 @@ export class OrganisationOverviewComponent implements OnInit {
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
-    this.getOverview();
   }
 
   ngOnInit() {
+    this.getOverview();
   }
 
   getOverview() {
@@ -213,7 +213,6 @@ export class OrganisationOverviewComponent implements OnInit {
     const vm = this;
     vm.organisationService.saveOrganisation(vm.existingOrg)
       .subscribe(saved => {
-          vm.adminService.clearPendingChanges();
           vm.removeConflict(vm.newOrg);
         },
         error => vm.log.error('Error saving', error, 'Error')

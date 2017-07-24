@@ -1,7 +1,8 @@
 package org.endeavourhealth.informationmodel.api.database.models;
 
-import org.endeavourhealth.core.mySQLDatabase.PersistenceManager;
-import org.endeavourhealth.coreui.json.JsonDSA;
+
+import org.endeavourhealth.informationmodel.api.database.PersistenceManager;
+import org.endeavourhealth.informationmodel.api.json.JsonDSA;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -135,25 +136,25 @@ public class DataSharingAgreementEntity {
         return result;
     }
 
-    public static List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> getAllDSAs() throws Exception {
+    public static List<DataSharingAgreementEntity> getAllDSAs() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> cq = cb.createQuery(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
-        Root<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> rootEntry = cq.from(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
-        CriteriaQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> all = cq.select(rootEntry);
-        TypedQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> allQuery = entityManager.createQuery(all);
-        List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> ret = allQuery.getResultList();
+        CriteriaQuery<DataSharingAgreementEntity> cq = cb.createQuery(DataSharingAgreementEntity.class);
+        Root<DataSharingAgreementEntity> rootEntry = cq.from(DataSharingAgreementEntity.class);
+        CriteriaQuery<DataSharingAgreementEntity> all = cq.select(rootEntry);
+        TypedQuery<DataSharingAgreementEntity> allQuery = entityManager.createQuery(all);
+        List<DataSharingAgreementEntity> ret = allQuery.getResultList();
 
         entityManager.close();
 
         return ret;
     }
 
-    public static org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity getDSA(String uuid) throws Exception {
+    public static DataSharingAgreementEntity getDSA(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity ret = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class, uuid);
+        DataSharingAgreementEntity ret = entityManager.find(DataSharingAgreementEntity.class, uuid);
 
         entityManager.close();
 
@@ -163,7 +164,7 @@ public class DataSharingAgreementEntity {
     public static void updateDSA(JsonDSA dsa) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity dsaEntity = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class, dsa.getUuid());
+        DataSharingAgreementEntity dsaEntity = entityManager.find(DataSharingAgreementEntity.class, dsa.getUuid());
         entityManager.getTransaction().begin();
         dsaEntity.setName(dsa.getName());
         dsaEntity.setDescription(dsa.getDescription());
@@ -184,7 +185,7 @@ public class DataSharingAgreementEntity {
     public static void saveDSA(JsonDSA dsa) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity dsaEntity = new org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity();
+        DataSharingAgreementEntity dsaEntity = new DataSharingAgreementEntity();
         entityManager.getTransaction().begin();
         dsaEntity.setName(dsa.getName());
         dsaEntity.setDescription(dsa.getDescription());
@@ -207,7 +208,7 @@ public class DataSharingAgreementEntity {
     public static void deleteDSA(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity dsaEntity = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class, uuid);
+        DataSharingAgreementEntity dsaEntity = entityManager.find(DataSharingAgreementEntity.class, uuid);
         entityManager.getTransaction().begin();
         entityManager.remove(dsaEntity);
         entityManager.getTransaction().commit();
@@ -215,38 +216,38 @@ public class DataSharingAgreementEntity {
         entityManager.close();
     }
 
-    public static List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> search(String expression) throws Exception {
+    public static List<DataSharingAgreementEntity> search(String expression) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> cq = cb.createQuery(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
-        Root<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> rootEntry = cq.from(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
+        CriteriaQuery<DataSharingAgreementEntity> cq = cb.createQuery(DataSharingAgreementEntity.class);
+        Root<DataSharingAgreementEntity> rootEntry = cq.from(DataSharingAgreementEntity.class);
 
         Predicate predicate = cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
                 cb.like(cb.upper(rootEntry.get("description")), "%" + expression.toUpperCase() + "%"));
 
         cq.where(predicate);
-        TypedQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> query = entityManager.createQuery(cq);
-        List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> ret = query.getResultList();
+        TypedQuery<DataSharingAgreementEntity> query = entityManager.createQuery(cq);
+        List<DataSharingAgreementEntity> ret = query.getResultList();
 
         entityManager.close();
 
         return ret;
     }
 
-    public static List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> getDSAsFromList(List<String> dsas) throws Exception {
+    public static List<DataSharingAgreementEntity> getDSAsFromList(List<String> dsas) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> cq = cb.createQuery(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
-        Root<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> rootEntry = cq.from(org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity.class);
+        CriteriaQuery<DataSharingAgreementEntity> cq = cb.createQuery(DataSharingAgreementEntity.class);
+        Root<DataSharingAgreementEntity> rootEntry = cq.from(DataSharingAgreementEntity.class);
 
         Predicate predicate = rootEntry.get("uuid").in(dsas);
 
         cq.where(predicate);
-        TypedQuery<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> query = entityManager.createQuery(cq);
+        TypedQuery<DataSharingAgreementEntity> query = entityManager.createQuery(cq);
 
-        List<org.endeavourhealth.core.mySQLDatabase.models.DataSharingAgreementEntity> ret = query.getResultList();
+        List<DataSharingAgreementEntity> ret = query.getResultList();
 
         entityManager.close();
 

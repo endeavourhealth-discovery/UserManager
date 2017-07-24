@@ -8,19 +8,23 @@ import { LoggerService, EntityViewComponentsModule } from 'eds-angular4';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { OrganisationEditorComponent } from './organisation-editor/organisation-editor.component';
 import { OrganisationPickerComponent } from './organisation-picker/organisation-picker.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {RegionPickerComponent} from '../region/region-picker/region-picker.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     EntityViewComponentsModule,
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    NgbModule
   ],
   declarations: [
     OrganisationComponent,
     OrganisationOverviewComponent,
     OrganisationEditorComponent,
-    OrganisationPickerComponent
+    OrganisationPickerComponent,
+    RegionPickerComponent
   ],
   entryComponents : [
     OrganisationPickerComponent

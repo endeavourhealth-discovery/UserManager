@@ -1,7 +1,6 @@
 package org.endeavourhealth.informationmodel.api.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.endeavourhealth.coreui.json.JsonAddress;
 
 import java.util.ArrayList;
 import java.util.List;

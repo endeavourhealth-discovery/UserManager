@@ -17,7 +17,7 @@ export class OrganisationPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, organisations: Organisation[], searchType: string) {
     const modalRef = modalService.open(OrganisationPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = jQuery.extend(true, [], organisations);
+    modalRef.componentInstance.resultData = organisations;
     modalRef.componentInstance.searchType = searchType;
 
     return modalRef;
@@ -31,9 +31,10 @@ export class OrganisationPickerComponent implements OnInit {
   }
 
   private search() {
-    let vm = this;
-    if (vm.searchData.length < 3)
+    const vm = this;
+    if (vm.searchData.length < 3) {
       return;
+    }
     vm.organisationService.search(vm.searchData, vm.searchType)
       .subscribe(
         (result) => vm.searchResults = result,
@@ -42,14 +43,15 @@ export class OrganisationPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Organisation) {
-    if ($.grep(this.resultData, function(o: Organisation) { return o.uuid === match.uuid; }).length === 0)
-      this.resultData.push(match);
+    /*if ($.grep(this.resultData, function(o: Organisation) { return o.uuid === match.uuid; }).length === 0)
+      this.resultData.push(match);*/
   }
 
   private removeFromSelection(match: Organisation) {
-    let index = this.resultData.indexOf(match, 0);
-    if (index > -1)
+    const index = this.resultData.indexOf(match, 0);
+    if (index > -1) {
       this.resultData.splice(index, 1);
+    }
   }
 
   ok() {

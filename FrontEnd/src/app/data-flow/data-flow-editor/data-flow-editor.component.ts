@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {DataFlowService} from '../data-flow.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataFlow} from '../models/DataFlow';
-import {DsaPickerDialog} from '../dsa/dsaPicker.dialog';
-import {DpaPickerDialog} from '../dpa/dpaPicker.dialog';
+import {DataSharingAgreementPickerComponent} from '../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component';
+import {DataProcessingAgreementPickerComponent} from '../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component';
 import {Dsa} from '../../data-sharing-agreement/models/Dsa';
 import {Dpa} from '../../data-processing-agreement/models/Dpa';
 import { LoggerService} from 'eds-angular4';
@@ -142,7 +142,7 @@ export class DataFlowEditorComponent implements OnInit {
 
   private editDataSharingAgreements() {
     const vm = this;
-    DsaPickerDialog.open(vm.$modal, vm.dsas)
+    DataSharingAgreementPickerComponent.open(vm.$modal, vm.dsas)
       .result.then(function
       (result: Dsa[]) { vm.dsas = result; },
       () => vm.log.info('Edit Data Sharing Agreements cancelled')
@@ -151,7 +151,7 @@ export class DataFlowEditorComponent implements OnInit {
 
   private editDataProcessingAgreements() {
     const vm = this;
-    DpaPickerDialog.open(vm.$modal, vm.dpas)
+    DataProcessingAgreementPickerComponent.open(vm.$modal, vm.dpas)
       .result.then(function
       (result: Dpa[]) { vm.dpas = result; },
       () => vm.log.info('Edit Data Processing Agreements cancelled')

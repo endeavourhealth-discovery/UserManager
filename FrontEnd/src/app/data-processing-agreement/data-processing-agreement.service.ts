@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {DataFlow} from '../data-flow/models/DataFlow';
 import {Dpa} from './models/Dpa';
 import {DataSet} from '../data-set/models/Dataset';
+import {Cohort} from "../cohort/models/Cohort";
 
 @Injectable()
 export class DataProcessingAgreementService {

@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Organisation} from '../models/Organisation';
 import {Address} from '../models/Address';
 import {LoggerService} from 'eds-angular4';
-import {RegionPickerDialog} from '../region/regionPicker.dialog';
+import {RegionPickerComponent} from '../../region/region-picker/region-picker.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {OrganisationManagerService} from '../organisation.service';
-import {Region} from '../region/models/Region';
-import {OrganisationPickerDialog} from '../organisations/organisationPicker.dialog';
-import {OrganisationManagerPickerDialog} from './organisationManagerPicker.dialog';
-import {ActivatedRoute, Router} from "@angular/router";
+import {OrganisationService} from '../organisation.service';
+import {Region} from '../../region/models/Region';
+import {OrganisationPickerComponent} from '../organisation-picker/organisation-picker.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-organisation-editor',
@@ -34,15 +34,17 @@ export class OrganisationEditorComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
-              private organisationManagerService: OrganisationManagerService,
+              private organisationService: OrganisationService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
   }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
       params => {
-        this.performAction(params['itemAction'], params['itemUuid']);
+        this.performAction(params['mode'], params['id']);
       });
   }
 
@@ -95,7 +97,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   load(uuid: string) {
     const vm = this;
-    vm.organisationManagerService.getOrganisation(uuid)
+    vm.organisationService.getOrganisation(uuid)
       .subscribe(result =>  {
           vm.organisation = result;
           if (vm.organisation.isService) {
@@ -116,25 +118,25 @@ export class OrganisationEditorComponent implements OnInit {
     const vm = this;
     // Populate organisations regions before save
     vm.organisation.regions = {};
-    for (const idx of this.regions) {
+    for (const idx in this.regions) {
       const region: Region = this.regions[idx];
       this.organisation.regions[region.uuid] = region.name;
     }
 
     vm.organisation.childOrganisations = {};
-    for (const idx of this.childOrganisations) {
+    for (const idx in this.childOrganisations) {
       const org: Organisation = this.childOrganisations[idx];
       this.organisation.childOrganisations[org.uuid] = org.name;
     }
 
     vm.organisation.parentOrganisations = {};
-    for (const idx of this.parentOrganisations) {
+    for (const idx in this.parentOrganisations) {
       const org: Organisation = this.parentOrganisations[idx];
       this.organisation.parentOrganisations[org.uuid] = org.name;
     }
 
     vm.organisation.services = {};
-    for (const idx of this.services) {
+    for (const idx in this.services) {
       const org: Organisation = this.services[idx];
       this.organisation.services[org.uuid] = org.name;
     }
@@ -143,7 +145,7 @@ export class OrganisationEditorComponent implements OnInit {
     vm.organisation.addresses = this.addresses;
 
 
-    vm.organisationManagerService.saveOrganisation(vm.organisation)
+    vm.organisationService.saveOrganisation(vm.organisation)
       .subscribe(saved => {
           vm.log.success('Item saved', vm.organisation, 'Saved');
           if (close) { this.router.navigate(['/organisationOverview']); }
@@ -173,8 +175,9 @@ export class OrganisationEditorComponent implements OnInit {
   }
 
   private editRegions() {
+    console.log('yes');
     const vm = this;
-    RegionPickerDialog.open(vm.$modal, vm.regions)
+    RegionPickerComponent.open(vm.$modal, vm.regions)
       .result.then(function (result: Region[]) {
       vm.regions = result;
     });
@@ -182,7 +185,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editChildOrganisations() {
     const vm = this;
-    OrganisationManagerPickerDialog.open(vm.$modal, vm.childOrganisations, 'organisation' )
+    OrganisationPickerComponent.open(vm.$modal, vm.childOrganisations, 'organisation' )
       .result.then(function (result: Organisation[]) {
       vm.childOrganisations = result;
     });
@@ -190,7 +193,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editParentOrganisations() {
     const vm = this;
-    OrganisationManagerPickerDialog.open(vm.$modal, vm.parentOrganisations, 'organisation' )
+    OrganisationPickerComponent.open(vm.$modal, vm.parentOrganisations, 'organisation' )
       .result.then(function (result: Organisation[]) {
       vm.parentOrganisations = result;
     });
@@ -198,7 +201,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editServices() {
     const vm = this;
-    OrganisationManagerPickerDialog.open(vm.$modal, vm.services, 'services' )
+    OrganisationPickerComponent.open(vm.$modal, vm.services, 'services' )
       .result.then(function (result: Organisation[]) {
       vm.services = result;
     });
@@ -206,7 +209,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private getOrganisationRegions() {
     const vm = this;
-    vm.organisationManagerService.getOrganisationRegions(vm.organisation.uuid)
+    vm.organisationService.getOrganisationRegions(vm.organisation.uuid)
       .subscribe(
         result => vm.regions = result,
         error => vm.log.error('Failed to load organisation regions', error, 'Load organisation regions')
@@ -215,7 +218,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private getOrganisationAddresses() {
     const vm = this;
-    vm.organisationManagerService.getOrganisationAddresses(vm.organisation.uuid)
+    vm.organisationService.getOrganisationAddresses(vm.organisation.uuid)
       .subscribe(
         result => vm.addresses = result,
         error => vm.log.error('Failed to load organisation Addresses', error, 'Load organisation Addresses')
@@ -224,7 +227,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private getChildOrganisations() {
     const vm = this;
-    vm.organisationManagerService.getChildOrganisations(vm.organisation.uuid)
+    vm.organisationService.getChildOrganisations(vm.organisation.uuid)
       .subscribe(
         result => vm.childOrganisations = result,
         error => vm.log.error('Failed to load child organisations', error, 'Load child organisation')
@@ -233,7 +236,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private getParentOrganisations() {
     const vm = this;
-    vm.organisationManagerService.getParentOrganisations(vm.organisation.uuid, vm.organisation.isService)
+    vm.organisationService.getParentOrganisations(vm.organisation.uuid, vm.organisation.isService)
       .subscribe(
         result => vm.parentOrganisations = result,
         error => vm.log.error('Failed to load parent organisations', error, 'Load parent organisation')
@@ -242,7 +245,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private getServices() {
     const vm = this;
-    vm.organisationManagerService.getServices(vm.organisation.uuid)
+    vm.organisationService.getServices(vm.organisation.uuid)
       .subscribe(
         result => vm.services = result,
         error => vm.log.error('Failed to load services', error, 'Load services')

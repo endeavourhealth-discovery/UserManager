@@ -7,7 +7,8 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-region-picker',
   templateUrl: './region-picker.component.html',
-  styleUrls: ['./region-picker.component.css']
+  styleUrls: ['./region-picker.component.css'],
+  providers: [RegionService]
 })
 export class RegionPickerComponent implements OnInit {
   @Input() resultData: Region[];
@@ -16,7 +17,7 @@ export class RegionPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, regions: Region[]) {
     const modalRef = modalService.open(RegionPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = jQuery.extend(true, [], regions);
+    modalRef.componentInstance.resultData = regions;
 
     return modalRef;
   }
@@ -41,9 +42,9 @@ export class RegionPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Region) {
-    if ($.grep(this.resultData, function(o: Region) { return o.uuid === match.uuid; }).length === 0) {
+    /*if ($.grep(this.resultData, function(o: Region) { return o.uuid === match.uuid; }).length === 0) {
       this.resultData.push(match);
-    }
+    }*/
   }
 
   private removeFromSelection(match: Region) {

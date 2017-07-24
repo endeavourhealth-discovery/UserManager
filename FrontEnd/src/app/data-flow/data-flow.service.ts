@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs';
 import {DataFlow} from './models/DataFlow';
-import {Dpa} from '../dpa/models/Dpa';
-import {Dsa} from '../dsa/models/Dsa';
+import {Dpa} from '../data-processing-agreement/models/Dpa';
+import {Dsa} from '../data-sharing-agreement/models/Dsa';
 
 @Injectable()
 export class DataFlowService {

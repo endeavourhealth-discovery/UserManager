@@ -11,7 +11,11 @@ import { RegionPickerComponent } from './region-picker/region-picker.component';
     CommonModule,
     EntityViewComponentsModule,
   ],
-  declarations: [RegionComponent, RegionEditorComponent, RegionPickerComponent],
+  declarations: [
+    RegionComponent,
+    RegionEditorComponent,
+    RegionPickerComponent
+  ],
   entryComponents : [
     RegionPickerComponent
   ],
