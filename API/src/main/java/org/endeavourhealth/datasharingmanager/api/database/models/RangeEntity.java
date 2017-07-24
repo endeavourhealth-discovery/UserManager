@@ -2,9 +2,7 @@ package org.endeavourhealth.datasharingmanager.api.database.models;
 
 import javax.persistence.*;
 
-/**
- * Created by studu on 09/06/2017.
- */
+
 @Entity
 @Table(name = "range", schema = "information_model", catalog = "")
 public class RangeEntity {

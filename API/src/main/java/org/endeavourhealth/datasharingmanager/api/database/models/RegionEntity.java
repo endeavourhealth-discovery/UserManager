@@ -1,6 +1,6 @@
 package org.endeavourhealth.datasharingmanager.api.database.models;
 
-import org.endeavourhealth.core.mySQLDatabase.PersistenceManager;
+import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonRegion;
 
 
