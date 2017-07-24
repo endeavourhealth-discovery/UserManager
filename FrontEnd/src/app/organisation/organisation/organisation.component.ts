@@ -34,10 +34,7 @@ export class OrganisationComponent implements OnInit {
               private organisationService: OrganisationService,
               private log: LoggerService,
               private router: Router,
-              private route: ActivatedRoute/*,
-              protected $state: StateService,
-              private transition: Transition,
-              private state: StateService*/) {
+              private route: ActivatedRoute) {
   }
 
   protected performAction(mode: string) {
@@ -120,7 +117,7 @@ export class OrganisationComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['app.organisationManagerOverview']);
+    this.router.navigate(['/organisationOverview']);
   }
 
   onSearch($event) {

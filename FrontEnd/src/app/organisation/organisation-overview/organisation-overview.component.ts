@@ -2,9 +2,8 @@ import {Component, Input, OnInit, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {Organisation} from '../models/Organisation';
-// import {AdminService, LoggerService} from 'eds-common-js';
 import {OrganisationService} from '../organisation.service';
-// import {Region} from '../region/models/Region';
+import {Region} from '../../region/models/Region';
 import {OrganisationManagerStatistics} from '../models/OrganisationManagerStatistics';
 import {FileUpload} from '../models/FileUpload';
 import {LoggerService} from 'eds-angular4';
@@ -32,7 +31,6 @@ export class OrganisationOverviewComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
-              // private adminService: AdminService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -102,7 +100,7 @@ export class OrganisationOverviewComponent implements OnInit {
       this.file = null;
     }
   }
-/*
+
   private uploadFile(fileToUpload: FileUpload) {
     const vm = this;
 
@@ -158,7 +156,7 @@ export class OrganisationOverviewComponent implements OnInit {
         },
         error => vm.log.error('Failed to upload bulk organisations ' + fileToUpload.name, error, 'Upload Bulk Organisations')
       );
-  };*/
+  };
 
   private getConflictingOrganisations() {
     const vm = this;
@@ -166,7 +164,7 @@ export class OrganisationOverviewComponent implements OnInit {
       .subscribe(result => vm.conflictedOrgs = result,
         error => console.log('Failed to get conflicted Organisations', error, 'Get Conflicting Organisations'))
   }
-/*
+
   ok() {
     this.uploadFiles();
   }
@@ -241,17 +239,17 @@ export class OrganisationOverviewComponent implements OnInit {
     this.newOrg = null;
     this.existingOrg = null;
 
-  }*/
+  }
 
   goToOrganisations() {
     this.router.navigate(['/organisations', {mode: 'organisations'}]);
   }
-/*
+
   goToServices() {
-    this.$state.go('app.organisationManager', {mode: 'services'});
+    this.router.navigate(['organisations', {mode: 'services'}]);
   }
 
   goToRegions() {
-    this.$state.go('app.region');
-  }*/
+    this.router.navigate(['/regions']);
+  }
 }

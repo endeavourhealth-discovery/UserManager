@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs';
 import {Organisation} from './models/Organisation';
-// import {Region} from '../region/models/Region';
+import {Region} from '../region/models/Region';
 import {Address} from './models/Address';
-// import {Marker} from '../region/models/Marker';
+import {Marker} from '../region/models/Marker';
 import {OrganisationManagerStatistics} from './models/OrganisationManagerStatistics';
 import {FileUpload} from './models/FileUpload';
 
@@ -21,13 +21,13 @@ export class OrganisationService  {
       .map((response) => response.json());
   }
 
-  /*getOrganisationRegions(uuid: string):  Observable<Region[]> {
+  getOrganisationRegions(uuid: string):  Observable<Region[]> {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/organisationManager/regions', { search : params })
       .map((response) => response.json());
-  }*/
+  }
 
   getChildOrganisations(uuid: string):  Observable<Organisation[]> {
     const vm = this;
@@ -91,13 +91,13 @@ export class OrganisationService  {
       .map((response) => response.json());
   }
 
-  /*getOrganisationMarkers(uuid: string): Observable<Marker[]> {
+  getOrganisationMarkers(uuid: string): Observable<Marker[]> {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/organisationManager/markers', { search : params })
       .map((response) => response.json());
-  }*/
+  }
 
   getUpdatedBulkOrganisations(): Observable<any> {
     const vm = this;

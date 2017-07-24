@@ -6,6 +6,8 @@ import { OrganisationOverviewComponent } from './organisation-overview/organisat
 import { OrganisationService } from './organisation.service';
 import { LoggerService, EntityViewComponentsModule } from 'eds-angular4';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { OrganisationEditorComponent } from './organisation-editor/organisation-editor.component';
+import { OrganisationPickerComponent } from './organisation-picker/organisation-picker.component';
 
 @NgModule({
   imports: [
@@ -16,7 +18,12 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
   ],
   declarations: [
     OrganisationComponent,
-    OrganisationOverviewComponent
+    OrganisationOverviewComponent,
+    OrganisationEditorComponent,
+    OrganisationPickerComponent
+  ],
+  entryComponents : [
+    OrganisationPickerComponent
   ],
   providers: [
     OrganisationService,
