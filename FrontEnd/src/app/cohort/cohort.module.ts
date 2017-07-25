@@ -4,12 +4,17 @@ import { CohortComponent } from './cohort/cohort.component';
 import { CohortEditorComponent } from './cohort-editor/cohort-editor.component';
 import { CohortPickerComponent } from './cohort-picker/cohort-picker.component';
 import {CohortService} from "./cohort.service";
+import {EntityViewComponentsModule} from "eds-angular4";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    EntityViewComponentsModule
   ],
-  declarations: [CohortComponent, CohortEditorComponent, CohortPickerComponent],
+  declarations: [
+    CohortComponent,
+    CohortEditorComponent,
+    CohortPickerComponent],
   providers: [CohortService]
 })
 export class CohortModule { }

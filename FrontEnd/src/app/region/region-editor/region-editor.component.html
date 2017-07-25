@@ -30,114 +30,121 @@
           </div>
         </div>
 
-        <accordion>
-          <accordion-group [panelClass]="accordionClass" #sharingAgreement>
-            <div accordion-heading>
+        <ngb-accordion>
+          <ngb-panel id="sharingAgreement">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Sharing Agreements
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{sharingAgreements?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': sharingAgreement?.isOpen, 'glyphicon-chevron-right': !sharingAgreement?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{sharingAgreements?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editSharingAgreements()">Edit</button>
-
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="sharingAgreements"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Sharing Agreement'"
-              [model]="'dsa'"
-              [detailsToShow]="sharingAgreementsDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #parentRegion>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="sharingAgreements"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Sharing Agreement'"
+                [model]="'dsa'"
+                [detailsToShow]="sharingAgreementsDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="parentRegion">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Parent Regions
                 </div>
                 <div class="col-md-1">
                   <span class="badge">{{parentRegions?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': parentRegion?.isOpen, 'glyphicon-chevron-right': !parentRegion?.isOpen}"></i>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editParentRegions()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="parentRegions"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Parent Region'"
-              [model]="'region'"
-              [detailsToShow]="regionDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #childRegion>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="parentRegions"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Parent Region'"
+                [model]="'region'"
+                [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="childRegion">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Child Regions
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{childRegions?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': childRegion?.isOpen, 'glyphicon-chevron-right': !childRegion?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{childRegions?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editChildRegions()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="childRegions"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Child Region'"
-              [model]="'region'"
-              [detailsToShow]="regionDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #orgs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="childRegions"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Child Region'"
+                [model]="'region'"
+                [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="orgs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Organisations
                 </div>
                 <div class="col-md-1">
                   <span class="badge">{{organisations?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': orgs?.isOpen, 'glyphicon-chevron-right': !orgs?.isOpen}"></i>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editOrganisations()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="organisations"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Organisation'"
-              [model]="'organisation'"
-              [pageSize]="12"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-        </accordion>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="organisations"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Organisation'"
+                [model]="'organisation'"
+                [pageSize]="12"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
       </form>
       <sebm-google-map
         [latitude]="lat"

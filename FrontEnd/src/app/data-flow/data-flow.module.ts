@@ -5,11 +5,13 @@ import { LoggerService, EntityViewComponentsModule } from 'eds-angular4';
 import {DataFlowService} from './data-flow.service';
 import { DataFlowEditorComponent } from './data-flow-editor/data-flow-editor.component';
 import { DataflowPickerComponent } from './dataflow-picker/dataflow-picker.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
-    EntityViewComponentsModule
+    EntityViewComponentsModule,
+    NgbModule
   ],
   declarations: [DataFlowComponent, DataFlowEditorComponent, DataflowPickerComponent],
   entryComponents : [

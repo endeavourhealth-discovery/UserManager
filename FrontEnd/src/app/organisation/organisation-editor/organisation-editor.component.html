@@ -88,17 +88,17 @@
         </div>
 
         <ngb-accordion>
-          <ngb-panel id="regs" *ngIf="organisation.isService === 0">
+          <ngb-panel id="regs" *ngIf="organisation.isService === 0" #boo>
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Regions
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{regions?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': regs?.isOpen, 'glyphicon-chevron-right': !regs?.isOpen}"></i>
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editRegions()">Edit</button>
+                  <span class="badge badge-pill badge-primary">{{regions?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editRegions()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -123,10 +123,10 @@
                   Child Organisations
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{childOrganisations?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': childOrgs?.isOpen, 'glyphicon-chevron-right': !childOrgs?.isOpen}"></i>
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editChildOrganisations()">Edit</button>
+                  <span class="badge badge-pill badge-primary">{{childOrganisations?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editChildOrganisations()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -151,10 +151,10 @@
                   Parent Organisations
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{parentOrganisations?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': parentOrgs?.isOpen, 'glyphicon-chevron-right': !parentOrgs?.isOpen}"></i>
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editParentOrganisations()">Edit</button>
+                  <span class="badge badge-pill badge-primary">{{parentOrganisations?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editParentOrganisations()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -179,10 +179,10 @@
                   Services
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{services?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': servs?.isOpen, 'glyphicon-chevron-right': !servs?.isOpen}"></i>
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editServices()">Edit</button>
+                  <span class="badge badge-pill badge-primary">{{services?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editServices()">Edit</button>
                 </div>
               </div>
             </ng-template>

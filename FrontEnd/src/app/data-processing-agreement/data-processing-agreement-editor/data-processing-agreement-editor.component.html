@@ -74,128 +74,133 @@
           </div>
         </div>
 
-        <accordion>
-          <accordion-group [panelClass]="accordionClass" #dflows>
-            <div accordion-heading>
+        <ngb-accordion>
+          <ngb-panel id="dflows">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Data Flow Agreements
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{dataFlows?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': dflows?.isOpen, 'glyphicon-chevron-right': !dflows?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{dataFlows?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataFlows()">Edit</button>
-
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="dataFlows"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'approximateVolume'"
-              [secondaryOrderText]="'Approximate Volume'"
-              [typeDescription]="'Data Flow'"
-              [model]="'dataflow'"
-              [detailsToShow]="dataflowDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #coh>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dataFlows"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'approximateVolume'"
+                [secondaryOrderText]="'Approximate Volume'"
+                [typeDescription]="'Data Flow'"
+                [model]="'dataflow'"
+                [detailsToShow]="dataflowDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="coh">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Cohorts
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{cohorts?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': coh?.isOpen, 'glyphicon-chevron-right': !coh?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{cohorts?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editCohorts()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="cohorts"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [typeDescription]="'Cohort'"
-              [model]="'cohort'"
-              [detailsToShow]="cohortflowDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #dsets>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="cohorts"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [typeDescription]="'Cohort'"
+                [model]="'cohort'"
+                [detailsToShow]="cohortflowDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dsets">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Data Sets
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{dataSets?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': dsets?.isOpen, 'glyphicon-chevron-right': !dsets?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{dataSets?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataSets()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="dataSets"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [typeDescription]="'Data Set'"
-              [model]="'dataset'"
-              [detailsToShow]="datasetDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #docs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dataSets"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [typeDescription]="'Data Set'"
+                [model]="'dataset'"
+                [detailsToShow]="datasetDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="docs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Associated Documentation
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{documentations?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': docs?.isOpen, 'glyphicon-chevron-right': !docs?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{documentations?.length}}</span>
                 </div>
               </div>
-            </div>
-            <entity-viewer (deleted)="delete($event)"
-                           [items]="documentations"
-                           [primary]="'title'"
-                           [primaryOrderText]="'Title'"
-                           [displayClass]="'region'"
-                           [typeDescription]="'Associated Documentation'"
-                           [model]="'documentation'"
-                           [detailsToShow]="documentDetailsToShow">
-            </entity-viewer>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="panel panel-primary">
-                  <div class="panel-heading">Upload Associated Documentation</div>
-                  <div class="panel-body">
-                    <form endUserRole="form" class="container-fluid">
-                      <div class="row">
-                        <div class="form-group col-md-12">
-                          <label class="control-label">PDF File</label>
-                          <div class="input-group">
-                            <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf">
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer (deleted)="delete($event)"
+                             [items]="documentations"
+                             [primary]="'title'"
+                             [primaryOrderText]="'Title'"
+                             [displayClass]="'region'"
+                             [typeDescription]="'Associated Documentation'"
+                             [model]="'documentation'"
+                             [detailsToShow]="documentDetailsToShow">
+              </entity-viewer>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading">Upload Associated Documentation</div>
+                    <div class="panel-body">
+                      <form endUserRole="form" class="container-fluid">
+                        <div class="row">
+                          <div class="form-group col-md-12">
+                            <label class="control-label">PDF File</label>
+                            <div class="input-group">
+                              <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf">
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </form>
+                      </form>
 
-                    <button type="button" class="btn bnt-default" (click)="cancel()">Cancel</button>
-                    <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
+                      <button type="button" class="btn bnt-default" (click)="cancel()">Cancel</button>
+                      <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </accordion-group>
-        </accordion>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
 
       </form>
       <br>

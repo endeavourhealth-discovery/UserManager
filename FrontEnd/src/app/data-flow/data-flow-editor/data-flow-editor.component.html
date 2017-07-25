@@ -101,61 +101,64 @@
           </div>
         </div>
 
-        <accordion>
-          <accordion-group [panelClass]="accordionClass" #datashare>
-            <div accordion-heading>
+        <ngb-accordion>
+          <ngb-panel id="datashare">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Data Sharing Agreements
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{dsas?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': datashare?.isOpen, 'glyphicon-chevron-right': !datashare?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{dsas?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataSharingAgreements()">Edit</button>
-
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="dsas"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Data Sharing Agreement'"
-              [model]="'dsa'"
-              [detailsToShow]="dsaDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #dataproc>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dsas"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data Sharing Agreement'"
+                [model]="'dsa'"
+                [detailsToShow]="dsaDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dataproc">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Data Processing Agreements
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{dpas?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': dataproc?.isOpen, 'glyphicon-chevron-right': !dataproc?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{dpas?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataProcessingAgreements()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="dpas"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Data Processing Agreement'"
-              [model]="'dpa'"
-              [detailsToShow]="dpaflowDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-        </accordion>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dpas"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data Processing Agreement'"
+                [model]="'dpa'"
+                [detailsToShow]="dpaflowDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
       </form>
       <br>
       <br>

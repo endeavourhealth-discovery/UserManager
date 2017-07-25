@@ -55,166 +55,177 @@
           </div>
         </div>
 
-        <accordion>
-          <accordion-group [panelClass]="accordionClass" #purps>
-            <div accordion-heading>
+        <ngb-accordion>
+          <ngb-panel id="purps">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Purposes
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{purposes?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': purps?.isOpen, 'glyphicon-chevron-right': !purps?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{purposes?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPurposes()">Add</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="purposes"
-              [primary]="'title'"
-              [primaryOrderText]="'Title'"
-              [displayClass]="'region'"
-              [secondary]="'detail'"
-              [secondaryOrderText]="'Detail'"
-              [typeDescription]="'Purpose'"
-              [model]="'organisation'"
-              [detailsToShow]="purposeDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="purposes"
+                [primary]="'title'"
+                [primaryOrderText]="'Title'"
+                [displayClass]="'region'"
+                [secondary]="'detail'"
+                [secondaryOrderText]="'Detail'"
+                [typeDescription]="'Purpose'"
+                [model]="'organisation'"
+                [detailsToShow]="purposeDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
 
-          <accordion-group [panelClass]="accordionClass" #bens>
-            <div accordion-heading>
+          <ngb-panel id="bens">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Benefits
                 </div>
                 <div class="col-md-1">
                   <span class="badge">{{benefits?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': bens?.isOpen, 'glyphicon-chevron-right': !bens?.isOpen}"></i>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editBenefits()">Add</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="benefits"
-              [primary]="'title'"
-              [primaryOrderText]="'Title'"
-              [displayClass]="'region'"
-              [secondary]="'detail'"
-              [secondaryOrderText]="'Detail'"
-              [typeDescription]="'Benefit'"
-              [model]="'benefit'"
-              [detailsToShow]="purposeDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #regs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="benefits"
+                [primary]="'title'"
+                [primaryOrderText]="'Title'"
+                [displayClass]="'region'"
+                [secondary]="'detail'"
+                [secondaryOrderText]="'Detail'"
+                [typeDescription]="'Benefit'"
+                [model]="'benefit'"
+                [detailsToShow]="purposeDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="regs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Regions
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{regions?.length}}</span>
-                  <i class=" float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': regs?.isOpen, 'glyphicon-chevron-right': !regs?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{regions?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editRegions()">Edit</button>
-
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="regions"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Region'"
-              [model]="'region'"
-              [detailsToShow]="regionDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #dfs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="regions"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Region'"
+                [model]="'region'"
+                [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dfs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Data Flow Agreements
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{dataFlows?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': dfs?.isOpen, 'glyphicon-chevron-right': !dfs?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{dataFlows?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataFlows()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="dataFlows"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'approximateVolume'"
-              [secondaryOrderText]="'Approximate Volume'"
-              [typeDescription]="'Data Flow'"
-              [model]="'dataflow'"
-              [detailsToShow]="dataflowDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #pubs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dataFlows"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'approximateVolume'"
+                [secondaryOrderText]="'Approximate Volume'"
+                [typeDescription]="'Data Flow'"
+                [model]="'dataflow'"
+                [detailsToShow]="dataflowDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="pubs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Publishers
                 </div>
                 <div class="col-md-1">
-                  <span class="badge">{{publishers?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': pubs?.isOpen, 'glyphicon-chevron-right': !pubs?.isOpen}"></i>
+                  <span class="badge badge-pill badge-primary">{{publishers?.length}}</span>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPublishers()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="publishers"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Publisher'"
-              [model]="'organisation'"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-          <accordion-group [panelClass]="accordionClass" #subs>
-            <div accordion-heading>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="publishers"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Publisher'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="subs">
+            <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
                   Subscribers
                 </div>
                 <div class="col-md-1">
                   <span class="badge">{{subscribers?.length}}</span>
-                  <i class="float-xs-right glyphicon pull-right"
-                     [ngClass]="{'glyphicon-chevron-down': subs?.isOpen, 'glyphicon-chevron-right': !subs?.isOpen}"></i>
+                </div>
+                <div class="col-md-1">
                   <button type="button" class="btn btn-xs btn-success pull-right" (click)="editSubscribers()">Edit</button>
                 </div>
               </div>
-            </div>
-            <entity-viewer
-              [items]="subscribers"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'odsCode'"
-              [secondaryOrderText]="'ODS Code'"
-              [typeDescription]="'Subscriber'"
-              [model]="'organisation'"
-              [detailsToShow]="orgDetailsToShow">
-            </entity-viewer>
-          </accordion-group>
-        </accordion>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="subscribers"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Subscriber'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
       </form>
       <br>
       <br>

@@ -48,8 +48,7 @@
 }
 
 
-.card.accordionClass,
-.card.accordionClass .card-header
+.card, .card-header, .card-block
 {
   background-color: #3a87ad;
   color: #fff;

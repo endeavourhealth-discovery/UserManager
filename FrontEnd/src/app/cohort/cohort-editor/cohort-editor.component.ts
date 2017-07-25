@@ -14,8 +14,10 @@ import {Cohort} from "../models/Cohort";
 })
 export class CohortEditorComponent implements OnInit {
   private paramSubscriber: any;
-  cohort : Cohort = <Cohort>{};
-  dpas : Dpa[];
+  cohort: Cohort = <Cohort>{};
+  dpas: Dpa[];
+
+  dpaDetailsToShow = new Dpa().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,

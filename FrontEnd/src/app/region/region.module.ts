@@ -5,11 +5,16 @@ import { LoggerService, EntityViewComponentsModule } from 'eds-angular4';
 import {RegionService} from './region.service';
 import { RegionEditorComponent } from './region-editor/region-editor.component';
 import { RegionPickerComponent } from './region-picker/region-picker.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {AgmCoreModule, MapsAPILoader} from 'angular2-google-maps/core';
+import {CustomLazyAPIKeyLoader} from './CustomLazyAPIKeyLoader';
 
 @NgModule({
   imports: [
+    AgmCoreModule.forRoot(),
     CommonModule,
     EntityViewComponentsModule,
+    NgbModule
   ],
   declarations: [
     RegionComponent,
@@ -21,6 +26,7 @@ import { RegionPickerComponent } from './region-picker/region-picker.component';
   ],
   providers: [
     RegionService,
-    LoggerService]
+    LoggerService,
+    {provide: MapsAPILoader, useClass: CustomLazyAPIKeyLoader }]
 })
 export class RegionModule { }
