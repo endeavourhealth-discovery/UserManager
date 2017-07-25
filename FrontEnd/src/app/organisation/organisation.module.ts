@@ -27,7 +27,8 @@ import {RegionPickerComponent} from '../region/region-picker/region-picker.compo
     RegionPickerComponent
   ],
   entryComponents : [
-    OrganisationPickerComponent
+    OrganisationPickerComponent,
+    RegionPickerComponent
   ],
   providers: [
     OrganisationService,

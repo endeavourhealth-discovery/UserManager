@@ -17,7 +17,7 @@ export class OrganisationPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, organisations: Organisation[], searchType: string) {
     const modalRef = modalService.open(OrganisationPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = organisations;
+    modalRef.componentInstance.resultData = Object.assign([], organisations);
     modalRef.componentInstance.searchType = searchType;
 
     return modalRef;
@@ -43,8 +43,9 @@ export class OrganisationPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Organisation) {
-    /*if ($.grep(this.resultData, function(o: Organisation) { return o.uuid === match.uuid; }).length === 0)
-      this.resultData.push(match);*/
+    if (!this.resultData.some(x => x.uuid === match.uuid)) {
+      this.resultData.push(match);
+    }
   }
 
   private removeFromSelection(match: Organisation) {

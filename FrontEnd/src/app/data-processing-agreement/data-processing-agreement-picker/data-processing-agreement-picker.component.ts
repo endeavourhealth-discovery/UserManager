@@ -16,7 +16,7 @@ export class DataProcessingAgreementPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, dpas: Dpa[]) {
     const modalRef = modalService.open(DataProcessingAgreementPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = dpas;
+    modalRef.componentInstance.resultData = Object.assign([], dpas);;
 
     return modalRef;
   }
@@ -41,8 +41,9 @@ export class DataProcessingAgreementPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Dpa) {
-    /*if ($.grep(this.resultData, function(o:Dpa) { return o.uuid === match.uuid; }).length === 0)
-      this.resultData.push(match);*/
+    if (!this.resultData.some(x => x.uuid === match.uuid)) {
+      this.resultData.push(match);
+    }
   }
 
   private removeFromSelection(match: Dpa) {

@@ -17,7 +17,7 @@ export class RegionPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, regions: Region[]) {
     const modalRef = modalService.open(RegionPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = regions;
+    modalRef.componentInstance.resultData = Object.assign([], regions);
 
     return modalRef;
   }
@@ -42,9 +42,9 @@ export class RegionPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Region) {
-    /*if ($.grep(this.resultData, function(o: Region) { return o.uuid === match.uuid; }).length === 0) {
+    if (!this.resultData.some(x => x.uuid === match.uuid)) {
       this.resultData.push(match);
-    }*/
+    }
   }
 
   private removeFromSelection(match: Region) {

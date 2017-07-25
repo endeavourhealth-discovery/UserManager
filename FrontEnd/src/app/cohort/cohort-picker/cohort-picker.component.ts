@@ -16,7 +16,7 @@ export class CohortPickerComponent implements OnInit {
 
   public static open(modalService: NgbModal, cohorts: Cohort[]) {
     const modalRef = modalService.open(CohortPickerComponent, { backdrop : 'static'});
-    modalRef.componentInstance.resultData = cohorts;
+    modalRef.componentInstance.resultData = Object.assign([], cohorts);
 
     return modalRef;
   }
@@ -40,8 +40,9 @@ export class CohortPickerComponent implements OnInit {
   }
 
   private addToSelection(match: Cohort) {
-    /*if ($.grep(this.resultData, function(o: Cohort) { return o.uuid === match.uuid; }).length === 0)
-      this.resultData.push(match);*/
+    if (!this.resultData.some(x => x.uuid === match.uuid)) {
+      this.resultData.push(match);
+    }
   }
 
   private removeFromSelection(match: Cohort) {
