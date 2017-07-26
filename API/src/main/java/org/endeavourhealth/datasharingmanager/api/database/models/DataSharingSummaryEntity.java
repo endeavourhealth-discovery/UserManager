@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import java.sql.Date;
 import java.util.List;
 
-@Entity
 @NamedStoredProcedureQueries({
         @NamedStoredProcedureQuery(
                 name = "getDataSharingSummaryStatistics",
@@ -38,7 +37,8 @@ import java.util.List;
                 procedureName = "getDatasetStatistics"
         )
 })
-@Table(name = "DataSharingSummary", schema = "OrganisationManager")
+@Entity
+@Table(name = "data_sharing_summary", schema = "data_sharing_manager")
 public class DataSharingSummaryEntity {
     private String uuid;
     private String name;
@@ -57,7 +57,7 @@ public class DataSharingSummaryEntity {
     private String evidenceOfAgreement;
 
     @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
+    @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -67,7 +67,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -77,7 +77,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "Description", nullable = true, length = 100)
+    @Column(name = "description", nullable = true, length = 100)
     public String getDescription() {
         return description;
     }
@@ -87,7 +87,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "Purpose", nullable = true, length = 100)
+    @Column(name = "purpose", nullable = true, length = 100)
     public String getPurpose() {
         return purpose;
     }
@@ -97,7 +97,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "NatureOfInformationId", nullable = false)
+    @Column(name = "nature_of_information_id", nullable = false)
     public short getNatureOfInformationId() {
         return natureOfInformationId;
     }
@@ -107,7 +107,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "Schedule2Condition", nullable = true, length = 100)
+    @Column(name = "schedule2_condition", nullable = true, length = 100)
     public String getSchedule2Condition() {
         return schedule2Condition;
     }
@@ -117,7 +117,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "BenefitToSharing", nullable = true, length = 200)
+    @Column(name = "benefit_to_sharing", nullable = true, length = 200)
     public String getBenefitToSharing() {
         return benefitToSharing;
     }
@@ -127,7 +127,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "OverviewOfDataItems", nullable = true, length = 100)
+    @Column(name = "overview_of_data_items", nullable = true, length = 100)
     public String getOverviewOfDataItems() {
         return overviewOfDataItems;
     }
@@ -137,7 +137,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "FormatTypeId", nullable = false)
+    @Column(name = "format_type_id", nullable = false)
     public short getFormatTypeId() {
         return formatTypeId;
     }
@@ -147,7 +147,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "DataSubjectTypeId", nullable = false)
+    @Column(name = "data_subject_type_id", nullable = false)
     public short getDataSubjectTypeId() {
         return dataSubjectTypeId;
     }
@@ -157,7 +157,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "NatureOfPersonsAccessingData", nullable = true, length = 100)
+    @Column(name = "nature_of_persons_accessing_data", nullable = true, length = 100)
     public String getNatureOfPersonsAccessingData() {
         return natureOfPersonsAccessingData;
     }
@@ -167,7 +167,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "ReviewCycleId", nullable = false)
+    @Column(name = "review_cycle_id", nullable = false)
     public short getReviewCycleId() {
         return reviewCycleId;
     }
@@ -177,7 +177,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "ReviewDate", nullable = true)
+    @Column(name = "review_date", nullable = true)
     public Date getReviewDate() {
         return reviewDate;
     }
@@ -187,7 +187,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "StartDate", nullable = true)
+    @Column(name = "start_date", nullable = true)
     public Date getStartDate() {
         return startDate;
     }
@@ -197,7 +197,7 @@ public class DataSharingSummaryEntity {
     }
 
     @Basic
-    @Column(name = "EvidenceOfAgreement", nullable = true, length = 200)
+    @Column(name = "evidence_of_agreement", nullable = true, length = 200)
     public String getEvidenceOfAgreement() {
         return evidenceOfAgreement;
     }
@@ -211,7 +211,7 @@ public class DataSharingSummaryEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity) o;
+        DataSharingSummaryEntity that = (DataSharingSummaryEntity) o;
 
         if (natureOfInformationId != that.natureOfInformationId) return false;
         if (formatTypeId != that.formatTypeId) return false;

@@ -9,7 +9,7 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Documentation", schema = "OrganisationManager")
+@Table(name = "documentation", schema = "data_sharing_manager")
 public class DocumentationEntity {
     private String uuid;
     private String title;
@@ -17,7 +17,7 @@ public class DocumentationEntity {
     private String fileData;
 
     @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
+    @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -27,7 +27,7 @@ public class DocumentationEntity {
     }
 
     @Basic
-    @Column(name = "Title", nullable = false, length = 50)
+    @Column(name = "title", nullable = false, length = 50)
     public String getTitle() {
         return title;
     }
@@ -37,17 +37,17 @@ public class DocumentationEntity {
     }
 
     @Basic
-    @Column(name = "Filename", nullable = false, length = 50)
+    @Column(name = "filename", nullable = false, length = 50)
     public String getFilename() {
         return filename;
     }
 
-    public void setFilename(String fileName) {
-        this.filename = fileName;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     @Basic
-    @Column(name = "FileData", nullable = false)
+    @Column(name = "fileData", nullable = false, length = -1)
     public String getFileData() {
         return fileData;
     }
@@ -61,7 +61,7 @@ public class DocumentationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity) o;
+        DocumentationEntity that = (DocumentationEntity) o;
 
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
@@ -80,10 +80,10 @@ public class DocumentationEntity {
         return result;
     }
 
-    public static org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity getDocument(String uuid) throws Exception {
+    public static DocumentationEntity getDocument(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity ret = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class, uuid);
+        DocumentationEntity ret = entityManager.find(DocumentationEntity.class, uuid);
         entityManager.close();
 
         return ret;
@@ -92,7 +92,7 @@ public class DocumentationEntity {
     public static void saveDocument(JsonDocumentation document) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity documentationEntity = new org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity();
+        DocumentationEntity documentationEntity = new DocumentationEntity();
         documentationEntity.setUuid(document.getUuid());
         documentationEntity.setFilename(document.getFilename());
         documentationEntity.setTitle(document.getTitle());
@@ -107,7 +107,7 @@ public class DocumentationEntity {
     public static void updateDocument(JsonDocumentation document) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity documentationEntity = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class, document.getUuid());
+        DocumentationEntity documentationEntity = entityManager.find(DocumentationEntity.class, document.getUuid());
         entityManager.getTransaction().begin();
         documentationEntity.setTitle(document.getTitle());
         documentationEntity.setFilename(document.getFilename());
@@ -119,7 +119,7 @@ public class DocumentationEntity {
     public static void deleteDocument(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity documentationEntity = entityManager.find(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class, uuid);
+        DocumentationEntity documentationEntity = entityManager.find(DocumentationEntity.class, uuid);
         entityManager.getTransaction().begin();
         entityManager.remove(documentationEntity);
         entityManager.getTransaction().commit();
@@ -137,8 +137,8 @@ public class DocumentationEntity {
 
         entityManager.getTransaction().begin();
         CriteriaBuilder criteriaBuilder  = entityManager.getCriteriaBuilder();
-        CriteriaDelete<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> query = criteriaBuilder.createCriteriaDelete(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class);
-        Root<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> root = query.from(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class);
+        CriteriaDelete<DocumentationEntity> query = criteriaBuilder.createCriteriaDelete(DocumentationEntity.class);
+        Root<DocumentationEntity> root = query.from(DocumentationEntity.class);
         query.where(root.get("uuid").in(documents));
 
         entityManager.createQuery(query).executeUpdate();
@@ -147,19 +147,19 @@ public class DocumentationEntity {
         entityManager.close();
     }
 
-    public static List<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> getDocumentsFromList(List<String> documents) throws Exception {
+    public static List<DocumentationEntity> getDocumentsFromList(List<String> documents) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> cq = cb.createQuery(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class);
-        Root<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> rootEntry = cq.from(org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity.class);
+        CriteriaQuery<DocumentationEntity> cq = cb.createQuery(DocumentationEntity.class);
+        Root<DocumentationEntity> rootEntry = cq.from(DocumentationEntity.class);
 
         Predicate predicate = rootEntry.get("uuid").in(documents);
 
         cq.where(predicate);
-        TypedQuery<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> query = entityManager.createQuery(cq);
+        TypedQuery<DocumentationEntity> query = entityManager.createQuery(cq);
 
-        List<org.endeavourhealth.core.mySQLDatabase.models.DocumentationEntity> ret = query.getResultList();
+        List<DocumentationEntity> ret = query.getResultList();
 
         entityManager.close();
 

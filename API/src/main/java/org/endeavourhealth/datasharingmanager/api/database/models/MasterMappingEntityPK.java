@@ -6,11 +6,11 @@ import java.io.Serializable;
 
 public class MasterMappingEntityPK implements Serializable {
     private String childUuid;
-    private String parentUUid;
     private short childMapTypeId;
+    private String parentUuid;
     private short parentMapTypeId;
 
-    @Column(name = "ChildUuid", nullable = false, length = 36)
+    @Column(name = "child_uuid", nullable = false, length = 36)
     @Id
     public String getChildUuid() {
         return childUuid;
@@ -20,41 +20,7 @@ public class MasterMappingEntityPK implements Serializable {
         this.childUuid = childUuid;
     }
 
-    @Column(name = "ParentUUid", nullable = false, length = 36)
-    @Id
-    public String getParentUUid() {
-        return parentUUid;
-    }
-
-    public void setParentUUid(String parentUUid) {
-        this.parentUUid = parentUUid;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntityPK that = (org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntityPK) o;
-
-        if (childMapTypeId != that.childMapTypeId) return false;
-        if (parentMapTypeId != that.parentMapTypeId) return false;
-        if (childUuid != null ? !childUuid.equals(that.childUuid) : that.childUuid != null) return false;
-        if (parentUUid != null ? !parentUUid.equals(that.parentUUid) : that.parentUUid != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = childUuid != null ? childUuid.hashCode() : 0;
-        result = 31 * result + (parentUUid != null ? parentUUid.hashCode() : 0);
-        result = 31 * result + (int) childMapTypeId;
-        result = 31 * result + (int) parentMapTypeId;
-        return result;
-    }
-
-    @Column(name = "ChildMapTypeId", nullable = false)
+    @Column(name = "child_map_type_id", nullable = false)
     @Id
     public short getChildMapTypeId() {
         return childMapTypeId;
@@ -64,7 +30,17 @@ public class MasterMappingEntityPK implements Serializable {
         this.childMapTypeId = childMapTypeId;
     }
 
-    @Column(name = "ParentMapTypeId", nullable = false)
+    @Column(name = "parent_uuid", nullable = false, length = 36)
+    @Id
+    public String getParentUuid() {
+        return parentUuid;
+    }
+
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
+    }
+
+    @Column(name = "parent_map_type_id", nullable = false)
     @Id
     public short getParentMapTypeId() {
         return parentMapTypeId;
@@ -72,5 +48,29 @@ public class MasterMappingEntityPK implements Serializable {
 
     public void setParentMapTypeId(short parentMapTypeId) {
         this.parentMapTypeId = parentMapTypeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MasterMappingEntityPK that = (MasterMappingEntityPK) o;
+
+        if (childMapTypeId != that.childMapTypeId) return false;
+        if (parentMapTypeId != that.parentMapTypeId) return false;
+        if (childUuid != null ? !childUuid.equals(that.childUuid) : that.childUuid != null) return false;
+        if (parentUuid != null ? !parentUuid.equals(that.parentUuid) : that.parentUuid != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = childUuid != null ? childUuid.hashCode() : 0;
+        result = 31 * result + (int) childMapTypeId;
+        result = 31 * result + (parentUuid != null ? parentUuid.hashCode() : 0);
+        result = 31 * result + (int) parentMapTypeId;
+        return result;
     }
 }

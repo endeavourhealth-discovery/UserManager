@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "DataProcessingAgreement", schema = "OrganisationManager")
+@Table(name = "data_processing_agreement", schema = "data_sharing_manager")
 public class DataProcessingAgreementEntity {
     private String uuid;
     private String name;
@@ -20,15 +20,14 @@ public class DataProcessingAgreementEntity {
     private String derivation;
     private String publisherInformation;
     private String publisherContractInformation;
-    private String publisherDataSet;
+    private String publisherDataset;
     private short dsaStatusId;
-    private String dataFlow;
     private String returnToSenderPolicy;
     private Date startDate;
     private Date endDate;
 
     @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
+    @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -38,7 +37,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -48,7 +47,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true, length = 100)
     public String getDescription() {
         return description;
     }
@@ -58,7 +57,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Derivation", nullable = true, length = 100)
+    @Column(name = "derivation", nullable = true, length = 100)
     public String getDerivation() {
         return derivation;
     }
@@ -68,7 +67,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "PublisherInformation", nullable = true, length = 100)
+    @Column(name = "publisher_information", nullable = true, length = 100)
     public String getPublisherInformation() {
         return publisherInformation;
     }
@@ -78,7 +77,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "PublisherContractInformation", nullable = true, length = 100)
+    @Column(name = "publisher_contract_information", nullable = true, length = 100)
     public String getPublisherContractInformation() {
         return publisherContractInformation;
     }
@@ -88,17 +87,17 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "PublisherDataSet", nullable = true, length = 36)
-    public String getPublisherDataSet() {
-        return publisherDataSet;
+    @Column(name = "publisher_dataset", nullable = true, length = 36)
+    public String getPublisherDataset() {
+        return publisherDataset;
     }
 
-    public void setPublisherDataSet(String publisherDataSet) {
-        this.publisherDataSet = publisherDataSet;
+    public void setPublisherDataset(String publisherDataset) {
+        this.publisherDataset = publisherDataset;
     }
 
     @Basic
-    @Column(name = "DSAStatusId", nullable = false)
+    @Column(name = "dsa_status_id", nullable = false)
     public short getDsaStatusId() {
         return dsaStatusId;
     }
@@ -108,17 +107,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "DataFlow", nullable = true, length = 36)
-    public String getDataFlow() {
-        return dataFlow;
-    }
-
-    public void setDataFlow(String dataFlow) {
-        this.dataFlow = dataFlow;
-    }
-
-    @Basic
-    @Column(name = "ReturnToSenderPolicy", nullable = true, length = 100)
+    @Column(name = "return_to_sender_policy", nullable = true, length = 100)
     public String getReturnToSenderPolicy() {
         return returnToSenderPolicy;
     }
@@ -128,7 +117,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "StartDate", nullable = true)
+    @Column(name = "start_date", nullable = true)
     public Date getStartDate() {
         return startDate;
     }
@@ -138,7 +127,7 @@ public class DataProcessingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "EndDate", nullable = true)
+    @Column(name = "end_date", nullable = true)
     public Date getEndDate() {
         return endDate;
     }
@@ -152,7 +141,7 @@ public class DataProcessingAgreementEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.datasharingmanager.api.database.models.DataProcessingAgreementEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.DataProcessingAgreementEntity) o;
+        DataProcessingAgreementEntity that = (DataProcessingAgreementEntity) o;
 
         if (dsaStatusId != that.dsaStatusId) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
@@ -163,9 +152,8 @@ public class DataProcessingAgreementEntity {
             return false;
         if (publisherContractInformation != null ? !publisherContractInformation.equals(that.publisherContractInformation) : that.publisherContractInformation != null)
             return false;
-        if (publisherDataSet != null ? !publisherDataSet.equals(that.publisherDataSet) : that.publisherDataSet != null)
+        if (publisherDataset != null ? !publisherDataset.equals(that.publisherDataset) : that.publisherDataset != null)
             return false;
-        if (dataFlow != null ? !dataFlow.equals(that.dataFlow) : that.dataFlow != null) return false;
         if (returnToSenderPolicy != null ? !returnToSenderPolicy.equals(that.returnToSenderPolicy) : that.returnToSenderPolicy != null)
             return false;
         if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
@@ -182,9 +170,8 @@ public class DataProcessingAgreementEntity {
         result = 31 * result + (derivation != null ? derivation.hashCode() : 0);
         result = 31 * result + (publisherInformation != null ? publisherInformation.hashCode() : 0);
         result = 31 * result + (publisherContractInformation != null ? publisherContractInformation.hashCode() : 0);
-        result = 31 * result + (publisherDataSet != null ? publisherDataSet.hashCode() : 0);
+        result = 31 * result + (publisherDataset != null ? publisherDataset.hashCode() : 0);
         result = 31 * result + (int) dsaStatusId;
-        result = 31 * result + (dataFlow != null ? dataFlow.hashCode() : 0);
         result = 31 * result + (returnToSenderPolicy != null ? returnToSenderPolicy.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
@@ -226,9 +213,8 @@ public class DataProcessingAgreementEntity {
         dpaEntity.setDerivation(dpa.getDerivation());
         dpaEntity.setPublisherInformation(dpa.getPublisherInformation());
         dpaEntity.setPublisherContractInformation(dpa.getPublisherContractInformation());
-        dpaEntity.setPublisherDataSet(dpa.getPublisherDataSet());
+        dpaEntity.setPublisherDataset(dpa.getPublisherDataSet());
         dpaEntity.setDsaStatusId(dpa.getDsaStatusId());
-        dpaEntity.setDataFlow(dpa.getDataFlow());
         dpaEntity.setReturnToSenderPolicy(dpa.getReturnToSenderPolicy());
         if (dpa.getStartDate() != null) {
             dpaEntity.setStartDate(Date.valueOf(dpa.getStartDate()));
@@ -252,9 +238,8 @@ public class DataProcessingAgreementEntity {
         dpaEntity.setDerivation(dpa.getDerivation());
         dpaEntity.setPublisherInformation(dpa.getPublisherInformation());
         dpaEntity.setPublisherContractInformation(dpa.getPublisherContractInformation());
-        dpaEntity.setPublisherDataSet(dpa.getPublisherDataSet());
+        dpaEntity.setPublisherDataset(dpa.getPublisherDataSet());
         dpaEntity.setDsaStatusId(dpa.getDsaStatusId());
-        dpaEntity.setDataFlow(dpa.getDataFlow());
         dpaEntity.setReturnToSenderPolicy(dpa.getReturnToSenderPolicy());
         if (dpa.getStartDate() != null) {
             dpaEntity.setStartDate(Date.valueOf(dpa.getStartDate()));

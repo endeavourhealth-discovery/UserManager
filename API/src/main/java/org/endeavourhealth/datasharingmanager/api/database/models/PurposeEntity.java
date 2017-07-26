@@ -9,14 +9,14 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Purpose", schema = "OrganisationManager")
+@Table(name = "purpose", schema = "data_sharing_manager")
 public class PurposeEntity {
     private String uuid;
     private String title;
     private String detail;
 
     @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
+    @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -26,7 +26,7 @@ public class PurposeEntity {
     }
 
     @Basic
-    @Column(name = "Title", nullable = false, length = 50)
+    @Column(name = "title", nullable = false, length = 50)
     public String getTitle() {
         return title;
     }
@@ -36,7 +36,7 @@ public class PurposeEntity {
     }
 
     @Basic
-    @Column(name = "Detail", nullable = false, length = 2000)
+    @Column(name = "detail", nullable = false, length = 2000)
     public String getDetail() {
         return detail;
     }
@@ -50,7 +50,7 @@ public class PurposeEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.datasharingmanager.api.database.models.PurposeEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.PurposeEntity) o;
+        PurposeEntity that = (PurposeEntity) o;
 
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;

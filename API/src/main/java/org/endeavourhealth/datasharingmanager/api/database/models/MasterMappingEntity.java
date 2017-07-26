@@ -12,23 +12,99 @@ import javax.persistence.criteria.Root;
 import java.util.*;
 
 @NamedStoredProcedureQueries({
-    @NamedStoredProcedureQuery(
-            name = "deleteAllMappings",
-            procedureName = "deleteAllMappings",
-            parameters = {
-                    @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "UUID")
-            }
-    )
+        @NamedStoredProcedureQuery(
+                name = "deleteAllMappings",
+                procedureName = "deleteAllMappings",
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "UUID")
+                }
+        )
 })
 @Entity
-@Table(name = "MasterMapping", schema = "OrganisationManager")
+@Table(name = "master_mapping", schema = "data_sharing_manager")
 @IdClass(MasterMappingEntityPK.class)
 public class MasterMappingEntity {
     private String childUuid;
-    private String parentUUid;
-    private byte isDefault;
     private short childMapTypeId;
+    private String parentUuid;
     private short parentMapTypeId;
+    private byte isDefault;
+
+    @Id
+    @Column(name = "child_uuid", nullable = false, length = 36)
+    public String getChildUuid() {
+        return childUuid;
+    }
+
+    public void setChildUuid(String childUuid) {
+        this.childUuid = childUuid;
+    }
+
+    @Id
+    @Column(name = "child_map_type_id", nullable = false)
+    public short getChildMapTypeId() {
+        return childMapTypeId;
+    }
+
+    public void setChildMapTypeId(short childMapTypeId) {
+        this.childMapTypeId = childMapTypeId;
+    }
+
+    @Id
+    @Column(name = "parent_uuid", nullable = false, length = 36)
+    public String getParentUuid() {
+        return parentUuid;
+    }
+
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
+    }
+
+    @Id
+    @Column(name = "parent_map_type_id", nullable = false)
+    public short getParentMapTypeId() {
+        return parentMapTypeId;
+    }
+
+    public void setParentMapTypeId(short parentMapTypeId) {
+        this.parentMapTypeId = parentMapTypeId;
+    }
+
+    @Basic
+    @Column(name = "is_default", nullable = false)
+    public byte getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(byte isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MasterMappingEntity that = (MasterMappingEntity) o;
+
+        if (childMapTypeId != that.childMapTypeId) return false;
+        if (parentMapTypeId != that.parentMapTypeId) return false;
+        if (isDefault != that.isDefault) return false;
+        if (childUuid != null ? !childUuid.equals(that.childUuid) : that.childUuid != null) return false;
+        if (parentUuid != null ? !parentUuid.equals(that.parentUuid) : that.parentUuid != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = childUuid != null ? childUuid.hashCode() : 0;
+        result = 31 * result + (int) childMapTypeId;
+        result = 31 * result + (parentUuid != null ? parentUuid.hashCode() : 0);
+        result = 31 * result + (int) parentMapTypeId;
+        result = 31 * result + (int) isDefault;
+        return result;
+    }
 
     public static void deleteAllMappings(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
@@ -47,7 +123,7 @@ public class MasterMappingEntity {
             entityManager.getTransaction().begin();
             mme.setChildUuid(childUuid);
             mme.setChildMapTypeId(childMapTypeId);
-            mme.setParentUUid(k.toString());
+            mme.setParentUuid(k.toString());
             mme.setParentMapTypeId(parentMapTypeId);
             entityManager.persist(mme);
             entityManager.getTransaction().commit();
@@ -65,7 +141,7 @@ public class MasterMappingEntity {
             entityManager.getTransaction().begin();
             mme.setChildUuid(k.toString());
             mme.setChildMapTypeId(childMapTypeId);
-            mme.setParentUUid(parentUuid);
+            mme.setParentUuid(parentUuid);
             mme.setParentMapTypeId(parentMapTypeId);
             entityManager.persist(mme);
             entityManager.getTransaction().commit();
@@ -91,7 +167,7 @@ public class MasterMappingEntity {
 
         List<String> parents = new ArrayList<>();
         for(MasterMappingEntity mme : maps){
-            parents.add(mme.getParentUUid());
+            parents.add(mme.getParentUuid());
         }
 
         entityManager.close();
@@ -308,81 +384,5 @@ public class MasterMappingEntity {
 
         entityManager.getTransaction().commit();
         entityManager.close();
-    }
-
-    @Id
-    @Column(name = "ChildUuid", nullable = false, length = 36)
-    public String getChildUuid() {
-        return childUuid;
-    }
-
-    public void setChildUuid(String childUuid) {
-        this.childUuid = childUuid;
-    }
-
-    @Id
-    @Column(name = "ParentUUid", nullable = false, length = 36)
-    public String getParentUUid() {
-        return parentUUid;
-    }
-
-    public void setParentUUid(String parentUUid) {
-        this.parentUUid = parentUUid;
-    }
-
-    @Basic
-    @Column(name = "IsDefault", nullable = false)
-    public byte getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(byte isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity) o;
-
-        if (childMapTypeId != that.childMapTypeId) return false;
-        if (parentMapTypeId != that.parentMapTypeId) return false;
-        if (isDefault != that.isDefault) return false;
-        if (childUuid != null ? !childUuid.equals(that.childUuid) : that.childUuid != null) return false;
-        if (parentUUid != null ? !parentUUid.equals(that.parentUUid) : that.parentUUid != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = childUuid != null ? childUuid.hashCode() : 0;
-        result = 31 * result + (parentUUid != null ? parentUUid.hashCode() : 0);
-        result = 31 * result + (int) childMapTypeId;
-        result = 31 * result + (int) parentMapTypeId;
-        result = 31 * result + (int) isDefault;
-        return result;
-    }
-
-    @Id
-    @Column(name = "ChildMapTypeId", nullable = false)
-    public short getChildMapTypeId() {
-        return childMapTypeId;
-    }
-
-    public void setChildMapTypeId(short childMapTypeId) {
-        this.childMapTypeId = childMapTypeId;
-    }
-
-    @Id
-    @Column(name = "ParentMapTypeId", nullable = false)
-    public short getParentMapTypeId() {
-        return parentMapTypeId;
-    }
-
-    public void setParentMapTypeId(short parentMapTypeId) {
-        this.parentMapTypeId = parentMapTypeId;
     }
 }

@@ -14,11 +14,11 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
+import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity;
 import org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity;
 import org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity;
 import org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity;
-import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanager.api.json.*;
 import org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerMetricListener;
 import org.endeavourhealth.datasharingmanager.api.utility.CsvHelper;
@@ -687,10 +687,10 @@ public final class OrganisationManagerEndpoint extends AbstractEndpoint {
             MasterMappingEntity map = new MasterMappingEntity();
             map.setChildUuid(bulkOrgMap.get(k));
             map.setChildMapTypeId(MapType.ORGANISATION.getMapType());
-            map.setParentUUid(bulkOrgMap.get(v));
+            map.setParentUuid(bulkOrgMap.get(v));
             map.setParentMapTypeId(MapType.ORGANISATION.getMapType());
 
-            if (map.getParentUUid() != null)
+            if (map.getParentUuid() != null)
                 bulkUploadMappings.add(map);
         });
 

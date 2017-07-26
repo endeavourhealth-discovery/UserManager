@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "DataSharingAgreement", schema = "OrganisationManager")
+@Table(name = "data_sharing_agreement", schema = "data_sharing_manager")
 public class DataSharingAgreementEntity {
     private String uuid;
     private String name;
@@ -24,7 +24,7 @@ public class DataSharingAgreementEntity {
     private Date endDate;
 
     @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
+    @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -34,7 +34,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -44,7 +44,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Description", nullable = true, length = 100)
+    @Column(name = "description", nullable = true, length = 100)
     public String getDescription() {
         return description;
     }
@@ -54,7 +54,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "Derivation", nullable = true, length = 100)
+    @Column(name = "derivation", nullable = true, length = 100)
     public String getDerivation() {
         return derivation;
     }
@@ -64,7 +64,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "DSAStatusId", nullable = false)
+    @Column(name = "dsa_status_id", nullable = false)
     public short getDsaStatusId() {
         return dsaStatusId;
     }
@@ -74,7 +74,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "ConsentModelId", nullable = false)
+    @Column(name = "consent_model_id", nullable = false)
     public short getConsentModelId() {
         return consentModelId;
     }
@@ -84,7 +84,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "StartDate", nullable = true)
+    @Column(name = "start_date", nullable = true)
     public Date getStartDate() {
         return startDate;
     }
@@ -94,7 +94,7 @@ public class DataSharingAgreementEntity {
     }
 
     @Basic
-    @Column(name = "EndDate", nullable = true)
+    @Column(name = "end_date", nullable = true)
     public Date getEndDate() {
         return endDate;
     }
@@ -108,7 +108,7 @@ public class DataSharingAgreementEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity that = (org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity) o;
+        DataSharingAgreementEntity that = (DataSharingAgreementEntity) o;
 
         if (dsaStatusId != that.dsaStatusId) return false;
         if (consentModelId != that.consentModelId) return false;

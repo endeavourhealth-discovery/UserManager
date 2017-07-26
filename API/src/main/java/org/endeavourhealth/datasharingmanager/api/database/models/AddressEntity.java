@@ -20,7 +20,7 @@ import java.util.List;
         )
 })
 @Entity
-@Table(name = "Address", schema = "OrganisationManager")
+@Table(name = "address", schema = "data_sharing_manager")
 public class AddressEntity {
     private String uuid;
     private String organisationUuid;
@@ -30,10 +30,160 @@ public class AddressEntity {
     private String city;
     private String county;
     private String postcode;
-    private String geolocation;
-    private Byte geolocationReprocess;
     private Double lat;
     private Double lng;
+    private Byte geolocationReprocess;
+
+    @Id
+    @Column(name = "uuid", nullable = false, length = 36)
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Basic
+    @Column(name = "organisation_uuid", nullable = false, length = 36)
+    public String getOrganisationUuid() {
+        return organisationUuid;
+    }
+
+    public void setOrganisationUuid(String organisationUuid) {
+        this.organisationUuid = organisationUuid;
+    }
+
+    @Basic
+    @Column(name = "building_name", nullable = true, length = 100)
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
+
+    @Basic
+    @Column(name = "Number_and_street", nullable = true, length = 100)
+    public String getNumberAndStreet() {
+        return numberAndStreet;
+    }
+
+    public void setNumberAndStreet(String numberAndStreet) {
+        this.numberAndStreet = numberAndStreet;
+    }
+
+    @Basic
+    @Column(name = "locality", nullable = true, length = 100)
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    @Basic
+    @Column(name = "city", nullable = true, length = 100)
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Basic
+    @Column(name = "county", nullable = true, length = 100)
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    @Basic
+    @Column(name = "postcode", nullable = true, length = 100)
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    @Basic
+    @Column(name = "lat", nullable = true, precision = 6)
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    @Basic
+    @Column(name = "lng", nullable = true, precision = 6)
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    @Basic
+    @Column(name = "geolocation_reprocess", nullable = true)
+    public Byte getGeolocationReprocess() {
+        return geolocationReprocess;
+    }
+
+    public void setGeolocationReprocess(Byte geolocationReprocess) {
+        this.geolocationReprocess = geolocationReprocess;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AddressEntity that = (AddressEntity) o;
+
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+        if (organisationUuid != null ? !organisationUuid.equals(that.organisationUuid) : that.organisationUuid != null)
+            return false;
+        if (buildingName != null ? !buildingName.equals(that.buildingName) : that.buildingName != null) return false;
+        if (numberAndStreet != null ? !numberAndStreet.equals(that.numberAndStreet) : that.numberAndStreet != null)
+            return false;
+        if (locality != null ? !locality.equals(that.locality) : that.locality != null) return false;
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (county != null ? !county.equals(that.county) : that.county != null) return false;
+        if (postcode != null ? !postcode.equals(that.postcode) : that.postcode != null) return false;
+        if (lat != null ? !lat.equals(that.lat) : that.lat != null) return false;
+        if (lng != null ? !lng.equals(that.lng) : that.lng != null) return false;
+        if (geolocationReprocess != null ? !geolocationReprocess.equals(that.geolocationReprocess) : that.geolocationReprocess != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (organisationUuid != null ? organisationUuid.hashCode() : 0);
+        result = 31 * result + (buildingName != null ? buildingName.hashCode() : 0);
+        result = 31 * result + (numberAndStreet != null ? numberAndStreet.hashCode() : 0);
+        result = 31 * result + (locality != null ? locality.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (county != null ? county.hashCode() : 0);
+        result = 31 * result + (postcode != null ? postcode.hashCode() : 0);
+        result = 31 * result + (lat != null ? lat.hashCode() : 0);
+        result = 31 * result + (lng != null ? lng.hashCode() : 0);
+        result = 31 * result + (geolocationReprocess != null ? geolocationReprocess.hashCode() : 0);
+        return result;
+    }
 
     public AddressEntity() {
 
@@ -145,154 +295,5 @@ public class AddressEntity {
         entityManager.close();
 
         return ent;
-    }
-
-    @Id
-    @Column(name = "Uuid", nullable = false, length = 36)
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    @Basic
-    @Column(name = "OrganisationUuid", nullable = false, length = 36)
-    public String getOrganisationUuid() {
-        return organisationUuid;
-    }
-
-    public void setOrganisationUuid(String organisationUuid) {
-        this.organisationUuid = organisationUuid;
-    }
-
-    @Basic
-    @Column(name = "BuildingName", nullable = true, length = 100)
-    public String getBuildingName() {
-        return buildingName;
-    }
-
-    public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
-    }
-
-    @Basic
-    @Column(name = "NumberAndStreet", nullable = true, length = 100)
-    public String getNumberAndStreet() {
-        return numberAndStreet;
-    }
-
-    public void setNumberAndStreet(String numberAndStreet) {
-        this.numberAndStreet = numberAndStreet;
-    }
-
-    @Basic
-    @Column(name = "Locality", nullable = true, length = 100)
-    public String getLocality() {
-        return locality;
-    }
-
-    public void setLocality(String locality) {
-        this.locality = locality;
-    }
-
-    @Basic
-    @Column(name = "City", nullable = true, length = 100)
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    @Basic
-    @Column(name = "County", nullable = true, length = 100)
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    @Basic
-    @Column(name = "Postcode", nullable = true, length = 100)
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    @Basic
-    @Column(name = "GeolocationReprocess", nullable = true)
-    public Byte getGeolocationReprocess() {
-        return geolocationReprocess;
-    }
-
-    public void setGeolocationReprocess(Byte geolocationReprocess) {
-        this.geolocationReprocess = geolocationReprocess;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AddressEntity that = (AddressEntity) o;
-
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
-        if (organisationUuid != null ? !organisationUuid.equals(that.organisationUuid) : that.organisationUuid != null)
-            return false;
-        if (buildingName != null ? !buildingName.equals(that.buildingName) : that.buildingName != null) return false;
-        if (numberAndStreet != null ? !numberAndStreet.equals(that.numberAndStreet) : that.numberAndStreet != null)
-            return false;
-        if (locality != null ? !locality.equals(that.locality) : that.locality != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (county != null ? !county.equals(that.county) : that.county != null) return false;
-        if (postcode != null ? !postcode.equals(that.postcode) : that.postcode != null) return false;
-        if (geolocation != null ? !geolocation.equals(that.geolocation) : that.geolocation != null) return false;
-        if (geolocationReprocess != null ? !geolocationReprocess.equals(that.geolocationReprocess) : that.geolocationReprocess != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (organisationUuid != null ? organisationUuid.hashCode() : 0);
-        result = 31 * result + (buildingName != null ? buildingName.hashCode() : 0);
-        result = 31 * result + (numberAndStreet != null ? numberAndStreet.hashCode() : 0);
-        result = 31 * result + (locality != null ? locality.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (county != null ? county.hashCode() : 0);
-        result = 31 * result + (postcode != null ? postcode.hashCode() : 0);
-        result = 31 * result + (geolocation != null ? geolocation.hashCode() : 0);
-        result = 31 * result + (geolocationReprocess != null ? geolocationReprocess.hashCode() : 0);
-        return result;
-    }
-
-    @Basic
-    @Column(name = "lat", nullable = true, precision = 6)
-    public Double getLat() {
-        return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    @Basic
-    @Column(name = "lng", nullable = true, precision = 6)
-    public Double getLng() {
-        return lng;
-    }
-
-    public void setLng(Double lng) {
-        this.lng = lng;
     }
 }
