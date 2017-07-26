@@ -63,7 +63,7 @@ create table data_sharing_manager.flow_schedule (
 
 create table data_sharing_manager.data_exchange_method (
 	id smallint not null comment 'Lookup Id',
-    data_exhange_method varchar(100) not null comment 'Lookup Value',   
+    data_exchange_method varchar(100) not null comment 'Lookup Value',   
     
     constraint data_sharing_manager_data_exchange_method_id_pk primary key (id)     
 ) comment 'Lookup table holding enumerations for the data exchange method';
@@ -91,11 +91,11 @@ create table data_sharing_manager.security_architecture (
     constraint data_sharing_manager_security_architecture_id_pk primary key (id)  
 ) comment 'Lookup table holding enumerations for security architecture';
 
-create table data_sharing_manager.dsa_Status (
+create table data_sharing_manager.dsa_status (
 	id smallint not null comment 'Lookup Id',
-    dsa_Status varchar(100) not null comment 'Lookup Value',   
+    dsa_status varchar(100) not null comment 'Lookup Value',   
     
-    constraint data_sharing_manager_dsa_Status_id_pk primary key (id)  
+    constraint data_sharing_manager_dsa_status_id_pk primary key (id)  
 ) comment 'Lookup table holding enumerations for status';
 
 create table data_sharing_manager.consent_model (
