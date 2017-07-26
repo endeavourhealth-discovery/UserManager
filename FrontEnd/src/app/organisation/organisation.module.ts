@@ -23,8 +23,7 @@ import {RegionPickerComponent} from '../region/region-picker/region-picker.compo
     OrganisationComponent,
     OrganisationOverviewComponent,
     OrganisationEditorComponent,
-    OrganisationPickerComponent,
-    RegionPickerComponent
+    OrganisationPickerComponent
   ],
   entryComponents : [
     OrganisationPickerComponent,

@@ -115,6 +115,7 @@ export class OrganisationEditorComponent implements OnInit {
   }
 
   save(close: boolean) {
+    console.log('saving');
     const vm = this;
     // Populate organisations regions before save
     vm.organisation.regions = {};

@@ -6,13 +6,15 @@ import {RegionService} from './region.service';
 import { RegionEditorComponent } from './region-editor/region-editor.component';
 import { RegionPickerComponent } from './region-picker/region-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {AgmCoreModule, MapsAPILoader} from 'angular2-google-maps/core';
-import {CustomLazyAPIKeyLoader} from './CustomLazyAPIKeyLoader';
+import {FormsModule} from "@angular/forms";
+/*import {AgmCoreModule, MapsAPILoader} from 'angular2-google-maps/core';
+import {CustomLazyAPIKeyLoader} from './CustomLazyAPIKeyLoader';*/
 
 @NgModule({
   imports: [
-    AgmCoreModule.forRoot(),
+    // AgmCoreModule.forRoot(),
     CommonModule,
+    FormsModule,
     EntityViewComponentsModule,
     NgbModule
   ],
@@ -26,7 +28,7 @@ import {CustomLazyAPIKeyLoader} from './CustomLazyAPIKeyLoader';
   ],
   providers: [
     RegionService,
-    LoggerService,
-    {provide: MapsAPILoader, useClass: CustomLazyAPIKeyLoader }]
+    LoggerService]
+  // {provide: MapsAPILoader, useClass: CustomLazyAPIKeyLoader }]
 })
 export class RegionModule { }

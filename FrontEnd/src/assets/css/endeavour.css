@@ -48,12 +48,12 @@
 }
 
 
-.card, .card-header, .card-block
+/*.card, .card-header, .card-block
 {
   background-color: #3a87ad;
   color: #fff;
   border: #333 1px solid;
-}
+}*/
 
 .panel.accordionClass .panel-body {
   background-color: #FFFFFF;

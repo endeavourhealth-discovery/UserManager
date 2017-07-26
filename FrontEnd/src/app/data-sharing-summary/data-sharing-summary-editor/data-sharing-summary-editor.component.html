@@ -11,22 +11,6 @@
     <div class="module-body">
       <form>
         <div class="row">
-          <div class="col-md-12">
-            <h3>{{dataSharingSummary.name}}</h3>
-            <inline-edit labelClass="text-success" [(ngModel)]="dataSharingSummary.name" name="inlineName" type="text" disabled="false"></inline-edit>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="panel panel-info">
-              <div class="panel-heading">Description</div>
-              <div class="panel-body">
-                <inline-edit labelClass="text-success" [(ngModel)]="dataSharingSummary.description" name="inlineDescription" type="text-area"></inline-edit>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
           <div class="form-group col-md-6">
             <label class="control-label">Data Sharing Summary Name</label>
             <input type="text" class="form-control" placeholder="Organisation name" [(ngModel)]="dataSharingSummary.name" name="name">
@@ -94,7 +78,7 @@
             <input type="text" class="form-control" placeholder="Nature of Persons Accessing Data" [(ngModel)]="dataSharingSummary.natureOfPersonsAccessingData" name="natureOfPersonsAccessingData">
           </div>
         </div>
-        <div class="row">
+        <!--<div class="row">
           <div class="col-xs-6">
             <div class="form-group">
               <label>Review Date</label>
@@ -107,7 +91,7 @@
               <datetime [timepicker]="false" [(ngModel)]="dataSharingSummary.startDate" name="startDate" [datepicker]="{ icon: 'fa fa-calendar', format: 'dd-M-yyyy', autoclose: true }" placeholder="Review Date"></datetime>
             </div>
           </div>
-        </div>
+        </div>-->
         <div class="row">
           <div class="form-group col-md-12">
             <label class="control-label">Evidence Of Agreement</label>

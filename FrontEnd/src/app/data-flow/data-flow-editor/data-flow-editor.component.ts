@@ -72,7 +72,7 @@ export class DataFlowEditorComponent implements OnInit {
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
       params => {
-        this.performAction(params['itemAction'], params['itemUuid']);
+        this.performAction(params['mode'], params['id']);
       });
   }
 

@@ -6,10 +6,12 @@ import { DataSharingSummaryOverviewComponent } from './data-sharing-summary-over
 import {DataSharingSummaryService} from './data-sharing-summary.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from 'eds-angular4';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     NgbModule,
     EntityViewComponentsModule
   ],

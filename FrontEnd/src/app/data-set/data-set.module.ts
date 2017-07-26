@@ -6,10 +6,12 @@ import { DataSetPickerComponent } from './data-set-picker/data-set-picker.compon
 import {DataSetService} from './data-set.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from 'eds-angular4';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     NgbModule,
     EntityViewComponentsModule
   ],
