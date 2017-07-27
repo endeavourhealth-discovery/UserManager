@@ -41,6 +41,6 @@ public class PersistenceManager {
         properties.put("hibernate.connection.username", user);
         properties.put("hibernate.connection.password", pass);
 
-        entityManagerFactory = Persistence.createEntityManagerFactory("DataSharing", properties);
+        entityManagerFactory = Persistence.createEntityManagerFactory("DataSharingManager", properties);
     }
 }

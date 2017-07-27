@@ -2,6 +2,7 @@ package org.endeavourhealth.datasharingmanager.api.database.models;
 
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisationManager;
+import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisationManagerStatistics;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,25 +10,104 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-@NamedStoredProcedureQueries({
-        @NamedStoredProcedureQuery(
-                name = "deleteUneditedBulkOrganisations",
-                procedureName = "deleteUneditedBulkOrganisations"
-        ),
-        @NamedStoredProcedureQuery(
-                name = "getServiceStatistics",
-                procedureName = "getServiceStatistics"
-        ),
-        @NamedStoredProcedureQuery(
-                name = "getOrganisationStatistics",
-                procedureName = "getOrganisationStatistics"
-        ),
-        @NamedStoredProcedureQuery(
-                name = "getRegionStatistics",
-                procedureName = "getRegionStatistics"
-        )
+@NamedQueries({
+        @NamedQuery(name="organisation.total",
+                query="select 'Total Number of Organisations', count(o.uuid) " +
+                "from OrganisationEntity o " +
+                        "where o.isService = 0"),
+        @NamedQuery(name="organisation.bulk",
+                query="select 'Bulk Imported Organisations', count(o.uuid) "  +
+                        "from OrganisationEntity o " +
+                        "where o.isService = 0 " +
+                        "and o.bulkImported = 1"),
+        @NamedQuery(name="organisation.editedBulk",
+                query="select 'Edited Bulk Imported Organisations', count(o.uuid) " +
+                        "from OrganisationEntity o " +
+                        "where o.isService = 0 " +
+                        "and o.bulkImported = 1 " +
+                        "and o.bulkItemUpdated = 1"),
+        @NamedQuery(name="organisation.manual",
+                query="select 'Manually Created Organisations', count(o.uuid) " +
+                        "from OrganisationEntity o " +
+                        "where o.isService = 0 " +
+                        "and o.bulkImported = 0 "),
+        @NamedQuery(name="region.total",
+                query="select 'Total Number of Regions', count(o.uuid) " +
+                        "from RegionEntity o"),
+        @NamedQuery(name="region.withDSA",
+                query="select 'Regions containing a data sharing agreement', count(distinct r.uuid) " +
+                        "from RegionEntity r " +
+                        "inner join MasterMappingEntity mm on mm.parentUuid = r.uuid and mm.parentMapTypeId = 2 " +
+                        "inner join DataSharingAgreementEntity dsa on dsa.uuid = mm.childUuid and mm.childMapTypeId = 3"),
+        @NamedQuery(name="region.withOrganisation",
+                query="select 'Regions containing an organisation', count(distinct r.uuid) " +
+                        "from RegionEntity r " +
+                        "inner join MasterMappingEntity mm on mm.parentUuid = r.uuid and mm.parentMapTypeId = 2 " +
+                        "inner join OrganisationEntity o on o.uuid = mm.childUuid and mm.childMapTypeId = 1"),
+        @NamedQuery(name="region.withRegion",
+                query="select 'Regions containing a region', count(distinct r.uuid) " +
+                        "from RegionEntity r " +
+                        "inner join MasterMappingEntity mm on mm.parentUuid = r.uuid and mm.parentMapTypeId = 2 " +
+                        "inner join RegionEntity cr on cr.uuid = mm.childUuid and mm.childMapTypeId = 2"),
+        @NamedQuery(name="region.belongingToRegion",
+                query="select 'Regions belonging to a region', count(distinct cr.uuid) " +
+                        "from RegionEntity r " +
+                        "inner join MasterMappingEntity mm on mm.parentUuid = r.uuid and mm.parentMapTypeId = 2 " +
+                        "inner join RegionEntity cr on cr.uuid = mm.childUuid and mm.childMapTypeId = 2"),
+        @NamedQuery(name="region.orphaned",
+                query="select 'Orphaned regions', count(distinct r.uuid) " +
+                        "from RegionEntity r " +
+                        "left outer join MasterMappingEntity mmp on mmp.parentUuid = r.uuid and mmp.parentMapTypeId = 2 " +
+                        "left outer join MasterMappingEntity mmc on mmc.childUuid= r.uuid and mmc.childMapTypeId = 2 " +
+                        "where mmp.parentUuid is null " +
+                        "and mmc.parentUuid is null"),
+        @NamedQuery(name="service.total",
+                query="select 'Total Number of Services', count(distinct s.uuid) " +
+                        "from OrganisationEntity s " +
+                        "where s.isService = 1"),
+        @NamedQuery(name="service.withOrganisation",
+                query="select 'Services linked to an organisation', count(distinct s.uuid) " +
+                        "from OrganisationEntity s " +
+                        "join MasterMappingEntity mm on mm.childUuid = s.uuid and mm.childMapTypeId = 0 " +
+                        "where s.isService = 1"),
+        @NamedQuery(name="service.orphaned",
+                query="select 'Orphaned Services', count(distinct s.uuid) " +
+                        "from OrganisationEntity s " +
+                        "left outer join MasterMappingEntity mm on mm.childUuid = s.uuid and mm.childMapTypeId = 0 " +
+                        "where s.isService = 1 " +
+                        "and mm.childUuid is null"),
+        @NamedQuery(name="cohort.total",
+                query="select 'Total Number of Cohorts', count(distinct c.uuid) " +
+                        "from CohortEntity c "),
+        @NamedQuery(name="dataFlow.total",
+                query="select 'Total Number of Data Flows', count(distinct df.uuid) " +
+                        "from DataFlowEntity df "),
+        @NamedQuery(name="dataFlow.totalVolume",
+                query="select 'Total Volume for All Data Flows', coalesce(sum(df.approximateVolume), 0) " +
+                        "from DataFlowEntity df "),
+        @NamedQuery(name="dataFlow.averageVolume",
+                query="select 'Average Volume for Data Flows', coalesce(avg(df.approximateVolume), 0) " +
+                        "from DataFlowEntity df "),
+        @NamedQuery(name="dpa.total",
+                query="select 'Total Number of Data Processing Agreements', count(distinct dpa.uuid) " +
+                        "from DataProcessingAgreementEntity dpa "),
+        @NamedQuery(name="dataSet.total",
+                query="select 'Total Number of Datasets', count(distinct ds.uuid) " +
+                        "from DatasetEntity ds "),
+        @NamedQuery(name="dsa.total",
+                query="select 'Total Number of Data Sharing Agreements', count(distinct dsa.uuid) " +
+                        "from DataSharingAgreementEntity dsa "),
+        @NamedQuery(name="dsa.withRegion",
+                query="select 'Data sharing agreements belonging to a region', count(distinct dsa.uuid) " +
+                        "from DataSharingAgreementEntity dsa " +
+                        "inner join MasterMappingEntity mm on mm.childUuid = dsa.uuid and mm.childMapTypeId = 3 " +
+                        "inner join RegionEntity r on r.uuid = mm.parentUuid and mm.parentMapTypeId = 2"),
+        @NamedQuery(name="dss.total",
+                query="select 'Total Number of Sharing Summaries', count(distinct dss.uuid) " +
+                        "from DataSharingSummaryEntity dss "),
 })
 @Entity
 @Table(name = "organisation", schema = "data_sharing_manager")
@@ -238,8 +318,19 @@ public class OrganisationEntity {
     public static void deleteUneditedBulkOrganisations() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery("deleteUneditedBulkOrganisations");
-        spq.execute();
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery(
+                "DELETE from OrganisationEntity o " +
+                        "where o.bulkImported = :active " +
+                        "and o.bulkItemUpdated = :notActive");
+        query.setParameter("active", 1);
+        query.setParameter("notActive", 0);
+
+        int deletedCount = query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        System.out.println(deletedCount + " deleted");
         entityManager.close();
     }
 
@@ -459,6 +550,125 @@ public class OrganisationEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static List<Object[]> executeOrganisationStatisticQuery(String queryName) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        Query query = entityManager.createNamedQuery(queryName);
+        List<Object[]> result = query.getResultList();
+
+        entityManager.close();
+
+        return result;
+    }
+
+    public static List<JsonOrganisationManagerStatistics> getStatisticsForType(String type) throws Exception {
+        List<JsonOrganisationManagerStatistics> statsList = new ArrayList<>();
+
+        List<String> queryNames = getStatisticsQueries(type);
+
+        for (String queryName : queryNames) {
+            JsonOrganisationManagerStatistics jsonStats = new JsonOrganisationManagerStatistics();
+            List<Object[]> result = executeOrganisationStatisticQuery(queryName);
+            jsonStats.setLabel(result.get(0)[0].toString());
+            jsonStats.setValue(result.get(0)[1].toString());
+
+            statsList.add(jsonStats);
+        }
+        return statsList;
+    }
+
+    private static List<String> getStatisticsQueries(String type) throws Exception {
+        switch (type) {
+            case "organisation":
+                return getOrganisationStatisticsQueries();
+            case "region":
+                return getRegionStatisticsQueries();
+            case "service":
+                return getServiceStatisticsQueries();
+            case "cohort":
+                return getCohortStatisticsQueries();
+            case "dataflow":
+                return getDataFlowStatisticsQueries();
+            case "dpa":
+                return getDPAStatisticsQueries();
+            case "dataset":
+                return getDataSetStatisticsQueries();
+            case "dsa":
+                return getDSAStatisticsQueries();
+            case "summary":
+                return getDSSStatisticsQueries();
+            default:
+                return getOrganisationStatisticsQueries();
+        }
+    }
+
+    private static List<String> getOrganisationStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("organisation.total");
+        queryNames.add("organisation.bulk");
+        queryNames.add("organisation.editedBulk");
+        queryNames.add("organisation.manual");
+        return queryNames;
+    }
+
+    private static List<String> getRegionStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("region.total");
+        queryNames.add("region.withDSA");
+        queryNames.add("region.withOrganisation");
+        queryNames.add("region.withRegion");
+        queryNames.add("region.belongingToRegion");
+        queryNames.add("region.orphaned");
+        return queryNames;
+    }
+
+    private static List<String> getServiceStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("service.total");
+        queryNames.add("service.withOrganisation");
+        queryNames.add("service.orphaned");
+        return queryNames;
+    }
+
+    private static List<String> getCohortStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("cohort.total");
+        return queryNames;
+    }
+
+    private static List<String> getDataFlowStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dataFlow.total");
+        queryNames.add("dataFlow.totalVolume");
+        queryNames.add("dataFlow.averageVolume");
+        return queryNames;
+    }
+
+    private static List<String> getDPAStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dpa.total");
+        return queryNames;
+    }
+
+    private static List<String> getDataSetStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dataSet.total");
+        return queryNames;
+    }
+
+    private static List<String> getDSAStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dsa.total");
+        queryNames.add("dsa.withRegion");
+        return queryNames;
+    }
+
+    private static List<String> getDSSStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dss.total");
+        return queryNames;
     }
 
 }

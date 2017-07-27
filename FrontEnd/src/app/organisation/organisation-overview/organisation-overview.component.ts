@@ -52,10 +52,9 @@ export class OrganisationOverviewComponent implements OnInit {
 
   getOrganisationStatistics() {
     const vm = this;
-    vm.organisationService.getOrganisationStatistics()
+    vm.organisationService.getStatistics('organisation')
       .subscribe(result => {
           vm.orgStats = result;
-          vm.log.success('Got the new stuff', null, 'Success');
         },
         error => console.log('Failed to load organisation statistics', error, 'Load service statistics')
       );
@@ -63,7 +62,7 @@ export class OrganisationOverviewComponent implements OnInit {
 
   getServiceStatistics() {
     const vm = this;
-    vm.organisationService.getServiceStatistics()
+    vm.organisationService.getStatistics('service')
       .subscribe(result => {
           vm.serviceStats = result
         },
@@ -73,7 +72,7 @@ export class OrganisationOverviewComponent implements OnInit {
 
   getRegionStatistics() {
     const vm = this;
-    vm.organisationService.getRegionStatistics()
+    vm.organisationService.getStatistics('region')
       .subscribe(result => {
           vm.regionStats = result
         },

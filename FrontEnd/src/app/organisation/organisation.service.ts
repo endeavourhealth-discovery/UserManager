@@ -134,21 +134,11 @@ export class OrganisationService  {
     return vm.http.post('api/organisationManager/upload', fileToUpload);
   }
 
-  getOrganisationStatistics(): Observable<OrganisationManagerStatistics[]> {
+  getStatistics(type: string): Observable<OrganisationManagerStatistics[]> {
     const vm = this;
-    return vm.http.get('api/organisationManager/organisationStatistics')
-      .map((response) => response.json());
-  }
-
-  getServiceStatistics(): Observable<OrganisationManagerStatistics[]> {
-    const vm = this;
-    return vm.http.get('api/organisationManager/serviceStatistics')
-      .map((response) => response.json());
-  }
-
-  getRegionStatistics(): Observable<OrganisationManagerStatistics[]> {
-    const vm = this;
-    return vm.http.get('api/organisationManager/regionStatistics')
+    const params = new URLSearchParams();
+    params.set('type', type);
+    return vm.http.get('api/organisationManager/statistics', { search : params })
       .map((response) => response.json());
   }
 

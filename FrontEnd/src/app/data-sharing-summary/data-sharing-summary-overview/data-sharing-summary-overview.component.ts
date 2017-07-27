@@ -3,6 +3,7 @@ import {OrganisationManagerStatistics} from '../../organisation/models/Organisat
 import {DataSharingSummaryService} from '../data-sharing-summary.service';
 import {LoggerService} from 'eds-angular4';
 import {Router} from "@angular/router";
+import {OrganisationService} from "../../organisation/organisation.service";
 
 @Component({
   selector: 'app-data-sharing-summary-overview',
@@ -20,6 +21,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
   datasetStats: OrganisationManagerStatistics[];
 
   constructor(private dataSharingSummaryService: DataSharingSummaryService,
+              private organisationService: OrganisationService,
               private log: LoggerService,
               private router: Router) { }
 
@@ -40,7 +42,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getSummaryStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('summary')
+    vm.organisationService.getStatistics('summary')
       .subscribe(result => {
           vm.summaryStats = result
         },
@@ -50,7 +52,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getDpaStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('dpa')
+    vm.organisationService.getStatistics('dpa')
       .subscribe(result => {
           vm.dpaStats = result
         },
@@ -60,7 +62,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getDsaStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('dsa')
+    vm.organisationService.getStatistics('dsa')
       .subscribe(result => {
           vm.dsaStats = result
         },
@@ -70,7 +72,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getDataFlowStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('dataflow')
+    vm.organisationService.getStatistics('dataflow')
       .subscribe(result => {
           vm.dataflowStats = result
         },
@@ -80,7 +82,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getCohortStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('cohort')
+    vm.organisationService.getStatistics('cohort')
       .subscribe(result => {
           vm.cohortStats = result
         },
@@ -90,7 +92,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getDataSetStatistics() {
     const vm = this;
-    vm.dataSharingSummaryService.getStatistics('dataset')
+    vm.organisationService.getStatistics('dataset')
       .subscribe(result => {
           vm.datasetStats = result
         },

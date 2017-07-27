@@ -45,12 +45,4 @@ export class DataSharingSummaryService {
       .map((response) => response.json());
   }
 
-  getStatistics(type: string): Observable<OrganisationManagerStatistics[]> {
-    const vm = this;
-    const params = new URLSearchParams();
-    params.set('type', type);
-    return vm.http.get('api/dataSharingSummary/statistics', { search : params })
-      .map((response) => response.json());
-  }
-
 }

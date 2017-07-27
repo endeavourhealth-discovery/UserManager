@@ -11,15 +11,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
 
-@NamedStoredProcedureQueries({
-        @NamedStoredProcedureQuery(
-                name = "deleteAllMappings",
-                procedureName = "deleteAllMappings",
-                parameters = {
-                        @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "UUID")
-                }
-        )
-})
 @Entity
 @Table(name = "master_mapping", schema = "data_sharing_manager")
 @IdClass(MasterMappingEntityPK.class)
@@ -108,6 +99,20 @@ public class MasterMappingEntity {
 
     public static void deleteAllMappings(String uuid) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery(
+                "DELETE from MasterMappingEntity m " +
+                        "where m.childUuid = :uuid " +
+                        "or m.parentUuid = :uuid");
+        query.setParameter("uuid", uuid);
+
+        int deletedCount = query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        System.out.println(deletedCount + " deleted");
+        entityManager.close();
 
         StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery("deleteAllMappings");
         spq.setParameter("UUID", uuid);

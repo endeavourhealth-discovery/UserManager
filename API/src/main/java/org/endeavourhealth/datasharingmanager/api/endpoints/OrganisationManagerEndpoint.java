@@ -306,47 +306,17 @@ public final class OrganisationManagerEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetOrganisationStatistics")
-    @Path("/organisationStatistics")
+    @Timed(absolute = true, name="OrganisationManager.getStatistics")
+    @Path("/statistics")
     @RequiresAdmin
-    public Response getOrganisationsStatistics(@Context SecurityContext sc) throws Exception {
+    public Response getStatistics(@Context SecurityContext sc, @QueryParam("type") String type) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Organisation Statistics",
                 "Organisation", null);
 
         LOG.trace("Statistics obtained");
-        return generateStatistics(OrganisationEntity.getStatistics("getOrganisationStatistics"));
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetServiceStatistics")
-    @Path("/serviceStatistics")
-    @RequiresAdmin
-    public Response getServiceStatistics(@Context SecurityContext sc) throws Exception {
-        super.setLogbackMarkers(sc);
-        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
-                "Service Statistics",
-                "Organisation", null);
-
-       return generateStatistics(OrganisationEntity.getStatistics("getServiceStatistics"));
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetRegionStatistics")
-    @Path("/regionStatistics")
-    @RequiresAdmin
-    public Response getRegionStatistics(@Context SecurityContext sc) throws Exception {
-        super.setLogbackMarkers(sc);
-        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
-                "Service Statistics",
-                "Organisation", null);
-
-        return generateStatistics(OrganisationEntity.getStatistics("getRegionStatistics"));
+        return generateStatistics(type);
     }
 
     @DELETE
@@ -481,22 +451,12 @@ public final class OrganisationManagerEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response generateStatistics(List<Object []> statistics) throws Exception {
+    private Response generateStatistics(String type) throws Exception {
+        List<JsonOrganisationManagerStatistics> stats = OrganisationEntity.getStatisticsForType(type);
 
-        List<JsonOrganisationManagerStatistics> ret = new ArrayList<>();
-
-        for (Object[] stat : statistics) {
-            JsonOrganisationManagerStatistics jsonStat = new JsonOrganisationManagerStatistics();
-            jsonStat.setLabel(stat[0].toString());
-            jsonStat.setValue(stat[1].toString());
-
-            ret.add(jsonStat);
-        }
-
-        clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(ret)
+                .entity(stats)
                 .build();
     }
 

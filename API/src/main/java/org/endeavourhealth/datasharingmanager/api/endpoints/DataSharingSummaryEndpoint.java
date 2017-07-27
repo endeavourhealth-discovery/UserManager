@@ -9,6 +9,7 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity;
+import org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity;
 import org.endeavourhealth.datasharingmanager.api.json.JsonDataSharingSummary;
 import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisationManagerStatistics;
 import org.slf4j.Logger;
@@ -116,7 +117,7 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
                 "Statistics",
                 "type", type);
 
-        return generateStatistics(DataSharingSummaryEntity.getStatistics(getStatisticsProcedureFromType(type)));
+        return generateStatistics(type);
     }
 
     private Response getDataSharingSummaryList() throws Exception {
@@ -150,36 +151,14 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response generateStatistics(List<Object []> statistics) throws Exception {
-
-        List<JsonOrganisationManagerStatistics> ret = new ArrayList<>();
-
-        for (Object[] stat : statistics) {
-            JsonOrganisationManagerStatistics jsonStat = new JsonOrganisationManagerStatistics();
-            jsonStat.setLabel(stat[0].toString());
-            jsonStat.setValue(stat[1].toString());
-
-            ret.add(jsonStat);
-        }
+    private Response generateStatistics(String type) throws Exception {
+        List<JsonOrganisationManagerStatistics> stats = OrganisationEntity.getStatisticsForType(type);
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(ret)
+                .entity(stats)
                 .build();
-    }
-
-    private String getStatisticsProcedureFromType(String type) throws Exception {
-
-        switch (type){
-            case "summary" : return "getDataSharingSummaryStatistics";
-            case "dpa" : return "getDataProcessingAgreementStatistics";
-            case "dsa" : return "getDataSharingAgreementStatistics";
-            case "dataflow" : return "getDataFlowStatistics";
-            case "cohort" : return "getCohortStatistics";
-            case "dataset" : return "getDatasetStatistics";
-            default : throw new Exception("Invalid statistics type");
-        }
     }
 
 }
