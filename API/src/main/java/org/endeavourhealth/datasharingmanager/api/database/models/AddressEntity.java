@@ -10,15 +10,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@NamedStoredProcedureQueries({
-        @NamedStoredProcedureQuery(
-                name = "getOrganisationMarkers",
-                procedureName = "getOrganisationMarkers",
-                parameters = {
-                        @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "RegionId")
-                }
-        )
-})
 @Entity
 @Table(name = "address", schema = "data_sharing_manager")
 public class AddressEntity {
@@ -287,13 +278,17 @@ public class AddressEntity {
 
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery("getOrganisationMarkers");
-        spq.setParameter("RegionId", regionUUID);
-        spq.execute();
-        List<Object[]> ent = spq.getResultList();
+        Query query = entityManager.createQuery(
+                "select o from OrganisationEntity o " +
+                        "inner join AddressEntity a on a.organisationUuid = o.uuid " +
+                        "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = 1 " +
+                        "where mm.parentUuid = :region");
+        query.setParameter("region", regionUUID);
+
+        List<Object[]> result = query.getResultList();
 
         entityManager.close();
 
-        return ent;
+        return result;
     }
 }

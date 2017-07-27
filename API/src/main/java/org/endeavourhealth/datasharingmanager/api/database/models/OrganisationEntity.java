@@ -334,18 +334,6 @@ public class OrganisationEntity {
         entityManager.close();
     }
 
-    public static List<Object[]> getStatistics(String procName) throws Exception {
-
-        EntityManager entityManager = PersistenceManager.getEntityManager();
-
-        StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery(procName);
-        spq.execute();
-        List<Object[]> ent = spq.getResultList();
-        entityManager.close();
-
-        return ent;
-    }
-
     public static List<OrganisationEntity> getOrganisationsFromList(List<String> organisations) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 

@@ -257,18 +257,6 @@ public class DataSharingSummaryEntity {
         return result;
     }
 
-    public static List<Object[]> getStatistics(String procName) throws Exception {
-
-        EntityManager entityManager = PersistenceManager.getEntityManager();
-
-        StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery(procName);
-        spq.execute();
-        List<Object[]> ent = spq.getResultList();
-        entityManager.close();
-
-        return ent;
-    }
-
     public static List<DataSharingSummaryEntity> getAllDataSharingSummaries() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
