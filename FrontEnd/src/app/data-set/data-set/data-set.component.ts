@@ -33,11 +33,11 @@ export class DataSetComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['/dataSet', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/dataSet', 1, 'add']);
   }
 
   edit(item: DataSet) {
-    this.router.navigate(['/dataSet', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataSet', item.uuid, 'edit']);
   }
 
   delete(item: DataSet) {

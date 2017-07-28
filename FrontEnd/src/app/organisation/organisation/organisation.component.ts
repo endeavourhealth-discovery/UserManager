@@ -67,14 +67,14 @@ export class OrganisationComponent implements OnInit {
 
   add() {
     if (this.modeType === 'Organisation') {
-      this.router.navigate(['app.organisationManagerEditor', {itemUuid: null, itemAction: 'add'}]);
+      this.router.navigate(['/organisation', 1, 'add']);
     } else {
-      this.router.navigate(['app.organisationManagerEditor', {itemUuid: null, itemAction: 'addService'}]);
+      this.router.navigate(['/organisation', 1, 'addService']);
     }
   }
 
   edit(item: Organisation) {
-    this.router.navigate(['app.organisationManagerEditor', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/organisation', item.uuid, 'edit']);
   }
 
   save(original: Organisation, edited: Organisation) {

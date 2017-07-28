@@ -6,9 +6,9 @@
     <div class="module-body">
       <div class="row">
         <div class="col-md-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">Data Sharing Agreements</div>
-            <div class="panel-body">
+          <div class="card">
+            <div class="card-header">Data Sharing Agreements</div>
+            <div class="card-block">
               <div class="row" *ngFor="let dsa of dsaStats">
                 <div class="col-md-10">
                   {{dsa.label}}
@@ -25,9 +25,9 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="panel panel-success">
-            <div class="panel-heading">Data Flows</div>
-            <div class="panel-body">
+          <div class="card">
+            <div class="card-header">Data Flows</div>
+            <div class="card-block">
               <div class="row" *ngFor="let dataflow of dataflowStats">
                 <div class="col-md-10">
                   {{dataflow.label}}
@@ -47,8 +47,8 @@
       <div class="row">
         <div class="col-md-6">
           <div class="panel panel-warning">
-            <div class="panel-heading">Data Processing Agreements</div>
-            <div class="panel-body">
+            <div class="card-header">Data Processing Agreements</div>
+            <div class="card-block">
               <div class="row" *ngFor="let dpa of dpaStats">
                 <div class="col-md-10">
                   {{dpa.label}}
@@ -65,9 +65,9 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="panel panel-primary">
-            <div class="panel-heading">Cohorts</div>
-            <div class="panel-body">
+          <div class="card">
+            <div class="card-header">Cohorts</div>
+            <div class="card-block">
               <div class="row" *ngFor="let cohort of cohortStats">
                 <div class="col-md-10">
                   {{cohort.label}}
@@ -84,9 +84,9 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="panel panel-primary">
-            <div class="panel-heading">Datasets</div>
-            <div class="panel-body">
+          <div class="card">
+            <div class="card-header">Datasets</div>
+            <div class="card-block">
               <div class="row" *ngFor="let dataset of datasetStats">
                 <div class="col-md-10">
                   {{dataset.label}}
@@ -105,9 +105,9 @@
       </div>
       <div class="row" *ngIf="summaryStats">
         <div class="col-md-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">Data Sharing Summary</div>
-            <div class="panel-body">
+          <div class="card">
+            <div class="card-header">Data Sharing Summary</div>
+            <div class="card-block">
               <div class="row" *ngFor="let stat of summaryStats">
                 <div class="col-md-10">
                   {{stat.label}}

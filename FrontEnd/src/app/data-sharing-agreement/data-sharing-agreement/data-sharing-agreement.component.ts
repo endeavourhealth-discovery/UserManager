@@ -34,11 +34,11 @@ export class DataSharingAgreementComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['/dsa', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/dsa', 1, 'add']);
   }
 
   edit(item: Dsa) {
-    this.router.navigate(['/dsa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dsa', item.uuid, 'edit']);
   }
 
   delete(item: Dsa) {

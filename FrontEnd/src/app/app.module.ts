@@ -34,6 +34,13 @@ import {DataFlowModule} from "./data-flow/data-flow.module";
 import {DataSharingAgreementModule} from "./data-sharing-agreement/data-sharing-agreement.module";
 import {DataProcessingAgreementModule} from "./data-processing-agreement/data-processing-agreement.module";
 import {DataSharingSummaryModule} from "./data-sharing-summary/data-sharing-summary.module";
+import {DataSharingSummaryOverviewComponent} from "./data-sharing-summary/data-sharing-summary-overview/data-sharing-summary-overview.component";
+import {CohortComponent} from "./cohort/cohort/cohort.component";
+import {CohortEditorComponent} from "./cohort/cohort-editor/cohort-editor.component";
+import {DataSetComponent} from "./data-set/data-set/data-set.component";
+import {DataSetEditorComponent} from "./data-set/data-set-editor/data-set-editor.component";
+import {CohortModule} from "./cohort/cohort.module";
+import {DataSetModule} from "./data-set/data-set.module";
 
 export class DummyComponent {}
 
@@ -41,6 +48,7 @@ const appRoutes: Routes = [
   { path: 'conceptModeller', component: ConceptModellerComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'organisationOverview', component: OrganisationOverviewComponent},
+  { path: 'sharingOverview', component: DataSharingSummaryOverviewComponent},
   { path: 'organisations', component: OrganisationComponent},
   { path: 'organisation/:id/:mode', component: OrganisationEditorComponent},
   { path: 'regions', component: RegionComponent},
@@ -52,7 +60,12 @@ const appRoutes: Routes = [
   { path: 'dpas', component: DataProcessingAgreementComponent},
   { path: 'dpa/:id/:mode', component: DataProcessingAgreementEditorComponent},
   { path: 'dataSharingSummaries', component: DataSharingSummaryComponent},
-  { path: 'dataSharingSummary/:id/:mode', component: DataSharingSummaryEditorComponent}
+  { path: 'dataSharingSummary/:id/:mode', component: DataSharingSummaryEditorComponent},
+  { path: 'cohorts', component: CohortComponent},
+  { path: 'cohort/:id/:mode', component: CohortEditorComponent},
+  { path: 'dataSets', component: DataSetComponent},
+  { path: 'dataSet/:id/:mode', component: DataSetEditorComponent},
+  { path: '', redirectTo : 'organisationOverview', pathMatch: 'full' }, // Default route
 ];
 
 @NgModule({
@@ -63,6 +76,8 @@ const appRoutes: Routes = [
     HttpModule,
     LayoutModule,
     SettingsModule,
+    CohortModule,
+    DataSetModule,
     ConceptModellerModule,
     OrganisationModule,
     RegionModule,

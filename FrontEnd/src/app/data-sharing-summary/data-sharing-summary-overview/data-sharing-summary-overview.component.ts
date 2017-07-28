@@ -110,27 +110,27 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
   }
 
   goToSummary() {
-    this.router.navigate(['/dataSharingSummary']);
+    this.router.navigate(['/dataSharingSummaries']);
   }
 
   goToDpa() {
-    this.router.navigate(['/dpa']);
+    this.router.navigate(['/dpas']);
   }
 
   goToDsa() {
-    this.router.navigate(['/dsa']);
+    this.router.navigate(['/dsas']);
   }
 
   goToDataFlow() {
-    this.router.navigate(['/dataFlow']);
+    this.router.navigate(['/dataFlows']);
   }
 
   goToCohorts() {
-    this.router.navigate(['/cohort']);
+    this.router.navigate(['/cohorts']);
   }
 
   goToDataSets() {
-    this.router.navigate(['/dataSet']);
+    this.router.navigate(['/dataSets']);
   }
 
 }

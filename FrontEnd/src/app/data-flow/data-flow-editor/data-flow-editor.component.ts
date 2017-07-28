@@ -159,11 +159,11 @@ export class DataFlowEditorComponent implements OnInit {
   }
 
   private editDataSharingAgreement(item: Dsa) {
-    this.router.navigate(['dsa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dsa', item.uuid, 'edit']);
   }
 
   private editDataProcessingAgreement(item: Dpa) {
-    this.router.navigate(['dsa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dsa', item.uuid, 'edit']);
   }
 
   private getLinkedDpas() {

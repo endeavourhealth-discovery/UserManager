@@ -34,11 +34,11 @@ export class DataProcessingAgreementComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['/dpa', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/dpa', 1, 'add']);
   }
 
   edit(item: Dpa) {
-    this.router.navigate(['/dpa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dpa', item.uuid, 'edit']);
   }
 
   delete(item: Dpa) {

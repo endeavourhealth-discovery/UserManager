@@ -93,7 +93,7 @@ export class CohortEditorComponent implements OnInit {
   }
 
   private editDataProcessingAgreement(item: Dpa) {
-    this.router.navigate(['/dpa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dpa', item.uuid, 'edit']);
   }
 
   private getLinkedDpas() {

@@ -36,11 +36,11 @@ export class DataFlowComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['dataFlow', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/dataFlow', 1, 'add']);
   }
 
   edit(item: DataFlow) {
-    this.router.navigate(['dataFlow', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataFlow', item.uuid, 'edit']);
   }
 
   delete(item: DataFlow) {

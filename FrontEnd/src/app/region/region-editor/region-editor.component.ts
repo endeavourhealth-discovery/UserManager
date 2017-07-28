@@ -207,15 +207,15 @@ export class RegionEditorComponent implements OnInit {
   }
 
   editOrganisation(item: Organisation) {
-    this.router.navigate(['/organisation', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/organisation', item.uuid, 'edit']);
   }
 
   editRegion(item: Organisation) {
-    this.router.navigate(['/region', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/region', item.uuid, 'edit']);
   }
 
   editSharingAgreement(item: Dsa) {
-    this.router.navigate(['/dsa', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dsa', item.uuid, 'edit']);
   }
 
 }

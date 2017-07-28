@@ -152,7 +152,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   }
 
   private editRegion(item: DataFlow) {
-    this.router.navigate(['/region', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/region', item.uuid, 'edit']);
   }
 
   private editRegions() {
@@ -201,7 +201,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   }
 
   private editDataFlow(item: DataFlow) {
-    this.router.navigate(['/dataFlow', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataFlow', item.uuid, 'edit']);
   }
 
   private getLinkedDataFlows() {

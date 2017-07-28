@@ -34,11 +34,11 @@ export class DataSharingSummaryComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['/dataSharingSummary', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/dataSharingSummary', 1, 'add']);
   }
 
   edit(item: DataSharingSummary) {
-    this.router.navigate(['/dataSharingSummary', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataSharingSummary', item.uuid, 'edit']);
   }
 
   delete(item: DataSharingSummary) {

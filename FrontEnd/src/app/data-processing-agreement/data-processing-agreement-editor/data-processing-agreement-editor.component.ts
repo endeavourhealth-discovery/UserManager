@@ -157,15 +157,15 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   }
 
   private editDataFlow(item: DataFlow) {
-    this.router.navigate(['/dataFlow', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataFlow', item.uuid, 'edit']);
   }
 
   private editCohort(item: Cohort) {
-    this.router.navigate(['/cohort', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/cohort', item.uuid, 'edit']);
   }
 
   private editDataSet(item: DataSet) {
-    this.router.navigate(['/dataSet', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/dataSet', item.uuid, 'edit']);
   }
 
   private getLinkedCohorts() {

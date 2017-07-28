@@ -38,11 +38,11 @@ export class RegionComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['region', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/region', 1, 'add']);
   }
 
   edit(item: Region) {
-    this.router.navigate(['region', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/region', item.uuid, 'edit']);
   }
 
   delete(item: Region) {

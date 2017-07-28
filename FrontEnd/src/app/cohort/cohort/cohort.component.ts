@@ -11,7 +11,9 @@ import {Cohort} from '../models/Cohort';
   styleUrls: ['./cohort.component.css']
 })
 export class CohortComponent implements OnInit {
-  cohorts : Cohort[] = [];
+  cohorts: Cohort[] = [];
+  pageSize = 20;
+  cohortDetailsToShow = new Cohort().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private cohortService: CohortService,
@@ -32,11 +34,11 @@ export class CohortComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(['/cohort', {itemUuid: null, itemAction: 'add'}]);
+    this.router.navigate(['/cohort', 1, 'add']);
   }
 
   edit(item: Cohort) {
-    this.router.navigate(['/cohort', {itemUuid: item.uuid, itemAction: 'edit'}]);
+    this.router.navigate(['/cohort', item.uuid,  'edit']);
   }
 
   delete(item: Cohort) {

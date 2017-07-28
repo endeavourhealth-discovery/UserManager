@@ -1,6 +1,6 @@
-import {Injectable} from "@angular/core";
-import {MenuService} from "eds-angular4";
-import {MenuOption} from "eds-angular4/dist/layout/models/MenuOption";
+import {Injectable} from '@angular/core';
+import {MenuService} from 'eds-angular4';
+import {MenuOption} from 'eds-angular4/dist/layout/models/MenuOption';
 
 @Injectable()
 export class AppMenuService implements  MenuService {
@@ -9,9 +9,8 @@ export class AppMenuService implements  MenuService {
   }
   getMenuOptions(): MenuOption[] {
     return [
-      {caption: 'Concept Modeller', state: 'conceptModeller', icon: 'fa fa-sitemap'},
-      {caption: 'IM Settings', state: 'settings', icon: 'fa fa-cogs'},
-      {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-cogs'}
+      {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o'},
+      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs'}
     ];
   }
 }
