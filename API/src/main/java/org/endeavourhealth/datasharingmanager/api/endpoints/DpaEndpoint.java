@@ -2,6 +2,9 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.annotation.Timed;
 import io.astefanutti.metrics.aspectj.Metrics;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
@@ -26,6 +29,7 @@ import java.util.UUID;
 
 @Path("/dpa")
 @Metrics(registry = "EdsRegistry")
+@Api(description = "API endpoint related to the data processing agreements")
 public final class DpaEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(DpaEndpoint.class);
 
@@ -37,7 +41,13 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.Get")
     @Path("/")
-    public Response get(@Context SecurityContext sc, @QueryParam("uuid") String uuid, @QueryParam("searchData") String searchData) throws Exception {
+    @ApiOperation(value = "Return either all data processing agreements if no parameter is provided or search for " +
+            "data processing agreements using a UUID or a search term. Search matches on name or description of data processing agreement. " +
+            "Returns a JSON representation of the matching set of Data processing agreement")
+    public Response get(@Context SecurityContext sc,
+                        @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
+                        @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "DPA(s)",
@@ -62,8 +72,11 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.Post")
     @Path("/")
+    @ApiOperation(value = "Save a new data processing agreement or update an existing one.  Accepts a JSON representation " +
+            "of a data processing agreement.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc, JsonDPA dpa) throws Exception {
+    public Response post(@Context SecurityContext sc,
+                         @ApiParam(value = "Json representation of data processing agreement to save or update") JsonDPA dpa) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "DPA",
@@ -100,8 +113,11 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.Delete")
     @Path("/")
+    @ApiOperation(value = "Delete a data processing agreement based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    public Response delete(@Context SecurityContext sc,
+                           @ApiParam(value = "UUID of the data processing agreement to be deleted") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "DPA",
@@ -120,7 +136,11 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.GetDataFlows")
     @Path("/dataflows")
-    public Response getLinkedDataFlows(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    @ApiOperation(value = "Returns a list of Json representations of data flow agreements that are linked " +
+            "to the data processing agreeement.  Accepts a UUID of a data processing agreement.")
+    public Response getLinkedDataFlows(@Context SecurityContext sc,
+                                       @ApiParam(value = "UUID of data processing agreement") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "dataflows(s)",
@@ -134,7 +154,11 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.GetCohorts")
     @Path("/cohorts")
-    public Response getLinkedCohorts(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    @ApiOperation(value = "Returns a list of Json representations of cohorts that are linked " +
+            "to the data processing agreeement.  Accepts a UUID of a data processing agreement.")
+    public Response getLinkedCohorts(@Context SecurityContext sc,
+                                     @ApiParam(value = "UUID of data processing agreement") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "cohorts(s)",
@@ -148,7 +172,11 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DpaEndpoint.GetDataSets")
     @Path("/datasets")
-    public Response getLinkedDataSets(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    @ApiOperation(value = "Returns a list of Json representations of data sets that are linked " +
+            "to the data processing agreeement.  Accepts a UUID of a data processing agreement.")
+    public Response getLinkedDataSets(@Context SecurityContext sc,
+                                      @ApiParam(value = "UUID of data processing agreement") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Data Sets(s)",

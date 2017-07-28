@@ -2,6 +2,9 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.annotation.Timed;
 import io.astefanutti.metrics.aspectj.Metrics;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
@@ -26,6 +29,7 @@ import java.util.UUID;
 
 @Path("/dataSharingSummary")
 @Metrics(registry = "EdsRegistry")
+@Api(description = "API endpoint related to the data sharing summaries")
 public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(DataSharingSummaryEndpoint.class);
 
@@ -37,7 +41,13 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Get")
     @Path("/")
-    public Response get(@Context SecurityContext sc, @QueryParam("uuid") String uuid, @QueryParam("searchData") String searchData) throws Exception {
+    @ApiOperation(value = "Return either all data sharing summaries if no parameter is provided or search for " +
+            "data sharing summaries using a UUID or a search term. Search matches on name or description of data sharing summary. " +
+            "Returns a JSON representation of the matching set of data sharing summaries")
+    public Response get(@Context SecurityContext sc,
+                        @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
+                        @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Data Sharing Summary(s)",
@@ -64,8 +74,12 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Post")
     @Path("/")
+    @ApiOperation(value = "Save a new data sharing summary or update an existing one.  Accepts a JSON representation " +
+            "of a data sharing summary.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc, JsonDataSharingSummary dataSharingSummary) throws Exception {
+    public Response post(@Context SecurityContext sc,
+                         @ApiParam(value = "Json representation of data sharing summary to save or update") JsonDataSharingSummary dataSharingSummary
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Data Sharing Summary",
@@ -90,8 +104,11 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Delete")
     @Path("/")
+    @ApiOperation(value = "Delete a data flow based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    public Response delete(@Context SecurityContext sc,
+                           @ApiParam(value = "UUID of the data sharing summary to be deleted") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "Data Sharing Summary",
@@ -103,21 +120,6 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.GetServiceStatistics")
-    @Path("/statistics")
-    @RequiresAdmin
-    public Response getServiceStatistics(@Context SecurityContext sc, @QueryParam("type") String type) throws Exception {
-        super.setLogbackMarkers(sc);
-        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
-                "Statistics",
-                "type", type);
-
-        return generateStatistics(type);
     }
 
     private Response getDataSharingSummaryList() throws Exception {
@@ -148,16 +150,6 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(datasharingsummaryEntities)
-                .build();
-    }
-
-    private Response generateStatistics(String type) throws Exception {
-        List<JsonOrganisationManagerStatistics> stats = OrganisationEntity.getStatisticsForType(type);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(stats)
                 .build();
     }
 

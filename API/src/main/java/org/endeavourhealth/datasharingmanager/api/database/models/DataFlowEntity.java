@@ -271,8 +271,7 @@ public class DataFlowEntity {
         CriteriaQuery<DataFlowEntity> cq = cb.createQuery(DataFlowEntity.class);
         Root<DataFlowEntity> rootEntry = cq.from(DataFlowEntity.class);
 
-        Predicate predicate = cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
-                cb.like(cb.upper(rootEntry.get("status")), "%" + expression.toUpperCase() + "%"));
+        Predicate predicate = cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%");
 
         cq.where(predicate);
         TypedQuery<DataFlowEntity> query = entityManager.createQuery(cq);
