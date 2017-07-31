@@ -121,6 +121,7 @@ export class OrganisationOverviewComponent implements OnInit {
     for (const file of vm.filesToUpload) {
       if (file.success == null) {
         vm.uploadFile(file);
+        vm.getOrganisationStatistics();
         allUploaded = false;
         break;
       }

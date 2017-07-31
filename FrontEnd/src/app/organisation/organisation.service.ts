@@ -119,14 +119,14 @@ export class OrganisationService  {
 
   startUpload(): Observable<any> {
     const vm = this;
-    return vm.http.get('api/organisationManager/startUpload')
-      .map((response) => response.json());
+    return vm.http.get('api/organisationManager/startUpload', {withCredentials : true})
+      .map((response) => response.text());
   }
 
   endUpload(): Observable<any> {
     const vm = this;
     return vm.http.get('api/organisationManager/endUpload')
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   uploadCsv(fileToUpload: FileUpload): Observable<any> {
