@@ -21,6 +21,9 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     DataSetComponent,
     DataSetEditorComponent,
     DataSetPickerComponent],
+  entryComponents: [
+    DataSetPickerComponent
+  ],
   providers: [DataSetService]
 })
 export class DataSetModule { }

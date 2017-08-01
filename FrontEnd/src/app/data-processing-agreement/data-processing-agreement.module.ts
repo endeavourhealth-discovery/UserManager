@@ -22,6 +22,9 @@ import {DocumentationService} from '../documentation/documentation.service';
     DataProcessingAgreementComponent,
     DataProcessingAgreementEditorComponent,
     DataProcessingAgreementPickerComponent],
+  entryComponents: [
+    DataProcessingAgreementPickerComponent
+  ],
   providers: [
     DataProcessingAgreementService,
     DocumentationService,

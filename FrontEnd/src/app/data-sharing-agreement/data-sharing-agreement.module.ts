@@ -24,7 +24,8 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     DataSharingAgreementPickerComponent,
     PurposeAddComponent],
   entryComponents : [
-    PurposeAddComponent
+    PurposeAddComponent,
+    DataSharingAgreementPickerComponent
   ],
   providers: [DataSharingAgreementService]
 })

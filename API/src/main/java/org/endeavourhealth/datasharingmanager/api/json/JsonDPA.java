@@ -15,7 +15,7 @@ public class JsonDPA {
     private String derivation = null;
     private String publisherInformation = null;
     private String publisherContractInformation = null;
-    private String publisherDataSet = null;
+    private String publisherDataset = null;
     private Short dsaStatusId = null;
     private String dataFlow = null;
     private String returnToSenderPolicy = null;
@@ -74,12 +74,12 @@ public class JsonDPA {
         this.publisherContractInformation = publisherContractInformation;
     }
 
-    public String getPublisherDataSet() {
-        return publisherDataSet;
+    public String getPublisherDataset() {
+        return publisherDataset;
     }
 
-    public void setPublisherDataSet(String publisherDataSet) {
-        this.publisherDataSet = publisherDataSet;
+    public void setPublisherDataset(String publisherDataset) {
+        this.publisherDataset = publisherDataset;
     }
 
     public Short getDsaStatusId() {

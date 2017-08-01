@@ -9,7 +9,6 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { OrganisationEditorComponent } from './organisation-editor/organisation-editor.component';
 import { OrganisationPickerComponent } from './organisation-picker/organisation-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {RegionPickerComponent} from '../region/region-picker/region-picker.component';
 
 @NgModule({
   imports: [
@@ -26,8 +25,7 @@ import {RegionPickerComponent} from '../region/region-picker/region-picker.compo
     OrganisationPickerComponent
   ],
   entryComponents : [
-    OrganisationPickerComponent,
-    RegionPickerComponent
+    OrganisationPickerComponent
   ],
   providers: [
     OrganisationService,

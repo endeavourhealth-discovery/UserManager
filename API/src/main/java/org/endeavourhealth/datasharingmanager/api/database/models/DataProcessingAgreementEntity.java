@@ -213,7 +213,7 @@ public class DataProcessingAgreementEntity {
         dpaEntity.setDerivation(dpa.getDerivation());
         dpaEntity.setPublisherInformation(dpa.getPublisherInformation());
         dpaEntity.setPublisherContractInformation(dpa.getPublisherContractInformation());
-        dpaEntity.setPublisherDataset(dpa.getPublisherDataSet());
+        dpaEntity.setPublisherDataset(dpa.getPublisherDataset());
         dpaEntity.setDsaStatusId(dpa.getDsaStatusId());
         dpaEntity.setReturnToSenderPolicy(dpa.getReturnToSenderPolicy());
         if (dpa.getStartDate() != null) {
@@ -238,7 +238,7 @@ public class DataProcessingAgreementEntity {
         dpaEntity.setDerivation(dpa.getDerivation());
         dpaEntity.setPublisherInformation(dpa.getPublisherInformation());
         dpaEntity.setPublisherContractInformation(dpa.getPublisherContractInformation());
-        dpaEntity.setPublisherDataset(dpa.getPublisherDataSet());
+        dpaEntity.setPublisherDataset(dpa.getPublisherDataset());
         dpaEntity.setDsaStatusId(dpa.getDsaStatusId());
         dpaEntity.setReturnToSenderPolicy(dpa.getReturnToSenderPolicy());
         if (dpa.getStartDate() != null) {

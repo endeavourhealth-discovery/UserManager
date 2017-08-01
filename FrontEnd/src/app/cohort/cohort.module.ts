@@ -21,6 +21,9 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     CohortComponent,
     CohortEditorComponent,
     CohortPickerComponent],
+  entryComponents: [
+    CohortPickerComponent
+  ],
   providers: [CohortService]
 })
 export class CohortModule { }
