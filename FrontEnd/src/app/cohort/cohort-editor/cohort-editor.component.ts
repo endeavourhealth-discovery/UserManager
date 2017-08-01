@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {CohortService} from '../cohort.service';
 import {LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -6,6 +6,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Dpa} from '../../data-processing-agreement/models/Dpa';
 import {DataProcessingAgreementPickerComponent} from '../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component';
 import {Cohort} from "../models/Cohort";
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-cohort-editor',
@@ -23,7 +24,10 @@ export class CohortEditorComponent implements OnInit {
               private log: LoggerService,
               private cohortService: CohortService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
@@ -72,6 +76,7 @@ export class CohortEditorComponent implements OnInit {
 
     vm.cohortService.saveCohort(vm.cohort)
       .subscribe(saved => {
+          vm.cohort.uuid = saved;
           vm.log.success('Cohort saved', vm.cohort, 'Saved');
           if (close) { vm.close(); }
         },

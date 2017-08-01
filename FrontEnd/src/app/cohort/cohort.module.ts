@@ -7,13 +7,15 @@ import {CohortService} from './cohort.service';
 import {EntityViewComponentsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     EntityViewComponentsModule,
-    NgbModule
+    NgbModule,
+    ToastModule.forRoot(),
   ],
   declarations: [
     CohortComponent,

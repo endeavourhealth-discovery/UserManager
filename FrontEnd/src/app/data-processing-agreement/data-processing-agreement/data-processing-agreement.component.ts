@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataProcessingAgreementService} from '../data-processing-agreement.service';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Dpa} from '../models/Dpa';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-processing-agreement',
@@ -11,14 +12,17 @@ import {Dpa} from '../models/Dpa';
   styleUrls: ['./data-processing-agreement.component.css']
 })
 export class DataProcessingAgreementComponent implements OnInit {
-  dpas : Dpa[] = [];
+  dpas: Dpa[] = [];
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dpaService: DataProcessingAgreementService,
               private log: LoggerService,
-              private router: Router) { }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getDsas();

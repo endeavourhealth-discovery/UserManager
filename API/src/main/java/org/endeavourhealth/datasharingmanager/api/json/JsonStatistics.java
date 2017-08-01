@@ -3,7 +3,7 @@ package org.endeavourhealth.datasharingmanager.api.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JsonOrganisationManagerStatistics {
+public class JsonStatistics {
     private String label = null;
     private String value = null;
 

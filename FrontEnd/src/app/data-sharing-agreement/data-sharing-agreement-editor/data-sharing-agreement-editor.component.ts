@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSharingAgreementService} from '../data-sharing-agreement.service';
 import {LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -11,7 +11,8 @@ import {Dsa} from '../models/Dsa';
 import {DataflowPickerComponent} from '../../data-flow/dataflow-picker/dataflow-picker.component';
 import {RegionPickerComponent} from '../../region/region-picker/region-picker.component';
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
-import {PurposeAddComponent} from "../purpose-add/purpose-add.component";
+import {PurposeAddComponent} from '../purpose-add/purpose-add.component';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-sharing-agreement-editor',
@@ -49,9 +50,14 @@ export class DataSharingAgreementEditorComponent implements OnInit {
               private log: LoggerService,
               private dsaService: DataSharingAgreementService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+    console.log('plpp');
+  }
 
   ngOnInit() {
+    console.log('rere');
     this.paramSubscriber = this.route.params.subscribe(
     params => {
       this.performAction(params['mode'], params['id']);
@@ -77,6 +83,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
   load(uuid: string) {
     const vm = this;
+    console.log(uuid);
     vm.dsaService.getDsa(uuid)
       .subscribe(result =>  {
           vm.dsa = result;
@@ -93,31 +100,33 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
   save(close: boolean) {
     const vm = this;
+    console.log('before');
+    console.log(vm.dsa);
     // Populate data flows before save
     vm.dsa.dataFlows = {};
-    for (let idx in this.dataFlows) {
-      let dataflow: DataFlow = this.dataFlows[idx];
+    for (const idx in this.dataFlows) {
+      const dataflow: DataFlow = this.dataFlows[idx];
       this.dsa.dataFlows[dataflow.uuid] = dataflow.name;
     }
 
     // Populate regions before save
     vm.dsa.regions = {};
-    for (let idx in this.regions) {
-      let region: Region = this.regions[idx];
+    for (const idx in this.regions) {
+      const region: Region = this.regions[idx];
       this.dsa.regions[region.uuid] = region.name;
     }
 
     // Populate publishers before save
     vm.dsa.publishers = {};
-    for (let idx in this.publishers) {
-      let pub: Organisation = this.publishers[idx];
+    for (const idx in this.publishers) {
+      const pub: Organisation = this.publishers[idx];
       this.dsa.publishers[pub.uuid] = pub.name;
     }
 
     // Populate subscribers before save
     vm.dsa.subscribers = {};
-    for (let idx in this.subscribers) {
-      let sub: Organisation = this.subscribers[idx];
+    for (const idx in this.subscribers) {
+      const sub: Organisation = this.subscribers[idx];
       this.dsa.subscribers[sub.uuid] = sub.name;
     }
 
@@ -131,7 +140,11 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
     vm.dsaService.saveDsa(vm.dsa)
       .subscribe(saved => {
+          vm.dsa.uuid = saved;
           vm.log.success('Data Sharing Agreement saved', vm.dsa, 'Saved');
+
+          console.log('after');
+          console.log(vm.dsa);
           if (close) { vm.close(); }
         },
         error => vm.log.error('Error saving Data Sharing Agreement', error, 'Error')
@@ -149,10 +162,6 @@ export class DataSharingAgreementEditorComponent implements OnInit {
       (result: DataFlow[]) { vm.dataFlows = result; },
       () => vm.log.info('Edit Data Flows cancelled')
     );
-  }
-
-  private editRegion(item: DataFlow) {
-    this.router.navigate(['/region', item.uuid, 'edit']);
   }
 
   private editRegions() {

@@ -100,6 +100,7 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
 
         return Response
                 .ok()
+                .entity(dataFlow.getUuid())
                 .build();
     }
 

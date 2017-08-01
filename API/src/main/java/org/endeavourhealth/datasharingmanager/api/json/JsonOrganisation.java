@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class JsonOrganisationManager {
+public final class JsonOrganisation {
     private String name = null;
     private String alternativeName = null;
     private String odsCode = null;

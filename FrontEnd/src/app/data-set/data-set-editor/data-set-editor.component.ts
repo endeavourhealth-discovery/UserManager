@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSetService} from '../data-set.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoggerService} from 'eds-angular4';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-set-editor',
@@ -16,7 +17,10 @@ export class DataSetEditorComponent implements OnInit {
               private log: LoggerService,
               private dataSetService: DataSetService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(

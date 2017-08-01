@@ -99,6 +99,7 @@ public final class RegionEndpoint extends AbstractEndpoint {
 
         return Response
                 .ok()
+                .entity(region.getUuid())
                 .build();
     }
 

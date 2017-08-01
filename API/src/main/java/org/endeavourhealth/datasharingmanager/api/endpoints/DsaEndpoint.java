@@ -102,6 +102,7 @@ public final class DsaEndpoint extends AbstractEndpoint {
 
         return Response
                 .ok()
+                .entity(dsa.getUuid())
                 .build();
     }
 

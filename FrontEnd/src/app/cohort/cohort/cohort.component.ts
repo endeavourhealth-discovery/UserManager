@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {CohortService} from '../cohort.service';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Cohort} from '../models/Cohort';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-cohort',
@@ -18,7 +19,10 @@ export class CohortComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private cohortService: CohortService,
               private log: LoggerService,
-              private router: Router) { }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getCohorts();

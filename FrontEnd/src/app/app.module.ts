@@ -8,10 +8,6 @@ import {Http, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
 import {LayoutComponent} from 'eds-angular4/dist/layout/layout.component';
 import {LayoutModule, MenuService } from 'eds-angular4';
 import {AppMenuService} from './app-menu.service';
-import {SettingsComponent} from './settings/settings/settings.component';
-import {SettingsModule} from './settings/settings.module';
-import {ConceptModellerComponent} from './concept-modeller/concept-modeller/concept-modeller.component';
-import {ConceptModellerModule} from './concept-modeller/concept-modeller.module';
 import {OrganisationModule} from './organisation/organisation.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { OrganisationComponent } from './organisation/organisation/organisation.component';
@@ -29,24 +25,22 @@ import {DataProcessingAgreementComponent} from './data-processing-agreement/data
 import {DataProcessingAgreementEditorComponent} from './data-processing-agreement/data-processing-agreement-editor/data-processing-agreement-editor.component';
 import {DataSharingSummaryComponent} from './data-sharing-summary/data-sharing-summary/data-sharing-summary.component';
 import {DataSharingSummaryEditorComponent} from './data-sharing-summary/data-sharing-summary-editor/data-sharing-summary-editor.component';
-import {RegionModule} from "./region/region.module";
-import {DataFlowModule} from "./data-flow/data-flow.module";
-import {DataSharingAgreementModule} from "./data-sharing-agreement/data-sharing-agreement.module";
-import {DataProcessingAgreementModule} from "./data-processing-agreement/data-processing-agreement.module";
-import {DataSharingSummaryModule} from "./data-sharing-summary/data-sharing-summary.module";
-import {DataSharingSummaryOverviewComponent} from "./data-sharing-summary/data-sharing-summary-overview/data-sharing-summary-overview.component";
-import {CohortComponent} from "./cohort/cohort/cohort.component";
-import {CohortEditorComponent} from "./cohort/cohort-editor/cohort-editor.component";
-import {DataSetComponent} from "./data-set/data-set/data-set.component";
-import {DataSetEditorComponent} from "./data-set/data-set-editor/data-set-editor.component";
-import {CohortModule} from "./cohort/cohort.module";
-import {DataSetModule} from "./data-set/data-set.module";
+import {RegionModule} from './region/region.module';
+import {DataFlowModule} from './data-flow/data-flow.module';
+import {DataSharingAgreementModule} from './data-sharing-agreement/data-sharing-agreement.module';
+import {DataProcessingAgreementModule} from './data-processing-agreement/data-processing-agreement.module';
+import {DataSharingSummaryModule} from './data-sharing-summary/data-sharing-summary.module';
+import {DataSharingSummaryOverviewComponent} from './data-sharing-summary/data-sharing-summary-overview/data-sharing-summary-overview.component';
+import {CohortComponent} from './cohort/cohort/cohort.component';
+import {CohortEditorComponent} from './cohort/cohort-editor/cohort-editor.component';
+import {DataSetComponent} from './data-set/data-set/data-set.component';
+import {DataSetEditorComponent} from './data-set/data-set-editor/data-set-editor.component';
+import {CohortModule} from './cohort/cohort.module';
+import {DataSetModule} from './data-set/data-set.module';
 
 export class DummyComponent {}
 
 const appRoutes: Routes = [
-  { path: 'conceptModeller', component: ConceptModellerComponent },
-  { path: 'settings', component: SettingsComponent },
   { path: 'organisationOverview', component: OrganisationOverviewComponent},
   { path: 'sharingOverview', component: DataSharingSummaryOverviewComponent},
   { path: 'organisations', component: OrganisationComponent},
@@ -75,10 +69,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     HttpModule,
     LayoutModule,
-    SettingsModule,
     CohortModule,
     DataSetModule,
-    ConceptModellerModule,
     OrganisationModule,
     RegionModule,
     DataFlowModule,

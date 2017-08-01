@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {Organisation} from '../organisation/models/Organisation';
 import {Region} from './models/Region';
 import {Dsa} from '../data-sharing-agreement/models/Dsa';
@@ -59,7 +59,7 @@ export class RegionService {
   saveRegion(region: Region): Observable<any> {
     const vm = this;
     return vm.http.post('api/region', region)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteRegion(uuid: string): Observable<any> {

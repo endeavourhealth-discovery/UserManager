@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataFlowService} from '../data-flow.service';
 import {DataFlow} from '../models/DataFlow';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {Router} from '@angular/router';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-flow',
@@ -19,7 +20,10 @@ export class DataFlowComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private dataFlowService: DataFlowService,
               private log: LoggerService,
-              private router: Router) { }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getDataFlows();
@@ -53,11 +57,11 @@ export class DataFlowComponent implements OnInit {
   }
 
   doDelete(item: DataFlow) {
-    let vm = this;
+    const vm = this;
     vm.dataFlowService.deleteDataFlow(item.uuid)
       .subscribe(
         () => {
-          let index = vm.dataflows.indexOf(item);
+          const index = vm.dataflows.indexOf(item);
           vm.dataflows.splice(index, 1);
           vm.log.success('Data flow deleted', item, 'Delete Data flow');
         },

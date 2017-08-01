@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataFlowService} from '../data-flow.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataFlow} from '../models/DataFlow';
@@ -8,6 +8,7 @@ import {Dsa} from '../../data-sharing-agreement/models/Dsa';
 import {Dpa} from '../../data-processing-agreement/models/Dpa';
 import { LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-data-flow-editor',
@@ -67,7 +68,10 @@ export class DataFlowEditorComponent implements OnInit {
               private log: LoggerService,
               private dataFlowService: DataFlowService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
@@ -123,6 +127,7 @@ export class DataFlowEditorComponent implements OnInit {
 
     vm.dataFlowService.saveDataFlow(vm.dataFlow)
       .subscribe(saved => {
+          vm.dataFlow.uuid = saved;
           vm.log.success('Data Flow saved', vm.dataFlow, 'Saved');
           if (close) { vm.close(); }
         },

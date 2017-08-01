@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Cohort} from './models/Cohort';
 import {Dpa} from '../data-processing-agreement/models/Dpa';
@@ -26,7 +26,7 @@ export class CohortService {
   saveCohort(cohort: Cohort): Observable<any> {
     const vm = this;
     return vm.http.post('api/cohort', cohort)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteCohort(uuid: string): Observable<any> {

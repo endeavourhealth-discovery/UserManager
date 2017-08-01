@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Region} from '../models/Region';
 import {Organisation} from '../../organisation/models/Organisation';
 import {Marker} from '../models/Marker';
@@ -11,6 +11,7 @@ import {OrganisationPickerComponent} from "../../organisation/organisation-picke
 import {RegionPickerComponent} from "../region-picker/region-picker.component";
 import {Dsa} from "../../data-sharing-agreement/models/Dsa";
 import {DataSharingAgreementPickerComponent} from "../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component";
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-region-editor',
@@ -41,9 +42,12 @@ export class RegionEditorComponent implements OnInit {
               private organisationManagerService: OrganisationService,
               private regionService: RegionService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+  this.toastr.setRootViewContainerRef(vcr); }
 
   ngOnInit() {
+    console.log('rere');
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
@@ -88,42 +92,43 @@ export class RegionEditorComponent implements OnInit {
     // Populate organisations before save
     vm.region.organisations = {};
     for (const idx in this.organisations) {
-      let organisation: Organisation = this.organisations[idx];
+      const organisation: Organisation = this.organisations[idx];
       this.region.organisations[organisation.uuid] = organisation.name;
     }
 
     // populate Parent Regions
     vm.region.parentRegions = {};
     for (const idx in this.parentRegions) {
-      let region: Region = this.parentRegions[idx];
+      const region: Region = this.parentRegions[idx];
       this.region.parentRegions[region.uuid] = region.name;
     }
 
     // populate Parent Regions
     vm.region.childRegions = {};
     for (const idx in this.childRegions) {
-      let region: Region = this.childRegions[idx];
+      const region: Region = this.childRegions[idx];
       this.region.childRegions[region.uuid] = region.name;
     }
 
-    //populate sharing agreements
+    // populate sharing agreements
     vm.region.sharingAgreements = {};
     for (const idx in this.sharingAgreements) {
-      let dsa: Dsa = this.sharingAgreements[idx];
+      const dsa: Dsa = this.sharingAgreements[idx];
       this.region.sharingAgreements[dsa.uuid] = dsa.name;
     }
 
     vm.regionService.saveRegion(vm.region)
       .subscribe(saved => {
+          vm.region.uuid = saved;
           vm.log.success('Item saved', vm.region, 'Saved');
-          if (close) { this.router.navigate(['/organisationManagerOverview']); }
+          if (close) { this.router.navigate(['/organisationOverview']); }
         },
         error => vm.log.error('Error saving', error, 'Error')
       );
   }
 
   close() {
-    this.router.navigate(['/organisationManagerOverview']);
+    this.router.navigate(['/organisationOverview']);
   }
 
   private getRegionOrganisations() {

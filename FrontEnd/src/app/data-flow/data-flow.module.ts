@@ -6,14 +6,16 @@ import {DataFlowService} from './data-flow.service';
 import { DataFlowEditorComponent } from './data-flow-editor/data-flow-editor.component';
 import { DataflowPickerComponent } from './dataflow-picker/dataflow-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
+import {ToastModule} from 'ng2-toastr';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     EntityViewComponentsModule,
-    NgbModule
+    NgbModule,
+    ToastModule.forRoot(),
   ],
   declarations: [DataFlowComponent, DataFlowEditorComponent, DataflowPickerComponent],
   entryComponents : [

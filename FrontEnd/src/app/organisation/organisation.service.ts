@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {URLSearchParams, Http} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {Organisation} from './models/Organisation';
 import {Region} from '../region/models/Region';
 import {Address} from './models/Address';
@@ -65,7 +65,7 @@ export class OrganisationService  {
   saveOrganisation(organisation: Organisation): Observable<any> {
     const vm = this;
     return vm.http.post('api/organisationManager', organisation)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteOrganisation(uuid: string): Observable<any> {

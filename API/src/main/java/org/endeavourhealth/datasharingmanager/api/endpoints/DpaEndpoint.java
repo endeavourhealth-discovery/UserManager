@@ -105,6 +105,7 @@ public final class DpaEndpoint extends AbstractEndpoint {
 
         return Response
                 .ok()
+                .entity(dpa.getUuid())
                 .build();
     }
 

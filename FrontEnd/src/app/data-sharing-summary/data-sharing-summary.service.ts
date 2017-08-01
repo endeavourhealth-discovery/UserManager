@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {DataSharingSummary} from './models/DataSharingSummary';
-import {OrganisationManagerStatistics} from '../organisation/models/OrganisationManagerStatistics';
 
 @Injectable()
 export class DataSharingSummaryService {
@@ -26,7 +25,7 @@ export class DataSharingSummaryService {
   saveDataSharingSummary(cohort: DataSharingSummary): Observable<any> {
     const vm = this;
     return vm.http.post('api/dataSharingSummary', cohort)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteDataSharingSummary(uuid: string): Observable<any> {

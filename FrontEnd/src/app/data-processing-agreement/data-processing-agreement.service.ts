@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {DataFlow} from '../data-flow/models/DataFlow';
 import {Dpa} from './models/Dpa';
 import {DataSet} from '../data-set/models/Dataset';
-import {Cohort} from "../cohort/models/Cohort";
+import {Cohort} from '../cohort/models/Cohort';
 
 @Injectable()
 export class DataProcessingAgreementService {
@@ -13,6 +13,7 @@ export class DataProcessingAgreementService {
 
   getAllDpas(): Observable<Dpa[]> {
     const vm = this;
+    console.log('getting all DPAs');
     return vm.http.get('api/dpa')
       .map((response) => response.json());
   }
@@ -20,14 +21,17 @@ export class DataProcessingAgreementService {
   getDpa(uuid: string): Observable<Dpa> {
     const vm = this;
     const params = new URLSearchParams();
+    console.log(uuid);
     params.set('uuid', uuid);
+    console.log('getting SINGLE DPAs');
     return vm.http.get('api/dpa', { search : params })
       .map((response) => response.json());
   }
 
   saveDpa(dpa: Dpa): Observable<any> {
     const vm = this;
-    return vm.http.post('api/dpa', dpa);
+    return vm.http.post('api/dpa', dpa)
+      .map((response) => response.text());
   }
 
   deleteDpa(uuid: string): Observable<any> {

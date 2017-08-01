@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataProcessingAgreementService} from '../data-processing-agreement.service';
 import {LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -6,12 +6,13 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSet} from '../../data-set/models/Dataset';
 import {DataFlow} from '../../data-flow/models/DataFlow';
 import {Dpa} from '../models/Dpa';
-import {DataflowPickerComponent} from "../../data-flow/dataflow-picker/dataflow-picker.component";
-import {Cohort} from "../../cohort/models/Cohort";
-import {Documentation} from "../../documentation/models/Documentation";
-import {CohortPickerComponent} from "../../cohort/cohort-picker/cohort-picker.component";
-import {DataSetPickerComponent} from "../../data-set/data-set-picker/data-set-picker.component";
-import {DocumentationService} from "../../documentation/documentation.service";
+import {DataflowPickerComponent} from '../../data-flow/dataflow-picker/dataflow-picker.component';
+import {Cohort} from '../../cohort/models/Cohort';
+import {Documentation} from '../../documentation/models/Documentation';
+import {CohortPickerComponent} from '../../cohort/cohort-picker/cohort-picker.component';
+import {DataSetPickerComponent} from '../../data-set/data-set-picker/data-set-picker.component';
+import {DocumentationService} from '../../documentation/documentation.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-processing-agreement-editor',
@@ -48,7 +49,10 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
               private dpaService: DataProcessingAgreementService,
               private documentationService: DocumentationService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
@@ -76,9 +80,11 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
   load(uuid: string) {
     const vm = this;
+    console.log(uuid);
     vm.dpaService.getDpa(uuid)
       .subscribe(result => {
           vm.dpa = result;
+          console.log(result);
           vm.getLinkedDataFlows();
           vm.getLinkedCohorts();
           vm.getLinkedDataSets();
@@ -118,6 +124,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
     vm.dpaService.saveDpa(vm.dpa)
       .subscribe(saved => {
+          vm.dpa.uuid = saved;
           vm.log.success('Data Processing Agreement saved', vm.dpa, 'Saved');
           if (close) { vm.close(); }
         },

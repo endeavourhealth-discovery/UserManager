@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Organisation} from '../organisation/models/Organisation';
 import {Purpose} from './models/Purpose';
@@ -29,7 +29,8 @@ export class DataSharingAgreementService {
 
   saveDsa(dsa: Dsa): Observable<any> {
     const vm = this;
-    return vm.http.post('api/dsa', dsa);
+    return vm.http.post('api/dsa', dsa)
+      .map((response) => response.text());
   }
 
   deleteDsa(uuid: string): Observable<any> {

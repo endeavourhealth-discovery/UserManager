@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Organisation} from '../../organisation/models/Organisation';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {RegionService} from '../region.service';
 import {Region} from '../models/Region';
 import {Router} from '@angular/router';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-region',
@@ -20,7 +21,10 @@ export class RegionComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private regionService: RegionService,
               private log: LoggerService,
-              private router: Router) {  }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getRegions();

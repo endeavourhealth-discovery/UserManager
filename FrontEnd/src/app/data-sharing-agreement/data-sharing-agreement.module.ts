@@ -7,20 +7,25 @@ import { PurposeAddComponent } from './purpose-add/purpose-add.component';
 import {DataSharingAgreementService} from './data-sharing-agreement.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from 'eds-angular4';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgbModule,
-    EntityViewComponentsModule
+    EntityViewComponentsModule,
+    ToastModule.forRoot(),
   ],
   declarations: [
     DataSharingAgreementComponent,
     DataSharingAgreementEditorComponent,
     DataSharingAgreementPickerComponent,
     PurposeAddComponent],
+  entryComponents : [
+    PurposeAddComponent
+  ],
   providers: [DataSharingAgreementService]
 })
 export class DataSharingAgreementModule { }

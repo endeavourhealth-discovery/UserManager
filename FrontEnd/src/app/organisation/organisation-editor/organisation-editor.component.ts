@@ -8,7 +8,7 @@ import {OrganisationService} from '../organisation.service';
 import {Region} from '../../region/models/Region';
 import {OrganisationPickerComponent} from '../organisation-picker/organisation-picker.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastsManager} from "ng2-toastr";
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-organisation-editor',
@@ -100,6 +100,7 @@ export class OrganisationEditorComponent implements OnInit {
     vm.organisationService.getOrganisation(uuid)
       .subscribe(result =>  {
           vm.organisation = result;
+          console.log(result);
           if (vm.organisation.isService) {
             vm.orgType = 'Service';
           } else { // only get these for organisations, not services
@@ -148,6 +149,7 @@ export class OrganisationEditorComponent implements OnInit {
 
     vm.organisationService.saveOrganisation(vm.organisation)
       .subscribe(saved => {
+          vm.organisation.uuid = saved;
           vm.log.success('Item saved', vm.organisation, 'Saved');
           if (close) { this.router.navigate(['/organisationOverview']); }
         },

@@ -7,13 +7,15 @@ import {DataSetService} from './data-set.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgbModule,
-    EntityViewComponentsModule
+    EntityViewComponentsModule,
+    ToastModule.forRoot(),
   ],
   declarations: [
     DataSetComponent,

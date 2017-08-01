@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSharingSummaryService} from '../data-sharing-summary.service';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSharingSummary} from '../models/DataSharingSummary';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-sharing-summary',
@@ -18,7 +19,10 @@ export class DataSharingSummaryComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private dataSharingSummaryService: DataSharingSummaryService,
               private log: LoggerService,
-              private router: Router) { }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getDataSharingSummaries();

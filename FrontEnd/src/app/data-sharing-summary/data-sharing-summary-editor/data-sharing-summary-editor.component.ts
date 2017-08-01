@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSharingSummary} from '../models/DataSharingSummary';
 import {DataSharingSummaryService} from '../data-sharing-summary.service';
 import {LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-sharing-summary-editor',
@@ -39,7 +40,10 @@ export class DataSharingSummaryEditorComponent implements OnInit {
               private log: LoggerService,
               private dataSharingSummaryService: DataSharingSummaryService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.paramSubscriber = this.route.params.subscribe(
@@ -81,6 +85,7 @@ export class DataSharingSummaryEditorComponent implements OnInit {
 
     vm.dataSharingSummaryService.saveDataSharingSummary(vm.dataSharingSummary)
       .subscribe(saved => {
+          vm.dataSharingSummary.uuid = saved;
           vm.log.success('Item saved', vm.dataSharingSummary, 'Saved');
           if (close) { this.router.navigate(['/dataSharingOverview']); }
         },

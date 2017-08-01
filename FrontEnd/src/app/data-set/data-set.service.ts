@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {URLSearchParams, Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {DataSet} from './models/Dataset';
-import {Dpa} from "../data-processing-agreement/models/Dpa";
+import {Dpa} from '../data-processing-agreement/models/Dpa';
 
 @Injectable()
 export class DataSetService {
@@ -26,7 +26,7 @@ export class DataSetService {
   saveDataSet(dataset: DataSet): Observable<any> {
     const vm = this;
     return vm.http.post('api/dataSet', dataset)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteDataSet(uuid: string): Observable<any> {

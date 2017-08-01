@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Dsa} from '../models/Dsa';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSharingAgreementService} from '../data-sharing-agreement.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-data-sharing-agreement',
@@ -18,7 +19,10 @@ export class DataSharingAgreementComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private dsaService: DataSharingAgreementService,
               private log: LoggerService,
-              private router: Router) { }
+              private router: Router,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
     this.getDsas();
@@ -55,7 +59,7 @@ export class DataSharingAgreementComponent implements OnInit {
     vm.dsaService.deleteDsa(item.uuid)
       .subscribe(
         () => {
-          let index = vm.dsas.indexOf(item);
+          const index = vm.dsas.indexOf(item);
           vm.dsas.splice(index, 1);
           vm.log.success('Data Sharing Agreement deleted', item, 'Delete Data Sharing Agreement');
         },

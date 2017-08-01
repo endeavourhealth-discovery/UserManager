@@ -1,8 +1,8 @@
 package org.endeavourhealth.datasharingmanager.api.database.models;
 
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
-import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisationManager;
-import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisationManagerStatistics;
+import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisation;
+import org.endeavourhealth.datasharingmanager.api.json.JsonStatistics;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -397,7 +397,7 @@ public class OrganisationEntity {
         return ret;
     }
 
-    public static void updateOrganisation(JsonOrganisationManager organisation) throws Exception {
+    public static void updateOrganisation(JsonOrganisation organisation) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         OrganisationEntity organisationEntity = entityManager.find(OrganisationEntity.class, organisation.getUuid());
@@ -420,7 +420,7 @@ public class OrganisationEntity {
         entityManager.close();
     }
 
-    public static void saveOrganisation(JsonOrganisationManager organisation) throws Exception {
+    public static void saveOrganisation(JsonOrganisation organisation) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         OrganisationEntity organisationEntity = new OrganisationEntity();
@@ -551,13 +551,13 @@ public class OrganisationEntity {
         return result;
     }
 
-    public static List<JsonOrganisationManagerStatistics> getStatisticsForType(String type) throws Exception {
-        List<JsonOrganisationManagerStatistics> statsList = new ArrayList<>();
+    public static List<JsonStatistics> getStatisticsForType(String type) throws Exception {
+        List<JsonStatistics> statsList = new ArrayList<>();
 
         List<String> queryNames = getStatisticsQueries(type);
 
         for (String queryName : queryNames) {
-            JsonOrganisationManagerStatistics jsonStats = new JsonOrganisationManagerStatistics();
+            JsonStatistics jsonStats = new JsonStatistics();
             List<Object[]> result = executeOrganisationStatisticQuery(queryName);
             jsonStats.setLabel(result.get(0)[0].toString());
             jsonStats.setValue(result.get(0)[1].toString());

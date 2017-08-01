@@ -118,30 +118,30 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
             "of a organisation.")
     @RequiresAdmin
     public Response post(@Context SecurityContext sc,
-                         @ApiParam(value = "Json representation of organisation to save or update") JsonOrganisationManager organisationManager
+                         @ApiParam(value = "Json representation of organisation to save or update") JsonOrganisation organisation
     ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Organisation",
-                "Organisation", organisationManager);
+                "Organisation", organisation);
 
-        if (organisationManager.getUuid() != null) {
-            MasterMappingEntity.deleteAllMappings(organisationManager.getUuid());
-            OrganisationEntity.updateOrganisation(organisationManager);
+        if (organisation.getUuid() != null) {
+            MasterMappingEntity.deleteAllMappings(organisation.getUuid());
+            OrganisationEntity.updateOrganisation(organisation);
         } else {
-            organisationManager.setUuid(UUID.nameUUIDFromBytes((organisationManager.getName() + organisationManager.getOdsCode()).getBytes()).toString());
-            OrganisationEntity.saveOrganisation(organisationManager);
+            organisation.setUuid(UUID.nameUUIDFromBytes((organisation.getName() + organisation.getOdsCode()).getBytes()).toString());
+            OrganisationEntity.saveOrganisation(organisation);
         }
 
 
         //Process Mappings
-        MasterMappingEntity.saveOrganisationMappings(organisationManager);
+        MasterMappingEntity.saveOrganisationMappings(organisation);
 
-        List<JsonAddress> addresses = organisationManager.getAddresses();
+        List<JsonAddress> addresses = organisation.getAddresses();
         if (addresses.size() > 0) {
             for (JsonAddress address : addresses) {
                 if (address.getOrganisationUuid() == null)
-                    address.setOrganisationUuid(organisationManager.getUuid());
+                    address.setOrganisationUuid(organisation.getUuid());
 
                 if (address.getUuid() == null) {
                     address.setUuid(UUID.randomUUID().toString());
@@ -159,6 +159,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
         return Response
                 .ok()
+                .entity(organisation.getUuid())
                 .build();
     }
 
@@ -498,7 +499,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     }
 
     private Response generateStatistics(String type) throws Exception {
-        List<JsonOrganisationManagerStatistics> stats = OrganisationEntity.getStatisticsForType(type);
+        List<JsonStatistics> stats = OrganisationEntity.getStatisticsForType(type);
 
         return Response
                 .ok()

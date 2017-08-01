@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {URLSearchParams, Http} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {DataFlow} from './models/DataFlow';
 import {Dpa} from '../data-processing-agreement/models/Dpa';
 import {Dsa} from '../data-sharing-agreement/models/Dsa';
@@ -27,7 +27,7 @@ export class DataFlowService {
   saveDataFlow(cohort: DataFlow): Observable<any> {
     const vm = this;
     return vm.http.post('api/dataFlow', cohort)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   deleteDataFlow(uuid: string): Observable<any> {

@@ -113,11 +113,6 @@ public class MasterMappingEntity {
 
         System.out.println(deletedCount + " deleted");
         entityManager.close();
-
-        StoredProcedureQuery spq = entityManager.createNamedStoredProcedureQuery("deleteAllMappings");
-        spq.setParameter("UUID", uuid);
-        spq.execute();
-        entityManager.close();
     }
 
     public static void saveParentMappings(Map<UUID, String> parents, Short parentMapTypeId, String childUuid, Short childMapTypeId) throws Exception {
@@ -187,7 +182,7 @@ public class MasterMappingEntity {
         CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
         Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUUid"), parentUuid ),
+        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), parentUuid ),
                 cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId),
                 cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId));
 
@@ -212,7 +207,7 @@ public class MasterMappingEntity {
         CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
         Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUUid"), parentUuid ),
+        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), parentUuid ),
                 cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId));
 
         cq.where(predicate);
@@ -224,7 +219,7 @@ public class MasterMappingEntity {
         return maps;
     }
 
-    public static void saveOrganisationMappings(JsonOrganisationManager organisation) throws Exception {
+    public static void saveOrganisationMappings(JsonOrganisation organisation) throws Exception {
         //Default to organisation
         Short organisationType = MapType.ORGANISATION.getMapType();
 

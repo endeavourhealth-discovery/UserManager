@@ -6,9 +6,8 @@ export class Dpa {
     derivation: string;
     publisherInformation: string;
     publisherContractInformation: string;
-    publisherDataSet: string;
+    publisherDataset: string;
     dsaStatusId: number;
-    dataFlow: string;
     returnToSenderPolicy: string;
     startDate: string;
     endDate: string;
