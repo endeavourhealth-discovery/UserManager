@@ -25,6 +25,7 @@ public class JsonDPA {
     private Map<UUID, String> cohorts = null;
     private Map<UUID, String> dataSets = null;
     private List<JsonDocumentation> documentations = new ArrayList<>();
+    private Map<UUID, String> publishers = null;
 
     public String getUuid() {
         return uuid;
@@ -152,5 +153,13 @@ public class JsonDPA {
 
     public void setDocumentations(List<JsonDocumentation> documentations) {
         this.documentations = documentations;
+    }
+
+    public Map<UUID, String> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(Map<UUID, String> publishers) {
+        this.publishers = publishers;
     }
 }

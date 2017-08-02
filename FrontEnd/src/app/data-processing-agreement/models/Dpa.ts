@@ -14,6 +14,7 @@ export class Dpa {
     dataFlows: { [key: string]: string; };
     cohorts: { [key: string]: string; };
     dataSets: { [key: string]: string; };
+    publishers: { [key: string]: string; };
     documentations: Documentation[];
 
     getDisplayItems(): any[] {

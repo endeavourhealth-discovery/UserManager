@@ -5,6 +5,7 @@ import {DataFlow} from '../data-flow/models/DataFlow';
 import {Dpa} from './models/Dpa';
 import {DataSet} from '../data-set/models/Dataset';
 import {Cohort} from '../cohort/models/Cohort';
+import {Organisation} from "../organisation/models/Organisation";
 
 @Injectable()
 export class DataProcessingAgreementService {
@@ -71,6 +72,14 @@ export class DataProcessingAgreementService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/dpa/datasets', { search : params })
+      .map((response) => response.json());
+  }
+
+  getPublishers(uuid: string):  Observable<Organisation[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dpa/publishers', { search : params })
       .map((response) => response.json());
   }
 

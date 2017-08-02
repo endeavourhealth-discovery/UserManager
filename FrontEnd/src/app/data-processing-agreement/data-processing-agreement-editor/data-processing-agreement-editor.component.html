@@ -64,16 +64,40 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Data Flow</label>
-            <input type="text" class="form-control" placeholder="Data Flow" [(ngModel)]="dpa.dataFlow" name="dataFlow">
-          </div>
-          <div class="form-group col-md-3">
             <label class="control-label">Return To Sender Policy</label>
             <input type="text" class="form-control" placeholder="Return To Sender Policy" [(ngModel)]="dpa.returnToSenderPolicy" name="returnToSenderPolicy">
           </div>
         </div>
 
         <ngb-accordion>
+          <ngb-panel id="pubs">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Publishers
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{publishers?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPublishers()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="publishers"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Publisher'"
+                [model]="'organisation'"
+                [detailsToShow]="orgDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
           <ngb-panel id="dflows">
             <ng-template ngbPanelTitle>
               <div class="row">

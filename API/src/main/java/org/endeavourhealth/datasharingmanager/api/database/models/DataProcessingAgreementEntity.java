@@ -302,4 +302,22 @@ public class DataProcessingAgreementEntity {
 
         return ret;
     }
+
+    public static List<Object[]> getDataProcessingAgreementsForOrganisation(String organisationUUID) throws Exception {
+
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        Query query = entityManager.createQuery(
+                "select dpa from DataProcessingAgreementEntity dpa " +
+                        "inner join AddressEntity a on a.organisationUuid = o.uuid " +
+                        "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = 1 " +
+                        "where mm.parentUuid = :region");
+        query.setParameter("region", organisationUUID);
+
+        List<Object[]> result = query.getResultList();
+
+        entityManager.close();
+
+        return result;
+    }
 }

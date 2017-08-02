@@ -186,6 +186,24 @@ public final class DpaEndpoint extends AbstractEndpoint {
         return getLinkedDataSets(uuid);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.GetPublishers")
+    @Path("/publishers")
+    @ApiOperation(value = "Returns a list of Json representations of publishers that are linked " +
+            "to the data processing agreement.  Accepts a UUID of a data processing agreement.")
+    public Response getPublishersForDSA(@Context SecurityContext sc,
+                                        @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "publisher(s)",
+                "DSA Id", uuid);
+
+        return getPublishers(uuid);
+    }
+
     private Response getDPAList() throws Exception {
 
         List<DataProcessingAgreementEntity> dpas = DataProcessingAgreementEntity.getAllDPAs();
@@ -254,6 +272,22 @@ public final class DpaEndpoint extends AbstractEndpoint {
 
         if (datasets.size() > 0)
             ret = DatasetEntity.getDataSetsFromList(datasets);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getPublishers(String dsaUuid) throws Exception {
+
+        List<String> publisherUuids = MasterMappingEntity.getChildMappings(dsaUuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
+
+        List<OrganisationEntity> ret = new ArrayList<>();
+
+        if (publisherUuids.size() > 0)
+            ret = OrganisationEntity.getOrganisationsFromList(publisherUuids);
 
         clearLogbackMarkers();
         return Response

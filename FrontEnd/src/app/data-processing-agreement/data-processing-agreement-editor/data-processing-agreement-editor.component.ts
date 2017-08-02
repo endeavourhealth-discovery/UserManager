@@ -13,6 +13,8 @@ import {CohortPickerComponent} from '../../cohort/cohort-picker/cohort-picker.co
 import {DataSetPickerComponent} from '../../data-set/data-set-picker/data-set-picker.component';
 import {DocumentationService} from '../../documentation/documentation.service';
 import {ToastsManager} from 'ng2-toastr';
+import {Organisation} from '../../organisation/models/Organisation';
+import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
 
 @Component({
   selector: 'app-data-processing-agreement-editor',
@@ -28,6 +30,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   cohorts: Cohort[];
   dataSets: DataSet[];
   documentations: Documentation[];
+  publishers: Organisation[];
   editDisabled = false;
   processor = 'Discovery';
   private file: File;
@@ -43,6 +46,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   datasetDetailsToShow = new DataSet().getDisplayItems();
   cohortDetailsToShow = new Cohort().getDisplayItems();
   documentDetailsToShow = new Documentation().getDisplayItems();
+  orgDetailsToShow = new Organisation().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
@@ -85,6 +89,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
       .subscribe(result => {
           vm.dpa = result;
           console.log(result);
+          vm.getPublishers();
           vm.getLinkedDataFlows();
           vm.getLinkedCohorts();
           vm.getLinkedDataSets();
@@ -102,6 +107,13 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
     for (const idx in this.dataFlows) {
       const dataflow: DataFlow = this.dataFlows[idx];
       this.dpa.dataFlows[dataflow.uuid] = dataflow.name;
+    }
+
+    // Populate publishers before save
+    vm.dpa.publishers = {};
+    for (const idx in this.publishers) {
+      const pub: Organisation = this.publishers[idx];
+      this.dpa.publishers[pub.uuid] = pub.name;
     }
 
     // Populate Cohorts before save
@@ -249,6 +261,24 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
   delete($event) {
     console.log($event);
+  }
+
+  private editPublishers() {
+    const vm = this;
+    OrganisationPickerComponent.open(vm.$modal, vm.publishers, 'organisation')
+      .result.then(function
+      (result: Organisation[]) { vm.publishers = result; },
+      () => vm.log.info('Edit Publishers cancelled')
+    );
+  }
+
+  private getPublishers() {
+    const vm = this;
+    vm.dpaService.getPublishers(vm.dpa.uuid)
+      .subscribe(
+        result => vm.publishers = result,
+        error => vm.log.error('Failed to load publishers', error, 'Load Publishers')
+      );
   }
 
 }

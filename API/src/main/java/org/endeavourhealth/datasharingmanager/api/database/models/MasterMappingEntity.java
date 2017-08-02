@@ -350,6 +350,11 @@ public class MasterMappingEntity {
             }
             saveChildMappings(documentation, MapType.DOCUMENT.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
         }
+
+        if (dpa.getPublishers() != null) {
+            Map<UUID, String> publishers = dpa.getPublishers();
+            saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        }
     }
 
     public static void saveCohortMappings(JsonCohort cohort) throws Exception {

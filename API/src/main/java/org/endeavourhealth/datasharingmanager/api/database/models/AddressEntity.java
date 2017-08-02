@@ -279,7 +279,7 @@ public class AddressEntity {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         Query query = entityManager.createQuery(
-                "select o from OrganisationEntity o " +
+                "select o.name, a.lat, a.lng from OrganisationEntity o " +
                         "inner join AddressEntity a on a.organisationUuid = o.uuid " +
                         "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = 1 " +
                         "where mm.parentUuid = :region");
