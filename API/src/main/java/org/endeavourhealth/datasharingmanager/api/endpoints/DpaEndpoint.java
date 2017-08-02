@@ -204,6 +204,24 @@ public final class DpaEndpoint extends AbstractEndpoint {
         return getPublishers(uuid);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.GetPublishers")
+    @Path("/checkOrganisation")
+    @ApiOperation(value = "Checks whether an organisation is part of a data processing agreement. " +
+            "Returns a list of data processing agreements")
+    public Response checkOrganisation(@Context SecurityContext sc,
+                                        @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "check Organisation(s)",
+                "ODS Code", odsCode);
+
+        return checkOrganisationIsPartOfDPA(odsCode);
+    }
+
     private Response getDPAList() throws Exception {
 
         List<DataProcessingAgreementEntity> dpas = DataProcessingAgreementEntity.getAllDPAs();
@@ -295,4 +313,16 @@ public final class DpaEndpoint extends AbstractEndpoint {
                 .entity(ret)
                 .build();
     }
+
+    private Response checkOrganisationIsPartOfDPA(String odsCode) throws Exception {
+
+        List<DataProcessingAgreementEntity> matchingDpa = DataProcessingAgreementEntity.getDataProcessingAgreementsForOrganisation(odsCode);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(matchingDpa)
+                .build();
+    }
+
 }

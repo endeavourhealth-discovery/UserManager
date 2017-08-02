@@ -1,5 +1,6 @@
 package org.endeavourhealth.datasharingmanager.api.database.models;
 
+import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonDPA;
 
@@ -303,18 +304,21 @@ public class DataProcessingAgreementEntity {
         return ret;
     }
 
-    public static List<Object[]> getDataProcessingAgreementsForOrganisation(String organisationUUID) throws Exception {
+    public static List<DataProcessingAgreementEntity> getDataProcessingAgreementsForOrganisation(String odsCode) throws Exception {
 
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         Query query = entityManager.createQuery(
                 "select dpa from DataProcessingAgreementEntity dpa " +
-                        "inner join AddressEntity a on a.organisationUuid = o.uuid " +
-                        "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = 1 " +
-                        "where mm.parentUuid = :region");
-        query.setParameter("region", organisationUUID);
+                        "inner join MasterMappingEntity mm on mm.parentUuid = dpa.uuid and mm.parentMapTypeId = :dpaType " +
+                        "inner join OrganisationEntity o on o.uuid = mm.childUuid " +
+                        "where o.odsCode = :ods " +
+                        "and mm.childMapTypeId = :publisherType");
+        query.setParameter("dpaType", MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        query.setParameter("ods", odsCode);
+        query.setParameter("publisherType", MapType.PUBLISHER.getMapType());
 
-        List<Object[]> result = query.getResultList();
+        List<DataProcessingAgreementEntity> result = query.getResultList();
 
         entityManager.close();
 
