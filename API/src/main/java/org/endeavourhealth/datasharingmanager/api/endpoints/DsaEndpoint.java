@@ -39,12 +39,12 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Return either all data sharing agreements if no parameter is provided or search for " +
             "data sharing agreements using a UUID or a search term. Search matches on name or description of data sharing agreement. " +
             "Returns a JSON representation of the matching set of Data Flows")
-    public Response get(@Context SecurityContext sc,
+    public Response getDSA(@Context SecurityContext sc,
                         @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
     ) throws Exception {
@@ -70,12 +70,12 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.Post")
     @Path("/")
     @ApiOperation(value = "Save a new data sharing agreement or update an existing one.  Accepts a JSON representation " +
             "of a data sharing agreement")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postDSA(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of data sharing agreeement to save or update") JsonDSA dsa
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -109,11 +109,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.Delete")
     @Path("/")
     @ApiOperation(value = "Delete a data sharing agreement based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc,
+    public Response deleteDSA(@Context SecurityContext sc,
                            @ApiParam(value = "UUID of the data sharing agreement to be deleted") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -132,11 +132,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.GetDataFlows")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.GetDataFlows")
     @Path("/dataflows")
     @ApiOperation(value = "Returns a list of Json representations of cohorts that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getLinkedCohorts(@Context SecurityContext sc,
+    public Response getLinkedCohortsForDSA(@Context SecurityContext sc,
                                      @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -150,11 +150,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.GetRegions")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.GetRegions")
     @Path("/regions")
     @ApiOperation(value = "Returns a list of Json representations of regions that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getLinkedRegions(@Context SecurityContext sc,
+    public Response getLinkedRegionsForDSA(@Context SecurityContext sc,
                                      @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -168,11 +168,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.GetPublishers")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.GetPublishers")
     @Path("/publishers")
     @ApiOperation(value = "Returns a list of Json representations of publishers that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getPublishers(@Context SecurityContext sc,
+    public Response getPublishersForDSA(@Context SecurityContext sc,
                                   @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -186,11 +186,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.GetSubscribers")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.GetSubscribers")
     @Path("/subscribers")
     @ApiOperation(value = "Returns a list of Json representations of subscribers that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getSubscribers(@Context SecurityContext sc,
+    public Response getSubscribersForDSA(@Context SecurityContext sc,
                                    @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -204,11 +204,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.GetPurposes")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.GetPurposes")
     @Path("/purposes")
     @ApiOperation(value = "Returns a list of Json representations of purposes that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getPurposes(@Context SecurityContext sc,
+    public Response getPurposesForDSA(@Context SecurityContext sc,
                                 @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -222,11 +222,11 @@ public final class DsaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DsaEndpoint.getBenefits")
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.getBenefits")
     @Path("/benefits")
     @ApiOperation(value = "Returns a list of Json representations of benefits that are linked " +
             "to the data sharing agreement.  Accepts a UUID of a data sharing agreement.")
-    public Response getBenefits(@Context SecurityContext sc,
+    public Response getBenefitsForDSA(@Context SecurityContext sc,
                                 @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);

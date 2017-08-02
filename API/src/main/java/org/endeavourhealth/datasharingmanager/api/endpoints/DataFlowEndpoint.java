@@ -41,12 +41,12 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataFlowEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Return either all data flow agreements if no parameter is provided or search for " +
             "data flow agreements using a UUID or a search term. Search matches on name of data flow. " +
             "Returns a JSON representation of the matching set of Data Flows")
-    public Response get(@Context SecurityContext sc,
+    public Response getDataFlow(@Context SecurityContext sc,
                         @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
     ) throws Exception {
@@ -73,12 +73,12 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataFlowEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.Post")
     @Path("/")
     @ApiOperation(value = "Save a new data flow or update an existing one.  Accepts a JSON representation " +
             "of a data flow.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postDataFlow(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of data flow to save or update") JsonDataFlow dataFlow
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -107,12 +107,12 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataFlowEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.Delete")
     @Path("/")
     @ApiOperation(value = "Delete a data flow based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response deleteOrganisation(@Context SecurityContext sc,
-                                       @ApiParam(value = "UUID of the data flow to be deleted") @QueryParam("uuid") String uuid
+    public Response deleteDataFlow(@Context SecurityContext sc,
+                                   @ApiParam(value = "UUID of the data flow to be deleted") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
@@ -130,11 +130,11 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataFlowEndpoint.GetDataProcessingAgreements")
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.GetDataProcessingAgreements")
     @Path("/dpas")
     @ApiOperation(value = "Returns a list of Json representations of Data Processing Agreements that are linked " +
             "to the data flow.  Accepts a UUID of a data flow.")
-    public Response getLinkedDpas(@Context SecurityContext sc,
+    public Response getLinkedDpasForDataFlow(@Context SecurityContext sc,
                                   @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -147,11 +147,11 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataFlowEndpoint.GetDataSharingAgreements")
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.GetDataSharingAgreements")
     @Path("/dsas")
     @ApiOperation(value = "Returns a list of Json representations of Data Sharing Agreements that are linked " +
             "to the data flow.  Accepts a UUID of a data flow.")
-    public Response getLinkedDsas(@Context SecurityContext sc,
+    public Response getLinkedDsasForDataFlow(@Context SecurityContext sc,
                                   @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,

@@ -42,12 +42,12 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Return either all regions if no parameter is provided or search for " +
             "regions using a UUID or a search term. Search matches on name or description of region. " +
             "Returns a JSON representation of the matching set of regions")
-    public Response get(@Context SecurityContext sc,
+    public Response getRegion(@Context SecurityContext sc,
                         @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
     ) throws Exception {
@@ -72,11 +72,11 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.Post")
     @Path("/")@ApiOperation(value = "Save a new region or update an existing one.  Accepts a JSON representation " +
             "of a region.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postRegion(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of region to save or update") JsonRegion region
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -106,7 +106,7 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.Delete")
     @Path("/")
     @ApiOperation(value = "Delete a region based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
@@ -129,11 +129,11 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.GetOrganisations")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.GetOrganisations")
     @Path("/organisations")
     @ApiOperation(value = "Returns a list of Json representations of organisations that are linked " +
             "to the region.  Accepts a UUID of a region.")
-    public Response get(@Context SecurityContext sc,
+    public Response getOrganisationsForRegion(@Context SecurityContext sc,
                         @ApiParam(value = "UUID of the region") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -146,11 +146,11 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.GetParentRegions")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.GetParentRegions")
     @Path("/parentRegions")
     @ApiOperation(value = "Returns a list of Json representations of parent regions that are linked " +
             "to the region.  Accepts a UUID of a region.")
-    public Response getParentRegions(@Context SecurityContext sc,
+    public Response getParentRegionsForRegion(@Context SecurityContext sc,
                                      @ApiParam(value = "UUID of the region") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -163,11 +163,11 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.GetChildRegions")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.GetChildRegions")
     @Path("/childRegions")
     @ApiOperation(value = "Returns a list of Json representations of child regions that are linked " +
             "to the region.  Accepts a UUID of a region.")
-    public Response getChildRegions(@Context SecurityContext sc,
+    public Response getChildRegionsForRegion(@Context SecurityContext sc,
                                     @ApiParam(value = "UUID of the region") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -180,11 +180,11 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.GetSharingAgreements")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.GetSharingAgreements")
     @Path("/sharingAgreements")
     @ApiOperation(value = "Returns a list of Json representations of data sharing agreements that are linked " +
             "to the region.  Accepts a UUID of a region.")
-    public Response getSharingAgreements(@Context SecurityContext sc,
+    public Response getSharingAgreementsForRegion(@Context SecurityContext sc,
                                          @ApiParam(value = "UUID of the region") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -197,7 +197,7 @@ public final class RegionEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.RegionEndpoint.getApiKey")
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.getApiKey")
     @Path("/getApiKey")
     @ApiOperation(value = "Get the Google Maps API Key from the config database.")
     public Response getApiKey(@Context SecurityContext sc) throws Exception {

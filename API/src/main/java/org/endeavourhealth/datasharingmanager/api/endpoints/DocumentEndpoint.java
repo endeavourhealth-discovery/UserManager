@@ -2,6 +2,9 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.annotation.Timed;
 import io.astefanutti.metrics.aspectj.Metrics;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
@@ -24,6 +27,7 @@ import java.util.List;
 
 @Path("/documentation")
 @Metrics(registry = "EdsRegistry")
+@Api(description = "API endpoint related to associated Documentation")
 public final class DocumentEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OrganisationEndpoint.class);
 
@@ -33,9 +37,12 @@ public final class DocumentEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DocumentEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.DocumentEndpoint.Get")
     @Path("/")
-    public Response get(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    @ApiOperation(value = "Return a document based on UUID")
+    public Response getDocument(@Context SecurityContext sc,
+                                @ApiParam(value = "UUID of document to return") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Documents(s)",
@@ -47,9 +54,14 @@ public final class DocumentEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DocumentEndpoint.GetAssociatedDocuments")
+    @Timed(absolute = true, name="DataSharingManager.DocumentEndpoint.GetAssociatedDocuments")
     @Path("/associated")
-    public Response getAssociatedDocuments(@Context SecurityContext sc, @QueryParam("parentUuid") String parentUuid, @QueryParam("parentType") Short parentType) throws Exception {
+    @ApiOperation(value = "Return all associated documentation for an entity.  Takes the UUID of the entity " +
+            "and the type of the entity")
+    public Response getAssociatedDocuments(@Context SecurityContext sc,
+                                           @ApiParam(value = "UUID of entity") @QueryParam("parentUuid") String parentUuid,
+                                           @ApiParam(value = "Type of entity") @QueryParam("parentType") Short parentType
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Documents(s)",
@@ -62,10 +74,13 @@ public final class DocumentEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.CohortEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.CohortEndpoint.Delete")
     @Path("/")
+    @ApiOperation(value = "Delete a document based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    public Response deleteDocument(@Context SecurityContext sc,
+                                   @ApiParam(value = "UUID of the document to be deleted") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "Cohort",

@@ -42,7 +42,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-@Path("/organisationManager")
+@Path("/organisation")
 @Metrics(registry = "EdsRegistry")
 @Api(description = "API endpoint related to the organisations and services.  " +
         "Services are just organisations with a flag indicating they are a service.")
@@ -66,12 +66,12 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Return either all organisations if no parameter is provided or search for " +
             "organisations using a UUID or a search term. Search matches on name or ODS code of organisations. " +
             "Returns a JSON representation of the matching set of organisations")
-    public Response get(@Context SecurityContext sc,
+    public Response getOrganisation(@Context SecurityContext sc,
                         @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData,
                         @ApiParam(value = "Optional string of 'services' to indicate you want to search for services instead of organisations")
@@ -112,12 +112,12 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.Post")
     @Path("/")
     @ApiOperation(value = "Save a new organisation or update an existing one.  Accepts a JSON representation " +
             "of a organisation.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postOrganisation(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of organisation to save or update") JsonOrganisation organisation
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -166,7 +166,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.Delete")
     @Path("/")
     @ApiOperation(value = "Delete an organisation based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
@@ -189,11 +189,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.GetRegions")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.GetRegions")
     @Path("/regions")
     @ApiOperation(value = "Returns a list of Json representations of regions that are linked " +
             "to the organisation.  Accepts a UUID of an organisation.")
-    public Response get(@Context SecurityContext sc,
+    public Response getRegionsForOrganisation(@Context SecurityContext sc,
                         @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -207,11 +207,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.GetChildOrganisations")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.GetChildOrganisations")
     @Path("/childOrganisations")
     @ApiOperation(value = "Returns a list of Json representations of child organisations that are linked " +
             "to the organisation.  Accepts a UUID of an organisation.")
-    public Response getChildOrganisations(@Context SecurityContext sc,
+    public Response getChildOrganisationsForOrganisation(@Context SecurityContext sc,
                                           @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -225,11 +225,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.GetServices")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.GetServices")
     @Path("/services")
     @ApiOperation(value = "Returns a list of Json representations of services that are linked " +
             "to the organisation.  Accepts a UUID of an organisation.")
-    public Response getServices(@Context SecurityContext sc,
+    public Response getServicesForOrganisation(@Context SecurityContext sc,
                                 @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -242,11 +242,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.OrganisationEndpoint.GetParentOrganisations")
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.GetParentOrganisations")
     @Path("/parentOrganisations")
     @ApiOperation(value = "Returns a list of Json representations of parent organisations that are linked " +
             "to the organisation.  Accepts a UUID of an organisation.")
-    public Response getParentOrganisations(@Context SecurityContext sc,
+    public Response getParentOrganisationsForOrganisation(@Context SecurityContext sc,
                                            @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid,
                                            @ApiParam(value = "Is the organisation a service?") @QueryParam("isService") String isService) throws Exception {
         super.setLogbackMarkers(sc);
@@ -265,11 +265,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetAddresses")
+    @Timed(absolute = true, name="organisation.GetAddresses")
     @Path("/addresses")
     @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
             "to the organisation.  Accepts a UUID of an organisation.")
-    public Response getAddresses(@Context SecurityContext sc,
+    public Response getAddressesForOrganisation(@Context SecurityContext sc,
                                  @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -283,11 +283,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetMarkers")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.GetMarkers")
     @Path("/markers")
     @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
             "to the organisations in the corresponding region.  Accepts a UUID of an organisation.")
-    public Response getMarkers(@Context SecurityContext sc,
+    public Response getMarkersOfOrganisationsInRegion(@Context SecurityContext sc,
                                @ApiParam(value = "UUID of region") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -300,7 +300,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetEditedBulks")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.GetEditedBulks")
     @Path("/editedBulks")
     @ApiOperation(value = "Returns a list of Json representations of bulk added organisations that have been edited.")
     @RequiresAdmin
@@ -321,7 +321,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.GetConflicts")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.GetConflicts")
     @Path("/conflicts")
     @ApiOperation(value = "Returns a list of Json representations of conflicted organisations after a bulk addition.")
     @RequiresAdmin
@@ -342,7 +342,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.getStatistics")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.getStatistics")
     @Path("/statistics")
     @RequiresAdmin
     @ApiOperation(value = "Get a Json representation of statistics relevant to the type of entity.")
@@ -361,11 +361,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.DeleteBulks")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.DeleteBulks")
     @Path("/deleteBulks")
     @ApiOperation(value = "Deletes all un-edited organisations that have been bulk imported.")
     @RequiresAdmin
-    public Response deleteBulks(@Context SecurityContext sc) throws Exception {
+    public Response deleteBulkOrganisations(@Context SecurityContext sc) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "Organisation",
@@ -382,11 +382,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.UploadBulkOrganisations")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.UploadBulkOrganisations")
     @Path("/upload")
     @ApiOperation(value = "Upload a CSV file from TRUD containing organisations to bulk import.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postOrganisationCSVFile(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of csv file to process") JsonFileUpload fileUpload
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -400,7 +400,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.startUpload")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.startUpload")
     @Path("/startUpload")
     @ApiOperation(value = "Saves the organisations that have been processed from the CSV file. " +
             "Prevents other uploads from taking place simultaniously")
@@ -417,7 +417,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="OrganisationManager.endUpload")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.endUpload")
     @Path("/endUpload")
     @ApiOperation(value = "Ends the upload process allowing other uploads to start.")
     @RequiresAdmin
@@ -433,10 +433,10 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="InformationManager.ConceptEndpoint.searchCount")
+    @Timed(absolute = true, name="DataSharingManager.Organisation.searchCount")
     @Path("/searchCount")
     @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
-    public Response getConceptSearchCount(@Context SecurityContext sc,
+    public Response getOrganisationSearchCount(@Context SecurityContext sc,
                                           @QueryParam("expression") String expression,
                                           @QueryParam("searchType") String searchType
     ) throws Exception {

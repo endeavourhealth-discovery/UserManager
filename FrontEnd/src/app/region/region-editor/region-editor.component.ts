@@ -39,7 +39,7 @@ export class RegionEditorComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
-              private organisationManagerService: OrganisationService,
+              private organisationService: OrganisationService,
               private regionService: RegionService,
               private router: Router,
               private route: ActivatedRoute,
@@ -172,7 +172,7 @@ export class RegionEditorComponent implements OnInit {
 
   private getOrganisationMarkers() {
     const vm = this;
-    vm.organisationManagerService.getOrganisationMarkers(vm.region.uuid)
+    vm.organisationService.getOrganisationMarkers(vm.region.uuid)
       .subscribe(
         result => vm.markers = result,
         error => vm.log.error('Failed to load organisation markers', error, 'Load organisation Markers')

@@ -2,6 +2,9 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.annotation.Timed;
 import io.astefanutti.metrics.aspectj.Metrics;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
@@ -27,6 +30,7 @@ import java.util.UUID;
 
 @Path("/cohort")
 @Metrics(registry = "EdsRegistry")
+@Api(description = "API endpoint related to the Cohorts")
 public final class CohortEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OrganisationEndpoint.class);
 
@@ -36,9 +40,15 @@ public final class CohortEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.CohortEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.CohortEndpoint.Get")
     @Path("/")
-    public Response get(@Context SecurityContext sc, @QueryParam("uuid") String uuid, @QueryParam("searchData") String searchData) throws Exception {
+    @ApiOperation(value = "Return either all cohorts if no parameter is provided or search for " +
+            "cohorts using a UUID or a search term. Search matches on name of cohorts. " +
+            "Returns a JSON representation of the matching set of cohorts")
+    public Response getCohort(@Context SecurityContext sc,
+                              @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
+                              @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Cohort(s)",
@@ -62,10 +72,14 @@ public final class CohortEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.CohortEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.CohortEndpoint.Post")
     @Path("/")
+    @ApiOperation(value = "Save a new cohort or update an existing one.  Accepts a JSON representation " +
+            "of a cohort.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc, JsonCohort cohort) throws Exception {
+    public Response postCohort(@Context SecurityContext sc,
+                               @ApiParam(value = "Json representation of cohort to save or update") JsonCohort cohort
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Cohort",
@@ -91,10 +105,13 @@ public final class CohortEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.CohortEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.CohortEndpoint.Delete")
     @Path("/")
+    @ApiOperation(value = "Delete a cohort based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    public Response deleteCohort(@Context SecurityContext sc,
+                                 @ApiParam(value = "UUID of the cohort to be deleted") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "Cohort",
@@ -111,9 +128,13 @@ public final class CohortEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.CohortEndpoint.GetDataProcessingAgreements")
+    @Timed(absolute = true, name="DataSharingManager.CohortEndpoint.GetDataProcessingAgreements")
     @Path("/dpas")
-    public Response get(@Context SecurityContext sc, @QueryParam("uuid") String uuid) throws Exception {
+    @ApiOperation(value = "Returns a list of Json representations of Data Processing Agreements that are linked " +
+            "to the cohort.  Accepts a UUID of a cohort.")
+    public Response getDpaForCohort(@Context SecurityContext sc,
+                                    @ApiParam(value = "UUID of cohort") @QueryParam("uuid") String uuid
+    ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "DPA(s)",

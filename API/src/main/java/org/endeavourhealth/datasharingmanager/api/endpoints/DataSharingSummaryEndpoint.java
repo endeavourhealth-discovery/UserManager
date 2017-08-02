@@ -36,12 +36,12 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Get")
+    @Timed(absolute = true, name="DataSharingManager.DataSharingSummaryEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Return either all data sharing summaries if no parameter is provided or search for " +
             "data sharing summaries using a UUID or a search term. Search matches on name or description of data sharing summary. " +
             "Returns a JSON representation of the matching set of data sharing summaries")
-    public Response get(@Context SecurityContext sc,
+    public Response getDataSharingSummary(@Context SecurityContext sc,
                         @ApiParam(value = "Optional uuid") @QueryParam("uuid") String uuid,
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData
     ) throws Exception {
@@ -69,12 +69,12 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Post")
+    @Timed(absolute = true, name="DataSharingManager.DataSharingSummaryEndpoint.Post")
     @Path("/")
     @ApiOperation(value = "Save a new data sharing summary or update an existing one.  Accepts a JSON representation " +
             "of a data sharing summary.")
     @RequiresAdmin
-    public Response post(@Context SecurityContext sc,
+    public Response postDataSharingSummary(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of data sharing summary to save or update") JsonDataSharingSummary dataSharingSummary
     ) throws Exception {
         super.setLogbackMarkers(sc);
@@ -99,11 +99,11 @@ public final class DataSharingSummaryEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="EDS-UI.DataSharingSummaryEndpoint.Delete")
+    @Timed(absolute = true, name="DataSharingManager.DataSharingSummaryEndpoint.Delete")
     @Path("/")
     @ApiOperation(value = "Delete a data flow based on UUID that is passed to the API.  Warning! This is permanent.")
     @RequiresAdmin
-    public Response delete(@Context SecurityContext sc,
+    public Response deleteDataSharingSummary(@Context SecurityContext sc,
                            @ApiParam(value = "UUID of the data sharing summary to be deleted") @QueryParam("uuid") String uuid
     ) throws Exception {
         super.setLogbackMarkers(sc);

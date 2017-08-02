@@ -17,7 +17,7 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager', { search : params })
+    return vm.http.get('api/organisation', { search : params })
       .map((response) => response.json());
   }
 
@@ -25,7 +25,7 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager/regions', { search : params })
+    return vm.http.get('api/organisation/regions', { search : params })
       .map((response) => response.json());
   }
 
@@ -33,7 +33,7 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager/childOrganisations', { search : params })
+    return vm.http.get('api/organisation/childOrganisations', { search : params })
       .map((response) => response.json());
   }
 
@@ -42,7 +42,7 @@ export class OrganisationService  {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     params.set('isService', isService.toString());
-    return vm.http.get('api/organisationManager/parentOrganisations', { search : params })
+    return vm.http.get('api/organisation/parentOrganisations', { search : params })
       .map((response) => response.json());
   }
 
@@ -50,7 +50,7 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager/services', { search : params })
+    return vm.http.get('api/organisation/services', { search : params })
       .map((response) => response.json());
   }
 
@@ -58,13 +58,13 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager/addresses', { search : params })
+    return vm.http.get('api/organisation/addresses', { search : params })
       .map((response) => response.json());
   }
 
   saveOrganisation(organisation: Organisation): Observable<any> {
     const vm = this;
-    return vm.http.post('api/organisationManager', organisation)
+    return vm.http.post('api/organisation', organisation)
       .map((response) => response.text());
   }
 
@@ -72,7 +72,7 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.delete('api/organisationManager', { search : params })
+    return vm.http.delete('api/organisation', { search : params })
       .map((response) => response.json());
   }
 
@@ -87,7 +87,7 @@ export class OrganisationService  {
     params.set('pageSize', pageSize.toString());
     params.set('orderColumn', orderColumn);
     params.set('descending', descending.toString());
-    return vm.http.get('api/organisationManager', { search : params })
+    return vm.http.get('api/organisation', { search : params })
       .map((response) => response.json());
   }
 
@@ -95,50 +95,50 @@ export class OrganisationService  {
     const vm = this;
     const params = new URLSearchParams();
     params.set('uuid', uuid);
-    return vm.http.get('api/organisationManager/markers', { search : params })
+    return vm.http.get('api/organisation/markers', { search : params })
       .map((response) => response.json());
   }
 
   getUpdatedBulkOrganisations(): Observable<any> {
     const vm = this;
-    return vm.http.get('api/organisationManager/editedBulks')
+    return vm.http.get('api/organisation/editedBulks')
       .map((response) => response.json());
   }
 
   getConflictedOrganisations(): Observable<any> {
     const vm = this;
-    return vm.http.get('api/organisationManager/conflicts')
+    return vm.http.get('api/organisation/conflicts')
       .map((response) => response.json());
   }
 
   deleteBulks(): Observable<any> {
     const vm = this;
-    return vm.http.delete('api/organisationManager/deleteBulks')
+    return vm.http.delete('api/organisation/deleteBulks')
       .map((response) => response.json());
   }
 
   startUpload(): Observable<any> {
     const vm = this;
-    return vm.http.get('api/organisationManager/startUpload', {withCredentials : true})
+    return vm.http.get('api/organisation/startUpload', {withCredentials : true})
       .map((response) => response.text());
   }
 
   endUpload(): Observable<any> {
     const vm = this;
-    return vm.http.get('api/organisationManager/endUpload')
+    return vm.http.get('api/organisation/endUpload')
       .map((response) => response.text());
   }
 
   uploadCsv(fileToUpload: FileUpload): Observable<any> {
     const vm = this;
-    return vm.http.post('api/organisationManager/upload', fileToUpload);
+    return vm.http.post('api/organisation/upload', fileToUpload);
   }
 
   getStatistics(type: string): Observable<OrganisationManagerStatistics[]> {
     const vm = this;
     const params = new URLSearchParams();
     params.set('type', type);
-    return vm.http.get('api/organisationManager/statistics', { search : params })
+    return vm.http.get('api/organisation/statistics', { search : params })
       .map((response) => response.json());
   }
 
@@ -147,7 +147,7 @@ export class OrganisationService  {
     const params = new URLSearchParams();
     params.set('expression', expression);
     params.set('searchType', searchType);
-    return vm.http.get('api/organisationManager/searchCount', { search : params })
+    return vm.http.get('api/organisation/searchCount', { search : params })
       .map((response) => response.json());
   }
 
