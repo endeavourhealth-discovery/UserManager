@@ -366,7 +366,8 @@ public class OrganisationEntity {
         Predicate predicate= cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0));
 
         if (!expression.equals("")){
-            predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)), (cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
+            predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
+                    (cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
                     cb.like(cb.upper(rootEntry.get("odsCode")), "%" + expression.toUpperCase() + "%"),
                     cb.like(cb.upper(rootEntry.get("alternativeName")), "%" + expression.toUpperCase() + "%"),
                     cb.like(cb.upper(rootEntry.get("icoCode")), "%" + expression.toUpperCase() + "%"))));
@@ -485,15 +486,22 @@ public class OrganisationEntity {
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)), (cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
+
+        //Services are just organisations with the isService flag set to true;
+        Predicate predicate= cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0));
+
+
+        if (!expression.equals("")) {
+            predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
+                (cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
                 cb.like(cb.upper(rootEntry.get("odsCode")), "%" + expression.toUpperCase() + "%"),
                 cb.like(cb.upper(rootEntry.get("alternativeName")), "%" + expression.toUpperCase() + "%"),
                 cb.like(cb.upper(rootEntry.get("icoCode")), "%" + expression.toUpperCase() + "%"))));
+}
 
         cq.select((cb.countDistinct(rootEntry)));
 
-        if (!expression.equals(""))
-            cq.where(predicate);
+        cq.where(predicate);
 
         Long ret = entityManager.createQuery(cq).getSingleResult();
 
