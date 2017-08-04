@@ -8,8 +8,6 @@ import { RegionPickerComponent } from './region-picker/region-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-/*import {AgmCoreModule, MapsAPILoader} from 'angular2-google-maps/core';
-import {CustomLazyAPIKeyLoader} from './CustomLazyAPIKeyLoader';*/
 
 @NgModule({
   imports: [

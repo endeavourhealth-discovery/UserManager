@@ -88,7 +88,7 @@
         </div>
 
         <ngb-accordion>
-          <ngb-panel id="regs" *ngIf="organisation.isService === 0" #boo>
+          <ngb-panel id="regs" *ngIf="organisation.isService === 0">
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
@@ -113,6 +113,90 @@
                 [typeDescription]="'Regions'"
                 [model]="'region'"
                 [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dpapub" *ngIf="organisation.isService === 0">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Data Processing Agreements Publishing to
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{dpaPublishing?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDPAPublishing()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dpaPublishing"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data Processing Agreements'"
+                [model]="'region'"
+                [detailsToShow]="dpaDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dsapub" *ngIf="organisation.isService === 0">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Data Sharing Agreements Publishing to
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{dsaPublishing?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDSAPublishing()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dsaPublishing"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data Sharing Agreements'"
+                [model]="'region'"
+                [detailsToShow]="dsaDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dsasub" *ngIf="organisation.isService === 0">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Data Sharing Agreements Subscribing to
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{dsaSubscribing?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDSASubscribing()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="dsaSubscribing"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data Sharing Agreements'"
+                [model]="'region'"
+                [detailsToShow]="dsaDetailsToShow">
               </entity-viewer>
             </ng-template>
           </ngb-panel>

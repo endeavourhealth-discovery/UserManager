@@ -226,6 +226,20 @@
             </ng-template>
           </ngb-panel>
         </ngb-accordion>
+        <br>
+        <br>
+        <div>
+          <div class="radio-group" [(ngModel)]="showPub" ngbRadioGroup name="isDeductible">
+            <label class="btn btn-secondary"><input type="radio" (change)="swapMarkers()" [value]="true">Show Publishers</label>
+            <label class="btn btn-secondary"><input type="radio" (change)="swapMarkers()" [value]="false">Show Subscribers</label>
+          </div>
+        </div>
+        <hr>
+        <eds-google-maps
+          [markers]="mapMarkers">
+        </eds-google-maps>
+        <br>
+        <br>
       </form>
       <br>
       <br>

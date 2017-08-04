@@ -18,10 +18,7 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity;
+import org.endeavourhealth.datasharingmanager.api.database.models.*;
 import org.endeavourhealth.datasharingmanager.api.json.*;
 import org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerMetricListener;
 import org.endeavourhealth.datasharingmanager.api.utility.CsvHelper;
@@ -265,6 +262,60 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDPAsOrganisationPublishing")
+    @Path("/dpasPublishing")
+    @ApiOperation(value = "Returns a list of Json representations of DPAs that " +
+            "the organisation is publishing to.  Accepts a UUID of an organisation.")
+    public Response getDPAsOrganisationPublishing(@Context SecurityContext sc,
+                                              @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DPA(s)",
+                "Organisation Id", uuid);
+
+        return getDPAsOrganisationPublishingTo(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDSAsOrganisationPublishing")
+    @Path("/dsasPublishing")
+    @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
+            "the organisation is publishing to.  Accepts a UUID of an organisation.")
+    public Response getDSAsOrganisationPublishing(@Context SecurityContext sc,
+                                                  @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DSA(s)",
+                "Organisation Id", uuid);
+
+        return getDSAsOrganisationPublishingTo(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDPAsOrganisationPublishing")
+    @Path("/dsasSubscribing")
+    @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
+            "the organisation is subscribing to.  Accepts a UUID of an organisation.")
+    public Response getDSAsOrganisationSubscribing(@Context SecurityContext sc,
+                                                  @ApiParam(value = "UUID of organisation") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DPA(s)",
+                "Organisation Id", uuid);
+
+        return getDSAsOrganisationSubscribingTo(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="organisation.GetAddresses")
     @Path("/addresses")
     @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
@@ -473,6 +524,51 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
         if (regionUuids.size() > 0)
             ret = RegionEntity.getRegionsFromList(regionUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getDPAsOrganisationPublishingTo(String organisationUuid) throws Exception {
+
+        List<String> dpaUUIDs = MasterMappingEntity.getParentMappings(organisationUuid, MapType.PUBLISHER.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        List<DataProcessingAgreementEntity> ret = new ArrayList<>();
+
+        if (dpaUUIDs.size() > 0)
+            ret = DataProcessingAgreementEntity.getDPAsFromList(dpaUUIDs);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getDSAsOrganisationSubscribingTo(String organisationUuid) throws Exception {
+
+        List<String> dsaUuids = MasterMappingEntity.getParentMappings(organisationUuid, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
+        List<DataSharingAgreementEntity> ret = new ArrayList<>();
+
+        if (dsaUuids.size() > 0)
+            ret = DataSharingAgreementEntity.getDSAsFromList(dsaUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getDSAsOrganisationPublishingTo(String organisationUuid) throws Exception {
+
+        List<String> dsaUUIds = MasterMappingEntity.getParentMappings(organisationUuid, MapType.PUBLISHER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
+        List<DataSharingAgreementEntity> ret = new ArrayList<>();
+
+        if (dsaUUIds.size() > 0)
+            ret = DataSharingAgreementEntity.getDSAsFromList(dsaUUIds);
 
         clearLogbackMarkers();
         return Response

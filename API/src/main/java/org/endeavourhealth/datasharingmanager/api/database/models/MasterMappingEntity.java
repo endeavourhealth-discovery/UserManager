@@ -238,6 +238,21 @@ public class MasterMappingEntity {
                 Map<UUID, String> services = organisation.getServices();
                 saveChildMappings(services, MapType.SERVICE.getMapType(), organisation.getUuid(), MapType.ORGANISATION.getMapType());
             }
+
+            if (organisation.getDpaPublishing() != null) {
+                Map<UUID, String> dpas = organisation.getDpaPublishing();
+                saveParentMappings(dpas, MapType.DATAPROCESSINGAGREEMENT.getMapType(), organisation.getUuid(), MapType.PUBLISHER.getMapType());
+            }
+
+            if (organisation.getDsaPublishing() != null) {
+                Map<UUID, String> dsas = organisation.getDsaPublishing();
+                saveParentMappings(dsas, MapType.DATASHARINGAGREEMENT.getMapType(), organisation.getUuid(), MapType.PUBLISHER.getMapType());
+            }
+
+            if (organisation.getDsaSubscribing() != null) {
+                Map<UUID, String> dsaSub = organisation.getDsaSubscribing();
+                saveParentMappings(dsaSub, MapType.DATASHARINGAGREEMENT.getMapType(), organisation.getUuid(), MapType.SUBSCRIBER.getMapType());
+            }
         } else {
             organisationType = MapType.SERVICE.getMapType();
         }

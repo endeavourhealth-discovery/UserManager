@@ -2,7 +2,7 @@ import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSharingAgreementService} from '../data-sharing-agreement.service';
 import {LoggerService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbRadioGroup} from '@ng-bootstrap/ng-bootstrap';
 import {Purpose} from '../models/Purpose';
 import {Organisation} from '../../organisation/models/Organisation';
 import {Region} from '../../region/models/Region';
@@ -13,7 +13,7 @@ import {RegionPickerComponent} from '../../region/region-picker/region-picker.co
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
 import {PurposeAddComponent} from '../purpose-add/purpose-add.component';
 import {ToastsManager} from 'ng2-toastr';
-import {Marker} from "../../region/models/Marker";
+import {Marker} from '../../region/models/Marker';
 
 @Component({
   selector: 'app-data-sharing-agreement-editor',
@@ -33,7 +33,8 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   benefits: Purpose[];
   publisherMarkers: Marker[];
   subscriberMarkers: Marker[];
-  MapMarkers: Marker[];
+  mapMarkers: Marker[];
+  showPub = true;
 
   status = [
     {num: 0, name : 'Active'},
@@ -57,11 +58,9 @@ export class DataSharingAgreementEditorComponent implements OnInit {
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
-    console.log('plpp');
   }
 
   ngOnInit() {
-    console.log('rere');
     this.paramSubscriber = this.route.params.subscribe(
     params => {
       this.performAction(params['mode'], params['id']);
@@ -289,10 +288,24 @@ export class DataSharingAgreementEditorComponent implements OnInit {
     vm.dsaService.getPublisherMarkers(vm.dsa.uuid)
       .subscribe(
         result => {
+          vm.mapMarkers = result;
           vm.publisherMarkers = result;
+          console.log(vm.publisherMarkers);
         },
         error => vm.log.error('Failed to load publisher markers', error, 'Load publisher Markers')
       )
+  }
+
+  swapMarkers() {
+    const vm = this;
+    console.log(vm.showPub);
+    if (vm.showPub) {
+      console.log('showing pubs');
+      vm.mapMarkers = vm.publisherMarkers;
+    } else {
+      console.log('showing subs');
+      vm.mapMarkers = vm.subscriberMarkers;
+    }
   }
 
 }

@@ -27,6 +27,9 @@ public final class JsonOrganisation {
     private Map<UUID, String> parentOrganisations = null;
     private Map<UUID, String> childOrganisations = null;
     private Map<UUID, String> services = null;
+    private Map<UUID, String> dpaPublishing = null;
+    private Map<UUID, String> dsaPublishing = null;
+    private Map<UUID, String> dsaSubscribing = null;
     private List<JsonAddress> addresses = new ArrayList<>();
 
     public String getUuid() {
@@ -147,6 +150,30 @@ public final class JsonOrganisation {
 
     public void setServices(Map<UUID, String> services) {
         this.services = services;
+    }
+
+    public Map<UUID, String> getDpaPublishing() {
+        return dpaPublishing;
+    }
+
+    public void setDpaPublishing(Map<UUID, String> dpaPublishing) {
+        this.dpaPublishing = dpaPublishing;
+    }
+
+    public Map<UUID, String> getDsaPublishing() {
+        return dsaPublishing;
+    }
+
+    public void setDsaPublishing(Map<UUID, String> dsaPublishing) {
+        this.dsaPublishing = dsaPublishing;
+    }
+
+    public Map<UUID, String> getDsaSubscribing() {
+        return dsaSubscribing;
+    }
+
+    public void setDsaSubscribing(Map<UUID, String> dsaSubscribing) {
+        this.dsaSubscribing = dsaSubscribing;
     }
 
     public String getBulkImported() {

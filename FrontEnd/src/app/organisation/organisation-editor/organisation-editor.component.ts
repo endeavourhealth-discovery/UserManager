@@ -9,6 +9,10 @@ import {Region} from '../../region/models/Region';
 import {OrganisationPickerComponent} from '../organisation-picker/organisation-picker.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
+import {Dpa} from "../../data-processing-agreement/models/Dpa";
+import {Dsa} from "../../data-sharing-agreement/models/Dsa";
+import {DataProcessingAgreementPickerComponent} from "../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component";
+import {DataSharingAgreementPickerComponent} from "../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component";
 
 @Component({
   selector: 'app-organisation-editor',
@@ -26,11 +30,16 @@ export class OrganisationEditorComponent implements OnInit {
   parentOrganisations: Organisation[];
   services: Organisation[];
   addresses: Address[];
+  dpaPublishing: Dpa[];
+  dsaPublishing: Dsa[];
+  dsaSubscribing: Dsa[];
   location: any;
   orgType = 'Organisation';
 
   orgDetailsToShow = new Organisation().getDisplayItems();
   regionDetailsToShow = new Region().getDisplayItems();
+  dpaDetailsToShow = new Dpa().getDisplayItems();
+  dsaDetailsToShow = new Dsa().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
@@ -108,6 +117,9 @@ export class OrganisationEditorComponent implements OnInit {
             vm.getOrganisationAddresses();
             vm.getChildOrganisations();
             vm.getServices();
+            vm.getDPAsPublishingTo();
+            vm.getDSAsPublishingTo();
+            vm.getDSAsSubscribingTo();
           }
           vm.getParentOrganisations();
         },
@@ -141,6 +153,24 @@ export class OrganisationEditorComponent implements OnInit {
     for (const idx in this.services) {
       const org: Organisation = this.services[idx];
       this.organisation.services[org.uuid] = org.name;
+    }
+
+    vm.organisation.dpaPublishing = {};
+    for (const idx in this.dpaPublishing) {
+      const dpa: Dpa = this.dpaPublishing[idx];
+      this.organisation.dpaPublishing[dpa.uuid] = dpa.name;
+    }
+
+    vm.organisation.dsaPublishing = {};
+    for (const idx in this.dsaPublishing) {
+      const dsa: Dsa = this.dsaPublishing[idx];
+      this.organisation.dsaPublishing[dsa.uuid] = dsa.name;
+    }
+
+    vm.organisation.dsaSubscribing = {};
+    for (const idx in this.dsaSubscribing) {
+      const dsa: Dsa = this.dsaSubscribing[idx];
+      this.organisation.dsaSubscribing[dsa.uuid] = dsa.name;
     }
 
     // Populate Addresses before save
@@ -210,6 +240,30 @@ export class OrganisationEditorComponent implements OnInit {
     });
   }
 
+  private editDPAPublishing() {
+    const vm = this;
+    DataProcessingAgreementPickerComponent.open(vm.$modal, vm.dpaPublishing)
+      .result.then(function (result: Dpa[]) {
+      vm.dpaPublishing = result;
+    });
+  }
+
+  private editDSAPublishing() {
+    const vm = this;
+    DataSharingAgreementPickerComponent.open(vm.$modal, vm.dsaPublishing)
+      .result.then(function (result: Dsa[]) {
+      vm.dsaPublishing = result;
+    });
+  }
+
+  private editDSASubscribing() {
+    const vm = this;
+    DataSharingAgreementPickerComponent.open(vm.$modal, vm.dsaSubscribing)
+      .result.then(function (result: Dsa[]) {
+      vm.dsaSubscribing = result;
+    });
+  }
+
   private getOrganisationRegions() {
     const vm = this;
     vm.organisationService.getOrganisationRegions(vm.organisation.uuid)
@@ -252,6 +306,33 @@ export class OrganisationEditorComponent implements OnInit {
       .subscribe(
         result => vm.services = result,
         error => vm.log.error('Failed to load services', error, 'Load services')
+      );
+  }
+
+  private getDPAsPublishingTo() {
+    const vm = this;
+    vm.organisationService.getDPAPublishing(vm.organisation.uuid)
+      .subscribe(
+        result => vm.dpaPublishing = result,
+        error => vm.log.error('Failed to load DPAs organisation publishing to', error, 'Load organisation DPA Publishers')
+      );
+  }
+
+  private getDSAsPublishingTo() {
+    const vm = this;
+    vm.organisationService.getDSAPublishing(vm.organisation.uuid)
+      .subscribe(
+        result => vm.dsaPublishing = result,
+        error => vm.log.error('Failed to load DSAs organisation publishing to', error, 'Load organisation DSA Publishers')
+      );
+  }
+
+  private getDSAsSubscribingTo() {
+    const vm = this;
+    vm.organisationService.getDSASubscribing(vm.organisation.uuid)
+      .subscribe(
+        result => vm.dsaSubscribing = result,
+        error => vm.log.error('Failed to load DSAs organisation subscribing to', error, 'Load organisation DSA Publishers')
       );
   }
 

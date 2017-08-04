@@ -7,6 +7,8 @@ import {Address} from './models/Address';
 import {Marker} from '../region/models/Marker';
 import {OrganisationManagerStatistics} from './models/OrganisationManagerStatistics';
 import {FileUpload} from './models/FileUpload';
+import {Dpa} from "../data-processing-agreement/models/Dpa";
+import {Dsa} from "../data-sharing-agreement/models/Dsa";
 
 @Injectable()
 export class OrganisationService  {
@@ -51,6 +53,30 @@ export class OrganisationService  {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/organisation/services', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDPAPublishing(uuid: string):  Observable<Dpa[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/organisation/dpasPublishing', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDSAPublishing(uuid: string):  Observable<Dsa[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/organisation/dsasPublishing', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDSASubscribing(uuid: string):  Observable<Dsa[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/organisation/dsasSubscribing', { search : params })
       .map((response) => response.json());
   }
 
