@@ -6,7 +6,7 @@ import { DataSharingAgreementPickerComponent } from './data-sharing-agreement-pi
 import { PurposeAddComponent } from './purpose-add/purpose-add.component';
 import {DataSharingAgreementService} from './data-sharing-agreement.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EntityViewComponentsModule} from 'eds-angular4';
+import {EntityViewComponentsModule, GoogleMapsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
@@ -17,6 +17,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     NgbModule,
     EntityViewComponentsModule,
     ToastModule.forRoot(),
+    GoogleMapsModule
   ],
   declarations: [
     DataSharingAgreementComponent,

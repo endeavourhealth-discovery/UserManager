@@ -13,6 +13,7 @@ import {RegionPickerComponent} from '../../region/region-picker/region-picker.co
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
 import {PurposeAddComponent} from '../purpose-add/purpose-add.component';
 import {ToastsManager} from 'ng2-toastr';
+import {Marker} from "../../region/models/Marker";
 
 @Component({
   selector: 'app-data-sharing-agreement-editor',
@@ -30,6 +31,9 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   subscribers: Organisation[];
   purposes: Purpose[];
   benefits: Purpose[];
+  publisherMarkers: Marker[];
+  subscriberMarkers: Marker[];
+  MapMarkers: Marker[];
 
   status = [
     {num: 0, name : 'Active'},
@@ -93,6 +97,8 @@ export class DataSharingAgreementEditorComponent implements OnInit {
           vm.getSubscribers();
           vm.getPurposes();
           vm.getBenefits();
+          vm.getPublisherMarkers();
+          vm.getSubscriberMarkers()
         },
         error => vm.log.error('Error loading', error, 'Error')
       );
@@ -265,6 +271,28 @@ export class DataSharingAgreementEditorComponent implements OnInit {
         result => vm.benefits = result,
         error => vm.log.error('Failed to load benefits', error, 'Load Benefits')
       );
+  }
+
+  private getSubscriberMarkers() {
+    const vm = this;
+    vm.dsaService.getSubscriberMarkers(vm.dsa.uuid)
+      .subscribe(
+        result => {
+          vm.subscriberMarkers = result;
+        },
+        error => vm.log.error('Failed to load subscriber markers', error, 'Load subscriber Markers')
+      )
+  }
+
+  private getPublisherMarkers() {
+    const vm = this;
+    vm.dsaService.getPublisherMarkers(vm.dsa.uuid)
+      .subscribe(
+        result => {
+          vm.publisherMarkers = result;
+        },
+        error => vm.log.error('Failed to load publisher markers', error, 'Load publisher Markers')
+      )
   }
 
 }

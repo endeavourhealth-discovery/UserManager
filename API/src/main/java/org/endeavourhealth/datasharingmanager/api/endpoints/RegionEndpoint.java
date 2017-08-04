@@ -14,10 +14,8 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
-import org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity;
+import org.endeavourhealth.datasharingmanager.api.database.models.*;
+import org.endeavourhealth.datasharingmanager.api.json.JsonMarker;
 import org.endeavourhealth.datasharingmanager.api.json.JsonRegion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,6 +211,23 @@ public final class RegionEndpoint extends AbstractEndpoint {
                 .build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.RegionEndpoint.GetMarkers")
+    @Path("/markers")
+    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
+            "to the organisations in the corresponding region.  Accepts a UUID of an organisation.")
+    public Response getMarkersOfOrganisationsInRegion(@Context SecurityContext sc,
+                                                      @ApiParam(value = "UUID of region") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Marker(s)",
+                "Region Id", uuid);
+
+        return AddressEntity.getOrganisationMarkers(uuid, MapType.REGION.getMapType(), MapType.ORGANISATION.getMapType());
+    }
+
     private Response getRegionList() throws Exception {
 
         List<RegionEntity> regions = RegionEntity.getAllRegions();
@@ -303,5 +318,4 @@ public final class RegionEndpoint extends AbstractEndpoint {
                 .entity(ret)
                 .build();
     }
-
 }

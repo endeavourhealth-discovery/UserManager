@@ -4,6 +4,7 @@ import {Organisation} from '../organisation/models/Organisation';
 import {Region} from './models/Region';
 import {Dsa} from '../data-sharing-agreement/models/Dsa';
 import {URLSearchParams, Http} from '@angular/http';
+import {Marker} from "./models/Marker";
 
 @Injectable()
 export class RegionService {
@@ -81,6 +82,14 @@ export class RegionService {
   getAPIKey(): Observable<any> {
     const vm = this;
     return vm.http.get('api/region/getApiKey')
+      .map((response) => response.json());
+  }
+
+  getOrganisationMarkers(uuid: string): Observable<Marker[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/region/markers', { search : params })
       .map((response) => response.json());
   }
 

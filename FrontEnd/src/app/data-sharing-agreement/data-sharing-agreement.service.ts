@@ -6,6 +6,7 @@ import {Purpose} from './models/Purpose';
 import {Region} from '../region/models/Region';
 import {DataFlow} from '../data-flow/models/DataFlow';
 import {Dsa} from './models/Dsa';
+import {Marker} from '../region/models/Marker';
 
 @Injectable()
 export class DataSharingAgreementService {
@@ -94,6 +95,22 @@ export class DataSharingAgreementService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/dsa/benefits', { search : params })
+      .map((response) => response.json());
+  }
+
+  getSubscriberMarkers(uuid: string): Observable<Marker[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dsa/subscriberMarkers', { search : params })
+      .map((response) => response.json());
+  }
+
+  getPublisherMarkers(uuid: string): Observable<Marker[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dsa/publisherMarkers', { search : params })
       .map((response) => response.json());
   }
 

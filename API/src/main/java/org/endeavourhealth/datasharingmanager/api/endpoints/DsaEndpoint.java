@@ -237,6 +237,40 @@ public final class DsaEndpoint extends AbstractEndpoint {
         return getBenefits(uuid);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.getMarkersOfSubscribersOfDPA")
+    @Path("/subscriberMarkers")
+    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
+            "to the subscribers in the corresponding DSA.  Accepts a UUID of an DSA.")
+    public Response getMarkersOfSubscribersOfDPA(@Context SecurityContext sc,
+                                                 @ApiParam(value = "UUID of DSA") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Marker(s)",
+                "DAS Id", uuid);
+
+        return AddressEntity.getOrganisationMarkers(uuid, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DsaEndpoint.getMarkersOfPublishersOfDPA")
+    @Path("/publisherMarkers")
+    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
+            "to the Publishers in the corresponding DSA.  Accepts a UUID of an DSA.")
+    public Response getMarkersOfPublishersOfDPA(@Context SecurityContext sc,
+                                                @ApiParam(value = "UUID of DSA") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Marker(s)",
+                "DSA Id", uuid);
+
+        return AddressEntity.getOrganisationMarkers(uuid, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
+    }
+
     private Response getDSAList() throws Exception {
 
         List<DataSharingAgreementEntity> dsas = DataSharingAgreementEntity.getAllDSAs();

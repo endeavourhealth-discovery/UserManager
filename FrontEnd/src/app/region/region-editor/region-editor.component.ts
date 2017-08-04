@@ -5,13 +5,12 @@ import {Marker} from '../models/Marker';
 import {RegionService} from '../region.service';
 import {LoggerService} from 'eds-angular4';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {OrganisationService} from '../../organisation/organisation.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
-import {RegionPickerComponent} from "../region-picker/region-picker.component";
-import {Dsa} from "../../data-sharing-agreement/models/Dsa";
-import {DataSharingAgreementPickerComponent} from "../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component";
-import {ToastsManager} from "ng2-toastr";
+import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
+import {RegionPickerComponent} from '../region-picker/region-picker.component';
+import {Dsa} from '../../data-sharing-agreement/models/Dsa';
+import {DataSharingAgreementPickerComponent} from '../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-region-editor',
@@ -27,11 +26,11 @@ export class RegionEditorComponent implements OnInit {
   parentRegions: Region[];
   childRegions: Region[];
   sharingAgreements: Dsa[];
-  lat = 54.4347266;
-  lng: number = -4.7194005;
-  zoom = 6.01;
   markers: Marker[];
   editDisabled = false;
+  latitude: number = 33.8121;
+  longitude: number = -117.918;
+  zoom: number = 12;
 
   orgDetailsToShow = new Organisation().getDisplayItems();
   regionDetailsToShow = new Region().getDisplayItems();
@@ -39,7 +38,6 @@ export class RegionEditorComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
-              private organisationService: OrganisationService,
               private regionService: RegionService,
               private router: Router,
               private route: ActivatedRoute,
@@ -47,7 +45,6 @@ export class RegionEditorComponent implements OnInit {
   this.toastr.setRootViewContainerRef(vcr); }
 
   ngOnInit() {
-    console.log('rere');
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
@@ -172,11 +169,13 @@ export class RegionEditorComponent implements OnInit {
 
   private getOrganisationMarkers() {
     const vm = this;
-    vm.organisationService.getOrganisationMarkers(vm.region.uuid)
+    vm.regionService.getOrganisationMarkers(vm.region.uuid)
       .subscribe(
-        result => vm.markers = result,
-        error => vm.log.error('Failed to load organisation markers', error, 'Load organisation Markers')
-      );
+        result => {
+          vm.markers = result;
+        },
+            error => vm.log.error('Failed to load organisation markers', error, 'Load organisation Markers')
+      )
   }
 
   private editOrganisations() {

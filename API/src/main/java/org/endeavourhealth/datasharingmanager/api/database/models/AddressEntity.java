@@ -1,13 +1,17 @@
 package org.endeavourhealth.datasharingmanager.api.database.models;
 
+import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonAddress;
+import org.endeavourhealth.datasharingmanager.api.json.JsonMarker;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -274,21 +278,49 @@ public class AddressEntity {
         entityManager.close();
     }
 
-    public static List<Object[]> getOrganisationsMarkers(String regionUUID) throws Exception {
+    private static List<Object[]> getAddressMarkers(String parentUUID, Short parentMapType, Short childMapType) throws Exception {
 
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         Query query = entityManager.createQuery(
                 "select o.name, a.lat, a.lng from OrganisationEntity o " +
                         "inner join AddressEntity a on a.organisationUuid = o.uuid " +
-                        "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = 1 " +
-                        "where mm.parentUuid = :region");
-        query.setParameter("region", regionUUID);
+                        "inner join MasterMappingEntity mm on mm.childUuid = o.uuid and mm.childMapTypeId = :childMap " +
+                        "where mm.parentUuid = :parentUuid " +
+                        "and mm.parentMapTypeId = :parentMap");
+        query.setParameter("parentUuid", parentUUID);
+        query.setParameter("childMap", childMapType);
+        query.setParameter("parentMap", parentMapType);
 
         List<Object[]> result = query.getResultList();
 
         entityManager.close();
 
         return result;
+    }
+
+    public static Response getOrganisationMarkers(String regionUuid, Short parentMapType, Short childMapType) throws Exception {
+
+        List<Object[]> markers = getAddressMarkers(regionUuid, parentMapType, childMapType);
+
+        List<JsonMarker> ret = new ArrayList<>();
+
+        for (Object[] marker : markers) {
+            String name = marker[0].toString();
+            Double lat = marker[1]==null?0.0:Double.parseDouble(marker[1].toString());
+            Double lng = marker[2]==null?0.0:Double.parseDouble(marker[2].toString());
+
+            JsonMarker jsonMarker = new JsonMarker();
+            jsonMarker.setName(name);
+            jsonMarker.setLat(lat);
+            jsonMarker.setLng(lng);
+
+            ret.add(jsonMarker);
+        }
+
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
     }
 }

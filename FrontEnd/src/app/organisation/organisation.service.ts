@@ -91,14 +91,6 @@ export class OrganisationService  {
       .map((response) => response.json());
   }
 
-  getOrganisationMarkers(uuid: string): Observable<Marker[]> {
-    const vm = this;
-    const params = new URLSearchParams();
-    params.set('uuid', uuid);
-    return vm.http.get('api/organisation/markers', { search : params })
-      .map((response) => response.json());
-  }
-
   getUpdatedBulkOrganisations(): Observable<any> {
     const vm = this;
     return vm.http.get('api/organisation/editedBulks')

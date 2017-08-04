@@ -15,6 +15,7 @@ import {DocumentationService} from '../../documentation/documentation.service';
 import {ToastsManager} from 'ng2-toastr';
 import {Organisation} from '../../organisation/models/Organisation';
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
+import {Marker} from "../../region/models/Marker";
 
 @Component({
   selector: 'app-data-processing-agreement-editor',
@@ -36,6 +37,9 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   private file: File;
   pdfSrc: any;
   page = 1;
+  publisherMarkers: Marker[];
+  subscriberMarkers: Marker[];
+  mapMarkers: Marker[];
 
   status = [
     {num: 0, name: 'Active'},
@@ -94,6 +98,8 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
           vm.getLinkedCohorts();
           vm.getLinkedDataSets();
           vm.getAssociatedDocumentation();
+          vm.getPublisherMarkers();
+          vm.getSubscriberMarkers()
         },
         error => vm.log.error('Error loading', error, 'Error')
       );
@@ -279,6 +285,28 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
         result => vm.publishers = result,
         error => vm.log.error('Failed to load publishers', error, 'Load Publishers')
       );
+  }
+
+  private getSubscriberMarkers() {
+    const vm = this;
+    vm.dpaService.getSubscriberMarkers(vm.dpa.uuid)
+      .subscribe(
+        result => {
+          vm.subscriberMarkers = result;
+        },
+        error => vm.log.error('Failed to load subscriber markers', error, 'Load subscriber Markers')
+      )
+  }
+
+  private getPublisherMarkers() {
+    const vm = this;
+    vm.dpaService.getPublisherMarkers(vm.dpa.uuid)
+      .subscribe(
+        result => {
+          vm.publisherMarkers = result;
+        },
+        error => vm.log.error('Failed to load publisher markers', error, 'Load publisher Markers')
+      )
   }
 
 }

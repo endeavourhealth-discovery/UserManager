@@ -283,23 +283,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="DataSharingManager.Organisation.GetMarkers")
-    @Path("/markers")
-    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
-            "to the organisations in the corresponding region.  Accepts a UUID of an organisation.")
-    public Response getMarkersOfOrganisationsInRegion(@Context SecurityContext sc,
-                               @ApiParam(value = "UUID of region") @QueryParam("uuid") String uuid) throws Exception {
-        super.setLogbackMarkers(sc);
-        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
-                "Marker(s)",
-                "Region Id", uuid);
-
-        return getOrganisationMarkers(uuid);
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="DataSharingManager.Organisation.GetEditedBulks")
     @Path("/editedBulks")
     @ApiOperation(value = "Returns a list of Json representations of bulk added organisations that have been edited.")
@@ -504,32 +487,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(stats)
-                .build();
-    }
-
-    private Response getOrganisationMarkers(String regionUuid) throws Exception {
-
-        List<Object[]> markers = AddressEntity.getOrganisationsMarkers(regionUuid);
-
-        List<JsonMarker> ret = new ArrayList<>();
-
-        for (Object[] marker : markers) {
-            String name = marker[0].toString();
-            Double lat = marker[1]==null?0.0:Double.parseDouble(marker[1].toString());
-            Double lng = marker[2]==null?0.0:Double.parseDouble(marker[2].toString());
-
-            JsonMarker jsonMarker = new JsonMarker();
-            jsonMarker.setName(name);
-            jsonMarker.setLat(lat);
-            jsonMarker.setLng(lng);
-
-            ret.add(jsonMarker);
-        }
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(ret)
                 .build();
     }
 

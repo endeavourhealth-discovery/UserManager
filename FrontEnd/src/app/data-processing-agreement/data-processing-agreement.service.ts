@@ -5,7 +5,8 @@ import {DataFlow} from '../data-flow/models/DataFlow';
 import {Dpa} from './models/Dpa';
 import {DataSet} from '../data-set/models/Dataset';
 import {Cohort} from '../cohort/models/Cohort';
-import {Organisation} from "../organisation/models/Organisation";
+import {Organisation} from '../organisation/models/Organisation';
+import {Marker} from '../region/models/Marker';
 
 @Injectable()
 export class DataProcessingAgreementService {
@@ -80,6 +81,22 @@ export class DataProcessingAgreementService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/dpa/publishers', { search : params })
+      .map((response) => response.json());
+  }
+
+  getSubscriberMarkers(uuid: string): Observable<Marker[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dpa/subscriberMarkers', { search : params })
+      .map((response) => response.json());
+  }
+
+  getPublisherMarkers(uuid: string): Observable<Marker[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dpa/publisherMarkers', { search : params })
       .map((response) => response.json());
   }
 

@@ -222,6 +222,40 @@ public final class DpaEndpoint extends AbstractEndpoint {
         return checkOrganisationIsPartOfDPA(odsCode);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.getMarkersOfSubscribersOfDPA")
+    @Path("/subscriberMarkers")
+    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
+            "to the subscribers in the corresponding DPA.  Accepts a UUID of an DPA.")
+    public Response getMarkersOfSubscribersOfDPA(@Context SecurityContext sc,
+                                                      @ApiParam(value = "UUID of DPA") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Marker(s)",
+                "Region Id", uuid);
+
+        return AddressEntity.getOrganisationMarkers(uuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.getMarkersOfPublishersOfDPA")
+    @Path("/publisherMarkers")
+    @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
+            "to the Publishers in the corresponding DPA.  Accepts a UUID of an DPA.")
+    public Response getMarkersOfPublishersOfDPA(@Context SecurityContext sc,
+                                                 @ApiParam(value = "UUID of DPA") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Marker(s)",
+                "Region Id", uuid);
+
+        return AddressEntity.getOrganisationMarkers(uuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
+    }
+
     private Response getDPAList() throws Exception {
 
         List<DataProcessingAgreementEntity> dpas = DataProcessingAgreementEntity.getAllDPAs();

@@ -1,5 +1,5 @@
 export class Marker {
-    name:string;
-    lat:number;
-    lng:number;
+    name: string;
+    lat: number;
+    lng: number;
 }
