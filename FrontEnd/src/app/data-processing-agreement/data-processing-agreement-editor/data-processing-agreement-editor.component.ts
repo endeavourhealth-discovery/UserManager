@@ -15,7 +15,9 @@ import {DocumentationService} from '../../documentation/documentation.service';
 import {ToastsManager} from 'ng2-toastr';
 import {Organisation} from '../../organisation/models/Organisation';
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
-import {Marker} from "../../region/models/Marker";
+import {Marker} from '../../region/models/Marker';
+import {Purpose} from '../../data-sharing-agreement/models/Purpose';
+import {PurposeAddComponent} from '../../data-sharing-agreement/purpose-add/purpose-add.component';
 
 @Component({
   selector: 'app-data-processing-agreement-editor',
@@ -40,6 +42,8 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   publisherMarkers: Marker[];
   subscriberMarkers: Marker[];
   mapMarkers: Marker[];
+  purposes: Purpose[];
+  benefits: Purpose[];
 
   status = [
     {num: 0, name: 'Active'},
@@ -51,6 +55,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   cohortDetailsToShow = new Cohort().getDisplayItems();
   documentDetailsToShow = new Documentation().getDisplayItems();
   orgDetailsToShow = new Organisation().getDisplayItems();
+  purposeDetailsToShow = new Purpose().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
@@ -100,6 +105,8 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
           vm.getAssociatedDocumentation();
           vm.getPublisherMarkers();
           vm.getSubscriberMarkers()
+          vm.getPurposes();
+          vm.getBenefits();
         },
         error => vm.log.error('Error loading', error, 'Error')
       );
@@ -135,6 +142,14 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
       const dataset: DataSet = this.dataSets[idx];
       this.dpa.dataSets[dataset.uuid] = dataset.name;
     }
+
+    // Populate purposes before save
+    vm.dpa.purposes = [];
+    vm.dpa.purposes = this.purposes;
+
+    // Populate benefits before save
+    vm.dpa.benefits = [];
+    vm.dpa.benefits = this.benefits;
 
     // Populate DataSets before save
     vm.dpa.documentations = [];
@@ -193,6 +208,24 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
     this.router.navigate(['/dataSet', item.uuid, 'edit']);
   }
 
+  private editPurposes() {
+    const vm = this;
+    PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose')
+      .result.then(function
+      (result: Purpose[]) { vm.purposes = result; },
+      () => vm.log.info('Edit Purposes cancelled')
+    );
+  }
+
+  private editBenefits() {
+    const vm = this;
+    PurposeAddComponent.open(vm.$modal, vm.benefits, 'Benefit')
+      .result.then(function
+      (result: Purpose[]) { vm.benefits = result; },
+      () => vm.log.info('Edit Benefits cancelled')
+    );
+  }
+
   private getLinkedCohorts() {
     const vm = this;
     vm.dpaService.getLinkedCohorts(vm.dpa.uuid)
@@ -217,6 +250,24 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
       .subscribe(
         result => vm.dataSets = result,
         error => vm.log.error('Failed to load linked Data Sets', error, 'Load Linked Data Sets')
+      );
+  }
+
+  private getPurposes() {
+    const vm = this;
+    vm.dpaService.getPurposes(vm.dpa.uuid)
+      .subscribe(
+        result => vm.purposes = result,
+        error => vm.log.error('Failed to load purposes', error, 'Load Purposes')
+      );
+  }
+
+  private getBenefits() {
+    const vm = this;
+    vm.dpaService.getBenefits(vm.dpa.uuid)
+      .subscribe(
+        result => vm.benefits = result,
+        error => vm.log.error('Failed to load benefits', error, 'Load Benefits')
       );
   }
 

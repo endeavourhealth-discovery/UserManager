@@ -26,6 +26,8 @@ public class JsonDPA {
     private Map<UUID, String> dataSets = null;
     private List<JsonDocumentation> documentations = new ArrayList<>();
     private Map<UUID, String> publishers = null;
+    private List<JsonPurpose> purposes = new ArrayList<>();
+    private List<JsonPurpose> benefits = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -161,5 +163,21 @@ public class JsonDPA {
 
     public void setPublishers(Map<UUID, String> publishers) {
         this.publishers = publishers;
+    }
+
+    public List<JsonPurpose> getPurposes() {
+        return purposes;
+    }
+
+    public void setPurposes(List<JsonPurpose> purposes) {
+        this.purposes = purposes;
+    }
+
+    public List<JsonPurpose> getBenefits() {
+        return benefits;
+    }
+
+    public void setBenefits(List<JsonPurpose> benefits) {
+        this.benefits = benefits;
     }
 }

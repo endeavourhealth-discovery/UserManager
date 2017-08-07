@@ -397,7 +397,7 @@ public final class DsaEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private List<JsonPurpose> setUuidsAndSavePurpose(List<JsonPurpose> purposes) throws Exception {
+    public static List<JsonPurpose> setUuidsAndSavePurpose(List<JsonPurpose> purposes) throws Exception {
         for (JsonPurpose purpose : purposes) {
             if (purpose.getUuid() == null) {
                 purpose.setUuid(UUID.randomUUID().toString());

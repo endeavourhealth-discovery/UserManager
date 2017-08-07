@@ -75,7 +75,7 @@ public class PurposeEntity {
         dsaPurpose.setDetail(purpose.getDetail());
         dsaPurpose.setTitle(purpose.getTitle());
         entityManager.getTransaction().begin();
-        entityManager.persist(dsaPurpose);
+        entityManager.merge(dsaPurpose);
         entityManager.getTransaction().commit();
 
         entityManager.close();

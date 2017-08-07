@@ -7,6 +7,7 @@ import {DataSet} from '../data-set/models/Dataset';
 import {Cohort} from '../cohort/models/Cohort';
 import {Organisation} from '../organisation/models/Organisation';
 import {Marker} from '../region/models/Marker';
+import {Purpose} from "../data-sharing-agreement/models/Purpose";
 
 @Injectable()
 export class DataProcessingAgreementService {
@@ -97,6 +98,22 @@ export class DataProcessingAgreementService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/dpa/publisherMarkers', { search : params })
+      .map((response) => response.json());
+  }
+
+  getPurposes(uuid: string):  Observable<Purpose[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dpa/purposes', { search : params })
+      .map((response) => response.json());
+  }
+
+  getBenefits(uuid: string):  Observable<Purpose[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dpa/benefits', { search : params })
       .map((response) => response.json());
   }
 

@@ -99,6 +99,10 @@ public final class DpaEndpoint extends AbstractEndpoint {
             }
         }
 
+
+        dpa.setPurposes(DsaEndpoint.setUuidsAndSavePurpose(dpa.getPurposes()));
+        dpa.setBenefits(DsaEndpoint.setUuidsAndSavePurpose(dpa.getBenefits()));
+
         MasterMappingEntity.saveDataProcessingAgreementMappings(dpa);
 
         clearLogbackMarkers();
@@ -202,6 +206,42 @@ public final class DpaEndpoint extends AbstractEndpoint {
                 "DSA Id", uuid);
 
         return getPublishers(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.GetPurposes")
+    @Path("/purposes")
+    @ApiOperation(value = "Returns a list of Json representations of purposes that are linked " +
+            "to the data processing agreement.  Accepts a UUID of a data processing agreement.")
+    public Response getPurposesForDPA(@Context SecurityContext sc,
+                                      @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "purpose(s)",
+                "DSA Id", uuid);
+
+        return getPurposes(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.getBenefits")
+    @Path("/benefits")
+    @ApiOperation(value = "Returns a list of Json representations of benefits that are linked " +
+            "to the data processing agreement.  Accepts a UUID of a data processing agreement.")
+    public Response getBenefitsForDPA(@Context SecurityContext sc,
+                                      @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "benefits(s)",
+                "DSA Id", uuid);
+
+        return getBenefits(uuid);
     }
 
     @GET
@@ -340,6 +380,37 @@ public final class DpaEndpoint extends AbstractEndpoint {
 
         if (publisherUuids.size() > 0)
             ret = OrganisationEntity.getOrganisationsFromList(publisherUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getPurposes(String dsaUuid) throws Exception {
+        List<String> purposeUuids = MasterMappingEntity.getChildMappings(dsaUuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.PURPOSE.getMapType());
+
+        List<PurposeEntity> ret = new ArrayList<>();
+
+        if (purposeUuids.size() > 0)
+            ret = PurposeEntity.getPurposesFromList(purposeUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getBenefits(String dsaUuid) throws Exception {
+
+        List<String> benefitUuids = MasterMappingEntity.getChildMappings(dsaUuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.BENEFIT.getMapType());
+
+        List<PurposeEntity> ret = new ArrayList<>();
+
+        if (benefitUuids.size() > 0)
+            ret = PurposeEntity.getPurposesFromList(benefitUuids);
 
         clearLogbackMarkers();
         return Response

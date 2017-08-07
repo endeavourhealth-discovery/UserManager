@@ -377,6 +377,24 @@ public class MasterMappingEntity {
             saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
             AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
         }
+
+        if (dpa.getPurposes() != null) {
+            Map<UUID, String> purposes = new HashMap<>();
+            List<JsonPurpose> jsonPurposes =  dpa.getPurposes();
+            for (JsonPurpose purp : jsonPurposes) {
+                purposes.put(UUID.fromString(purp.getUuid()), purp.getTitle());
+            }
+            saveChildMappings(purposes, MapType.PURPOSE.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        }
+
+        if (dpa.getBenefits() != null) {
+            Map<UUID, String> benefits = new HashMap<>();
+            List<JsonPurpose> jsonBenefits =  dpa.getBenefits();
+            for (JsonPurpose benef : jsonBenefits) {
+                benefits.put(UUID.fromString(benef.getUuid()), benef.getTitle());
+            }
+            saveChildMappings(benefits, MapType.BENEFIT.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        }
     }
 
     public static void saveCohortMappings(JsonCohort cohort) throws Exception {

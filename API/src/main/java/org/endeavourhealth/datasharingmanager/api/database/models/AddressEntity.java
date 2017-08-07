@@ -341,6 +341,8 @@ public class AddressEntity {
             List<AddressEntity> addressEntities = AddressEntity.getAddressesForOrganisation(org.toString());
 
             for (AddressEntity address : addressEntities) {
+                if (address.lat != null && address.lng != null)
+                    continue;
                 JsonAddress jsonAddress = new JsonAddress(address);
                 getGeolocation(jsonAddress);
             }

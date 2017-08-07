@@ -25,20 +25,6 @@
             <label class="control-label">Derivation</label>
             <input type="text" class="form-control" placeholder="Derivation" [(ngModel)]="dpa.derivation" name="derivation">
           </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Publisher Information</label>
-            <input type="text" class="form-control" placeholder="Publisher Information" [(ngModel)]="dpa.publisherInformation" name="publisherInformation">
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Publisher Contract Information</label>
-            <input type="text" class="form-control" placeholder="Publisher Contract Information" [(ngModel)]="dpa.publisherContractInformation" name="publisherContractInformation">
-          </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Subscriber Information</label>
-            <input type="text" class="form-control" placeholder="Subscriber Information" [(ngModel)]="dpa.publisherDataset" name="publisherDataSet">
-          </div>
         </div>
         <div class="row">
           <div class="form-group col-md-4">
@@ -50,6 +36,7 @@
             <input type="date" class="form-control" placeholder="End Date" [(ngModel)]="dpa.endDate" name="endDate">
           </div>
           <div class="form-group col-md-4">
+            <label class="control-label">Data Procesor</label>
             <input type="text" class="form-control" placeholder="Processor" [(ngModel)]="processor" name="processorName">
           </div>
         </div>
@@ -70,6 +57,63 @@
         </div>
 
         <ngb-accordion>
+          <ngb-panel id="purps">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Purposes
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{purposes?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPurposes()">Add</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="purposes"
+                [primary]="'title'"
+                [primaryOrderText]="'Title'"
+                [displayClass]="'region'"
+                [secondary]="'detail'"
+                [secondaryOrderText]="'Detail'"
+                [typeDescription]="'Purpose'"
+                [model]="'organisation'"
+                [detailsToShow]="purposeDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel id="bens">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Benefits
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{benefits?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editBenefits()">Add</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="benefits"
+                [primary]="'title'"
+                [primaryOrderText]="'Title'"
+                [displayClass]="'region'"
+                [secondary]="'detail'"
+                [secondaryOrderText]="'Detail'"
+                [typeDescription]="'Benefit'"
+                [model]="'benefit'"
+                [detailsToShow]="purposeDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
           <ngb-panel id="pubs">
             <ng-template ngbPanelTitle>
               <div class="row">
