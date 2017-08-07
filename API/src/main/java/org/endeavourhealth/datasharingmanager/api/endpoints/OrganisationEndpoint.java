@@ -147,7 +147,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 else
                     AddressEntity.updateAddress(address);
 
-                getGeolocation(address);
+                AddressEntity.getGeolocation(address);
             }
 
         }
@@ -595,37 +595,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 .ok()
                 .entity(addresses)
                 .build();
-    }
-
-    private void getGeolocation(JsonAddress address) throws Exception {
-        Client client = ClientBuilder.newClient();
-
-        JsonNode json = ConfigManager.getConfigurationAsJson("GoogleMapsAPI");
-        String url = json.get("url").asText();
-        String apiKey = json.get("apiKey").asText();
-
-        WebTarget resource = client.target(url + address.getPostcode().replace(" ", "+") + "&key=" + apiKey);
-
-        Invocation.Builder request = resource.request();
-        request.accept(MediaType.APPLICATION_JSON_TYPE);
-
-        Response response = request.get();
-
-        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-            String s = response.readEntity(String.class);
-            JsonParser parser = new JsonParser();
-            JsonElement obj = parser.parse(s);
-            JsonObject jo = obj.getAsJsonObject();
-            JsonElement results = jo.getAsJsonArray("results").get(0);
-            JsonObject location = results.getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
-
-            address.setLat(Double.parseDouble(location.get("lat").toString()));
-            address.setLng(Double.parseDouble(location.get("lng").toString()));
-
-            AddressEntity.updateGeolocation(address);
-        }
-
-
     }
 
     private Response getChildOrganisations(String organisationUuid, Short organisationType) throws Exception {

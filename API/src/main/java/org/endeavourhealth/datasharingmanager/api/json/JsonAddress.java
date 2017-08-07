@@ -1,7 +1,7 @@
 package org.endeavourhealth.datasharingmanager.api.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.endeavourhealth.core.mySQLDatabase.models.AddressEntity;
+import org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class JsonAddress {
@@ -20,7 +20,7 @@ public final class JsonAddress {
     public JsonAddress() {
     }
 
-    public JsonAddress(AddressEntity address, Boolean isAdmin) {
+    public JsonAddress(AddressEntity address) {
         this.uuid = address.getUuid();
         this.organisationUuid = address.getOrganisationUuid();
         this.buildingName = address.getBuildingName();

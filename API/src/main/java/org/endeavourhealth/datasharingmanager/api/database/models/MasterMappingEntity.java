@@ -2,6 +2,7 @@ package org.endeavourhealth.datasharingmanager.api.database.models;
 
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
+import org.endeavourhealth.datasharingmanager.api.endpoints.OrganisationEndpoint;
 import org.endeavourhealth.datasharingmanager.api.json.*;
 
 import javax.persistence.*;
@@ -232,11 +233,13 @@ public class MasterMappingEntity {
             if (organisation.getChildOrganisations() != null) {
                 Map<UUID, String> childOrganisations = organisation.getChildOrganisations();
                 saveChildMappings(childOrganisations, MapType.ORGANISATION.getMapType(), organisation.getUuid(), MapType.ORGANISATION.getMapType());
+                AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(childOrganisations.keySet()));
             }
 
             if (organisation.getServices() != null) {
                 Map<UUID, String> services = organisation.getServices();
                 saveChildMappings(services, MapType.SERVICE.getMapType(), organisation.getUuid(), MapType.ORGANISATION.getMapType());
+                AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(services.keySet()));
             }
 
             if (organisation.getDpaPublishing() != null) {
@@ -278,6 +281,7 @@ public class MasterMappingEntity {
         if (region.getOrganisations() != null) {
             Map<UUID, String> organisations = region.getOrganisations();
             saveChildMappings(organisations, MapType.ORGANISATION.getMapType(), region.getUuid(), MapType.REGION.getMapType());
+            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(organisations.keySet()));
         }
 
         if (region.getSharingAgreements() != null) {
@@ -301,11 +305,13 @@ public class MasterMappingEntity {
         if (dsa.getPublishers() != null) {
             Map<UUID, String> publishers = dsa.getPublishers();
             saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType());
+            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
         }
 
         if (dsa.getSubscribers() != null) {
             Map<UUID, String> subscribers = dsa.getSubscribers();
             saveChildMappings(subscribers, MapType.SUBSCRIBER.getMapType(), dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType());
+            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(subscribers.keySet()));
         }
 
         if (dsa.getPurposes() != null) {
@@ -369,6 +375,7 @@ public class MasterMappingEntity {
         if (dpa.getPublishers() != null) {
             Map<UUID, String> publishers = dpa.getPublishers();
             saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
         }
     }
 

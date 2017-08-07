@@ -1,5 +1,10 @@
 package org.endeavourhealth.datasharingmanager.api.database.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonAddress;
@@ -10,9 +15,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "address", schema = "data_sharing_manager")
@@ -322,5 +333,48 @@ public class AddressEntity {
                 .ok()
                 .entity(ret)
                 .build();
+    }
+
+    public static void getGeoLocationsForOrganisations(List<UUID> organisationUuids) throws Exception {
+
+        for (UUID org : organisationUuids) {
+            List<AddressEntity> addressEntities = AddressEntity.getAddressesForOrganisation(org.toString());
+
+            for (AddressEntity address : addressEntities) {
+                JsonAddress jsonAddress = new JsonAddress(address);
+                getGeolocation(jsonAddress);
+            }
+        }
+    }
+
+    public static void getGeolocation(JsonAddress address) throws Exception {
+        Client client = ClientBuilder.newClient();
+
+        JsonNode json = ConfigManager.getConfigurationAsJson("GoogleMapsAPI");
+        String url = json.get("url").asText();
+        String apiKey = json.get("apiKey").asText();
+
+        WebTarget resource = client.target(url + address.getPostcode().replace(" ", "+") + "&key=" + apiKey);
+
+        Invocation.Builder request = resource.request();
+        request.accept(MediaType.APPLICATION_JSON_TYPE);
+
+        Response response = request.get();
+
+        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+            String s = response.readEntity(String.class);
+            JsonParser parser = new JsonParser();
+            JsonElement obj = parser.parse(s);
+            JsonObject jo = obj.getAsJsonObject();
+            JsonElement results = jo.getAsJsonArray("results").get(0);
+            JsonObject location = results.getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
+
+            address.setLat(Double.parseDouble(location.get("lat").toString()));
+            address.setLng(Double.parseDouble(location.get("lng").toString()));
+
+            AddressEntity.updateGeolocation(address);
+        }
+
+
     }
 }
