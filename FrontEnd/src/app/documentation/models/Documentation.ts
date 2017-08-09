@@ -1,10 +1,10 @@
 export class Documentation {
-    uuid : string;
-    title : string;
-    filename : string;
-    fileData : string;
+    uuid: string;
+    title: string;
+    filename: string;
+    fileData: string;
 
-    getDisplayItems() :any[] {
+    getDisplayItems(): any[] {
         return [
             {label: 'Title', property: 'title'},
             {label: 'Filename', property: 'filename'},
