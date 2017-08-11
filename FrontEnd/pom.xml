@@ -19,10 +19,6 @@
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <version>${frontend-maven-plugin.version}</version>
-        <configuration>
-          <installDirectory>src/main/frontend</installDirectory>
-          <workingDirectory>src/main/frontend</workingDirectory>
-        </configuration>
         <executions>
           <execution>
             <id>install node and npm</id>
@@ -41,13 +37,6 @@
           <execution>
             <id>npm install</id>
             <goals><goal>npm</goal></goals>
-          </execution>
-          <execution>
-            <id>typings install</id>
-            <goals><goal>npm</goal></goals>
-            <configuration>
-              <arguments>run typings -- install</arguments>
-            </configuration>
           </execution>
           <execution>
             <id>ng build</id>
