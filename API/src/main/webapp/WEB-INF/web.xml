@@ -148,10 +148,10 @@
 
 
     <listener>
-        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerMetricListener</listener-class>
+        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.DataSharingManagerMetricListener</listener-class>
     </listener>
     <listener>
-        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerInstrumentedFilterContextListener</listener-class>
+        <listener-class>org.endeavourhealth.datasharingmanager.api.metrics.DataSharingManagerInstrumentedFilterContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>metrics</servlet-name>

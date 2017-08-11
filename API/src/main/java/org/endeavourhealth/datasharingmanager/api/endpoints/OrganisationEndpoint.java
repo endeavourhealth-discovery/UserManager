@@ -2,15 +2,10 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.astefanutti.metrics.aspectj.Metrics;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
@@ -20,16 +15,12 @@ import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanager.api.database.models.*;
 import org.endeavourhealth.datasharingmanager.api.json.*;
-import org.endeavourhealth.datasharingmanager.api.metrics.InformationManagerMetricListener;
+import org.endeavourhealth.datasharingmanager.api.metrics.DataSharingManagerMetricListener;
 import org.endeavourhealth.datasharingmanager.api.utility.CsvHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -52,7 +43,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     private static boolean uploadInProgress = false;
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.Organisation);
-    private static final MetricRegistry metricRegistry = InformationManagerMetricListener.informationManagerMetricRegistry;
+    private static final MetricRegistry metricRegistry = DataSharingManagerMetricListener.dataSharingManagerMetricRegistry;
 
     private Integer defaultPageNumber = 1;
     private Integer defaultPageSize = 20;

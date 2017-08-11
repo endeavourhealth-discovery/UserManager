@@ -6,7 +6,7 @@
 
     <parent>
         <relativePath>../pom.xml</relativePath>
-        <groupId>org.endeavourhealth.informationManager</groupId>
+        <groupId>org.endeavourhealth.dataSharingManager</groupId>
         <artifactId>InformationManager</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
