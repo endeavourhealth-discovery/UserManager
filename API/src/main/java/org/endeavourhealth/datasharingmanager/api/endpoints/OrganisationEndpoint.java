@@ -644,6 +644,36 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
+    private boolean processFile(String filename) throws Exception {
+        if (filename.contains("earchive")
+                || filename.contains("ecarehomesucc")
+                || filename.contains("econcur")
+                || filename.contains("edconcur")
+                || filename.contains("educationtype")
+                || filename.contains("egdp")
+                || filename.contains("egdppracmem")
+                || filename.contains("egpcur")
+                || filename.contains("egpmema")
+                || filename.contains("enurse")
+                || filename.contains("epcdp")
+                || filename.contains("epcdpam")
+                || filename.contains("epcdpaq")
+                || filename.contains("epcmem")
+                || filename.contains("epracmem")
+                || filename.contains("ngpcur")
+                || filename.contains("nlhscgpr")
+                || filename.contains("scotgp")
+                || filename.contains("scotmem")
+                || filename.contains("succ")
+                || filename.contains("wconcur")
+                || filename.contains("egparc")
+                || filename.contains("egpcur"))
+            return false;
+
+
+        return true;
+    }
+
     private Response processCSVFile(JsonFileUpload file) throws Exception {
         boolean found = false;
         //OrganisationEntity.deleteUneditedBulkOrganisations();
@@ -655,6 +685,13 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
 
         System.out.println(file.getName());
+
+        if (!processFile(file.getName())){
+            return Response
+                    .ok()
+                    .build();
+        }
+
         if (file.getFileData() == null) {
             throw new Exception("No File Data transferred");
         }

@@ -107,8 +107,8 @@
 
       <br>
 
-      <div class="panel panel-danger" *ngIf="existingOrg">
-        <div class="panel-heading">Resolve Conflicting Organisations
+      <div class="card" *ngIf="existingOrg">
+        <div class="card-header">Resolve Conflicting Organisations
           <div class="pull-right">
             <button *ngIf="existingOrg" class="btn btn-sm btn-success"
                     (click)="cancelConflictResolution()"
@@ -121,7 +121,7 @@
           </div>
 
         </div>
-        <div class="panel-body">
+        <div class="card-block">
           <form>
             <div class="row">
               <div class="form-group col-md-6">
