@@ -130,28 +130,48 @@ export class OrganisationOverviewComponent implements OnInit {
     if (allUploaded) {
       vm.log.success('All Uploaded Successfully', null, 'Upload');
       vm.log.success('Saving mappings now', null, 'Upload');
-      vm.organisationService.endUpload()
-        .subscribe(
-          result => {
-            vm.log.success('Mappings saved Successfully ' , null, 'Success');
-            vm.log.success('All Organisations Uploaded Successfully ' , null, 'Success');
-            vm.getOrganisationStatistics();
-            vm.getServiceStatistics();
-            vm.getRegionStatistics();
-            vm.getConflictingOrganisations();
-          },
-          error => vm.log.error('Failed to save mappings', error, 'Upload Bulk Organisations')
-        )
+      vm.saveBulkMappings();
     }
+  }
+
+  private endUpload() {
+    const vm = this;
+    vm.organisationService.endUpload()
+      .subscribe(
+        result => {
+          vm.log.success('Mappings saved Successfully ' , null, 'Success');
+          vm.log.success('All Organisations Uploaded Successfully ' , null, 'Success');
+          vm.getOrganisationStatistics();
+          vm.getServiceStatistics();
+          vm.getRegionStatistics();
+          vm.getConflictingOrganisations();
+        },
+        error => vm.log.error('Failed to save mappings', error, 'Upload Bulk Organisations')
+      )
+  }
+
+  private saveBulkMappings() {
+    const vm = this;
+    vm.organisationService.saveMappings(10000)
+      .subscribe(
+        (result) => {
+          if (result > 0) {
+            vm.log.success(result + ' Mappings to Upload', null, 'Success');
+            vm.saveBulkMappings();
+          } else {
+            vm.endUpload();
+          }
+        }
+      )
   }
 
   private sendToServer(fileToUpload: FileUpload) {
     const vm = this;
-    vm.log.success('Sending To Server', null, 'Upload');
+    console.log(fileToUpload);
     vm.organisationService.uploadCsv(fileToUpload)
       .subscribe(result => {
           fileToUpload.success = 1;
-          vm.log.success('File Uploaded Successfully ' + fileToUpload.name, null, 'Success');
+          vm.log.success(result + ' Organisations Uploaded Successfully ' + fileToUpload.name, null, 'Success');
           vm.getNextFileToUpload();
         },
         error => vm.log.error('Failed to upload bulk organisations ' + fileToUpload.name, error, 'Upload Bulk Organisations')
@@ -200,8 +220,8 @@ export class OrganisationOverviewComponent implements OnInit {
           vm.existingOrg = result
           vm.organisationService.getOrganisationAddresses(organisation.bulkConflictedWith)
             .subscribe(
-              result => vm.existingOrg.addresses = result,
-              error => vm.log.error('Error getting address', error, 'Error')
+              (result) => vm.existingOrg.addresses = result,
+              (error) => vm.log.error('Error getting address', error, 'Error')
             );
         },
         error => vm.log.error('Error getting address', error, 'Error')

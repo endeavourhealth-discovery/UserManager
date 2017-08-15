@@ -149,7 +149,16 @@ export class OrganisationService  {
 
   uploadCsv(fileToUpload: FileUpload): Observable<any> {
     const vm = this;
-    return vm.http.post('api/organisation/upload', fileToUpload);
+    return vm.http.post('api/organisation/upload', fileToUpload)
+      .map((response) => response.json());
+  }
+
+  saveMappings(limit: number): Observable<any> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('limit', limit.toString());
+    return vm.http.get('api/organisation/saveMappings', { search : params })
+      .map((response) => response.json());
   }
 
   getStatistics(type: string): Observable<OrganisationManagerStatistics[]> {

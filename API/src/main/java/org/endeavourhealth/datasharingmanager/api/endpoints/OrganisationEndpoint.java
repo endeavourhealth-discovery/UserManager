@@ -414,10 +414,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     public Response postOrganisationCSVFile(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of csv file to process") JsonFileUpload fileUpload
     ) throws Exception {
+        String test = "hello";
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Organisation",
-                "Organisation", fileUpload);
+                "Organisation", fileUpload.getName());
 
         return processCSVFile(fileUpload);
     }
@@ -437,6 +438,18 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 "Organisation", null);
 
         return startUpload();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.Organisation.saveMappings")
+    @Path("/saveMappings")
+    @ApiOperation(value = "Save Mappings between organisations to the database.  Part of the bulk upload process")
+    public Response saveMappings(@Context SecurityContext sc,
+                                      @ApiParam(value = "Number of mappings to save in this batch") @QueryParam("limit") Integer limit) throws Exception {
+
+        return saveBulkMappings(limit);
     }
 
     @GET
@@ -632,7 +645,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
 
     private Response endUpload() throws Exception {
-        saveBulkMappings();
 
         bulkUploadMappings.clear();
         bulkOrgMap.clear();
@@ -688,7 +700,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
         if (!processFile(file.getName())){
             return Response
-                    .ok()
+                    .ok(organisationEntities.size())
                     .build();
         }
 
@@ -734,25 +746,48 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         AddressEntity.bulkSaveAddresses(addressEntities);
 
         return Response
-                .ok()
+                .ok(organisationEntities.size())
                 .build();
     }
 
-    private void saveBulkMappings() throws Exception {
+    private Response saveBulkMappings(Integer limit) throws Exception {
 
-        childParentMap.forEach((k, v) -> {
+        Integer i = 0;
+        for (Iterator<Map.Entry<String, String>> it = childParentMap.entrySet().iterator(); it.hasNext();) {
+            i++;
+            Map.Entry<String, String> map = it.next();
+
+            MasterMappingEntity mappingEntity = new MasterMappingEntity();
+            mappingEntity.setChildUuid(bulkOrgMap.get(map.getKey()));
+            mappingEntity.setChildMapTypeId(MapType.ORGANISATION.getMapType());
+            mappingEntity.setParentUuid(bulkOrgMap.get(map.getValue()));
+            mappingEntity.setParentMapTypeId(MapType.ORGANISATION.getMapType());
+
+            if (mappingEntity.getParentUuid() != null && mappingEntity.getChildUuid() != null)
+                bulkUploadMappings.add(mappingEntity);
+
+            it.remove();
+            if (i > limit)
+                break;
+        }
+
+        /*childParentMap.forEach((k, v) -> {
             MasterMappingEntity map = new MasterMappingEntity();
             map.setChildUuid(bulkOrgMap.get(k));
             map.setChildMapTypeId(MapType.ORGANISATION.getMapType());
             map.setParentUuid(bulkOrgMap.get(v));
             map.setParentMapTypeId(MapType.ORGANISATION.getMapType());
 
-            if (map.getParentUuid() != null)
+            if (map.getParentUuid() != null && map.getChildUuid() != null)
                 bulkUploadMappings.add(map);
-        });
+        });*/
 
         if (bulkUploadMappings.size() > 0)
             MasterMappingEntity.bulkSaveMappings(bulkUploadMappings);
+
+        return Response
+                .ok(childParentMap.size())
+                .build();
     }
 
     private String getOrgTypeFromFilename(String filename, String odsCode) throws Exception {
