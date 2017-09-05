@@ -17,6 +17,7 @@ import org.endeavourhealth.datasharingmanager.api.database.models.*;
 import org.endeavourhealth.datasharingmanager.api.json.*;
 import org.endeavourhealth.datasharingmanager.api.metrics.DataSharingManagerMetricListener;
 import org.endeavourhealth.datasharingmanager.api.utility.CsvHelper;
+import org.endeavourhealth.datasharingmanager.api.database.OrganisationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -414,7 +415,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     public Response postOrganisationCSVFile(@Context SecurityContext sc,
                          @ApiParam(value = "Json representation of csv file to process") JsonFileUpload fileUpload
     ) throws Exception {
-        String test = "hello";
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Organisation",
@@ -790,148 +790,145 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private String getOrgTypeFromFilename(String filename, String odsCode) throws Exception {
+    private byte getOrgTypeFromFilename(String filename, String odsCode) throws Exception {
 
         String file = filename.toLowerCase();
 
         if (file.contains("epraccur"))
-            return "GP Practice";
+            return OrganisationType.GPPRACTICE.getOrganisationType(); // "GP Practice";
 
         if (file.contains("etrust")) {
             if (odsCode.length() <= 3)
-                return "NHS Trust";
+                return OrganisationType.NHSTRUST.getOrganisationType(); // "NHS Trust";
             else
-                return "NHS Trust Site";
+                return OrganisationType.NHSTRUSTSITE.getOrganisationType(); // "NHS Trust Site";
         }
 
         if (file.contains("etr"))
-            return "NHS Trust";
+            return OrganisationType.NHSTRUST.getOrganisationType(); // "NHS Trust";
 
         if (file.contains("plab"))
-            return "Pathology Laboratories";
+            return OrganisationType.PATHLAB.getOrganisationType(); // "Pathology Laboratories";
 
         if (file.contains("epracarc"))
-            return "Archived GP Practice";
+            return OrganisationType.GPPRACTICE.getOrganisationType(); // "Archived GP Practice";
 
         if (file.contains("branch"))
-            return "Branch";
+            return OrganisationType.BRANCH.getOrganisationType(); // "Branch";
 
         if (file.contains("auth"))
-            return "Commissioning Region";
+            return OrganisationType.COMMISSIONINGREGION.getOrganisationType(); // "Commissioning Region";
 
         if (file.contains("ecare") && odsCode.length() > 3)
-            return "Care Trust Site";
+            return OrganisationType.CARETRUSTSITE.getOrganisationType(); // "Care Trust Site";
 
         if (file.contains("ecare") && odsCode.length() <= 3)
-            return "Care Trust";
+            return OrganisationType.CARETRUST.getOrganisationType(); // "Care Trust";
 
         if (file.contains("ccgsite"))
-            return "CCG Site";
+            return OrganisationType.CCGSITE.getOrganisationType(); // "CCG Site";
 
         if (file.contains("ccg"))
-            return "CCG";
-
-        if (file.contains("ccgsite"))
-            return "CCG Site";
+            return OrganisationType.CCG.getOrganisationType(); // "CCG";
 
         if (file.contains("csuaq"))
-            return "CSU";
+            return OrganisationType.CSU.getOrganisationType(); // "CSU";
 
         if (file.contains("csusite"))
-            return "CSU Site";
+            return OrganisationType.CSUSITE.getOrganisationType(); // "CSU Site";
 
         if (file.equals("ect.csv"))
-            return "Care Trust";
+            return OrganisationType.CARETRUST.getOrganisationType(); // "Care Trust";
 
         if (file.contains("ectsite"))
-            return "Care Trust Site";
+            return OrganisationType.CARETRUSTSITE.getOrganisationType(); // "Care Trust Site";
 
         if (file.contains("dispensary"))
-            return "Dispensary";
+            return OrganisationType.DISPENSARY.getOrganisationType(); // "Dispensary";
 
         if (file.contains("educate"))
-            return "Education Establishment";
+            return OrganisationType.EDUCATION.getOrganisationType(); // "Education Establishment";
 
         if (file.contains("egp"))
-            return "GP Practice";
+            return OrganisationType.GPPRACTICE.getOrganisationType(); // "GP Practice";
 
         if (file.contains("hospice")) {
             if (odsCode.length() > 3)
-                return "Non NHS Hospice";
+                return OrganisationType.NONNHSHOSPICE.getOrganisationType(); // "Non NHS Hospice";
             if (odsCode.length() <= 3)
-                return "NHS Hospice";
+                return OrganisationType.NHSHOSPICE.getOrganisationType(); // "NHS Hospice";
         }
 
         if (file.contains("iom")) {
             if (odsCode.length() <= 3) {
                 if (odsCode.substring(1, 1).equals("K"))
-                    return "IoM Government Directorate";
+                    return OrganisationType.IOMGOVDIRECTORATE.getOrganisationType(); // "IoM Government Directorate";
                 else
-                    return "IoM Government Department";
+                    return OrganisationType.IOMGOVDEPT.getOrganisationType(); // "IoM Government Department";
             } else
-                return "IoM Government Directorate Site";
+                return OrganisationType.IOMGOVDIRECTORATESITE.getOrganisationType(); // "IoM Government Directorate Site";
 
         }
 
         if (file.contains("justice"))
-            return "Justice Entity";
+            return OrganisationType.JUSTICEENTITY.getOrganisationType(); // "Justice Entity";
 
         if (file.contains("nonnhs"))
-            return "Non NHS Organisation";
+            return OrganisationType.NONNHSORGANISATION.getOrganisationType(); // "Non NHS Organisation";
 
         if (file.equals("ensa.csv"))
-            return "NHS Support Agency and Shared Service";
+            return OrganisationType.NHSSUPPORTAGENGY.getOrganisationType(); // "NHS Support Agency and Shared Service";
 
         if (file.contains("eopthq"))
-            return "Optical Headquarters";
+            return OrganisationType.OPTICALHQ.getOrganisationType(); // "Optical Headquarters";
 
         if (file.contains("eoptsite"))
-            return "Optical Site";
+            return OrganisationType.OPTICALSITE.getOrganisationType(); // "Optical Site";
 
         if (file.contains("other"))
-            return "Other";
+            return OrganisationType.OTHER.getOrganisationType(); // "Other";
 
         if (file.contains("pharmacyhq"))
-            return "Pharmacy Headquarters";
+            return OrganisationType.PHARMACYHQ.getOrganisationType(); // "Pharmacy Headquarters";
 
         if (file.contains("ephpsite"))
-            return "ISHP Site";
+            return OrganisationType.ISHPSITE.getOrganisationType(); // "ISHP Site";
 
         if (file.contains("ephp"))
-            return "ISHP";
+            return OrganisationType.ISHP.getOrganisationType(); // "ISHP";
 
         if (file.contains("prison"))
-            return "Prison";
+            return OrganisationType.PRISON.getOrganisationType(); // "Prison";
 
         if (file.contains("school"))
-            return "School";
+            return OrganisationType.SCHOOL.getOrganisationType(); // "School";
 
         if (file.contains("spha"))
-            return "Special Health Authority";
+            return OrganisationType.SPECIALHEALTH.getOrganisationType(); // "Special Health Authority";
 
         if (file.contains("lauthsite"))
-            return "Local Authority Site";
+            return OrganisationType.LOCALAUTHORITYSITE.getOrganisationType(); // "Local Authority Site";
 
         if (file.contains("lauth"))
-            return "Local Authority";
+            return OrganisationType.LOCALAUTHORITY.getOrganisationType(); // "Local Authority";
 
         if (file.contains("niarchive") || file.contains("niorg"))
-            return "NI Organisation";
+            return OrganisationType.NIORG.getOrganisationType(); // "NI Organisation";
 
         if (file.contains("scotgp"))
-            return "Scottish GP Practice";
+            return OrganisationType.SCOTTISHGP.getOrganisationType(); // "Scottish GP Practice";
 
         if (file.contains("scotorg"))
-            return "Scottish Provider Organisation";
+            return OrganisationType.SCOTTISHPROVIDER.getOrganisationType(); // "Scottish Provider Organisation";
 
         if (file.contains("whbs")) {
             if (odsCode.length() > 3)
-                return "Wales Health Board Site";
+                return OrganisationType.WALESHBSITE.getOrganisationType(); // "Wales Health Board Site";
             else
-                return "Wales Health Board";
+                return OrganisationType.WALESHB.getOrganisationType(); // "Wales Health Board";
         }
 
-        return "Unknown";
+        return OrganisationType.OTHER.getOrganisationType(); // "Unknown";
     }
 
     private OrganisationEntity createOrganisationEntity(List<String> org, String filename) throws Exception {
@@ -945,6 +942,10 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         organisationEntity.setBulkImported((byte)1);
         organisationEntity.setBulkItemUpdated((byte)0);
         organisationEntity.setType(getOrgTypeFromFilename(filename, org.get(0)));
+        if (filename.equals("epracarc"))
+            organisationEntity.setActive((byte)0);
+        else
+            organisationEntity.setActive((byte)1);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         Date date = format.parse(org.get(10));

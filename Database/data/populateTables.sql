@@ -140,23 +140,116 @@ values (0, "Explicit Consent");
 insert into data_sharing_manager.consent_model (id, consent_model)
 values (1, "Implied Consent");
 
-/*data_sharing_manager.data_sharing_agreement*/
-insert into data_sharing_manager.data_sharing_agreement (uuid, name, description, dsa_status_id, consent_model_id)
-values ("e8340789-0a61-11e7-bc48-80fa5b27a530", "National Data Sharing Agreement", "Full country sharing agreement", 1, 0);
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (0, "GP Practice");
 
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (1, "NHS Trust");
 
-/*data_sharing_manager.data_processing_agreement*/
-insert into data_sharing_manager.data_processing_agreement (uuid, name, description, dsa_status_id)
-values ("0140a2f8-0a63-11e7-bc48-80fa5b27a530", "National Data Processing Agreement", "Full Country Processing Agreement", 0);
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (2, "NHS Trust Site");
 
-/*data_sharing_manager.data_sharing_summary*/
-insert into data_sharing_manager.data_sharing_summary (uuid, name, description, nature_of_information_id, format_type_id, data_subject_type_id, review_cycle_id)
-values ("138024c9-0aee-11e7-926e-80fa5b27a530", "National Data Summary", "Sharing data for all patients", 0, 1, 0, 1);
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (3, "Pathology Laboratory");
 
-/*data_sharing_manager.cohort*/
-insert into data_sharing_manager.cohort (uuid, name, nature)
-values ("db64e478-0a3d-11e7-bc48-80fa5b27a530", "All Patients", "Sharing Data");
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (4, "Branch");
 
-insert into data_sharing_manager.data_flow (uuid, name, direction_id, flow_schedule_id, approximate_volume, data_exchange_method_id, flow_status_id, storage_protocol_id, security_infrastructure_id, security_architecture_id)
-values ("2ea68a0b-0a3e-11e7-bc48-80fa5b27a530", "Endeavour Data Flow", 0, 1, 200000, 1, 0, 0, 0, 0);
-    
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (5, "Commissioning Region");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (6, "Care Trust");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (7, "Care Trust Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (8, "CCG");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (9, "CCG Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (10, "CSU");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (11, "CSU Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (12, "Education Establishment");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (13, "NHS Hospice");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (14, "Non NHS Hospice");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (15, "IoM Government Directorate");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (16, "IoM Government Department");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (17, "Justice Entity");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (18, "Non NHS Organisation");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (19, "NHS Support Agency");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (20, "Optical HQ");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (21, "Optical Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (22, "Other");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (23, "Pharmacy HQ");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (24, "ISHP");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (25, "ISHP Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (26, "Prison");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (27, "School");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (28, "Special Health Authority");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (29, "Local Authority");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (30, "Local Authority Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (31, "NI organisation");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (32, "Scottish GP Practice");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (33, "Scottish Provider Organisation");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (34, "Wales Health Board");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (35, "Wales Health Board Site");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (36, "Dispensary");
+
+insert into data_sharing_manager.organisation_type (id, organisation_type)
+values (37, "IoM Government Directorate Site");

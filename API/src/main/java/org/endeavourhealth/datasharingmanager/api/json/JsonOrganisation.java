@@ -22,7 +22,8 @@ public final class JsonOrganisation {
     private String bulkImported = null;
     private String bulkItemUpdated = null;
     private String bulkConflictedWith = null;
-    private String type = null;
+    private byte type;
+    private boolean active;
     private Map<UUID, String> regions = null;
     private Map<UUID, String> parentOrganisations = null;
     private Map<UUID, String> childOrganisations = null;
@@ -200,11 +201,19 @@ public final class JsonOrganisation {
         this.bulkConflictedWith = bulkConflictedWith;
     }
 
-    public String getType() {
+    public byte getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(byte type) {
         this.type = type;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

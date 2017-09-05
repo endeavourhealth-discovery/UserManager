@@ -41,6 +41,7 @@ drop table if exists data_sharing_manager.format_type;
 drop table if exists data_sharing_manager.data_subject_type;
 drop table if exists data_sharing_manager.review_cycle;
 drop table if exists data_sharing_manager.map_type;
+drop table if exists data_sharing_manager.organisation_type;
 
 /*
 Look up tables containing enumerations for certain fields.  
@@ -147,7 +148,12 @@ create table data_sharing_manager.map_type (
     constraint data_sharing_manager_map_type_id_pk primary key (id)  
 ) comment 'Lookup table holding enumerations for map types used in the master mapping table';
 
-
+create table data_sharing_manager.organisation_type (
+	id tinyint not null comment 'Lookup Id',
+    organisation_type varchar(100) not null comment 'Lookup Value',   
+    
+    constraint data_sharing_manager_organisation_type_id_pk primary key (id)  
+) comment 'Lookup table holding enumerations for organisation types';
 
 /*Main entity tables containing the core information*/
 create table data_sharing_manager.region (
@@ -171,14 +177,16 @@ create table data_sharing_manager.organisation (
     registration_person char(36) null comment 'Who registered the organisation',  
     evidence_of_registration varchar(500) null comment 'Documented evidence of registration', 
     is_service boolean not null comment 'Flag to determine whether this is an organisation or a service',
-    type varchar(40) null comment 'The type of organisation eg GP Surgery, NHS Trust',
+    type tinyint not null comment 'The type of organisation eg GP Surgery, NHS Trust',
+    active boolean not null default 1 comment 'Flag to determine if the organisation is active',
     bulk_imported boolean not null comment 'Flag to determine if the organisation has been bulk imported',
     bulk_item_updated boolean not null comment 'Flag to determin if the organisation has been updated since the bulk import',
     bulk_conflicted_with char(36) null comment 'If organisation has been updated, this holds the duplicate organisation UUID to allow the conflicts to be resolved',
         
     constraint data_sharing_manager_organisation_uuid_pk primary key (uuid),
     index data_sharing_manager_organisation_name_idx (name),
-    index data_sharing_manager_organisation_ods_code_idx (ods_code)
+    index data_sharing_manager_organisation_ods_code_idx (ods_code),
+    index data_sharing_manager_organisation_type_idx (type)
 ) comment 'Holds all the details of the organisations';
 
 

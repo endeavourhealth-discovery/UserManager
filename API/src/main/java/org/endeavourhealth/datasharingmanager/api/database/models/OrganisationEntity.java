@@ -3,6 +3,7 @@ package org.endeavourhealth.datasharingmanager.api.database.models;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
 import org.endeavourhealth.datasharingmanager.api.json.JsonOrganisation;
 import org.endeavourhealth.datasharingmanager.api.json.JsonStatistics;
+import org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -125,7 +126,8 @@ public class OrganisationEntity {
     private byte bulkImported;
     private byte bulkItemUpdated;
     private String bulkConflictedWith;
-    private String type;
+    private byte type;
+    private byte active;
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
@@ -228,12 +230,12 @@ public class OrganisationEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = true, length = 40)
-    public String getType() {
+    @Column(name = "type", nullable = false, length = 40)
+    public byte getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(byte type) {
         this.type = type;
     }
 
@@ -313,6 +315,16 @@ public class OrganisationEntity {
         result = 31 * result + (int) bulkItemUpdated;
         result = 31 * result + (bulkConflictedWith != null ? bulkConflictedWith.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "active", nullable = false)
+    public byte getActive() {
+        return active;
+    }
+
+    public void setActive(byte active) {
+        this.active = active;
     }
 
     public static void deleteUneditedBulkOrganisations() throws Exception {
@@ -666,5 +678,4 @@ public class OrganisationEntity {
         queryNames.add("dss.total");
         return queryNames;
     }
-
 }

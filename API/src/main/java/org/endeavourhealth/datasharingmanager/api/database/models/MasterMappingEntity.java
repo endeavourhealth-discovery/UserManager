@@ -2,7 +2,6 @@ package org.endeavourhealth.datasharingmanager.api.database.models;
 
 import org.endeavourhealth.datasharingmanager.api.database.MapType;
 import org.endeavourhealth.datasharingmanager.api.database.PersistenceManager;
-import org.endeavourhealth.datasharingmanager.api.endpoints.OrganisationEndpoint;
 import org.endeavourhealth.datasharingmanager.api.json.*;
 
 import javax.persistence.*;

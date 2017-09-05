@@ -1,7 +1,7 @@
 package org.endeavourhealth.datasharingmanager.api.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.endeavourhealth.core.mySQLDatabase.models.RegionEntity;
+import org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity;
 
 import java.util.Map;
 import java.util.UUID;
