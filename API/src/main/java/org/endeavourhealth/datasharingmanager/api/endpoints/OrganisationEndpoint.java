@@ -475,8 +475,8 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @Path("/searchCount")
     @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
     public Response getOrganisationSearchCount(@Context SecurityContext sc,
-                                          @QueryParam("expression") String expression,
-                                          @QueryParam("searchType") String searchType
+                                               @QueryParam("expression") String expression,
+                                               @QueryParam("searchType") String searchType
     ) throws Exception {
 
         boolean searchServices = false;
@@ -487,6 +487,28 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
             expression = "";
 
         return getTotalNumberOfOrganisations(expression, searchServices);
+    }
+
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.Organisation.organisationTypes")
+    @Path("/organisationTypes")
+    @ApiOperation(value = "Get a list of organisation types")
+    public Response getOrganisationTypes(@Context SecurityContext sc) throws Exception {
+
+        return getOrganisationTypes();
+    }
+
+    private Response getOrganisationTypes() throws Exception {
+        List<OrganisationTypeEntity> organisationTypes = OrganisationTypeEntity.getAllOrganisationTypes();
+
+        return Response
+                .ok()
+                .entity(organisationTypes)
+                .build();
     }
 
     private Response getTotalNumberOfOrganisations(String expression, boolean searchServices) throws Exception {

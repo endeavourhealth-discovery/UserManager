@@ -7,8 +7,9 @@ import {Address} from './models/Address';
 import {Marker} from '../region/models/Marker';
 import {OrganisationManagerStatistics} from './models/OrganisationManagerStatistics';
 import {FileUpload} from './models/FileUpload';
-import {Dpa} from "../data-processing-agreement/models/Dpa";
-import {Dsa} from "../data-sharing-agreement/models/Dsa";
+import {Dpa} from '../data-processing-agreement/models/Dpa';
+import {Dsa} from '../data-sharing-agreement/models/Dsa';
+import {OrganisationType} from './models/OrganisationType';
 
 @Injectable()
 export class OrganisationService  {
@@ -175,6 +176,12 @@ export class OrganisationService  {
     params.set('expression', expression);
     params.set('searchType', searchType);
     return vm.http.get('api/organisation/searchCount', { search : params })
+      .map((response) => response.json());
+  }
+
+  getOrganisationTypes(): Observable<OrganisationType[]> {
+    const vm = this;
+    return vm.http.get('api/organisation/organisationTypes')
       .map((response) => response.json());
   }
 

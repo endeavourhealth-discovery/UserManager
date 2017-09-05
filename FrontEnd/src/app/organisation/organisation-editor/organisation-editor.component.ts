@@ -9,10 +9,11 @@ import {Region} from '../../region/models/Region';
 import {OrganisationPickerComponent} from '../organisation-picker/organisation-picker.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {Dpa} from "../../data-processing-agreement/models/Dpa";
-import {Dsa} from "../../data-sharing-agreement/models/Dsa";
-import {DataProcessingAgreementPickerComponent} from "../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component";
-import {DataSharingAgreementPickerComponent} from "../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component";
+import {Dpa} from '../../data-processing-agreement/models/Dpa';
+import {Dsa} from '../../data-sharing-agreement/models/Dsa';
+import {DataProcessingAgreementPickerComponent} from '../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component';
+import {DataSharingAgreementPickerComponent} from '../../data-sharing-agreement/data-sharing-agreement-picker/data-sharing-agreement-picker.component';
+import {OrganisationType} from '../models/OrganisationType';
 
 @Component({
   selector: 'app-organisation-editor',
@@ -33,6 +34,7 @@ export class OrganisationEditorComponent implements OnInit {
   dpaPublishing: Dpa[];
   dsaPublishing: Dsa[];
   dsaSubscribing: Dsa[];
+  organisationTypes: OrganisationType[];
   location: any;
   orgType = 'Organisation';
 
@@ -51,6 +53,7 @@ export class OrganisationEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getOrganisationTypes();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
@@ -306,6 +309,17 @@ export class OrganisationEditorComponent implements OnInit {
       .subscribe(
         result => vm.services = result,
         error => vm.log.error('Failed to load services', error, 'Load services')
+      );
+  }
+
+  private getOrganisationTypes() {
+    const vm = this;
+    vm.organisationService.getOrganisationTypes()
+      .subscribe(
+        result => {vm.organisationTypes = result;
+                        console.log(vm.organisationTypes);
+        },
+        error => vm.log.error('Failed to load organisation types', error, 'Load organisation types')
       );
   }
 
