@@ -366,6 +366,7 @@ public class OrganisationEntity {
     }
 
     public static List<OrganisationEntity> getOrganisations(String expression, boolean searchServices,
+                                                            byte organisationType,
                                                             Integer pageNumber, Integer pageSize,
                                                             String orderColumn, boolean descending) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
@@ -677,5 +678,23 @@ public class OrganisationEntity {
         List<String> queryNames = new ArrayList<>();
         queryNames.add("dss.total");
         return queryNames;
+    }
+
+    public static List<OrganisationEntity> getOrganisationByType(byte orgType) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("type"), orgType);
+
+        cq.where(predicate);
+        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+        List<OrganisationEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
     }
 }

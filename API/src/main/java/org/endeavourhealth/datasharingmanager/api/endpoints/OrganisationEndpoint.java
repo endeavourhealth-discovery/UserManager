@@ -65,6 +65,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                         @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData,
                         @ApiParam(value = "Optional string of 'services' to indicate you want to search for services instead of organisations")
                             @QueryParam("searchType") String searchType,
+                                    @ApiParam(value = "Organisation type (defaults to all if not provided)")@QueryParam("organisationType") byte organisationType,
                         @ApiParam(value = "Optional page number (defaults to 1 if not provided)") @QueryParam("pageNumber") Integer pageNumber,
                         @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize,
                         @ApiParam(value = "Optional order column (defaults to name if not provided)")@QueryParam("orderColumn") String orderColumn,
@@ -77,6 +78,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 "SearchData", searchData);
 
         boolean searchServices = false;
+        byte orgType = -1;
         if (searchType != null && searchType.equals("services"))
             searchServices = true;
 
@@ -94,7 +96,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
             return getSingleOrganisation(uuid);
         } else {
             LOG.trace("Search Organisations - " + searchData + searchType);
-            return getOrganisations(searchData, searchServices, pageNumber, pageSize, orderColumn, descending);
+            return getOrganisations(searchData, searchServices, organisationType, pageNumber, pageSize, orderColumn, descending);
         }
     }
 
@@ -475,8 +477,8 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @Path("/searchCount")
     @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
     public Response getOrganisationSearchCount(@Context SecurityContext sc,
-                                               @QueryParam("expression") String expression,
-                                               @QueryParam("searchType") String searchType
+                                               @ApiParam(value = "expression to filter organisations by") @QueryParam("expression") String expression,
+                                               @ApiParam(value = "Searching for organisations or services") @QueryParam("searchType") String searchType
     ) throws Exception {
 
         boolean searchServices = false;
@@ -489,8 +491,6 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         return getTotalNumberOfOrganisations(expression, searchServices);
     }
 
-
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -500,6 +500,28 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     public Response getOrganisationTypes(@Context SecurityContext sc) throws Exception {
 
         return getOrganisationTypes();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.Organisation.organisationByType")
+    @Path("/organisationByType")
+    @ApiOperation(value = "Get a list of organisation types")
+    public Response getOrganisationsByType(@Context SecurityContext sc,
+                                         @ApiParam(value = "Organisation Type to filter by") @QueryParam("type") byte type
+    ) throws Exception {
+
+        return getOrganisationsByType(type);
+    }
+
+    private Response getOrganisationsByType(byte type) throws Exception {
+        List<OrganisationEntity> organisations = OrganisationEntity.getOrganisationByType(type);
+
+        return Response
+                .ok()
+                .entity(organisations)
+                .build();
     }
 
     private Response getOrganisationTypes() throws Exception {
@@ -530,11 +552,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
     }
 
-    private Response getOrganisations(String searchData, boolean searchServices,
+    private Response getOrganisations(String searchData, boolean searchServices, byte organisationType,
                             Integer pageNumber, Integer pageSize,
                             String orderColumn, boolean descending) throws Exception {
         List<OrganisationEntity> organisations = OrganisationEntity.getOrganisations(searchData, searchServices,
-                pageNumber, pageSize, orderColumn, descending);
+                organisationType, pageNumber, pageSize, orderColumn, descending);
 
         clearLogbackMarkers();
         return Response
