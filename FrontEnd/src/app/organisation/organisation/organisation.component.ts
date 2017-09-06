@@ -124,6 +124,7 @@ export class OrganisationComponent implements OnInit {
     const vm = this;
     vm.searchData = $event;
     vm.pageNumber = 1;
+    vm.organisations = [];
     vm.search();
     vm.getTotalOrganisationCount();
   }

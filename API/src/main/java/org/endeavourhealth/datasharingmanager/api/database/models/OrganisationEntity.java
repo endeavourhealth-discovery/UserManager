@@ -380,16 +380,16 @@ public class OrganisationEntity {
 
         if (!expression.equals("")){
             predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
-                    (cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
-                    cb.like(cb.upper(rootEntry.get("odsCode")), "%" + expression.toUpperCase() + "%"),
-                    cb.like(cb.upper(rootEntry.get("alternativeName")), "%" + expression.toUpperCase() + "%"),
-                    cb.like(cb.upper(rootEntry.get("icoCode")), "%" + expression.toUpperCase() + "%"))));
+                    (cb.or(cb.like(rootEntry.get("name"), "%" + expression + "%"),
+                    cb.like(rootEntry.get("odsCode"), "%" + expression + "%"),
+                    cb.like(rootEntry.get("alternativeName"), "%" + expression + "%"),
+                    cb.like(rootEntry.get("icoCode"), "%" + expression + "%"))));
         }
 
         if (descending)
-            cq.where(predicate).orderBy(cb.desc(rootEntry.get(orderColumn)));
+            cq.where(predicate).orderBy(cb.desc(rootEntry.get(orderColumn)), cb.desc(rootEntry.get("uuid")));
         else
-            cq.where(predicate).orderBy(cb.asc(rootEntry.get(orderColumn)));
+            cq.where(predicate).orderBy(cb.asc(rootEntry.get(orderColumn)), cb.asc(rootEntry.get("uuid")));
 
         TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
         query.setFirstResult((pageNumber - 1) * pageSize);
