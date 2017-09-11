@@ -247,19 +247,37 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.GetPublishers")
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.checkOrganisation")
     @Path("/checkOrganisation")
     @ApiOperation(value = "Checks whether an organisation is part of a data processing agreement. " +
             "Returns a list of data processing agreements")
     public Response checkOrganisation(@Context SecurityContext sc,
-                                        @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode
+                                      @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode
     ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "check Organisation(s)",
                 "ODS Code", odsCode);
 
-        return checkOrganisationIsPartOfDPA(odsCode);
+        return checkOrganisationIsPartOfDPA(odsCode, false);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.checkOrganisationWithCount")
+    @Path("/checkOrganisationWithCount")
+    @ApiOperation(value = "Checks whether an organisation is part of a data processing agreement. " +
+            "Returns a list of data processing agreements")
+    public Response checkOrganisationWithCount(@Context SecurityContext sc,
+                                      @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "check Organisation(s)",
+                "ODS Code", odsCode);
+
+        return checkOrganisationIsPartOfDPA(odsCode, true);
     }
 
     @GET
@@ -419,9 +437,16 @@ public final class DpaEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response checkOrganisationIsPartOfDPA(String odsCode) throws Exception {
+    private Response checkOrganisationIsPartOfDPA(String odsCode, boolean countOnly) throws Exception {
 
         List<DataProcessingAgreementEntity> matchingDpa = DataProcessingAgreementEntity.getDataProcessingAgreementsForOrganisation(odsCode);
+
+        if (countOnly) {
+            return Response
+                    .ok()
+                    .entity(matchingDpa.size())
+                    .build();
+        }
 
         clearLogbackMarkers();
         return Response
