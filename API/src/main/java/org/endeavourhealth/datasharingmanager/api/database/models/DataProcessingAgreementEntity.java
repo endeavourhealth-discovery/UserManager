@@ -315,7 +315,8 @@ public class DataProcessingAgreementEntity {
                         "where o.odsCode = :ods " +
                         "and mm.childMapTypeId = :publisherType " +
                         "and (dpa.startDate is not null and dpa.startDate <= current_date) " +
-                        "and (dpa.endDate is null or dpa.endDate >= current_date) ");
+                        "and (dpa.endDate is null or dpa.endDate >= current_date) " +
+                        "and dpa.dsaStatusId = 0 ");
         query.setParameter("dpaType", MapType.DATAPROCESSINGAGREEMENT.getMapType());
         query.setParameter("ods", odsCode);
         query.setParameter("publisherType", MapType.PUBLISHER.getMapType());
