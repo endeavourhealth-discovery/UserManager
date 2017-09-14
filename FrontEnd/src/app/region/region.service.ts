@@ -68,7 +68,7 @@ export class RegionService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/region', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string): Observable<Region[]> {

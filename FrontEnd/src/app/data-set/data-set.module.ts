@@ -5,7 +5,7 @@ import { DataSetEditorComponent } from './data-set-editor/data-set-editor.compon
 import { DataSetPickerComponent } from './data-set-picker/data-set-picker.component';
 import {DataSetService} from './data-set.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EntityViewComponentsModule} from 'eds-angular4';
+import {EntityViewComponentsModule, DialogsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
@@ -16,6 +16,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     NgbModule,
     EntityViewComponentsModule,
     ToastModule.forRoot(),
+    DialogsModule
   ],
   declarations: [
     DataSetComponent,

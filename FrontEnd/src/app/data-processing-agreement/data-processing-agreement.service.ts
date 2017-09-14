@@ -42,7 +42,7 @@ export class DataProcessingAgreementService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/dpa', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string): Observable<Dpa[]> {

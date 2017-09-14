@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataFlowComponent } from './data-flow/data-flow.component';
-import { LoggerService, EntityViewComponentsModule } from 'eds-angular4';
+import { LoggerService, EntityViewComponentsModule, DialogsModule } from 'eds-angular4';
 import {DataFlowService} from './data-flow.service';
 import { DataFlowEditorComponent } from './data-flow-editor/data-flow-editor.component';
 import { DataflowPickerComponent } from './dataflow-picker/dataflow-picker.component';
@@ -16,6 +16,7 @@ import {ToastModule} from 'ng2-toastr';
     EntityViewComponentsModule,
     NgbModule,
     ToastModule.forRoot(),
+    DialogsModule
   ],
   declarations: [DataFlowComponent, DataFlowEditorComponent, DataflowPickerComponent],
   entryComponents : [

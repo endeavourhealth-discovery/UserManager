@@ -13,6 +13,7 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataSharingAgreementComponent implements OnInit {
   dsas: Dsa[] = [];
+  allowDelete = true;
 
   dsaDetailsToShow = new Dsa().getDisplayItems();
 
@@ -68,7 +69,7 @@ export class DataSharingAgreementComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/dataSharingOverview']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

@@ -15,6 +15,7 @@
         <div class="row">
           <div class="form-group col-md-12">
             <entity-viewer
+              (deleted)="delete($event)"
               [items]="dataflows"
               [primary]="'name'"
               [primaryOrderText]="'Name'"
@@ -22,6 +23,7 @@
               [secondary]="'approximateVolume'"
               [secondaryOrderText]="'Approximate Volume'"
               [typeDescription]="'Data Flow'"
+              [allowDelete]="allowDelete"
               [model]="'dataFlow'"
               [pageSize]="20"
               [detailsToShow]="dataflowDetailsToShow">

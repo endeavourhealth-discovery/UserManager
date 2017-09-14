@@ -13,6 +13,7 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataProcessingAgreementComponent implements OnInit {
   dpas: Dpa[] = [];
+  allowDelete = true;
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
@@ -47,7 +48,8 @@ export class DataProcessingAgreementComponent implements OnInit {
 
   delete(item: Dpa) {
     const vm = this;
-    MessageBoxDialog.open(vm.$modal, 'Delete Data Processing Agreement', 'Are you sure you want to delete the Data Processing Agreement?', 'Yes', 'No')
+    MessageBoxDialog.open(vm.$modal, 'Delete Data Processing Agreement',
+      'Are you sure you want to delete the Data Processing Agreement?', 'Yes', 'No')
       .result.then(
       () => vm.doDelete(item),
       () => vm.log.info('Delete cancelled')
@@ -68,7 +70,7 @@ export class DataProcessingAgreementComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/dataSharingOverview']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

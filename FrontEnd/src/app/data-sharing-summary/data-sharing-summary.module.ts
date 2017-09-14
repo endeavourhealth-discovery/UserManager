@@ -5,7 +5,7 @@ import { DataSharingSummaryEditorComponent } from './data-sharing-summary-editor
 import { DataSharingSummaryOverviewComponent } from './data-sharing-summary-overview/data-sharing-summary-overview.component';
 import {DataSharingSummaryService} from './data-sharing-summary.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EntityViewComponentsModule} from 'eds-angular4';
+import {EntityViewComponentsModule, DialogsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
@@ -16,6 +16,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     NgbModule,
     EntityViewComponentsModule,
     ToastModule.forRoot(),
+    DialogsModule
   ],
   declarations: [
     DataSharingSummaryComponent,

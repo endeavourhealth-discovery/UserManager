@@ -14,6 +14,7 @@ import {ToastsManager} from 'ng2-toastr';
 export class CohortComponent implements OnInit {
   cohorts: Cohort[] = [];
   pageSize = 20;
+  allowDelete = true;
   cohortDetailsToShow = new Cohort().getDisplayItems();
 
   constructor(private $modal: NgbModal,
@@ -68,7 +69,7 @@ export class CohortComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/dataSharingOverview']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

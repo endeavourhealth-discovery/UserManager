@@ -13,6 +13,7 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataSharingSummaryComponent implements OnInit {
   dataSharingSummaries: DataSharingSummary[] = [];
+  allowDelete = true;
 
   dssDetailsToShow = new DataSharingSummary().getDisplayItems();
 
@@ -68,7 +69,7 @@ export class DataSharingSummaryComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/dataSharingSummary']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

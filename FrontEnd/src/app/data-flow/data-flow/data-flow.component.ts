@@ -14,6 +14,7 @@ import {ToastsManager} from 'ng2-toastr';
 export class DataFlowComponent implements OnInit {
   private paramSubscriber: any;
   dataflows: DataFlow[] = [];
+  allowDelete = true;
 
   dataflowDetailsToShow = new DataFlow().getDisplayItems();
 
@@ -70,7 +71,7 @@ export class DataFlowComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/dataSharingOverview']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

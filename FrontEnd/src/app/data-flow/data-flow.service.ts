@@ -35,7 +35,7 @@ export class DataFlowService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/dataFlow', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string): Observable<DataFlow[]> {

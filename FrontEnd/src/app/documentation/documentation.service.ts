@@ -31,7 +31,7 @@ export class DocumentationService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/documentation', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
 }

@@ -15,6 +15,7 @@
         <div class="row">
           <div class="form-group col-md-12">
             <entity-viewer
+              (deleted)="delete($event)"
               [items]="dsas"
               [primary]="'name'"
               [primaryOrderText]="'Name'"
@@ -22,6 +23,7 @@
               [secondary]="'description'"
               [secondaryOrderText]="'Description'"
               [typeDescription]="'Data Sharing Agreements'"
+              [allowDelete]="allowDelete"
               [model]="'dsa'"
               [pageSize]="20"
               [detailsToShow]="dsaDetailsToShow">

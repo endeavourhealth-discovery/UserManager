@@ -34,7 +34,7 @@ export class DataSetService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/dataSet', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string): Observable<DataSet[]> {

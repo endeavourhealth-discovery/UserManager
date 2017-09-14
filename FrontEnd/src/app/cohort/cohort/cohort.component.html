@@ -15,11 +15,13 @@
         <form>
           <div class="form-group col-md-12">
             <entity-viewer
+              (deleted)="delete($event)"
               [items]="cohorts"
               [primary]="'name'"
               [primaryOrderText]="'Name'"
               [displayClass]="'region'"
               [typeDescription]="'Cohort'"
+              [allowDelete]="allowDelete"
               [model]="'cohort'"
               [pageSize]="pageSize"
               [detailsToShow]="cohortDetailsToShow">

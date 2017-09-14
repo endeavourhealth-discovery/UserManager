@@ -13,6 +13,7 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataSetComponent implements OnInit {
   datasets: DataSet[] = [];
+  allowDelete = true;
 
   constructor(private $modal: NgbModal,
               private dataSetService: DataSetService,

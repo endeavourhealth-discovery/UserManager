@@ -100,7 +100,7 @@ export class OrganisationService  {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/organisation', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string, searchType: string,

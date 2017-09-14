@@ -87,14 +87,14 @@ export class DataSharingSummaryEditorComponent implements OnInit {
       .subscribe(saved => {
           vm.dataSharingSummary.uuid = saved;
           vm.log.success('Item saved', vm.dataSharingSummary, 'Saved');
-          if (close) { this.router.navigate(['/dataSharingOverview']); }
+          if (close) { this.router.navigate(['/sharingOverview']); }
         },
         error => vm.log.error('Error saving', error, 'Error')
       );
   }
 
   close() {
-    this.router.navigate(['/dataSharingOverview']);
+    this.router.navigate(['/sharingOverview']);
   }
 
 }

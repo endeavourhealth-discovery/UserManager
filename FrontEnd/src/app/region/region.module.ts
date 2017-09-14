@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegionComponent } from './region/region.component';
-import { LoggerService, EntityViewComponentsModule, GoogleMapsModule } from 'eds-angular4';
+import { LoggerService, EntityViewComponentsModule, GoogleMapsModule, DialogsModule } from 'eds-angular4';
 import {RegionService} from './region.service';
 import { RegionEditorComponent } from './region-editor/region-editor.component';
 import { RegionPickerComponent } from './region-picker/region-picker.component';
@@ -17,7 +17,8 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     EntityViewComponentsModule,
     NgbModule,
     ToastModule.forRoot(),
-    GoogleMapsModule
+    GoogleMapsModule,
+    DialogsModule
   ],
   declarations: [
     RegionComponent,

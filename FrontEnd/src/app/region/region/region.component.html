@@ -15,6 +15,7 @@
         <div class="row">
           <div class="form-group col-md-12">
             <entity-viewer
+              (deleted)="delete($event)"
               [items]="regions"
               [primary]="'name'"
               [primaryOrderText]="'Name'"
@@ -23,6 +24,7 @@
               [secondaryOrderText]="'Description'"
               [typeDescription]="'Regions'"
               [model]="'region'"
+              [allowDelete]="allowDelete"
               [pageSize]="20"
               [detailsToShow]="regionDetailsToShow">
             </entity-viewer>

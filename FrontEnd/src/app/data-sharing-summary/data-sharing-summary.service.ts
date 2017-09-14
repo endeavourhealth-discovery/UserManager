@@ -33,7 +33,7 @@ export class DataSharingSummaryService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.delete('api/dataSharingSummary', { search : params })
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   search(searchData: string): Observable<DataSharingSummary[]> {

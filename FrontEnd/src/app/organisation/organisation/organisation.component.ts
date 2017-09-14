@@ -21,6 +21,7 @@ export class OrganisationComponent implements OnInit {
   pageSize = 20;
   orderColumn = 'name';
   descending = false;
+  allowDelete = true;
   orgDetailsToShow = new Organisation().getDisplayItems();
 
   ngOnInit() {

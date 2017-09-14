@@ -15,6 +15,7 @@ import {ToastsManager} from 'ng2-toastr';
 export class RegionComponent implements OnInit {
   organisations: Organisation[];
   regions: Region[] = [];
+  allowDelete = true;
 
   regionDetailsToShow = new Region().getDisplayItems();
 
