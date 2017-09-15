@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="DataSharingManager">
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.AddressEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.CohortEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DataFlowEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DataProcessingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DataSharingAgreementEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DataSharingSummaryEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DatasetEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DocumentationEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.MasterMappingEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.PurposeEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.RegionEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationTypeEntity</class>
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.jdbc.batch_size" value="50" />
+            <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/data_sharing_manager"/>
+            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/data_sharing_manager"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/data_sharing_manager"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/data_sharing_manager"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>

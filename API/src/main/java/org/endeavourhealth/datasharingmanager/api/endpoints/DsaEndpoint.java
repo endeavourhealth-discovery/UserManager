@@ -11,10 +11,10 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanager.api.database.MapType;
-import org.endeavourhealth.datasharingmanager.api.database.models.*;
-import org.endeavourhealth.datasharingmanager.api.json.JsonDSA;
-import org.endeavourhealth.datasharingmanager.api.json.JsonPurpose;
+import org.endeavourhealth.datasharingmanagermodel.models.database.*;
+import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
+import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDSA;
+import org.endeavourhealth.datasharingmanagermodel.models.json.JsonPurpose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

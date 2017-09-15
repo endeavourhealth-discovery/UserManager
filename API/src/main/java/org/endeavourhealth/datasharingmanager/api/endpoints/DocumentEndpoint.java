@@ -11,9 +11,9 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanager.api.database.MapType;
-import org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity;
-import org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.DocumentationEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.MasterMappingEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
