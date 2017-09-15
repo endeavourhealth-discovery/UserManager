@@ -12,8 +12,16 @@
     </parent>
 
     <artifactId>FrontEnd</artifactId>
+    <packaging>jar</packaging>
 
   <build>
+    <resources>
+      <resource>
+        <directory>dist</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>com.github.eirslett</groupId>
