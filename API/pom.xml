@@ -24,9 +24,9 @@
         <!-- Data Sharing Manager Models -->
 
         <dependency>
-            <groupId>org.endeavourhealth.datasharingmanagermodel</groupId>
-            <artifactId>data-sharing-manager-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.endeavourhealth.dataSharingManager</groupId>
+            <artifactId>Models</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- End Common -->

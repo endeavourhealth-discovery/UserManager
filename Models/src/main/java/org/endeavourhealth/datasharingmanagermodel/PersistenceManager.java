@@ -30,7 +30,7 @@ public class PersistenceManager {
             return;
         }
 
-        JsonNode json = ConfigManager.getConfigurationAsJson("database");
+        JsonNode json = ConfigManager.getConfigurationAsJson("database", "data-sharing-manager");
         String url = json.get("url").asText();
         String user = json.get("username").asText();
         String pass = json.get("password").asText();
