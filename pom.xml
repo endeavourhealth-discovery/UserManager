@@ -36,6 +36,7 @@
     <modules>
         <module>API</module>
         <module>FrontEnd</module>
+        <module>Models</module>
     </modules>
 
     <repositories>

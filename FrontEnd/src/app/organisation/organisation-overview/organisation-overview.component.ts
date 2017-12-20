@@ -18,7 +18,7 @@ export class OrganisationOverviewComponent implements OnInit {
   organisations: Organisation[];
   regions: Region[] = [];
   services: Organisation[];
-  private file: File;
+  file: File;
   existingOrg: Organisation;
   newOrg: Organisation;
   filesToUpload: FileUpload[] = [];

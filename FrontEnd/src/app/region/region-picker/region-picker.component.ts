@@ -29,7 +29,7 @@ export class RegionPickerComponent implements OnInit {
   ngOnInit() {
   }
 
-  private search() {
+  search() {
     const vm = this;
     if (vm.searchData.length < 3) {
       return;

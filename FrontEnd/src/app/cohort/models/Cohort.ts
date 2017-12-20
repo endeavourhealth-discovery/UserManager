@@ -3,8 +3,8 @@ export class Cohort {
     name:string;
     nature: string;
     patientCohortInclusionConsentModel: string;
-    QueryDefinition: string;
-    RemovalPolicy: string;
+    queryDefinition: string;
+    removalPolicy: string;
     dpas : { [key:string]:string; };
 
     getDisplayItems() :any[] {

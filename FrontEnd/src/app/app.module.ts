@@ -20,8 +20,6 @@ import {DataSharingSummaryModule} from './data-sharing-summary/data-sharing-summ
 import {CohortModule} from './cohort/cohort.module';
 import {DataSetModule} from './data-set/data-set.module';
 
-export class DummyComponent {}
-
 @NgModule({
   declarations: [],
   imports: [
@@ -37,7 +35,7 @@ export class DummyComponent {}
     DataSharingAgreementModule,
     DataProcessingAgreementModule,
     DataSharingSummaryModule,
-    RouterModule.forRoot(AppMenuService.getRoutes()),
+    RouterModule.forRoot(AppMenuService.getRoutes(), {useHash: true}),
     NgbModule.forRoot(),
     ToastModule.forRoot()
   ],
