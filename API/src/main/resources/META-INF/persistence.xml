@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
-    <persistence-unit name="DataSharingManager">
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.AddressEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.CohortEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataFlowEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataProcessingAgreementEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingAgreementEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DataSharingSummaryEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DatasetEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.DocumentationEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.MasterMappingEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.OrganisationEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.PurposeEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.RegionEntity</class>
-        <class>org.endeavourhealth.datasharingmanager.api.database.models.OrganisationTypeEntity</class>
+    <persistence-unit name="Subscriber">
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.PseudoIdMapEntity</class>
         <properties>
+            <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/subscriber_transform_mysql_pseudo"/>
+            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/subscriber_transform_mysql_pseudo"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.jdbc.batch_size" value="50" />
+            <property name="openjpa.ConnectionURL"
+                      value="jdbc:mysql://localhost:3306/subscriber_transform_mysql_pseudo"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/subscriber_transform_mysql_pseudo"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="ehr">
+        <class>org.endeavourhealth.datasharingmanager.api.database.models.ResourceCurrentEntity</class>
+        <properties>
+            <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3306/ehr"/>
+            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ehr"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/ehr"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/ehr"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
         </properties>
     </persistence-unit>
 </persistence>
