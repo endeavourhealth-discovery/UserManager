@@ -7,10 +7,11 @@ phases:
       - echo $IP of CodeBuild Instance
   build:
     commands:
+      - chmod +x aws_scripts/build.sh
       - echo Common build started on `date`
-      - mvn -f Models/pom.xml -B deploy
+      - aws_scripts/build.sh mvn -f Models/pom.xml -B deploy
       - echo Main build started on `date`
-      - mvn -B package
+      - aws_scripts/build.sh mvn -B package
   post_build:
     commands:
       - IP=$(curl http://checkip.amazonaws.com)/32

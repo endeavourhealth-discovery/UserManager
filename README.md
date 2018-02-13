@@ -6,6 +6,9 @@ agreements, cohorts and data sets.
 Includes an importer to allow you to import organisations from the trud spreadsheets.
 
 ## API Information  
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/version.svg)
+![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/build.svg)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/unit-test.svg)
 
 The project is setup as follows.
 
@@ -23,6 +26,9 @@ Contains the standard implementations for the metrics code
 Contains common utilities used throughout the project
 
 ## Model
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/version.svg)
+![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/build.svg)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/unit-test.svg)
 
 The models for the data sharing manager is setup as a separate maven project that can be imported into other applications.  
 This gives you the ability to access the models and also directly access the database functions without using the API.  
