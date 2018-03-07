@@ -185,14 +185,4 @@ export class OrganisationService  {
       .map((response) => response.json());
   }
 
-  getPseudo(patientList: string[]): Observable<any[]> {
-    const vm = this;
-    const params = new URLSearchParams();
-    for (let i = 0; i < patientList.length; i += 1) {
-      params.append('pseudoIds', patientList[i]);
-    }
-    return vm.http.get('api/subscriber/reverseLookupPatients', { search : params })
-      .map((response) => response.json());
-  }
-
 }

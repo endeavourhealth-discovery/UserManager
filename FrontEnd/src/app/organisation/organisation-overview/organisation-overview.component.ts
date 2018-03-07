@@ -29,10 +29,6 @@ export class OrganisationOverviewComponent implements OnInit {
   serviceStats: OrganisationManagerStatistics[];
   regionStats: OrganisationManagerStatistics[];
 
-  patientList: string[] = ['80E867EA771CAB47EE076DBB3342646B2D30F59353D73A8C8FF7D6A6221E8751',
-    '6A4DE7FDCFE621CDC71E8EB65C60BA7B9F5E921195881C5455FD7C46D7C265BB',
-  'F28840D169C3F6F3D6F5AA55C689A2BE0DF5C83C363064847DE8D9BC2CBE01AD'];
-
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
               private log: LoggerService,
@@ -52,16 +48,6 @@ export class OrganisationOverviewComponent implements OnInit {
     vm.getRegionStatistics();
     vm.getConflictingOrganisations();
 
-  }
-
-  pseudo() {
-    const vm = this;
-    vm.organisationService.getPseudo(vm.patientList)
-      .subscribe(result => {
-          console.log(result);
-        },
-        error => console.log('Failed to load pseudo', error, 'pseudo')
-      );
   }
 
   getOrganisationStatistics() {
