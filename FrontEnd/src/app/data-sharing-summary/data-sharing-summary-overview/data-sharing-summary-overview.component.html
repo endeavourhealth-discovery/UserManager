@@ -1,13 +1,13 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Data Sharing Overview
+      Data sharing overview
     </div>
     <div class="module-body">
       <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data Sharing Agreements</div>
+            <div class="card-header">Data sharing agreements</div>
             <div class="card-block">
               <div class="row" *ngFor="let dsa of dsaStats">
                 <div class="col-md-10">
@@ -19,14 +19,14 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-info" (click)="goToDsa()">View Data Sharing Agreements</button>
+                <button type="button" class="btn btn-sm btn-info" (click)="goToDsa()">View data sharing agreements</button>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data Flows</div>
+            <div class="card-header">Data flows</div>
             <div class="card-block">
               <div class="row" *ngFor="let dataflow of dataflowStats">
                 <div class="col-md-10">
@@ -38,7 +38,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-success" (click)="goToDataFlow()">View Data Flows</button>
+                <button type="button" class="btn btn-sm btn-success" (click)="goToDataFlow()">View data flows</button>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data Processing Agreements</div>
+            <div class="card-header">Data processing agreements</div>
             <div class="card-block">
               <div class="row" *ngFor="let dpa of dpaStats">
                 <div class="col-md-10">
@@ -59,7 +59,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-warning" (click)="goToDpa()">View Data Processing Agreements</button>
+                <button type="button" class="btn btn-sm btn-warning" (click)="goToDpa()">View data processing agreements</button>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-primary" (click)="goToCohorts()">View Cohorts</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="goToCohorts()">View cohorts</button>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-primary" (click)="goToDataSets()">View Datasets</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="goToDataSets()">View datasets</button>
               </div>
             </div>
           </div>
@@ -106,7 +106,7 @@
       <div class="row" *ngIf="summaryStats">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data Sharing Summary</div>
+            <div class="card-header">Data sharing summary</div>
             <div class="card-block">
               <div class="row" *ngFor="let stat of summaryStats">
                 <div class="col-md-10">
@@ -118,7 +118,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-info" (click)="goToSummary()">View Data Sharing Summaries</button>
+                <button type="button" class="btn btn-sm btn-info" (click)="goToSummary()">View data sharing summaries</button>
               </div>
             </div>
           </div>

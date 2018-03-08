@@ -1,7 +1,7 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Organisation Overview
+      Organisation overview
     </div>
     <div class="module-body">
       <div class="row">
@@ -19,7 +19,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-info" (click)="goToRegions()">View Regions</button>
+                <button type="button" class="btn btn-sm btn-info" (click)="goToRegions()">View regions</button>
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-success" (click)="goToOrganisations()">View Organisations</button>
+                <button type="button" class="btn btn-sm btn-success" (click)="goToOrganisations()">View organisations</button>
               </div>
             </div>
           </div>
@@ -59,19 +59,19 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-warning" (click)="goToServices()">View Services</button>
+                <button type="button" class="btn btn-sm btn-warning" (click)="goToServices()">View services</button>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Bulk Upload</div>
+            <div class="card-header">Bulk upload</div>
             <div class="card-block">
               <form endUserRole="form" class="container-fluid">
                 <div class="row">
                   <div class="form-group col-md-12">
-                    <label class="control-label">CSV File</label>
+                    <label class="control-label">CSV file</label>
                     <div class="input-group">
                       <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".csv" multiple="true">
                     </div>
@@ -88,7 +88,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card" *ngIf="conflictedOrgs?.length > 0">
-            <div class="card-header">Conflicting Organisations</div>
+            <div class="card-header">Conflicting organisations</div>
             <div class="card-block">
               <div class="table">
                 <table class="table table-striped table-condensed">
@@ -108,7 +108,7 @@
       <br>
 
       <div class="card" *ngIf="existingOrg">
-        <div class="card-header">Resolve Conflicting Organisations
+        <div class="card-header">Resolve conflicting organisations
           <div class="pull-right">
             <button *ngIf="existingOrg" class="btn btn-sm btn-success"
                     (click)="cancelConflictResolution()"
@@ -116,7 +116,7 @@
             </button>
             <button *ngIf="existingOrg" class="btn btn-sm btn-success"
                     (click)="saveConflict()"
-                    title="Add">Save Conflict
+                    title="Add">Save conflict
             </button>
           </div>
 
@@ -125,142 +125,142 @@
           <form>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="control-label">Existing Organisation Name</label>
+                <label class="control-label">Existing organisation name</label>
                 <input type="text" class="form-control" placeholder="Organisation name" [(ngModel)]="existingOrg.name" name="name">
               </div>
               <div class="form-group col-md-6">
-                <label class="control-label">New Organisation Name</label>
+                <label class="control-label">New organisation name</label>
                 <input type="text" disabled="true" class="form-control" placeholder="Organisation name" [(ngModel)]="newOrg.name" name="newname">
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="control-label">Existing Alternative Name</label>
-                <input type="text" class="form-control" placeholder="Alternative Name" [(ngModel)]="existingOrg.alternativeName" name="alternativeName">
+                <label class="control-label">Existing alternative name</label>
+                <input type="text" class="form-control" placeholder="Alternative name" [(ngModel)]="existingOrg.alternativeName" name="alternativeName">
               </div>
               <div class="form-group col-md-6">
-                <label class="control-label">Alternative Name</label>
-                <input type="text" disabled="true" class="form-control" placeholder="Alternative Name" [(ngModel)]="newOrg.alternativeName" name="newalternativeName">
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-6">
-                <label class="control-label">Existing ODS Code</label>
-                <input type="text" class="form-control" placeholder="ODS Code" [(ngModel)]="existingOrg.odsCode" name="odsCode">
-              </div>
-              <div class="form-group col-md-6">
-                <label class="control-label">New ODS Code</label>
-                <input type="text" disabled="true" class="form-control" placeholder="ODS Code" [(ngModel)]="newOrg.odsCode" name="newodsCode">
+                <label class="control-label">Alternative name</label>
+                <input type="text" disabled="true" class="form-control" placeholder="Alternative name" [(ngModel)]="newOrg.alternativeName" name="newalternativeName">
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="control-label">Existing ICO Code</label>
-                <input type="text" class="form-control" placeholder="ICO Code" [(ngModel)]="existingOrg.icoCode" name="icoCode">
+                <label class="control-label">Existing ODS code</label>
+                <input type="text" class="form-control" placeholder="ODS code" [(ngModel)]="existingOrg.odsCode" name="odsCode">
               </div>
               <div class="form-group col-md-6">
-                <label class="control-label">New ICO Code</label>
-                <input type="text" disabled="true" class="form-control" placeholder="ICO Code" [(ngModel)]="newOrg.icoCode" name="newicoCode">
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-6">
-                <label class="control-label">Existing IG Toolkit Status</label>
-                <input type="text" class="form-control" placeholder="IG Toolkit Status" [(ngModel)]="existingOrg.igToolkitStatus" name="igToolkitStatus">
-              </div>
-              <div class="form-group col-md-6">
-                <label class="control-label">New IG Toolkit Status</label>
-                <input type="text" disabled="true" class="form-control" placeholder="IG Toolkit Status" [(ngModel)]="newOrg.igToolkitStatus" name="newigToolkitStatus">
+                <label class="control-label">New ODS code</label>
+                <input type="text" disabled="true" class="form-control" placeholder="ODS code" [(ngModel)]="newOrg.odsCode" name="newodsCode">
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="control-label">Existing Date Of Registration</label>
-                <input type="date" class="form-control" placeholder="Date Of Registration" [(ngModel)]="existingOrg.dateOfRegistration" name="dateOfRegistration">
+                <label class="control-label">Existing ICO code</label>
+                <input type="text" class="form-control" placeholder="ICO code" [(ngModel)]="existingOrg.icoCode" name="icoCode">
               </div>
               <div class="form-group col-md-6">
-                <label class="control-label">New Date Of Registration</label>
-                <input type="date" disabled="true" class="form-control" placeholder="Date Of Registration" [(ngModel)]="newOrg.dateOfRegistration" name="newdateOfRegistration">
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-6">
-                <label class="control-label">Existing Registration Person</label>
-                <input type="text" class="form-control" placeholder="Registration Person" [(ngModel)]="existingOrg.registrationPerson" name="registrationPerson">
-              </div>
-              <div class="form-group col-md-6">
-                <label class="control-label">New  Registration Person</label>
-                <input type="text" disabled="true" class="form-control" placeholder="Registration Person" [(ngModel)]="newOrg.registrationPerson" name="newregistrationPerson">
+                <label class="control-label">New ICO code</label>
+                <input type="text" disabled="true" class="form-control" placeholder="ICO code" [(ngModel)]="newOrg.icoCode" name="newicoCode">
               </div>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
-                <label class="control-label">Existing Evidence of Registration</label>
-                <input type="text" class="form-control" placeholder="Evidence of Registration" [(ngModel)]="existingOrg.evidenceOfRegistration" name="evidenceOfRegistration">
+                <label class="control-label">Existing IG toolkit status</label>
+                <input type="text" class="form-control" placeholder="IG toolkit status" [(ngModel)]="existingOrg.igToolkitStatus" name="igToolkitStatus">
               </div>
               <div class="form-group col-md-6">
-                <label class="control-label">New Evidence of Registration</label>
-                <input type="text" disabled="true" class="form-control" placeholder="Evidence of Registration" [(ngModel)]="newOrg.evidenceOfRegistration" name="newevidenceOfRegistration">
+                <label class="control-label">New IG toolkit status</label>
+                <input type="text" disabled="true" class="form-control" placeholder="IG toolkit status" [(ngModel)]="newOrg.igToolkitStatus" name="newigToolkitStatus">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Existing date of registration</label>
+                <input type="date" class="form-control" placeholder="Date of registration" [(ngModel)]="existingOrg.dateOfRegistration" name="dateOfRegistration">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">New date of registration</label>
+                <input type="date" disabled="true" class="form-control" placeholder="Date of registration" [(ngModel)]="newOrg.dateOfRegistration" name="newdateOfRegistration">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Existing registration person</label>
+                <input type="text" class="form-control" placeholder="Registration person" [(ngModel)]="existingOrg.registrationPerson" name="registrationPerson">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">New registration person</label>
+                <input type="text" disabled="true" class="form-control" placeholder="Registration person" [(ngModel)]="newOrg.registrationPerson" name="newregistrationPerson">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Existing evidence of registration</label>
+                <input type="text" class="form-control" placeholder="Evidence of registration" [(ngModel)]="existingOrg.evidenceOfRegistration" name="evidenceOfRegistration">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">New rvidence of registration</label>
+                <input type="text" disabled="true" class="form-control" placeholder="Evidence of registration" [(ngModel)]="newOrg.evidenceOfRegistration" name="newevidenceOfRegistration">
               </div>
             </div>
             <div class="well" *ngFor="let address of existingOrg.addresses">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="control-label">Existing Building Name</label>
-                  <input type="text" class="form-control" placeholder="Building Name" [(ngModel)]="address.buildingName" name="buildingName">
+                  <label class="control-label">Existing building name</label>
+                  <input type="text" class="form-control" placeholder="Building name" [(ngModel)]="address.buildingName" name="buildingName">
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="control-label">New Building Name</label>
-                  <input type="text" disabled="true" class="form-control" placeholder="Building Name" [(ngModel)]="newOrg.addresses[0].buildingName" name="newbuildingName">
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label class="control-label">Existing Number and Street</label>
-                  <input type="text" class="form-control" placeholder="Number and Street" [(ngModel)]="address.numberAndStreet" name="numberAndStreet">
-                </div>
-                <div class="form-group col-md-6">
-                  <label class="control-label">New Number and Street</label>
-                  <input type="text" disabled="true" class="form-control" placeholder="Number and Street" [(ngModel)]="newOrg.addresses[0].numberAndStreet" name="newnumberAndStreet">
+                  <label class="control-label">New building name</label>
+                  <input type="text" disabled="true" class="form-control" placeholder="Building name" [(ngModel)]="newOrg.addresses[0].buildingName" name="newbuildingName">
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="control-label">Existing Locality</label>
+                  <label class="control-label">Existing number and street</label>
+                  <input type="text" class="form-control" placeholder="Number and street" [(ngModel)]="address.numberAndStreet" name="numberAndStreet">
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="control-label">New number and street</label>
+                  <input type="text" disabled="true" class="form-control" placeholder="Number and street" [(ngModel)]="newOrg.addresses[0].numberAndStreet" name="newnumberAndStreet">
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label class="control-label">Existing locality</label>
                   <input type="text" class="form-control" placeholder="Locality" [(ngModel)]="address.locality" name="locality">
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="control-label">New Locality</label>
+                  <label class="control-label">New locality</label>
                   <input type="text" disabled="true" class="form-control" placeholder="Locality" [(ngModel)]="newOrg.addresses[0].locality" name="newlocality">
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="control-label">Existing City</label>
+                  <label class="control-label">Existing city</label>
                   <input type="text" class="form-control" placeholder="City" [(ngModel)]="address.city" name="city">
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="control-label">New City</label>
+                  <label class="control-label">New city</label>
                   <input type="text" disabled="true" class="form-control" placeholder="City" [(ngModel)]="newOrg.addresses[0].city" name="newcity">
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="control-label">Existing County</label>
+                  <label class="control-label">Existing county</label>
                   <input type="text" class="form-control" placeholder="County" [(ngModel)]="address.county" name="county">
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="control-label">New County</label>
+                  <label class="control-label">New county</label>
                   <input type="text" disabled="true" class="form-control" placeholder="County" [(ngModel)]="newOrg.addresses[0].county" name="newcounty">
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="control-label">Existing Postcode</label>
+                  <label class="control-label">Existing postcode</label>
                   <input type="text" class="form-control" placeholder="Postcode" [(ngModel)]="address.postcode" name="postcode">
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="control-label">New Postcode</label>
+                  <label class="control-label">New postcode</label>
                   <input type="text" disabled="true" class="form-control" placeholder="Postcode" [(ngModel)]="newOrg.addresses[0].postcode" name="newpostcode">
                 </div>
               </div>

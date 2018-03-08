@@ -1,10 +1,10 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Data Sharing Agreement Details
+      Data sharing agreement details
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & Close</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -12,7 +12,7 @@
       <form>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Data Sharing Agreement Name</label>
+            <label class="control-label">Data sharing agreement name</label>
             <input type="text" class="form-control" placeholder="Organisation name" [(ngModel)]="dsa.name" name="name">
           </div>
           <div class="form-group col-md-6">
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Consent Model</label>
+            <label class="control-label">Consent model</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
               <select class="form-control" [(ngModel)]="dsa.consentModelId" name="consentModelId">
@@ -46,12 +46,12 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Start Date</label>
-            <input type="date" class="form-control" placeholder="Start Date" [(ngModel)]="dsa.startDate" name="startDate">
+            <label class="control-label">Start date</label>
+            <input type="date" class="form-control" placeholder="Start date" [(ngModel)]="dsa.startDate" name="startDate">
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">End Date</label>
-            <input type="date" class="form-control" placeholder="End Date" [(ngModel)]="dsa.endDate" name="endDate">
+            <label class="control-label">End date</label>
+            <input type="date" class="form-control" placeholder="End date" [(ngModel)]="dsa.endDate" name="endDate">
           </div>
         </div>
 
@@ -145,7 +145,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Data Flow Agreements
+                  Data flow agreements
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{dataFlows?.length}}</span>

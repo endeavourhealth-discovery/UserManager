@@ -15,27 +15,27 @@ import java.util.List;
 
 @NamedQueries({
         @NamedQuery(name="organisation.total",
-                query="select 'Total Number of Organisations', count(o.uuid) " +
+                query="select 'Total number of organisations', count(o.uuid) " +
                 "from OrganisationEntity o " +
                         "where o.isService = 0"),
         @NamedQuery(name="organisation.bulk",
-                query="select 'Bulk Imported Organisations', count(o.uuid) "  +
+                query="select 'Bulk imported organisations', count(o.uuid) "  +
                         "from OrganisationEntity o " +
                         "where o.isService = 0 " +
                         "and o.bulkImported = 1"),
         @NamedQuery(name="organisation.editedBulk",
-                query="select 'Edited Bulk Imported Organisations', count(o.uuid) " +
+                query="select 'Edited bulk imported organisations', count(o.uuid) " +
                         "from OrganisationEntity o " +
                         "where o.isService = 0 " +
                         "and o.bulkImported = 1 " +
                         "and o.bulkItemUpdated = 1"),
         @NamedQuery(name="organisation.manual",
-                query="select 'Manually Created Organisations', count(o.uuid) " +
+                query="select 'Manually created organisations', count(o.uuid) " +
                         "from OrganisationEntity o " +
                         "where o.isService = 0 " +
                         "and o.bulkImported = 0 "),
         @NamedQuery(name="region.total",
-                query="select 'Total Number of Regions', count(o.uuid) " +
+                query="select 'Total number of regions', count(o.uuid) " +
                         "from RegionEntity o"),
         @NamedQuery(name="region.withDSA",
                 query="select 'Regions containing a data sharing agreement', count(distinct r.uuid) " +
@@ -65,7 +65,7 @@ import java.util.List;
                         "where mmp.parentUuid is null " +
                         "and mmc.parentUuid is null"),
         @NamedQuery(name="service.total",
-                query="select 'Total Number of Services', count(distinct s.uuid) " +
+                query="select 'Total number of services', count(distinct s.uuid) " +
                         "from OrganisationEntity s " +
                         "where s.isService = 1"),
         @NamedQuery(name="service.withOrganisation",
@@ -80,25 +80,25 @@ import java.util.List;
                         "where s.isService = 1 " +
                         "and mm.childUuid is null"),
         @NamedQuery(name="cohort.total",
-                query="select 'Total Number of Cohorts', count(distinct c.uuid) " +
+                query="select 'Total number of cohorts', count(distinct c.uuid) " +
                         "from CohortEntity c "),
         @NamedQuery(name="dataFlow.total",
-                query="select 'Total Number of Data Flows', count(distinct df.uuid) " +
+                query="select 'Total number of data flows', count(distinct df.uuid) " +
                         "from DataFlowEntity df "),
         @NamedQuery(name="dataFlow.totalVolume",
-                query="select 'Total Volume for All Data Flows', coalesce(sum(df.approximateVolume), 0) " +
+                query="select 'Total volume for all data flows', coalesce(sum(df.approximateVolume), 0) " +
                         "from DataFlowEntity df "),
         @NamedQuery(name="dataFlow.averageVolume",
-                query="select 'Average Volume for Data Flows', coalesce(avg(df.approximateVolume), 0) " +
+                query="select 'Average volume for data flows', coalesce(avg(df.approximateVolume), 0) " +
                         "from DataFlowEntity df "),
         @NamedQuery(name="dpa.total",
-                query="select 'Total Number of Data Processing Agreements', count(distinct dpa.uuid) " +
+                query="select 'Total number of data processing agreements', count(distinct dpa.uuid) " +
                         "from DataProcessingAgreementEntity dpa "),
         @NamedQuery(name="dataSet.total",
-                query="select 'Total Number of Datasets', count(distinct ds.uuid) " +
+                query="select 'Total number of datasets', count(distinct ds.uuid) " +
                         "from DatasetEntity ds "),
         @NamedQuery(name="dsa.total",
-                query="select 'Total Number of Data Sharing Agreements', count(distinct dsa.uuid) " +
+                query="select 'Total number of data sharing agreements', count(distinct dsa.uuid) " +
                         "from DataSharingAgreementEntity dsa "),
         @NamedQuery(name="dsa.withRegion",
                 query="select 'Data sharing agreements belonging to a region', count(distinct dsa.uuid) " +
@@ -106,7 +106,7 @@ import java.util.List;
                         "inner join MasterMappingEntity mm on mm.childUuid = dsa.uuid and mm.childMapTypeId = 3 " +
                         "inner join RegionEntity r on r.uuid = mm.parentUuid and mm.parentMapTypeId = 2"),
         @NamedQuery(name="dss.total",
-                query="select 'Total Number of Sharing Summaries', count(distinct dss.uuid) " +
+                query="select 'Total number of sharing summaries', count(distinct dss.uuid) " +
                         "from DataSharingSummaryEntity dss "),
 })
 @Entity

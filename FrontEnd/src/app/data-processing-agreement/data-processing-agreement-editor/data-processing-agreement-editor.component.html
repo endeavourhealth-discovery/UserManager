@@ -1,10 +1,10 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Data Processing Agreement Details
+      Data processing agreement details
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & Close</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -12,8 +12,8 @@
       <form>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Data Processing Agreement Name</label>
-            <input type="text" class="form-control" placeholder="Data Processing Agreement name" autofocus [(ngModel)]="dpa.name" name="name">
+            <label class="control-label">Data processing agreement name</label>
+            <input type="text" class="form-control" placeholder="Data processing agreement name" autofocus [(ngModel)]="dpa.name" name="name">
           </div>
           <div class="form-group col-md-6">
             <label class="control-label">Description</label>
@@ -28,16 +28,16 @@
         </div>
         <div class="row">
           <div class="form-group col-md-4">
-            <label class="control-label">Start Date</label>
-            <input type="date" class="form-control" placeholder="Start Date" [(ngModel)]="dpa.startDate" name="startDate">
+            <label class="control-label">Start date</label>
+            <input type="date" class="form-control" placeholder="Start date" [(ngModel)]="dpa.startDate" name="startDate">
           </div>
           <div class="form-group col-md-4">
-            <label class="control-label">End Date</label>
-            <input type="date" class="form-control" placeholder="End Date" [(ngModel)]="dpa.endDate" name="endDate">
+            <label class="control-label">End date</label>
+            <input type="date" class="form-control" placeholder="End date" [(ngModel)]="dpa.endDate" name="endDate">
           </div>
           <div class="form-group col-md-4">
-            <label class="control-label">Data Procesor</label>
-            <input type="text" class="form-control" placeholder="Processor" [(ngModel)]="processor" name="processorName">
+            <label class="control-label">Data processor</label>
+            <input type="text" class="form-control" placeholder="Data processor" [(ngModel)]="processor" name="processorName">
           </div>
         </div>
         <div class="row">
@@ -51,8 +51,8 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Return To Sender Policy</label>
-            <input type="text" class="form-control" placeholder="Return To Sender Policy" [(ngModel)]="dpa.returnToSenderPolicy" name="returnToSenderPolicy">
+            <label class="control-label">Return to sender policy</label>
+            <input type="text" class="form-control" placeholder="Return to sender policy" [(ngModel)]="dpa.returnToSenderPolicy" name="returnToSenderPolicy">
           </div>
         </div>
 
@@ -146,7 +146,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Data Flow Agreements
+                  Data flow agreements
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{dataFlows?.length}}</span>
@@ -200,7 +200,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Data Sets
+                  Data sets
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{dataSets?.length}}</span>
@@ -226,7 +226,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Associated Documentation
+                  Associated documentation
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{documentations?.length}}</span>

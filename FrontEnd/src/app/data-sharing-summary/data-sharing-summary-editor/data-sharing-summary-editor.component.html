@@ -1,10 +1,10 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Data Sharing Summary Details
+      Data sharing summary details
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & Close</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -12,27 +12,27 @@
       <form>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Data Sharing Summary Name</label>
-            <input type="text" class="form-control" placeholder="Organisation name" [(ngModel)]="dataSharingSummary.name" name="name">
+            <label class="control-label">Data sharing summary name</label>
+            <input type="text" class="form-control" placeholder="Data sharing summary name" [(ngModel)]="dataSharingSummary.name" name="name">
           </div>
           <div class="form-group col-md-6">
             <label class="control-label">Description</label>
-            <input type="text" class="form-control" placeholder="Status" [(ngModel)]="dataSharingSummary.description" name="description">
+            <input type="text" class="form-control" placeholder="Description" [(ngModel)]="dataSharingSummary.description" name="description">
           </div>
         </div>
         <div class="row">
           <div class="form-group col-md-6">
             <label class="control-label">Purpose</label>
-            <input type="text" class="form-control" placeholder="Organisation name" [(ngModel)]="dataSharingSummary.purpose" name="purpose">
+            <input type="text" class="form-control" placeholder="Purpose" [(ngModel)]="dataSharingSummary.purpose" name="purpose">
           </div>
           <div class="form-group col-md-6">
-            <label class="control-label">Schedule 2 Condition</label>
+            <label class="control-label">Schedule 2 condition</label>
             <input type="text" class="form-control" placeholder="Status" [(ngModel)]="dataSharingSummary.schedule2Condition" name="schedule2Condition">
           </div>
         </div>
         <div class="row">
           <div class="form-group col-md-3">
-            <label class="control-label">Nature Of Information</label>
+            <label class="control-label">Nature of information</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
               <select class="form-control" [(ngModel)]="dataSharingSummary.natureOfInformationId" name="natureOfInformationId">
@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Format Type</label>
+            <label class="control-label">Format type</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
               <select class="form-control" [(ngModel)]="dataSharingSummary.formatTypeId" name="formatTypeId">
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Data Subject Id</label>
+            <label class="control-label">Data subject id</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
               <select class="form-control" [(ngModel)]="dataSharingSummary.dataSubjectTypeId" name="dataSubjectTypeId">
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Review Cycle</label>
+            <label class="control-label">Review cycle</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
               <select class="form-control" [(ngModel)]="dataSharingSummary.reviewCycleId" name="reviewCycleId">
@@ -70,12 +70,12 @@
         </div>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Overview of Data Items</label>
-            <input type="text" class="form-control" placeholder="Overview of Data Items" [(ngModel)]="dataSharingSummary.overviewOfDataItems" name="overviewOfDataItems">
+            <label class="control-label">Overview of data items</label>
+            <input type="text" class="form-control" placeholder="Overview of data items" [(ngModel)]="dataSharingSummary.overviewOfDataItems" name="overviewOfDataItems">
           </div>
           <div class="form-group col-md-6">
-            <label class="control-label">Nature of Persons Accessing Data</label>
-            <input type="text" class="form-control" placeholder="Nature of Persons Accessing Data" [(ngModel)]="dataSharingSummary.natureOfPersonsAccessingData" name="natureOfPersonsAccessingData">
+            <label class="control-label">Nature of persons accessing data</label>
+            <input type="text" class="form-control" placeholder="Nature of persons accessing data" [(ngModel)]="dataSharingSummary.natureOfPersonsAccessingData" name="natureOfPersonsAccessingData">
           </div>
         </div>
         <!--<div class="row">
@@ -94,8 +94,8 @@
         </div>-->
         <div class="row">
           <div class="form-group col-md-12">
-            <label class="control-label">Evidence Of Agreement</label>
-            <input type="text" class="form-control" placeholder="Evidence Of Agreement" [(ngModel)]="dataSharingSummary.evidenceOfAgreement" name="evidenceOfAgreement">
+            <label class="control-label">Evidence of agreement</label>
+            <input type="text" class="form-control" placeholder="Evidence of agreement" [(ngModel)]="dataSharingSummary.evidenceOfAgreement" name="evidenceOfAgreement">
           </div>
         </div>
       </form>
