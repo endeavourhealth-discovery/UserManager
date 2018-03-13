@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "dataset", schema = "data_sharing_manager")
@@ -16,11 +17,9 @@ public class DatasetEntity {
     private String uuid;
     private String name;
     private String description;
-    private String attributes;
-    private String queryDefinition;
 
     @Id
-    @Column(name = "uuid", nullable = false, length = 36)
+    @Column(name = "uuid")
     public String getUuid() {
         return uuid;
     }
@@ -30,7 +29,7 @@ public class DatasetEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -40,7 +39,7 @@ public class DatasetEntity {
     }
 
     @Basic
-    @Column(name = "description", nullable = true, length = 10000)
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -49,51 +48,20 @@ public class DatasetEntity {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "attributes", nullable = false, length = -1)
-    public String getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(String attributes) {
-        this.attributes = attributes;
-    }
-
-    @Basic
-    @Column(name = "query_definition", nullable = true, length = 100)
-    public String getQueryDefinition() {
-        return queryDefinition;
-    }
-
-    public void setQueryDefinition(String queryDefinition) {
-        this.queryDefinition = queryDefinition;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DatasetEntity that = (DatasetEntity) o;
-
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) return false;
-        if (queryDefinition != null ? !queryDefinition.equals(that.queryDefinition) : that.queryDefinition != null)
-            return false;
-
-        return true;
+        return Objects.equals(uuid, that.uuid) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 31 * result + (queryDefinition != null ? queryDefinition.hashCode() : 0);
-        return result;
+
+        return Objects.hash(uuid, name, description);
     }
 
     public static List<DatasetEntity> getAllDataSets() throws Exception {
@@ -146,8 +114,6 @@ public class DatasetEntity {
         entityManager.getTransaction().begin();
         dataSetEntity.setName(dataset.getName());
         dataSetEntity.setDescription(dataset.getDescription());
-        dataSetEntity.setAttributes(dataset.getAttributes());
-        dataSetEntity.setQueryDefinition(dataset.getQueryDefinition());
         entityManager.getTransaction().commit();
 
         entityManager.close();
@@ -161,8 +127,6 @@ public class DatasetEntity {
         dataSetEntity.setUuid(dataset.getUuid());
         dataSetEntity.setName(dataset.getName());
         dataSetEntity.setDescription(dataset.getDescription());
-        dataSetEntity.setAttributes(dataset.getAttributes());
-        dataSetEntity.setQueryDefinition(dataset.getQueryDefinition());
         entityManager.persist(dataSetEntity);
         entityManager.getTransaction().commit();
 

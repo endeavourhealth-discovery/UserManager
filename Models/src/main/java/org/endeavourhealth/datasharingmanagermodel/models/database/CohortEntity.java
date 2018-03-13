@@ -9,19 +9,18 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cohort", schema = "data_sharing_manager")
 public class CohortEntity {
     private String uuid;
     private String name;
-    private String nature;
-    private String patientCohortInclusionConsentModel;
-    private String queryDefinition;
-    private String removalPolicy;
+    private Short consentModelId;
+    private String description;
 
     @Id
-    @Column(name = "uuid", nullable = false, length = 36)
+    @Column(name = "uuid")
     public String getUuid() {
         return uuid;
     }
@@ -31,7 +30,7 @@ public class CohortEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -41,75 +40,43 @@ public class CohortEntity {
     }
 
     @Basic
-    @Column(name = "nature", nullable = true, length = 10000)
-    public String getNature() {
-        return nature;
+    @Column(name = "consent_model_id")
+    public Short getConsentModelId() {
+        return consentModelId;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
-    }
-
-    @Basic
-    @Column(name = "patient_cohort_inclusion_consent_model", nullable = true, length = 100)
-    public String getPatientCohortInclusionConsentModel() {
-        return patientCohortInclusionConsentModel;
-    }
-
-    public void setPatientCohortInclusionConsentModel(String patientCohortInclusionConsentModel) {
-        this.patientCohortInclusionConsentModel = patientCohortInclusionConsentModel;
+    public void setConsentModelId(Short consentModelId) {
+        this.consentModelId = consentModelId;
     }
 
     @Basic
-    @Column(name = "query_definition", nullable = true, length = 100)
-    public String getQueryDefinition() {
-        return queryDefinition;
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
     }
 
-    public void setQueryDefinition(String queryDefinition) {
-        this.queryDefinition = queryDefinition;
-    }
-
-    @Basic
-    @Column(name = "removal_policy", nullable = true, length = 100)
-    public String getRemovalPolicy() {
-        return removalPolicy;
-    }
-
-    public void setRemovalPolicy(String removalPolicy) {
-        this.removalPolicy = removalPolicy;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         CohortEntity that = (CohortEntity) o;
-
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (nature != null ? !nature.equals(that.nature) : that.nature != null) return false;
-        if (patientCohortInclusionConsentModel != null ? !patientCohortInclusionConsentModel.equals(that.patientCohortInclusionConsentModel) : that.patientCohortInclusionConsentModel != null)
-            return false;
-        if (queryDefinition != null ? !queryDefinition.equals(that.queryDefinition) : that.queryDefinition != null)
-            return false;
-        if (removalPolicy != null ? !removalPolicy.equals(that.removalPolicy) : that.removalPolicy != null)
-            return false;
-
-        return true;
+        return Objects.equals(uuid, that.uuid) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(consentModelId, that.consentModelId) &&
+                Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (nature != null ? nature.hashCode() : 0);
-        result = 31 * result + (patientCohortInclusionConsentModel != null ? patientCohortInclusionConsentModel.hashCode() : 0);
-        result = 31 * result + (queryDefinition != null ? queryDefinition.hashCode() : 0);
-        result = 31 * result + (removalPolicy != null ? removalPolicy.hashCode() : 0);
-        return result;
+
+        return Objects.hash(uuid, name, consentModelId, description);
     }
+
+
 
     public static List<CohortEntity> getAllCohorts() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
@@ -160,10 +127,8 @@ public class CohortEntity {
         CohortEntity cohortEntity = entityManager.find(CohortEntity.class, cohort.getUuid());
         entityManager.getTransaction().begin();
         cohortEntity.setName(cohort.getName());
-        cohortEntity.setNature(cohort.getNature());
-        cohortEntity.setPatientCohortInclusionConsentModel(cohort.getPatientCohortInclusionConsentModel());
-        cohortEntity.setQueryDefinition(cohort.getQueryDefinition());
-        cohortEntity.setRemovalPolicy(cohort.getRemovalPolicy());
+        cohortEntity.setConsentModelId(cohort.getConsentModelId());
+        cohortEntity.setDescription(cohort.getDescription());
         entityManager.getTransaction().commit();
 
         entityManager.close();
@@ -175,10 +140,8 @@ public class CohortEntity {
         CohortEntity cohortEntity = new CohortEntity();
         entityManager.getTransaction().begin();
         cohortEntity.setName(cohort.getName());
-        cohortEntity.setNature(cohort.getNature());
-        cohortEntity.setPatientCohortInclusionConsentModel(cohort.getPatientCohortInclusionConsentModel());
-        cohortEntity.setQueryDefinition(cohort.getQueryDefinition());
-        cohortEntity.setRemovalPolicy(cohort.getRemovalPolicy());
+        cohortEntity.setConsentModelId(cohort.getConsentModelId());
+        cohortEntity.setDescription(cohort.getDescription());
         cohortEntity.setUuid(cohort.getUuid());
         entityManager.persist(cohortEntity);
         entityManager.getTransaction().commit();
@@ -205,7 +168,7 @@ public class CohortEntity {
         Root<CohortEntity> rootEntry = cq.from(CohortEntity.class);
 
         Predicate predicate = cb.or(cb.like(cb.upper(rootEntry.get("name")), "%" + expression.toUpperCase() + "%"),
-                cb.like(cb.upper(rootEntry.get("nature")), "%" + expression.toUpperCase() + "%"));
+                cb.like(cb.upper(rootEntry.get("description")), "%" + expression.toUpperCase() + "%"));
 
         cq.where(predicate);
         TypedQuery<CohortEntity> query = entityManager.createQuery(cq);

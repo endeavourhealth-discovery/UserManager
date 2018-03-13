@@ -9,10 +9,8 @@ import java.util.UUID;
 public class JsonCohort {
     private String uuid = null;
     private String name = null;
-    private String nature = null;
-    private String patientCohortInclusionConsentModel = null;
-    private String queryDefinition = null;
-    private String removalPolicy = null;
+    private Short ConsentModelId = null;
+    private String description = null;
     private Map<UUID, String> dpas = null;
 
     public String getUuid() {
@@ -31,36 +29,20 @@ public class JsonCohort {
         this.name = name;
     }
 
-    public String getNature() {
-        return nature;
+    public Short getConsentModelId() {
+        return ConsentModelId;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
+    public void setConsentModelId(Short consentModelId) {
+        ConsentModelId = consentModelId;
     }
 
-    public String getPatientCohortInclusionConsentModel() {
-        return patientCohortInclusionConsentModel;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPatientCohortInclusionConsentModel(String patientCohortInclusionConsentModel) {
-        this.patientCohortInclusionConsentModel = patientCohortInclusionConsentModel;
-    }
-
-    public String getQueryDefinition() {
-        return queryDefinition;
-    }
-
-    public void setQueryDefinition(String queryDefinition) {
-        this.queryDefinition = queryDefinition;
-    }
-
-    public String getRemovalPolicy() {
-        return removalPolicy;
-    }
-
-    public void setRemovalPolicy(String removalPolicy) {
-        this.removalPolicy = removalPolicy;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Map<UUID, String> getDpas() {

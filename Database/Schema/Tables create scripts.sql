@@ -210,13 +210,12 @@ create table data_sharing_manager.address (
 create table data_sharing_manager.cohort (
 	uuid char(36) not null comment 'Unique identifier for the cohort',
     name varchar(100) not null comment 'Name of the cohort',
-    nature varchar(10000) null comment 'Nature of the cohort',
-    patient_cohort_inclusion_consent_model varchar(100) null,
-    query_definition varchar(100) null,
-    removal_policy varchar(100) null,
+    consent_model_id smallint null comment 'Consent model of the cohort',
+    description varchar(10000) null comment 'description of the cohort',
     
     constraint data_sharing_manager_cohort_uuid_pk primary key (uuid),
-    index data_sharing_manager_cohort_name_idx (name) 
+    index data_sharing_manager_cohort_name_idx (name),    
+    foreign key data_sharing_manager_cohort_consent_model_id_fk (consent_model_id) references data_sharing_manager.consent_model(id)
     
 ) comment 'Holds details of the Cohorts that have been defined';
 
@@ -224,8 +223,6 @@ create table data_sharing_manager.dataset (
 	uuid char(36) not null comment 'Unique identifier for the cohort',
     name varchar(100) not null,
     description varchar(10000) null,
-    attributes text not null,
-    query_definition varchar(100) null,
     
     constraint data_sharing_manager_dataset_uuid_pk primary key (uuid),    
     index data_sharing_manager_dataset_name_idx (name) 

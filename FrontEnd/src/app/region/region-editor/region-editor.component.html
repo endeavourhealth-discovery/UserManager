@@ -1,10 +1,10 @@
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
-      Region Details
+      Region details
       <div class="pull-right">
         <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & Close</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -12,14 +12,14 @@
       <form>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Region Name</label>
-            <input type="text" class="form-control" placeholder="Region Name" [(ngModel)]="region.name" name="name">
+            <label class="control-label">Region name</label>
+            <input type="text" class="form-control" placeholder="Region name" [(ngModel)]="region.name" name="name">
           </div>
         </div>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Region Description</label>
-            <input type="text" class="form-control" placeholder="Region Description" [(ngModel)]="region.description" name="description">
+            <label class="control-label">Region description</label>
+            <input type="text" class="form-control" placeholder="Region description" [(ngModel)]="region.description" name="description">
           </div>
         </div>
 
@@ -28,7 +28,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Sharing Agreements
+                  Sharing agreements
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{sharingAgreements?.length}}</span>
@@ -56,7 +56,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Parent Regions
+                  Parent regions
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{parentRegions?.length}}</span>
@@ -84,7 +84,7 @@
             <ng-template ngbPanelTitle>
               <div class="row">
                 <div class="col-md-2">
-                  Child Regions
+                  Child regions
                 </div>
                 <div class="col-md-1">
                   <span class="badge badge-pill badge-primary">{{childRegions?.length}}</span>

@@ -16,24 +16,19 @@
             <input type="text" class="form-control" placeholder="Cohort name" [(ngModel)]="cohort.name" name="name">
           </div>
           <div class="form-group col-md-6">
-            <label class="control-label">Nature</label>
-            <input type="text" class="form-control" placeholder="Nature" [(ngModel)]="cohort.nature" name="nature">
+            <label class="control-label">Consent model</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+              <select class="form-control" [(ngModel)]="cohort.consentModelId" name="consentModelId">
+                <option *ngFor="let con of consents" [ngValue]="con.num">{{con.name}}</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="form-group col-md-6">
-            <label class="control-label">Patient cohort inclusion consent model</label>
-            <input type="text" class="form-control" placeholder="Patient cohort inclusion consent model" [(ngModel)]="cohort.patientCohortInclusionConsentModel" name="patientCohortInclusionConsentModel">
-          </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Query definition</label>
-            <input type="text" class="form-control" placeholder="Query definition" [(ngModel)]="cohort.queryDefinition" name="queryDefinition">
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Removal policy</label>
-            <input type="text" class="form-control" placeholder="Removal policy" [(ngModel)]="cohort.removalPolicy" name="removalPolicy">
+            <label class="control-label">Description</label>
+            <input type="text" class="form-control" placeholder="Description" [(ngModel)]="cohort.description" name="description">
           </div>
         </div>
 

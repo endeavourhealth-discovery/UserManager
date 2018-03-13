@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSet} from '../models/Dataset';
 import {ToastsManager} from 'ng2-toastr';
+import {DataFlow} from "../../data-flow/models/DataFlow";
 
 @Component({
   selector: 'app-data-set',
@@ -14,6 +15,8 @@ import {ToastsManager} from 'ng2-toastr';
 export class DataSetComponent implements OnInit {
   datasets: DataSet[] = [];
   allowDelete = true;
+
+  datasetDetailsToShow = new DataSet().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dataSetService: DataSetService,
@@ -33,7 +36,7 @@ export class DataSetComponent implements OnInit {
     vm.dataSetService.getAllDataSets()
       .subscribe(
         result => vm.datasets = result,
-        error => vm.log.error('Failed to load data flows', error, 'Load data flows')
+        error => vm.log.error('Failed to load data sets', error, 'Load data sets')
       );
   }
 

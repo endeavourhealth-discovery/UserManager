@@ -20,6 +20,11 @@ export class CohortEditorComponent implements OnInit {
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
+  consents = [
+    {num: 0, name : 'Explicit Consent'},
+    {num: 1, name : 'Implied Consent'}
+  ];
+
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private cohortService: CohortService,

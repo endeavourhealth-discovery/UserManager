@@ -29,7 +29,7 @@ import java.util.List;
 @Metrics(registry = "EdsRegistry")
 @Api(description = "API endpoint related to associated Documentation")
 public final class DocumentEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(OrganisationEndpoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.Organisation);
 
