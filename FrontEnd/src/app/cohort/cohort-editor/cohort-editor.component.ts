@@ -103,7 +103,12 @@ export class CohortEditorComponent implements OnInit {
   }
 
   private editDataProcessingAgreement(item: Dpa) {
-    this.router.navigate(['/dpa', item.uuid, 'edit']);
+    const vm = this;
+    DataProcessingAgreementPickerComponent.open(vm.$modal, vm.dpas)
+      .result.then(function
+      (result: Dpa[]) { vm.dpas = result; },
+      () => vm.log.info('Edit Data Processing Agreements cancelled')
+    );
   }
 
   private getLinkedDpas() {

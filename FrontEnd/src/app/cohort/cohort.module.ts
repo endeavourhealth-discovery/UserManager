@@ -4,10 +4,11 @@ import { CohortComponent } from './cohort/cohort.component';
 import { CohortEditorComponent } from './cohort-editor/cohort-editor.component';
 import { CohortPickerComponent } from './cohort-picker/cohort-picker.component';
 import {CohortService} from './cohort.service';
-import {EntityViewComponentsModule, DialogsModule} from 'eds-angular4';
+import {DialogsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 
 @NgModule({
   imports: [
