@@ -10,8 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @NamedQueries({
         @NamedQuery(name="organisation.total",
@@ -112,6 +111,8 @@ import java.util.List;
 @Entity
 @Table(name = "organisation", schema = "data_sharing_manager")
 public class OrganisationEntity {
+    private static Map<UUID, List<OrganisationEntity>> cachedOrganisations = new HashMap<>();
+    private static Map<UUID, String> cachedSearchTerm = new HashMap<>();
     private String uuid;
     private String name;
     private String alternativeName;
@@ -398,6 +399,85 @@ public class OrganisationEntity {
         entityManager.close();
 
         return ret;
+    }
+
+
+
+    public static List<OrganisationEntity> searchOrganisations(String expression, boolean searchServices,
+                                                            byte organisationType,
+                                                            Integer pageNumber, Integer pageSize,
+                                                            String orderColumn, boolean descending, UUID userId) throws Exception {
+
+        System.out.println("searching for " +  expression);
+
+        //Only query the DB if the search term has changed for that user
+        if (cachedSearchTerm.get(userId) == null || !cachedSearchTerm.get(userId).equals(expression) ) {
+            System.out.println("Not found so searching in DB  " + expression);
+
+            cachedOrganisations.remove(userId);
+            cachedSearchTerm.put(userId, expression);
+
+            EntityManager entityManager = PersistenceManager.getEntityManager();
+
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+            Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+
+
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
+                    (cb.or(cb.like(rootEntry.get("name"), "%" + expression + "%"),
+                            cb.like(rootEntry.get("odsCode"), "%" + expression + "%"),
+                            cb.like(rootEntry.get("alternativeName"), "%" + expression + "%"),
+                            cb.like(rootEntry.get("icoCode"), "%" + expression + "%"))));
+
+            cq.where(predicate);
+
+            TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+
+            cachedOrganisations.put(userId, query.getResultList());
+
+            entityManager.close();
+        }
+
+        List<OrganisationEntity> cachedOrgs = cachedOrganisations.get(userId);
+        System.out.println("found " + cachedOrgs != null ? cachedOrgs.size() : 0 + " orgs");
+
+        if (cachedOrgs != null) {
+            sortOrganisationCache(cachedOrganisations.get(userId), orderColumn, descending);
+            return paginateOrganisationCache(cachedOrganisations.get(userId), pageNumber, pageSize);
+        }
+
+        return Collections.emptyList();
+    }
+
+    private static void sortOrganisationCache(List<OrganisationEntity> orgs, String orderColumn, boolean descending) throws Exception {
+        switch (orderColumn) {
+            case "name":
+                orgs.sort(Comparator.comparing(OrganisationEntity::getName));
+                break;
+            case "odsCode":
+                orgs.sort(Comparator.comparing(OrganisationEntity::getOdsCode));
+                break;
+            default: throw new Exception("Order column not recognised");
+        }
+
+        if (descending) {
+            Collections.reverse(orgs);
+        }
+
+    }
+
+    private static List<OrganisationEntity> paginateOrganisationCache(List<OrganisationEntity> orgs, Integer pageNumber, Integer pageSize) {
+        if(pageSize <= 0 || pageNumber <= 0) {
+            throw new IllegalArgumentException("invalid page size: " + pageSize);
+        }
+
+        int fromIndex = (pageNumber - 1) * pageSize;
+        if(orgs == null || orgs.size() < fromIndex){
+            return Collections.emptyList();
+        }
+
+        return orgs.subList(fromIndex, Math.min(fromIndex + pageSize, orgs.size()));
     }
 
     public static OrganisationEntity getOrganisation(String uuid) throws Exception {
