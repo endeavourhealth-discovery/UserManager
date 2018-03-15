@@ -2,6 +2,7 @@ package org.endeavourhealth.datasharingmanager.api.endpoints;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Strings;
 import io.astefanutti.metrics.aspectj.Metrics;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -97,8 +98,10 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         if (uuid != null) {
             LOG.trace("getOrganisation - single - " + uuid);
             return getSingleOrganisation(uuid);
+        } else if (!Strings.isNullOrEmpty(searchData)) {
+            return searchOrganisations(searchData, searchServices, organisationType, pageNumber, pageSize, orderColumn, descending, SecurityUtils.getCurrentUserId(sc));
         } else {
-            LOG.trace("Search Organisations - " + searchData + searchType);
+            LOG.trace("get all Organisations - " + searchData + searchType);
             return getOrganisations(searchData, searchServices, organisationType, pageNumber, pageSize, orderColumn, descending);
         }
     }
@@ -560,6 +563,19 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                             String orderColumn, boolean descending) throws Exception {
         List<OrganisationEntity> organisations = OrganisationEntity.getOrganisations(searchData, searchServices,
                 organisationType, pageNumber, pageSize, orderColumn, descending);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(organisations)
+                .build();
+    }
+
+    private Response searchOrganisations(String searchData, boolean searchServices, byte organisationType,
+                                      Integer pageNumber, Integer pageSize,
+                                      String orderColumn, boolean descending, UUID userId) throws Exception {
+        List<OrganisationEntity> organisations = OrganisationEntity.searchOrganisations(searchData, searchServices,
+                organisationType, pageNumber, pageSize, orderColumn, descending, userId);
 
         clearLogbackMarkers();
         return Response
