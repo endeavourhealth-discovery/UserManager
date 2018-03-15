@@ -86,23 +86,19 @@
         <param-value>org.endeavourhealth.common.security.keycloak.KeycloakConfigResolverImpl</param-value>
     </context-param>
 
+    <!-- API docs json is public -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>api</web-resource-name>
+            <url-pattern>/api/swagger.json</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
 
     <!-- API is private and requires the user to authenticate and be an EDS user -->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>api</web-resource-name>
             <url-pattern>/api/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>eds_user</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <!-- API docs require an admin user -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>api-docs</web-resource-name>
-            <url-pattern>/api-docs/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>eds_user</role-name>
