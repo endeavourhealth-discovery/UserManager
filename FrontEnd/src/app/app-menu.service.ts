@@ -51,7 +51,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
     return 'eds-dsa-manager';
   }
   getApplicationTitle(): string {
-    return 'Information Governance';
+    return 'Data Sharing Manager';
   }
   getMenuOptions(): MenuOption[] {
     return [

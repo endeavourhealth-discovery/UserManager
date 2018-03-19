@@ -6,8 +6,9 @@ import {OrganisationService} from '../organisation.service';
 import {Region} from '../../region/models/Region';
 import {OrganisationManagerStatistics} from '../models/OrganisationManagerStatistics';
 import {FileUpload} from '../models/FileUpload';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {User} from 'eds-angular4/dist/security/models/User';
 
 @Component({
   selector: 'app-organisation-overview',
@@ -23,6 +24,7 @@ export class OrganisationOverviewComponent implements OnInit {
   newOrg: Organisation;
   filesToUpload: FileUpload[] = [];
   fileList: FileList;
+  currentUser: User;
 
   conflictedOrgs: Organisation[];
   orgStats: OrganisationManagerStatistics[];
@@ -32,6 +34,7 @@ export class OrganisationOverviewComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
               private log: LoggerService,
+              private securityService: SecurityService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -39,6 +42,8 @@ export class OrganisationOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.getOverview();
+    this.currentUser = this.securityService.getCurrentUser();
+    console.log(this.currentUser);
   }
 
   getOverview() {

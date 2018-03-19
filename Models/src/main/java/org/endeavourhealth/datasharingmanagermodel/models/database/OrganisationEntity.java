@@ -73,7 +73,7 @@ import java.util.*;
                         "join MasterMappingEntity mm on mm.childUuid = s.uuid and mm.childMapTypeId = 0 " +
                         "where s.isService = 1"),
         @NamedQuery(name="service.orphaned",
-                query="select 'Orphaned Services', count(distinct s.uuid) " +
+                query="select 'Orphaned services', count(distinct s.uuid) " +
                         "from OrganisationEntity s " +
                         "left outer join MasterMappingEntity mm on mm.childUuid = s.uuid and mm.childMapTypeId = 0 " +
                         "where s.isService = 1 " +

@@ -186,6 +186,7 @@ create table data_sharing_manager.organisation (
     constraint data_sharing_manager_organisation_uuid_pk primary key (uuid),
     index data_sharing_manager_organisation_name_idx (name),
     index data_sharing_manager_organisation_ods_code_idx (ods_code),
+    index data_sharing_manager_organisation_name_ods_code_idx (name, ods_code),
     index data_sharing_manager_organisation_type_idx (type)
 ) comment 'Holds all the details of the organisations';
 
@@ -309,8 +310,8 @@ create table data_sharing_manager.data_sharing_agreement (
     constraint data_sharing_manager_data_sharing_agreement_uuid_pk primary key (uuid),
     index data_sharing_manager_data_sharing_agreement_name_idx (name),    
     
-    foreign key data_sharing_manager_data_sharing_agreement_dsa_status_id_fk (dsa_status_id) references data_sharing_manager.Dsa_Status(id),
-    foreign key data_sharing_manager_data_sharing_agreement_consent_model_id_fk (consent_model_id) references data_sharing_manager.consent_model(id)        
+    foreign key data_sharing_manager_data_sharing_agreement_dsa_status_id_fk (dsa_status_id) references data_sharing_manager.dsa_status(id),
+    foreign key data_sharing_manager_data_sharing_agreement_consent_model_id_fk (consent_model_id) references data_sharing_manager.consent_model(id)
 ) comment 'Holds details of the data sharing agreements that have been defined';
 
 create table data_sharing_manager.documentation (
