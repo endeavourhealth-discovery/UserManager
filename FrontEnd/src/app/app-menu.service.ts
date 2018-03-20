@@ -20,6 +20,7 @@ import {CohortComponent} from './cohort/cohort/cohort.component';
 import {CohortEditorComponent} from './cohort/cohort-editor/cohort-editor.component';
 import {DataSetComponent} from './data-set/data-set/data-set.component';
 import {DataSetEditorComponent} from './data-set/data-set-editor/data-set-editor.component';
+import {MySharingOverviewComponent} from "./my-sharing/my-sharing-overview/my-sharing-overview.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider  {
@@ -44,6 +45,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'cohort/:id/:mode', component: CohortEditorComponent},
       { path: 'dataSets', component: DataSetComponent},
       { path: 'dataSet/:id/:mode', component: DataSetEditorComponent},
+      { path: 'mySharingOverview', component: MySharingOverviewComponent}
     ];
   }
 
@@ -56,7 +58,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
   getMenuOptions(): MenuOption[] {
     return [
       {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o', role: 'eds-dsa-manager:org-manager'},
-      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:sharing-manager'}
+      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:sharing-manager'},
+      {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:sharing-manager'}
     ];
   }
 }

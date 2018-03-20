@@ -19,6 +19,7 @@ import {DataProcessingAgreementModule} from './data-processing-agreement/data-pr
 import {DataSharingSummaryModule} from './data-sharing-summary/data-sharing-summary.module';
 import {CohortModule} from './cohort/cohort.module';
 import {DataSetModule} from './data-set/data-set.module';
+import {MySharingModule} from "./my-sharing/my-sharing.module";
 
 @NgModule({
   declarations: [],
@@ -35,6 +36,7 @@ import {DataSetModule} from './data-set/data-set.module';
     DataSharingAgreementModule,
     DataProcessingAgreementModule,
     DataSharingSummaryModule,
+    MySharingModule,
     RouterModule.forRoot(AppMenuService.getRoutes(), {useHash: true}),
     NgbModule.forRoot(),
     ToastModule.forRoot()
