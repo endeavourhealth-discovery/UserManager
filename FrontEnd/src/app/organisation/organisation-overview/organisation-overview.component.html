@@ -71,22 +71,22 @@
               <form endUserRole="form" class="container-fluid">
                 <div class="row">
                   <div class="form-group col-md-12">
-                    <label class="control-label">CSV file</label>
 
-                    <div class="input-group">
-                      <label class="custom-file-upload"> Select files
-                        <input type="file" style="display: none" (change)="fileChange($event)" placeholder="Upload file" accept=".csv" multiple="true" >
-                      </label>
-                      <label *ngIf="fileList?.length > 2"> {{fileList.length}} files selected</label>
-                      <label *ngIf="fileList?.length == 1"> {{fileList[0].name}} selected</label>
-                      <label *ngIf="!fileList"> No files selected</label>
-                    </div>
+                    <button for="fileUpload" class="btn btn-primary" (click)="fileUploader.click()">Select files</button>
+                    <input #fileUploader id="fileUpload" type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".csv" multiple="true" >
+                    <label class="control-label" for="fileUpload" *ngIf="fileList?.length > 2">{{fileList.length}} files selected</label>
+                    <label class="control-label" for="fileUpload" *ngIf="fileList?.length == 1">{{fileList[0].name}} selected</label>
+                    <label class="control-label" for="fileUpload" *ngIf="!fileList">No files selected</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
                   </div>
                 </div>
               </form>
 
-              <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
-              <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
             </div>
           </div>
         </div>
