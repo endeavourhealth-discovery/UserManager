@@ -25,6 +25,7 @@ export class OrganisationOverviewComponent implements OnInit {
   filesToUpload: FileUpload[] = [];
   fileList: FileList;
   currentUser: User;
+  allowEdit = false;
 
   conflictedOrgs: Organisation[];
   orgStats: OrganisationManagerStatistics[];
@@ -43,7 +44,14 @@ export class OrganisationOverviewComponent implements OnInit {
   ngOnInit() {
     this.getOverview();
     this.currentUser = this.securityService.getCurrentUser();
+    this.checkEditPermission();
     console.log(this.currentUser);
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getOverview() {

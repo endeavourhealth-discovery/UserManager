@@ -57,9 +57,9 @@ export class AppMenuService implements  AbstractMenuProvider  {
   }
   getMenuOptions(): MenuOption[] {
     return [
-      {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o', role: 'eds-dsa-manager:org-manager'},
-      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:sharing-manager'},
-      {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:sharing-manager'}
+      {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o', role: 'eds-dsa-manager:viewer'},
+      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'},
+      {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'}
     ];
   }
 }

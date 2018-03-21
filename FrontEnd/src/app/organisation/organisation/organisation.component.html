@@ -3,7 +3,7 @@
     <div class="module-heading">
       {{modeType}} manager
       <div class="pull-right">
-        <button class="btn btn-sm btn-success"
+        <button *ngIf="allowEdit" class="btn btn-sm btn-success"
                 (click)="add()"
                 title="Add">Add {{modeType}}
         </button>
@@ -27,7 +27,7 @@
             [secondary]="'odsCode'"
             [secondaryOrderText]="'ODS Code'"
             [typeDescription]="modeType"
-            [allowDelete]="allowDelete"
+            [allowDelete]="allowEdit"
             [model]="'organisation'"
             [pageSize]="pageSize"
             [pageNumber]="pageNumber"

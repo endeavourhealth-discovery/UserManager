@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Organisation} from '../models/Organisation';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {OrganisationService} from '../organisation.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -21,18 +21,26 @@ export class OrganisationComponent implements OnInit {
   pageSize = 20;
   orderColumn = 'name';
   descending = false;
-  allowDelete = true;
+  allowEdit = false;
   orgDetailsToShow = new Organisation().getDisplayItems();
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode']);
       });
   }
 
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
+  }
+
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               private route: ActivatedRoute) {

@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Organisation} from '../models/Organisation';
 import {Address} from '../models/Address';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {RegionPickerComponent} from '../../region/region-picker/region-picker.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {OrganisationService} from '../organisation.service';
@@ -37,6 +37,7 @@ export class OrganisationEditorComponent implements OnInit {
   organisationTypes: OrganisationType[];
   location: any;
   orgType = 'Organisation';
+  allowEdit = false;
 
   orgDetailsToShow = new Organisation().getDisplayItems();
   regionDetailsToShow = new Region().getDisplayItems();
@@ -46,6 +47,7 @@ export class OrganisationEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private organisationService: OrganisationService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -54,10 +56,17 @@ export class OrganisationEditorComponent implements OnInit {
 
   ngOnInit() {
     this.getOrganisationTypes();
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

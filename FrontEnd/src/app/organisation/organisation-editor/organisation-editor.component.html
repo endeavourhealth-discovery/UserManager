@@ -3,9 +3,9 @@
     <div class="module-heading">
       {{orgType}} details
       <div class="pull-right">
-        <button *ngIf="(organisation.isService === 0) && (organisation.uuid)" type="button" class="btn btn-sm btn-success" (click)="createServiceFromOrg(false)">Create Service</button>
-        <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
+        <button *ngIf="(organisation.isService === 0) && (organisation.uuid) && (allowEdit)" type="button" class="btn btn-sm btn-success" (click)="createServiceFromOrg(false)">Create Service</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -56,7 +56,7 @@
             <input type="text" class="form-control" placeholder="Evidence of registration" [(ngModel)]="organisation.evidenceOfRegistration" name="evidenceOfRegistration">
           </div>
         </div>
-        <button type="button" class="btn btn-sm btn-info" (click)="addAddress()">Add Address</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-info" (click)="addAddress()">Add Address</button>
         <div class="well" *ngFor="let address of addresses">
           <div class="row">
             <div class="form-group col-md-4">
@@ -99,7 +99,7 @@
                   <span class="badge badge-pill badge-primary">{{regions?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editRegions()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editRegions()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -113,7 +113,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Regions'"
                 [model]="'region'"
-                [detailsToShow]="regionDetailsToShow">
+                [detailsToShow]="regionDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -127,7 +128,7 @@
                   <span class="badge badge-pill badge-primary">{{dpaPublishing?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDPAPublishing()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editDPAPublishing()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -141,7 +142,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data Processing Agreements'"
                 [model]="'dpa'"
-                [detailsToShow]="dpaDetailsToShow">
+                [detailsToShow]="dpaDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -155,7 +157,7 @@
                   <span class="badge badge-pill badge-primary">{{dsaPublishing?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDSAPublishing()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editDSAPublishing()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -169,7 +171,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data Sharing Agreements'"
                 [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow">
+                [detailsToShow]="dsaDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -183,7 +186,7 @@
                   <span class="badge badge-pill badge-primary">{{dsaSubscribing?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editDSASubscribing()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editDSASubscribing()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -197,7 +200,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data Sharing Agreements'"
                 [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow">
+                [detailsToShow]="dsaDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -211,7 +215,7 @@
                   <span class="badge badge-pill badge-primary">{{childOrganisations?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editChildOrganisations()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editChildOrganisations()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -225,7 +229,8 @@
                 [secondaryOrderText]="'ODS Code'"
                 [typeDescription]="'Child Organisation'"
                 [model]="'organisation'"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>>
@@ -239,7 +244,7 @@
                   <span class="badge badge-pill badge-primary">{{parentOrganisations?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editParentOrganisations()">Edit</button>
+                  <button *ngIf="allowEdit"  type="button" class="btn btn-sm btn-success pull-right" (click)="editParentOrganisations()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -253,7 +258,8 @@
                 [secondaryOrderText]="'ODS Code'"
                 [typeDescription]="'Parent Organisation'"
                 [model]="'organisation'"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -267,7 +273,7 @@
                   <span class="badge badge-pill badge-primary">{{services?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="editServices()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success pull-right" (click)="editServices()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -281,7 +287,8 @@
                 [secondaryOrderText]="'ODS Code'"
                 [typeDescription]="'Service'"
                 [model]="'organisation'"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
