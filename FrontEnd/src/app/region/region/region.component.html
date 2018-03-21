@@ -3,7 +3,7 @@
     <div class="module-heading">
       Regions
       <div class="pull-right">
-        <button class="btn btn-sm btn-success"
+        <button *ngIf="allowEdit" class="btn btn-sm btn-success"
                 (click)="add()"
                 title="Add">Add new
         </button>
@@ -24,7 +24,7 @@
               [secondaryOrderText]="'Description'"
               [typeDescription]="'Regions'"
               [model]="'region'"
-              [allowDelete]="allowDelete"
+              [allowDelete]="allowEdit"
               [pageSize]="20"
               [detailsToShow]="regionDetailsToShow">
             </entity-viewer>

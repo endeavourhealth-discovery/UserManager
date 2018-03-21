@@ -3,7 +3,7 @@
     <div class="module-heading">
       Cohort manager
       <div class="pull-right">
-        <button class="btn btn-sm btn-success"
+        <button *ngIf="allowEdit" class="btn btn-sm btn-success"
                 (click)="add()"
                 title="Add">Add new
         </button>
@@ -21,7 +21,7 @@
               [primaryOrderText]="'Name'"
               [displayClass]="'region'"
               [typeDescription]="'Cohort'"
-              [allowDelete]="allowDelete"
+              [allowDelete]="allowEdit"
               [model]="'cohort'"
               [pageSize]="pageSize"
               [detailsToShow]="cohortDetailsToShow">

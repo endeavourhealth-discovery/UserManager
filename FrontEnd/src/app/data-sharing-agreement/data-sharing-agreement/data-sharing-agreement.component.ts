@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Dsa} from '../models/Dsa';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSharingAgreementService} from '../data-sharing-agreement.service';
@@ -13,12 +13,13 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataSharingAgreementComponent implements OnInit {
   dsas: Dsa[] = [];
-  allowDelete = true;
+  allowEdit = false;
 
   dsaDetailsToShow = new Dsa().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dsaService: DataSharingAgreementService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -26,7 +27,14 @@ export class DataSharingAgreementComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.getDsas();
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getDsas() {

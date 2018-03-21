@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataProcessingAgreementService} from '../data-processing-agreement.service';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSet} from '../../data-set/models/Dataset';
@@ -34,7 +34,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   dataSets: DataSet[];
   documentations: Documentation[];
   publishers: Organisation[];
-  editDisabled = false;
+  allowEdit = false;
   processor = 'Discovery';
   private file: File;
   pdfSrc: any;
@@ -61,6 +61,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
               private log: LoggerService,
               private dpaService: DataProcessingAgreementService,
               private documentationService: DocumentationService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -68,10 +69,17 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

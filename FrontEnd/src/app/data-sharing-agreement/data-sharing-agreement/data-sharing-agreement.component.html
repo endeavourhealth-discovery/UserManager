@@ -3,7 +3,7 @@
     <div class="module-heading">
       Data sharing agreement manager
       <div class="pull-right">
-        <button class="btn btn-sm btn-success"
+        <button *ngIf="allowEdit" class="btn btn-sm btn-success"
                 (click)="add()"
                 title="Add">Add new
         </button>
@@ -23,7 +23,7 @@
               [secondary]="'description'"
               [secondaryOrderText]="'Description'"
               [typeDescription]="'Data Sharing Agreements'"
-              [allowDelete]="allowDelete"
+              [allowDelete]="allowEdit"
               [model]="'dsa'"
               [pageSize]="20"
               [detailsToShow]="dsaDetailsToShow">

@@ -3,8 +3,8 @@
     <div class="module-heading">
       Data sharing agreement details
       <div class="pull-right">
-        <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -66,7 +66,7 @@
                   <span class="badge badge-pill badge-primary">{{purposes?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPurposes()">Add</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editPurposes()">Add</button>
                 </div>
               </div>
             </ng-template>
@@ -80,7 +80,8 @@
                 [secondaryOrderText]="'Detail'"
                 [typeDescription]="'Purpose'"
                 [model]="'purpose'"
-                [detailsToShow]="purposeDetailsToShow">
+                [detailsToShow]="purposeDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -95,7 +96,7 @@
                   <span class="badge badge-pill badge-primary">{{benefits?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editBenefits()">Add</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editBenefits()">Add</button>
                 </div>
               </div>
             </ng-template>
@@ -109,7 +110,8 @@
                 [secondaryOrderText]="'Detail'"
                 [typeDescription]="'Benefit'"
                 [model]="'benefit'"
-                [detailsToShow]="purposeDetailsToShow">
+                [detailsToShow]="purposeDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -123,7 +125,7 @@
                   <span class="badge badge-pill badge-primary">{{regions?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editRegions()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editRegions()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -137,7 +139,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Region'"
                 [model]="'region'"
-                [detailsToShow]="regionDetailsToShow">
+                [detailsToShow]="regionDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -151,7 +154,7 @@
                   <span class="badge badge-pill badge-primary">{{dataFlows?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataFlows()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editDataFlows()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -165,7 +168,8 @@
                 [secondaryOrderText]="'Approximate Volume'"
                 [typeDescription]="'Data Flow'"
                 [model]="'dataflow'"
-                [detailsToShow]="dataflowDetailsToShow">
+                [detailsToShow]="dataflowDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -179,7 +183,7 @@
                   <span class="badge badge-pill badge-primary">{{publishers?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editPublishers()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editPublishers()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -193,7 +197,8 @@
                 [secondaryOrderText]="'ODS Code'"
                 [typeDescription]="'Publisher'"
                 [model]="'organisation'"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -207,7 +212,7 @@
                   <span class="badge badge-pill badge-primary">{{subscribers?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editSubscribers()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editSubscribers()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -221,7 +226,8 @@
                 [secondaryOrderText]="'ODS Code'"
                 [typeDescription]="'Subscriber'"
                 [model]="'organisation'"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>

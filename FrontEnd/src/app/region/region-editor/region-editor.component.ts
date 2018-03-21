@@ -3,7 +3,7 @@ import {Region} from '../models/Region';
 import {Organisation} from '../../organisation/models/Organisation';
 import {Marker} from '../models/Marker';
 import {RegionService} from '../region.service';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationPickerComponent} from '../../organisation/organisation-picker/organisation-picker.component';
@@ -18,7 +18,6 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./region-editor.component.css']
 })
 export class RegionEditorComponent implements OnInit {
-  public accordionClass = 'accordionClass';
   private paramSubscriber: any;
 
   region: Region = <Region>{};
@@ -31,6 +30,7 @@ export class RegionEditorComponent implements OnInit {
   latitude: number = 33.8121;
   longitude: number = -117.918;
   zoom: number = 12;
+  allowEdit = false;
 
   orgDetailsToShow = new Organisation().getDisplayItems();
   regionDetailsToShow = new Region().getDisplayItems();
@@ -39,16 +39,24 @@ export class RegionEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private regionService: RegionService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
   this.toastr.setRootViewContainerRef(vcr); }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

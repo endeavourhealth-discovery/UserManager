@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSharingAgreementService} from '../data-sharing-agreement.service';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal, NgbRadioGroup} from '@ng-bootstrap/ng-bootstrap';
 import {Purpose} from '../models/Purpose';
@@ -22,7 +22,6 @@ import {Marker} from '../../region/models/Marker';
 })
 export class DataSharingAgreementEditorComponent implements OnInit {
   private paramSubscriber: any;
-  public accordionClass = 'accordionClass';
 
   dsa: Dsa = <Dsa>{};
   dataFlows: DataFlow[];
@@ -35,6 +34,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   subscriberMarkers: Marker[];
   mapMarkers: Marker[];
   showPub = true;
+  allowEdit = false;
 
   status = [
     {num: 0, name : 'Active'},
@@ -54,6 +54,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private dsaService: DataSharingAgreementService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -61,10 +62,17 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
     params => {
       this.performAction(params['mode'], params['id']);
     });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

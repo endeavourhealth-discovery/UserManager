@@ -2,7 +2,7 @@ import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataFlowService} from '../data-flow.service';
 import {DataFlow} from '../models/DataFlow';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 
@@ -14,12 +14,13 @@ import {ToastsManager} from 'ng2-toastr';
 export class DataFlowComponent implements OnInit {
   private paramSubscriber: any;
   dataflows: DataFlow[] = [];
-  allowDelete = true;
+  allowEdit = false;
 
   dataflowDetailsToShow = new DataFlow().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dataFlowService: DataFlowService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -27,7 +28,14 @@ export class DataFlowComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.getDataFlows();
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getDataFlows() {

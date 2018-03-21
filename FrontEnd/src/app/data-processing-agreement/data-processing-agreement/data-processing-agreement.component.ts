@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataProcessingAgreementService} from '../data-processing-agreement.service';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Dpa} from '../models/Dpa';
@@ -13,12 +13,13 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataProcessingAgreementComponent implements OnInit {
   dpas: Dpa[] = [];
-  allowDelete = true;
+  allowEdit = false;
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dpaService: DataProcessingAgreementService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -26,7 +27,14 @@ export class DataProcessingAgreementComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.getDsas();
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getDsas() {

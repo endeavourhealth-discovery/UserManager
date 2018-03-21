@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSetService} from '../data-set.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastsManager} from 'ng2-toastr';
 import {DataSet} from "../models/Dataset";
@@ -22,6 +22,7 @@ export class DataSetEditorComponent implements OnInit {
 
   dataset: DataSet = <DataSet>{};
   dpas: Dpa[];
+  allowEdit = false;
 
   datasetDetailsToShow = new DataSet().getDisplayItems();
   dpaDetailsToShow = new Dpa().getDisplayItems();
@@ -29,6 +30,7 @@ export class DataSetEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private dataSetService: DataSetService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -36,10 +38,17 @@ export class DataSetEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

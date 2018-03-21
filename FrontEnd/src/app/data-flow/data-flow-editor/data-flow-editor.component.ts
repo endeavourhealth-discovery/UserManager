@@ -6,7 +6,7 @@ import {DataSharingAgreementPickerComponent} from '../../data-sharing-agreement/
 import {DataProcessingAgreementPickerComponent} from '../../data-processing-agreement/data-processing-agreement-picker/data-processing-agreement-picker.component';
 import {Dsa} from '../../data-sharing-agreement/models/Dsa';
 import {Dpa} from '../../data-processing-agreement/models/Dpa';
-import { LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastsManager} from "ng2-toastr";
 
@@ -22,6 +22,7 @@ export class DataFlowEditorComponent implements OnInit {
   dataFlow: DataFlow = <DataFlow>{};
   dsas: Dsa[];
   dpas: Dpa[];
+  allowEdit = false;
 
   flowDirections = [
     {num: 0, name : 'Inbound'},
@@ -67,6 +68,7 @@ export class DataFlowEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private dataFlowService: DataFlowService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -74,10 +76,17 @@ export class DataFlowEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

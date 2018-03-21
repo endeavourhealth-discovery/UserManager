@@ -3,8 +3,8 @@
     <div class="module-heading">
       Data flow details
       <div class="pull-right">
-        <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -112,7 +112,7 @@
                   <span class="badge badge-pill badge-primary">{{dsas?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataSharingAgreements()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editDataSharingAgreements()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -126,7 +126,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data Sharing Agreement'"
                 [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow">
+                [detailsToShow]="dsaDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -140,7 +141,7 @@
                   <span class="badge badge-pill badge-primary">{{dpas?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editDataProcessingAgreements()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editDataProcessingAgreements()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -154,7 +155,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data Processing Agreement'"
                 [model]="'dpa'"
-                [detailsToShow]="dpaDetailsToShow">
+                [detailsToShow]="dpaDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>

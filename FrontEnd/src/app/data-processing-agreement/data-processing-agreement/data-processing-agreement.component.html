@@ -3,7 +3,7 @@
     <div class="module-heading">
       Data processing agreement manager
       <div class="pull-right">
-        <button class="btn btn-sm btn-success"
+        <button *ngIf="allowEdit" class="btn btn-sm btn-success"
                 (click)="add()"
                 title="Add">Add new
         </button>
@@ -24,7 +24,7 @@
               [secondaryOrderText]="'Description'"
               [typeDescription]="'Data Processing Agreement'"
               [model]="'dpa'"
-              [allowDelete]="allowDelete"
+              [allowDelete]="allowEdit"
               [pageSize]="20"
               [detailsToShow]="dpaDetailsToShow">
             </entity-viewer>

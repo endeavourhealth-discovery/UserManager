@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {CohortService} from '../cohort.service';
-import {LoggerService} from 'eds-angular4';
+import {LoggerService, SecurityService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Dpa} from '../../data-processing-agreement/models/Dpa';
@@ -17,6 +17,7 @@ export class CohortEditorComponent implements OnInit {
   private paramSubscriber: any;
   cohort: Cohort = <Cohort>{};
   dpas: Dpa[];
+  allowEdit = false;
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
@@ -28,6 +29,7 @@ export class CohortEditorComponent implements OnInit {
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private cohortService: CohortService,
+              private securityService: SecurityService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -35,10 +37,17 @@ export class CohortEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.performAction(params['mode'], params['id']);
       });
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   protected performAction(action: string, itemUuid: string) {

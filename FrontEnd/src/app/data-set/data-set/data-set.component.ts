@@ -1,11 +1,10 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {DataSetService} from '../data-set.service';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DataSet} from '../models/Dataset';
 import {ToastsManager} from 'ng2-toastr';
-import {DataFlow} from "../../data-flow/models/DataFlow";
 
 @Component({
   selector: 'app-data-set',
@@ -14,12 +13,13 @@ import {DataFlow} from "../../data-flow/models/DataFlow";
 })
 export class DataSetComponent implements OnInit {
   datasets: DataSet[] = [];
-  allowDelete = true;
+  allowEdit = false;
 
   datasetDetailsToShow = new DataSet().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private dataSetService: DataSetService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -27,7 +27,14 @@ export class DataSetComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.getDataSets();
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getDataSets() {

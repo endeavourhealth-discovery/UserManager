@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {CohortService} from '../cohort.service';
-import {LoggerService, MessageBoxDialog} from 'eds-angular4';
+import {LoggerService, MessageBoxDialog, SecurityService} from 'eds-angular4';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Cohort} from '../models/Cohort';
@@ -14,11 +14,12 @@ import {ToastsManager} from 'ng2-toastr';
 export class CohortComponent implements OnInit {
   cohorts: Cohort[] = [];
   pageSize = 20;
-  allowDelete = true;
+  allowEdit = false;
   cohortDetailsToShow = new Cohort().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private cohortService: CohortService,
+              private securityService: SecurityService,
               private log: LoggerService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -26,7 +27,14 @@ export class CohortComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkEditPermission();
     this.getCohorts();
+  }
+
+  checkEditPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
+      vm.allowEdit = true;
   }
 
   getCohorts() {

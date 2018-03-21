@@ -3,8 +3,8 @@
     <div class="module-heading">
       Region details
       <div class="pull-right">
-        <button type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
-        <button type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
+        <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
       </div>
     </div>
@@ -34,7 +34,7 @@
                   <span class="badge badge-pill badge-primary">{{sharingAgreements?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editSharingAgreements()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editSharingAgreements()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -48,7 +48,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Sharing Agreement'"
                 [model]="'dsa'"
-                [detailsToShow]="sharingAgreementsDetailsToShow">
+                [detailsToShow]="sharingAgreementsDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -62,7 +63,7 @@
                   <span class="badge badge-pill badge-primary">{{parentRegions?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editParentRegions()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editParentRegions()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -76,7 +77,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Parent Region'"
                 [model]="'region'"
-                [detailsToShow]="regionDetailsToShow">
+                [detailsToShow]="regionDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -90,7 +92,7 @@
                   <span class="badge badge-pill badge-primary">{{childRegions?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editChildRegions()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editChildRegions()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -104,7 +106,8 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Child Region'"
                 [model]="'region'"
-                [detailsToShow]="regionDetailsToShow">
+                [detailsToShow]="regionDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -118,7 +121,7 @@
                   <span class="badge badge-pill badge-primary">{{organisations?.length}}</span>
                 </div>
                 <div class="col-md-1">
-                  <button type="button" class="btn btn-xs btn-success pull-right" (click)="editOrganisations()">Edit</button>
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editOrganisations()">Edit</button>
                 </div>
               </div>
             </ng-template>
@@ -133,7 +136,8 @@
                 [typeDescription]="'Organisation'"
                 [model]="'organisation'"
                 [pageSize]="12"
-                [detailsToShow]="orgDetailsToShow">
+                [detailsToShow]="orgDetailsToShow"
+                [allowDelete]="allowEdit">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
