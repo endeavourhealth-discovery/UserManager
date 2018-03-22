@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data sharing agreements</div>
+            <div class="card-header  bg-info">Data sharing agreements</div>
             <div class="card-block">
               <div class="row" *ngFor="let dsa of dsaStats">
                 <div class="col-md-10">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data flows</div>
+            <div class="card-header  bg-success">Data flows</div>
             <div class="card-block">
               <div class="row" *ngFor="let dataflow of dataflowStats">
                 <div class="col-md-10">
@@ -44,10 +44,11 @@
           </div>
         </div>
       </div>
+      <br>
       <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Data processing agreements</div>
+            <div class="card-header  bg-warning">Data processing agreements</div>
             <div class="card-block">
               <div class="row" *ngFor="let dpa of dpaStats">
                 <div class="col-md-10">
@@ -64,9 +65,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Cohorts</div>
+            <div class="card-header text-white bg-primary">Cohorts</div>
             <div class="card-block">
               <div class="row" *ngFor="let cohort of cohortStats">
                 <div class="col-md-10">
@@ -83,7 +84,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">Datasets</div>
             <div class="card-block">
@@ -97,13 +101,13 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-primary" (click)="goToDataSets()">View datasets</button>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="goToDataSets()">View datasets</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="summaryStats">
+      <!--<div class="row" *ngIf="summaryStats">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">Data sharing summary</div>
@@ -123,7 +127,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>

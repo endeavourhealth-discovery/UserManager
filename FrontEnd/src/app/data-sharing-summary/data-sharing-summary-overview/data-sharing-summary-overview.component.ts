@@ -37,7 +37,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
     vm.getDataFlowStatistics();
     vm.getCohortStatistics();
     vm.getDataSetStatistics();
-    vm.getSummaryStatistics();
+    // vm.getSummaryStatistics();
   }
 
   getSummaryStatistics() {
