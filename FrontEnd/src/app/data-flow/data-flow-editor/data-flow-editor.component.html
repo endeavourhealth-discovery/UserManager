@@ -10,96 +10,98 @@
     </div>
     <div class="module-body">
       <form>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Data flow name</label>
-            <input type="text" class="form-control" placeholder="Data flow name" [(ngModel)]="dataFlow.name" name="name">
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-3">
-            <label class="control-label">Direction</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.directionId" name="directionId">
-                <option *ngFor="let direction of flowDirections" [ngValue]="direction.num">{{direction.name}}</option>
-              </select>
+        <fieldset disabled="!allowEdit">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Data flow name</label>
+              <input type="text" class="form-control" placeholder="Data flow name" [(ngModel)]="dataFlow.name" name="name">
             </div>
           </div>
-          <div class="form-group col-md-3">
-            <label class="control-label">Flow schedule</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.flowScheduleId" name="flowScheduleId">
-                <option *ngFor="let schedule of flowSchedules" [ngValue]="schedule.num">{{schedule.name}}</option>
-              </select>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label class="control-label">Direction</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.directionId" name="directionId">
+                  <option *ngFor="let direction of flowDirections" [ngValue]="direction.num">{{direction.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Flow schedule</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.flowScheduleId" name="flowScheduleId">
+                  <option *ngFor="let schedule of flowSchedules" [ngValue]="schedule.num">{{schedule.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Data exchange method</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.dataExchangeMethodId" name="dataExchangeMethodId">
+                  <option *ngFor="let method of exchangeMethod" [ngValue]="method.num">{{method.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Flow status</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.flowStatusId" name="flowStatusId">
+                  <option *ngFor="let status of flowStatus" [ngValue]="status.num">{{status.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="form-group col-md-3">
-            <label class="control-label">Data exchange method</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.dataExchangeMethodId" name="dataExchangeMethodId">
-                <option *ngFor="let method of exchangeMethod" [ngValue]="method.num">{{method.name}}</option>
-              </select>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label class="control-label">Storage protocol</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.storageProtocolId" name="storageProtocolId">
+                  <option *ngFor="let sps of storageProtocols" [ngValue]="sps.num">{{sps.name}}</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-group col-md-3">
-            <label class="control-label">Flow status</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.flowStatusId" name="flowStatusId">
-                <option *ngFor="let status of flowStatus" [ngValue]="status.num">{{status.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-3">
-            <label class="control-label">Storage protocol</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.storageProtocolId" name="storageProtocolId">
-                <option *ngFor="let sps of storageProtocols" [ngValue]="sps.num">{{sps.name}}</option>
-              </select>
-            </div>
-          </div>
 
-          <div class="form-group col-md-3">
-            <label class="control-label">Security infrastructure</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.securityInfrastructureId" name="securityInfrastructureId">
-                <option *ngFor="let sis of securityInfrastructures" [ngValue]="sis.num">{{sis.name}}</option>
-              </select>
+            <div class="form-group col-md-3">
+              <label class="control-label">Security infrastructure</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.securityInfrastructureId" name="securityInfrastructureId">
+                  <option *ngFor="let sis of securityInfrastructures" [ngValue]="sis.num">{{sis.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Storage protocol</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="dataFlow.securityArchitectureId" name="securityArchitectureId">
+                  <option *ngFor="let sas of securityArchitectures" [ngValue]="sas.num">{{sas.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="control-label">Approximate volume</label>
+              <input type="text" class="form-control" placeholder="Approximate volume" [(ngModel)]="dataFlow.approximateVolume" name="approximateVolume">
             </div>
           </div>
-          <div class="form-group col-md-3">
-            <label class="control-label">Storage protocol</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="dataFlow.securityArchitectureId" name="securityArchitectureId">
-                <option *ngFor="let sas of securityArchitectures" [ngValue]="sas.num">{{sas.name}}</option>
-              </select>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Additional documentation</label>
+              <input type="text" class="form-control" placeholder="Additional documentation" [(ngModel)]="dataFlow.additionalDocumentation" name="additionalDocumentation">
             </div>
           </div>
-          <div class="form-group col-md-3">
-            <label class="control-label">Approximate volume</label>
-            <input type="text" class="form-control" placeholder="Approximate volume" [(ngModel)]="dataFlow.approximateVolume" name="approximateVolume">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Sign off</label>
+              <input type="text" class="form-control" placeholder="Sign off" [(ngModel)]="dataFlow.signOff" name="signOff">
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Additional documentation</label>
-            <input type="text" class="form-control" placeholder="Additional documentation" [(ngModel)]="dataFlow.additionalDocumentation" name="additionalDocumentation">
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Sign off</label>
-            <input type="text" class="form-control" placeholder="Sign off" [(ngModel)]="dataFlow.signOff" name="signOff">
-          </div>
-        </div>
+        </fieldset>
 
         <ngb-accordion>
           <ngb-panel id="datashare">

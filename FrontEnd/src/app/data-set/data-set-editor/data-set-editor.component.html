@@ -10,18 +10,20 @@
     </div>
     <div class="module-body">
       <form>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Data set name</label>
-            <input type="text" class="form-control" placeholder="Data set name" [(ngModel)]="dataset.name" name="name">
+        <fieldset disabled="!allowEdit">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Data set name</label>
+              <input type="text" class="form-control" placeholder="Data set name" [(ngModel)]="dataset.name" name="name">
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Data set description</label>
-            <input type="text" class="form-control" placeholder="Data Set description" [(ngModel)]="dataset.description" name="description">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Data set description</label>
+              <input type="text" class="form-control" placeholder="Data Set description" [(ngModel)]="dataset.description" name="description">
+            </div>
           </div>
-        </div>
+        </fieldset>
 
         <ngb-accordion>
           <ngb-panel id="dataproc">

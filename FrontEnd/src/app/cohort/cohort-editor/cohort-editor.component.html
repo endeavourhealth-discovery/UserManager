@@ -10,27 +10,29 @@
     </div>
     <div class="module-body">
       <form>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Cohort name</label>
-            <input type="text" class="form-control" placeholder="Cohort name" [(ngModel)]="cohort.name" name="name">
-          </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Consent model</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="cohort.consentModelId" name="consentModelId">
-                <option *ngFor="let con of consents" [ngValue]="con.num">{{con.name}}</option>
-              </select>
+        <fieldset disabled="!allowEdit">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Cohort name</label>
+              <input type="text" class="form-control" placeholder="Cohort name" [(ngModel)]="cohort.name" name="name">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="control-label">Consent model</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="cohort.consentModelId" name="consentModelId">
+                  <option *ngFor="let con of consents" [ngValue]="con.num">{{con.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">Description</label>
-            <input type="text" class="form-control" placeholder="Description" [(ngModel)]="cohort.description" name="description">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Description</label>
+              <input type="text" class="form-control" placeholder="Description" [(ngModel)]="cohort.description" name="description">
+            </div>
           </div>
-        </div>
+        </fieldset>
 
         <ngb-accordion>
           <ngb-panel id="regs">
