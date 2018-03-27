@@ -24,11 +24,11 @@ export class Dpa {
       return [
           {label: 'Description', property: 'description'},
           {label: 'Derivation', property: 'derivation'},
-          {label: 'Publisher Information', property: 'publisherInformation'},
-          {label: 'Publisher Contract Information', property: 'publisherContractInformation'},
-          {label: 'Publisher DataSet', property: 'publisherDataSet'},
-          {label: 'DSA Status Id', property: 'dsaStatusId'},
-          {label: 'Return To Sender Policy', property: 'returnToSenderPolicy'}
+          {label: 'Publisher information', property: 'publisherInformation'},
+          {label: 'Publisher contract information', property: 'publisherContractInformation'},
+          {label: 'Publisher data set', property: 'publisherDataSet'},
+          {label: 'DSA status id', property: 'dsaStatusId'},
+          {label: 'Return to sender policy', property: 'returnToSenderPolicy'}
       ];
   }
 }

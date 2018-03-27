@@ -26,13 +26,13 @@ export class Organisation {
 
     getDisplayItems(): any[] {
         return [
-            {label: 'ODS Code', property: 'odsCode'},
-            {label: 'Alternative Name', property: 'alternativeName'},
-            {label: 'ICO Code', property: 'icoCode'},
-            {label: 'IG Toolkit Status', property: 'igToolkitStatus'},
-            {label: 'Date of Registration', property: 'dateOfRegistration'},
-            {label: 'Registration Person', property: 'registrationPerson'},
-            {label: 'Evidence Of Registration', property: 'evidenceOfRegistration'},
+            {label: 'ODS code', property: 'odsCode'},
+            {label: 'Alternative name', property: 'alternativeName'},
+            {label: 'ICO code', property: 'icoCode'},
+            {label: 'IG toolkit status', property: 'igToolkitStatus'},
+            {label: 'Date of registration', property: 'dateOfRegistration'},
+            {label: 'Registration person', property: 'registrationPerson'},
+            {label: 'Evidence Of registration', property: 'evidenceOfRegistration'},
             {label: 'Type', property: 'type'}
         ];
     }

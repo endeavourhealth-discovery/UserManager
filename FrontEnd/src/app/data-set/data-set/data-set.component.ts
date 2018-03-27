@@ -78,7 +78,7 @@ export class DataSetComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['dataSharingOverview']);
+    this.router.navigate(['sharingOverview']);
   }
 
 }

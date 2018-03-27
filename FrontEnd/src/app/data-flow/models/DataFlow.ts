@@ -17,8 +17,8 @@ export class DataFlow {
     getDisplayItems(): any[] {
         return [
             {label: 'Status', property: 'status'},
-            {label: 'Approximate Volume', property: 'approximateVolume'},
-            {label: 'Sign Off', property: 'signOff'}
+            {label: 'Approximate volume', property: 'approximateVolume'},
+            {label: 'Sign off', property: 'signOff'}
         ];
     }
 }
