@@ -37,9 +37,9 @@ public class PersistenceManager {
 
         Map<String, Object> properties = new HashMap<>();
         //properties.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        properties.put("hibernate.connection.url", url);
-        properties.put("hibernate.connection.username", user);
-        properties.put("hibernate.connection.password", pass);
+        properties.put("hibernate.hikari.dataSource.url", url);
+        properties.put("hibernate.hikari.dataSource.user", user);
+        properties.put("hibernate.hikari.dataSource.password", pass);
 
         entityManagerFactory = Persistence.createEntityManagerFactory("DataSharingManager", properties);
     }
