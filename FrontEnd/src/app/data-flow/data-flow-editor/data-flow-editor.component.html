@@ -91,10 +91,6 @@
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <label class="control-label">Additional documentation</label>
-              <input type="text" class="form-control" placeholder="Additional documentation" [(ngModel)]="dataFlow.additionalDocumentation" name="additionalDocumentation">
-            </div>
-            <div class="form-group col-md-6">
               <label class="control-label">Sign off</label>
               <input type="text" class="form-control" placeholder="Sign off" [(ngModel)]="dataFlow.signOff" name="signOff">
             </div>
@@ -158,6 +154,52 @@
                 [detailsToShow]="dpaDetailsToShow"
                 [allowDelete]="allowEdit">
               </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="docs">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Associated documentation
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{documentations?.length}}</span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer (deleted)="delete($event)"
+                             [items]="documentations"
+                             [primary]="'title'"
+                             [primaryOrderText]="'Title'"
+                             [displayClass]="'region'"
+                             [typeDescription]="'Associated Documentation'"
+                             [model]="'documentation'"
+                             [detailsToShow]="documentDetailsToShow"
+                             [allowDelete]="allowEdit">
+              </entity-viewer>
+              <div *ngIf="allowEdit" class="row">
+                <div class="col-md-6">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading">Upload associated documentation</div>
+                    <div class="panel-body">
+                      <form endUserRole="form" class="container-fluid">
+                        <div class="row">
+                          <div class="form-group col-md-12">
+                            <label class="control-label">PDF File</label>
+                            <div class="input-group">
+                              <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf">
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+
+                      <button type="button" class="btn bnt-default" (click)="cancel()">Cancel</button>
+                      <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </ng-template>
           </ngb-panel>
         </ngb-accordion>

@@ -3,6 +3,8 @@ package org.endeavourhealth.datasharingmanagermodel.models.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ public class JsonDataFlow {
     private String signOff = null;
     private Map<UUID, String> dsas = null;
     private Map<UUID, String> dpas = null;
+    private List<JsonDocumentation> documentations = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -133,5 +136,13 @@ public class JsonDataFlow {
 
     public void setSecurityArchitectureId(Short securityArchitectureId) {
         this.securityArchitectureId = securityArchitectureId;
+    }
+
+    public List<JsonDocumentation> getDocumentations() {
+        return documentations;
+    }
+
+    public void setDocumentations(List<JsonDocumentation> documentations) {
+        this.documentations = documentations;
     }
 }

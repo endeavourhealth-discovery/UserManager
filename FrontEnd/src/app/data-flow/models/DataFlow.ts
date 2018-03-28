@@ -1,3 +1,5 @@
+import {Documentation} from "../../documentation/models/Documentation";
+
 export class DataFlow {
     uuid: string;
     name: string;
@@ -13,6 +15,7 @@ export class DataFlow {
     signOff: string;
     dsas: { [key: string]: string; };
     dpas: { [key: string]: string; };
+    documentations: Documentation[];
 
     getDisplayItems(): any[] {
         return [

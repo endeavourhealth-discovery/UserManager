@@ -313,6 +313,15 @@ public class MasterMappingEntity {
             AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(subscribers.keySet()));
         }
 
+        if (dsa.getDocumentations() != null) {
+            Map<UUID, String> documentation = new HashMap<>();
+            List<JsonDocumentation> jsonDocumentations =  dsa.getDocumentations();
+            for (JsonDocumentation doc : jsonDocumentations) {
+                documentation.put(UUID.fromString(doc.getUuid()), doc.getTitle());
+            }
+            saveChildMappings(documentation, MapType.DOCUMENT.getMapType(), dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType());
+        }
+
         if (dsa.getPurposes() != null) {
             Map<UUID, String> purposes = new HashMap<>();
             List<JsonPurpose> jsonPurposes =  dsa.getPurposes();
@@ -342,6 +351,15 @@ public class MasterMappingEntity {
         if (dataFlow.getDpas() != null) {
             Map<UUID, String> dpas = dataFlow.getDpas();
             saveChildMappings(dpas, MapType.DATAPROCESSINGAGREEMENT.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+        }
+
+        if (dataFlow.getDocumentations() != null) {
+            Map<UUID, String> documentation = new HashMap<>();
+            List<JsonDocumentation> jsonDocumentations =  dataFlow.getDocumentations();
+            for (JsonDocumentation doc : jsonDocumentations) {
+                documentation.put(UUID.fromString(doc.getUuid()), doc.getTitle());
+            }
+            saveChildMappings(documentation, MapType.DOCUMENT.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
         }
     }
 

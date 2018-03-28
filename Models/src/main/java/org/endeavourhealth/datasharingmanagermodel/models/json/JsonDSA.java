@@ -23,6 +23,7 @@ public class JsonDSA {
     private Map<UUID, String> subscribers = null;
     private List<JsonPurpose> purposes = new ArrayList<>();
     private List<JsonPurpose> benefits = new ArrayList<>();
+    private List<JsonDocumentation> documentations = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -134,5 +135,13 @@ public class JsonDSA {
 
     public void setBenefits(List<JsonPurpose> benefits) {
         this.benefits = benefits;
+    }
+
+    public List<JsonDocumentation> getDocumentations() {
+        return documentations;
+    }
+
+    public void setDocumentations(List<JsonDocumentation> documentations) {
+        this.documentations = documentations;
     }
 }

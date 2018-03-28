@@ -9,6 +9,8 @@ import {Dpa} from '../../data-processing-agreement/models/Dpa';
 import {LoggerService, SecurityService} from 'eds-angular4';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastsManager} from "ng2-toastr";
+import {Documentation} from "../../documentation/models/Documentation";
+import {DocumentationService} from "../../documentation/documentation.service";
 
 @Component({
   selector: 'app-data-flow-editor',
@@ -22,7 +24,10 @@ export class DataFlowEditorComponent implements OnInit {
   dataFlow: DataFlow = <DataFlow>{};
   dsas: Dsa[];
   dpas: Dpa[];
+  documentations: Documentation[];
   allowEdit = false;
+  private file: File;
+  pdfSrc: any;
 
   flowDirections = [
     {num: 0, name : 'Inbound'},
@@ -63,12 +68,14 @@ export class DataFlowEditorComponent implements OnInit {
 
   dsaDetailsToShow = new Dsa().getDisplayItems();
   dpaDetailsToShow = new Dpa().getDisplayItems();
+  documentDetailsToShow = new Documentation().getDisplayItems();
 
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private dataFlowService: DataFlowService,
               private securityService: SecurityService,
+              private documentationService: DocumentationService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -113,6 +120,7 @@ export class DataFlowEditorComponent implements OnInit {
           vm.dataFlow = result;
           vm.getLinkedDpas();
           vm.getLinkedDsas();
+          vm.getAssociatedDocumentation();
         },
         error => vm.log.error('Error loading', error, 'Error')
       );
@@ -133,6 +141,10 @@ export class DataFlowEditorComponent implements OnInit {
       const dpa: Dpa = this.dpas[idx];
       this.dataFlow.dpas[dpa.uuid] = dpa.name;
     }
+
+    // Populate documents before save
+    vm.dataFlow.documentations = [];
+    vm.dataFlow.documentations = vm.documentations;
 
     vm.dataFlowService.saveDataFlow(vm.dataFlow)
       .subscribe(saved => {
@@ -196,6 +208,55 @@ export class DataFlowEditorComponent implements OnInit {
         result => vm.dsas = result,
         error => vm.log.error('Failed to load linked Data Sharing Agreement', error, 'Load Linked Data Sharing Agreement')
       );
+  }
+
+  private getAssociatedDocumentation() {
+    const vm = this;
+    vm.documentationService.getAllAssociatedDocuments(vm.dataFlow.uuid, '4')
+      .subscribe(
+        result => vm.documentations = result,
+        error => vm.log.error('Failed to load associated documentation', error, 'Load associated documentation')
+      );
+  }
+
+  delete($event) {
+    console.log($event);
+  }
+
+  fileChange(event) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.file = fileList[0];
+    } else {
+      this.file = null;
+    }
+  }
+
+  ok() {
+    this.uploadFile();
+  }
+
+  cancel() {
+    this.file = null;
+  }
+
+  private uploadFile() {
+    const vm = this;
+    const myReader: FileReader = new FileReader();
+
+    myReader.onloadend = function(e){
+      // you can perform an action with readed data here
+      vm.log.success('Uploading file', null, 'Upload');
+      vm.pdfSrc = myReader.result;
+      const newDoc: Documentation = new Documentation();
+      newDoc.fileData = myReader.result;
+      newDoc.title = vm.file.name;
+      newDoc.filename = vm.file.name;
+      vm.documentations.push(newDoc);
+    }
+
+
+    myReader.readAsDataURL(vm.file);
   }
 
 }

@@ -14,6 +14,8 @@ import {OrganisationPickerComponent} from '../../organisation/organisation-picke
 import {PurposeAddComponent} from '../purpose-add/purpose-add.component';
 import {ToastsManager} from 'ng2-toastr';
 import {Marker} from '../../region/models/Marker';
+import {Documentation} from "../../documentation/models/Documentation";
+import {DocumentationService} from "../../documentation/documentation.service";
 
 @Component({
   selector: 'app-data-sharing-agreement-editor',
@@ -28,6 +30,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   regions: Region[];
   publishers: Organisation[];
   subscribers: Organisation[];
+  documentations: Documentation[];
   purposes: Purpose[];
   benefits: Purpose[];
   publisherMarkers: Marker[];
@@ -35,6 +38,8 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   mapMarkers: Marker[];
   showPub = true;
   allowEdit = false;
+  private file: File;
+  pdfSrc: any;
 
   status = [
     {num: 0, name : 'Active'},
@@ -50,11 +55,13 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   regionDetailsToShow = new Region().getDisplayItems();
   orgDetailsToShow = new Organisation().getDisplayItems();
   purposeDetailsToShow = new Purpose().getDisplayItems();
+  documentDetailsToShow = new Documentation().getDisplayItems();
 
   constructor(private $modal: NgbModal,
               private log: LoggerService,
               private dsaService: DataSharingAgreementService,
               private securityService: SecurityService,
+              private documentationService: DocumentationService,
               private router: Router,
               private route: ActivatedRoute,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -105,7 +112,8 @@ export class DataSharingAgreementEditorComponent implements OnInit {
           vm.getPurposes();
           vm.getBenefits();
           vm.getPublisherMarkers();
-          vm.getSubscriberMarkers()
+          vm.getSubscriberMarkers();
+          vm.getAssociatedDocumentation();
         },
         error => vm.log.error('Error loading', error, 'Error')
       );
@@ -150,6 +158,10 @@ export class DataSharingAgreementEditorComponent implements OnInit {
     // Populate benefits before save
     vm.dsa.benefits = [];
     vm.dsa.benefits = this.benefits;
+
+    // Populate documents before save
+    vm.dsa.documentations = [];
+    vm.dsa.documentations = vm.documentations;
 
     vm.dsaService.saveDsa(vm.dsa)
       .subscribe(saved => {
@@ -280,6 +292,15 @@ export class DataSharingAgreementEditorComponent implements OnInit {
       );
   }
 
+  private getAssociatedDocumentation() {
+    const vm = this;
+    vm.documentationService.getAllAssociatedDocuments(vm.dsa.uuid, '3')
+      .subscribe(
+        result => vm.documentations = result,
+        error => vm.log.error('Failed to load associated documentation', error, 'Load associated documentation')
+      );
+  }
+
   private getSubscriberMarkers() {
     const vm = this;
     vm.dsaService.getSubscriberMarkers(vm.dsa.uuid)
@@ -304,6 +325,10 @@ export class DataSharingAgreementEditorComponent implements OnInit {
       )
   }
 
+  delete($event) {
+    console.log($event);
+  }
+
   swapMarkers() {
     const vm = this;
     console.log(vm.showPub);
@@ -314,6 +339,42 @@ export class DataSharingAgreementEditorComponent implements OnInit {
       console.log('showing subs');
       vm.mapMarkers = vm.subscriberMarkers;
     }
+  }
+
+  private uploadFile() {
+    const vm = this;
+    const myReader: FileReader = new FileReader();
+
+    myReader.onloadend = function(e){
+      // you can perform an action with readed data here
+      vm.log.success('Uploading file', null, 'Upload');
+      vm.pdfSrc = myReader.result;
+      const newDoc: Documentation = new Documentation();
+      newDoc.fileData = myReader.result;
+      newDoc.title = vm.file.name;
+      newDoc.filename = vm.file.name;
+      vm.documentations.push(newDoc);
+    }
+
+
+    myReader.readAsDataURL(vm.file);
+  }
+
+  fileChange(event) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.file = fileList[0];
+    } else {
+      this.file = null;
+    }
+  }
+
+  ok() {
+    this.uploadFile();
+  }
+
+  cancel() {
+    this.file = null;
   }
 
 }

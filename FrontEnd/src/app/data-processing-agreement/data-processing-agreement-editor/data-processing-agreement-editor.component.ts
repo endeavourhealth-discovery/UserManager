@@ -159,7 +159,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
     vm.dpa.benefits = [];
     vm.dpa.benefits = this.benefits;
 
-    // Populate DataSets before save
+    // Populate documents before save
     vm.dpa.documentations = [];
     vm.dpa.documentations = vm.documentations;
 
@@ -303,7 +303,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
     myReader.onloadend = function(e){
       // you can perform an action with readed data here
-      vm.log.success('Uploading File', null, 'Upload');
+      vm.log.success('Uploading file', null, 'Upload');
       vm.pdfSrc = myReader.result;
       const newDoc: Documentation = new Documentation();
       newDoc.fileData = myReader.result;

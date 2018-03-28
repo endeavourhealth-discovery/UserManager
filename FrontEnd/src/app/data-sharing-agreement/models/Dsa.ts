@@ -1,4 +1,5 @@
 import {Purpose} from './Purpose';
+import {Documentation} from "../../documentation/models/Documentation";
 
 export class Dsa {
     uuid: string;
@@ -13,6 +14,7 @@ export class Dsa {
     regions: { [key: string]: string; };
     publishers: { [key: string]: string; };
     subscribers: { [key: string]: string; };
+    documentations: Documentation[];
     purposes: Purpose[];
     benefits: Purpose[];
 
