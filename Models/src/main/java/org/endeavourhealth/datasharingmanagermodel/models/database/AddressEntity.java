@@ -341,10 +341,8 @@ public class AddressEntity {
 
             for (AddressEntity address : addressEntities) {
                 if (address.lat != null && address.lng != null) {
-                    System.out.println("already got address geo : " + org.toString());
                     continue;
                 }
-                System.out.println("finding geo");
                 JsonAddress jsonAddress = new JsonAddress(address);
                 getGeolocation(jsonAddress);
             }
