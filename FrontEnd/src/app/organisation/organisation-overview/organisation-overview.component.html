@@ -6,7 +6,7 @@
     <div class="module-body">
       <div class="row">
         <div class="col-md-6">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-header bg-info">Regions</div>
             <div class="card-block">
               <div class="row" *ngFor="let regionStat of regionStats">
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-header  bg-success">Organisations</div>
             <div class="card-block">
               <div class="row" *ngFor="let stat of orgStats">
@@ -47,7 +47,7 @@
       <br>
       <div class="row">
         <div class="col-md-6">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-header  bg-warning">Services</div>
             <div class="card-block">
               <div class="row" *ngFor="let serviceStat of serviceStats">
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div *ngIf="allowEdit" class="col-md-6">
-          <div class="card">
+          <div class="card h-100">
             <div class="card-header">Bulk upload</div>
             <div class="card-block">
               <form endUserRole="form" class="container-fluid">
