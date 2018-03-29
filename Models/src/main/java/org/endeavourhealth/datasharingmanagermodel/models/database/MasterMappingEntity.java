@@ -1,5 +1,7 @@
 package org.endeavourhealth.datasharingmanagermodel.models.database;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
+import com.sun.xml.internal.ws.util.CompletedFuture;
 import org.endeavourhealth.datasharingmanagermodel.PersistenceManager;
 import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.datasharingmanagermodel.models.json.*;
@@ -10,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Entity
 @Table(name = "master_mapping", schema = "data_sharing_manager")
@@ -232,13 +235,27 @@ public class MasterMappingEntity {
             if (organisation.getChildOrganisations() != null) {
                 Map<UUID, String> childOrganisations = organisation.getChildOrganisations();
                 saveChildMappings(childOrganisations, MapType.ORGANISATION.getMapType(), organisation.getUuid(), MapType.ORGANISATION.getMapType());
-                AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(childOrganisations.keySet()));
+
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(childOrganisations.keySet()));
+                    } catch (Exception e) {
+                        // ignore error;
+                    }
+                });
             }
 
             if (organisation.getServices() != null) {
                 Map<UUID, String> services = organisation.getServices();
                 saveChildMappings(services, MapType.SERVICE.getMapType(), organisation.getUuid(), MapType.ORGANISATION.getMapType());
-                AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(services.keySet()));
+
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(services.keySet()));
+                    } catch (Exception e) {
+                        // ignore error;
+                    }
+                });
             }
 
             if (organisation.getDpaPublishing() != null) {
@@ -280,7 +297,14 @@ public class MasterMappingEntity {
         if (region.getOrganisations() != null) {
             Map<UUID, String> organisations = region.getOrganisations();
             saveChildMappings(organisations, MapType.ORGANISATION.getMapType(), region.getUuid(), MapType.REGION.getMapType());
-            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(organisations.keySet()));
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(organisations.keySet()));
+                } catch (Exception e) {
+                    // ignore error;
+                }
+            });
         }
 
         if (region.getSharingAgreements() != null) {
@@ -304,13 +328,27 @@ public class MasterMappingEntity {
         if (dsa.getPublishers() != null) {
             Map<UUID, String> publishers = dsa.getPublishers();
             saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType());
-            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
+                } catch (Exception e) {
+                    // ignore error;
+                }
+            });
         }
 
         if (dsa.getSubscribers() != null) {
             Map<UUID, String> subscribers = dsa.getSubscribers();
             saveChildMappings(subscribers, MapType.SUBSCRIBER.getMapType(), dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType());
-            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(subscribers.keySet()));
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(subscribers.keySet()));
+                } catch (Exception e) {
+                    // ignore error;
+                }
+            });
         }
 
         if (dsa.getDocumentations() != null) {
@@ -392,7 +430,14 @@ public class MasterMappingEntity {
         if (dpa.getPublishers() != null) {
             Map<UUID, String> publishers = dpa.getPublishers();
             saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
-            AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    AddressEntity.getGeoLocationsForOrganisations(new ArrayList<>(publishers.keySet()));
+                } catch (Exception e) {
+                    // ignore error;
+                }
+            });
         }
 
         if (dpa.getPurposes() != null) {

@@ -215,7 +215,7 @@ public class AddressEntity {
         CriteriaQuery<AddressEntity> cq = cb.createQuery(AddressEntity.class);
         Root<AddressEntity> rootEntry = cq.from(AddressEntity.class);
 
-        Predicate predicate = cb.equal(cb.upper(rootEntry.get("organisationUuid")), uuid.toUpperCase());
+        Predicate predicate = cb.equal(rootEntry.get("organisationUuid"), uuid);
         cq.where(predicate);
 
         TypedQuery<AddressEntity> query = entityManager.createQuery(cq);
@@ -340,8 +340,11 @@ public class AddressEntity {
             List<AddressEntity> addressEntities = AddressEntity.getAddressesForOrganisation(org.toString());
 
             for (AddressEntity address : addressEntities) {
-                if (address.lat != null && address.lng != null)
+                if (address.lat != null && address.lng != null) {
+                    System.out.println("already got address geo : " + org.toString());
                     continue;
+                }
+                System.out.println("finding geo");
                 JsonAddress jsonAddress = new JsonAddress(address);
                 getGeolocation(jsonAddress);
             }
