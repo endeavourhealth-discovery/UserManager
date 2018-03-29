@@ -10,7 +10,7 @@
     </div>
     <div class="module-body">
       <form>
-        <fieldset disabled="!allowEdit">
+        <fieldset [disabled]="!allowEdit">
           <div class="row">
             <div class="form-group col-md-6">
               <label class="control-label">Data flow name</label>
@@ -180,22 +180,26 @@
               </entity-viewer>
               <div *ngIf="allowEdit" class="row">
                 <div class="col-md-6">
-                  <div class="panel panel-primary">
-                    <div class="panel-heading">Upload associated documentation</div>
-                    <div class="panel-body">
-                      <form endUserRole="form" class="container-fluid">
+                  <div class="card h-100">
+                    <div class="card-header bg-success">Upload associated documentation</div>
+                    <div class="card-block">
+                      <form class="container-fluid">
                         <div class="row">
                           <div class="form-group col-md-12">
-                            <label class="control-label">PDF File</label>
-                            <div class="input-group">
-                              <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf">
-                            </div>
+                            <button for="fileUpload" id="fileUpload" class="btn btn-primary" (click)="fileUploader.click()">Select files</button>
+                            <input #fileUploader type="file" (change)="fileChange($event)" accept=".pdf">
+                            <label class="control-label" for="fileUpload" *ngIf="!file">No files selected</label>
+                            <label class="control-label" for="fileUpload" *ngIf="file">{{file.name}}</label>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <button type="button" class="btn bnt-default" (click)="cancel()">Cancel</button>
+                            <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
                           </div>
                         </div>
                       </form>
-
-                      <button type="button" class="btn bnt-default" (click)="cancel()">Cancel</button>
-                      <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
                     </div>
                   </div>
                 </div>

@@ -14,6 +14,7 @@ import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.*;
 import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDSA;
+import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDocumentation;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonPurpose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,15 @@ public final class DsaEndpoint extends AbstractEndpoint {
         } else {
             dsa.setUuid(UUID.randomUUID().toString());
             DataSharingAgreementEntity.saveDSA(dsa);
+        }
+
+        for (JsonDocumentation doc : dsa.getDocumentations()) {
+            if (doc.getUuid() != null) {
+                DocumentationEntity.updateDocument(doc);
+            } else {
+                doc.setUuid(UUID.randomUUID().toString());
+                DocumentationEntity.saveDocument(doc);
+            }
         }
 
         dsa.setPurposes(setUuidsAndSavePurpose(dsa.getPurposes()));

@@ -11,12 +11,10 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanagermodel.models.database.DataFlowEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.DataSharingAgreementEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.MasterMappingEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.*;
 import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDataFlow;
+import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDocumentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +92,14 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
             DataFlowEntity.saveDataFlow(dataFlow);
         }
 
+        for (JsonDocumentation doc : dataFlow.getDocumentations()) {
+            if (doc.getUuid() != null) {
+                DocumentationEntity.updateDocument(doc);
+            } else {
+                doc.setUuid(UUID.randomUUID().toString());
+                DocumentationEntity.saveDocument(doc);
+            }
+        }
         MasterMappingEntity.saveDataFlowMappings(dataFlow);
 
         clearLogbackMarkers();

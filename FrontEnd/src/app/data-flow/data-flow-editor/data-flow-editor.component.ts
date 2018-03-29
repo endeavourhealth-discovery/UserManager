@@ -26,7 +26,7 @@ export class DataFlowEditorComponent implements OnInit {
   dpas: Dpa[];
   documentations: Documentation[];
   allowEdit = false;
-  private file: File;
+  file: File;
   pdfSrc: any;
 
   flowDirections = [

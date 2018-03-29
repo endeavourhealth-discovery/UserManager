@@ -36,7 +36,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   publishers: Organisation[];
   allowEdit = false;
   processor = 'Discovery';
-  private file: File;
+  file: File;
   pdfSrc: any;
   page = 1;
   publisherMarkers: Marker[];

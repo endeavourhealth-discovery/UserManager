@@ -38,7 +38,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   mapMarkers: Marker[];
   showPub = true;
   allowEdit = false;
-  private file: File;
+  file: File;
   pdfSrc: any;
 
   status = [
@@ -163,6 +163,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
     vm.dsa.documentations = [];
     vm.dsa.documentations = vm.documentations;
 
+    console.log(vm.dsa);
     vm.dsaService.saveDsa(vm.dsa)
       .subscribe(saved => {
           vm.dsa.uuid = saved;

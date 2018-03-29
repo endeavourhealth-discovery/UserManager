@@ -21,9 +21,9 @@ public class JsonDSA {
     private Map<UUID, String> regions = null;
     private Map<UUID, String> publishers = null;
     private Map<UUID, String> subscribers = null;
+    private List<JsonDocumentation> documentations = new ArrayList<>();
     private List<JsonPurpose> purposes = new ArrayList<>();
     private List<JsonPurpose> benefits = new ArrayList<>();
-    private List<JsonDocumentation> documentations = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
