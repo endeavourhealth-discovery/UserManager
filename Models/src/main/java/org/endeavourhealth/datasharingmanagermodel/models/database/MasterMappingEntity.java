@@ -1,7 +1,5 @@
 package org.endeavourhealth.datasharingmanagermodel.models.database;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
-import com.sun.xml.internal.ws.util.CompletedFuture;
 import org.endeavourhealth.datasharingmanagermodel.PersistenceManager;
 import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.datasharingmanagermodel.models.json.*;
