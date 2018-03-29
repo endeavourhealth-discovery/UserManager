@@ -15,7 +15,7 @@ import {Dsa} from "../../data-sharing-agreement/models/Dsa";
 })
 export class MySharingOverviewComponent implements OnInit {
   currentUser: User;
-  currentOrg = '2dbe7e2a-85a4-3313-a375-391e13182aa4';
+  currentOrg = 'c45ccafd-f86a-4778-845a-96269cad6c3d';
   dpaPublishing: Dpa[];
   dsaPublishing: Dsa[];
   dsaSubscribing: Dsa[];
