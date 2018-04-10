@@ -122,8 +122,7 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data sharing agreement'"
                 [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow"
-                [allowDelete]="allowEdit">
+                [detailsToShow]="dsaDetailsToShow">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -151,8 +150,7 @@
                 [secondaryOrderText]="'Description'"
                 [typeDescription]="'Data processing agreement'"
                 [model]="'dpa'"
-                [detailsToShow]="dpaDetailsToShow"
-                [allowDelete]="allowEdit">
+                [detailsToShow]="dpaDetailsToShow">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -175,8 +173,7 @@
                              [displayClass]="'region'"
                              [typeDescription]="'Associated Documentation'"
                              [model]="'documentation'"
-                             [detailsToShow]="documentDetailsToShow"
-                             [allowDelete]="allowEdit">
+                             [detailsToShow]="documentDetailsToShow">
               </entity-viewer>
               <div *ngIf="allowEdit" class="row">
                 <div class="col-md-6">
