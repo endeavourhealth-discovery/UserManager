@@ -20,7 +20,8 @@ export class Dsa {
 
     getDisplayItems(): any[] {
         return [
-            {label: 'Description', property: 'description'}
+            {label: 'Description', property: 'description'},
+            {label: 'Status', property: 'dsaStatusId'}
         ];
     }
 }
