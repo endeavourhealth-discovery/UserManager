@@ -20,8 +20,7 @@ export class Dsa {
 
     getDisplayItems(): any[] {
         return [
-            {label: 'Description', property: 'description'},
-            {label: 'Derivation', property: 'derivation'}
+            {label: 'Description', property: 'description'}
         ];
     }
 }
