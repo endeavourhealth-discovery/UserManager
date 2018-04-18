@@ -33,7 +33,7 @@ drop table if exists data_sharing_manager.data_exchange_method;
 drop table if exists data_sharing_manager.flow_status;
 drop table if exists data_sharing_manager.security_infrastructure;
 drop table if exists data_sharing_manager.security_architecture;
-drop table if exists data_sharing_manager.Dsa_Status;
+drop table if exists data_sharing_manager.dsa_status;
 drop table if exists data_sharing_manager.consent_model;
 drop table if exists data_sharing_manager.storage_protocol;
 drop table if exists data_sharing_manager.nature_of_information;

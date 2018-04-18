@@ -549,6 +549,7 @@ public class OrganisationEntity {
         for (int i = 0; i < organisationEntities.size(); i++) {
             OrganisationEntity organisationEntity = organisationEntities.get(i);
             entityManager.merge(organisationEntity);
+            AddressEntity.deleteAddressForOrganisations(organisationEntity.uuid);
             if (i % batchSize == 0){
                 entityManager.flush();
                 entityManager.clear();

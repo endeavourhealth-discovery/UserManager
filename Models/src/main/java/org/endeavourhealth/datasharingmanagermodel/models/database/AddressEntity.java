@@ -233,7 +233,7 @@ public class AddressEntity {
 
         for (int i = 0; i < addressEntities.size(); i++) {
             AddressEntity addressEntity = addressEntities.get(i);
-            entityManager.persist(addressEntity);
+            entityManager.merge(addressEntity);
             if (i % batchSize == 0){
                 entityManager.flush();
                 entityManager.clear();
@@ -347,6 +347,22 @@ public class AddressEntity {
                 getGeolocation(jsonAddress);
             }
         }
+    }
+
+    public static void deleteAddressForOrganisations(String organisationUuid) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery(
+                "DELETE from AddressEntity a " +
+                        "where a.organisationUuid = :orgUuid ");
+        query.setParameter("orgUuid", organisationUuid);
+
+        int deletedCount = query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
     public static void getGeolocation(JsonAddress address) throws Exception {
