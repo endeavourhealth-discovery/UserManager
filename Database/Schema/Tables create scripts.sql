@@ -180,7 +180,7 @@ create table data_sharing_manager.organisation (
     type tinyint not null comment 'The type of organisation eg GP Surgery, NHS Trust',
     active boolean not null default 1 comment 'Flag to determine if the organisation is active',
     bulk_imported boolean not null comment 'Flag to determine if the organisation has been bulk imported',
-    bulk_item_updated boolean not null comment 'Flag to determin if the organisation has been updated since the bulk import',
+    bulk_item_updated boolean not null comment 'Flag to determine if the organisation has been updated since the bulk import',
     bulk_conflicted_with char(36) null comment 'If organisation has been updated, this holds the duplicate organisation UUID to allow the conflicts to be resolved',
         
     constraint data_sharing_manager_organisation_uuid_pk primary key (uuid),
