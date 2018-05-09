@@ -126,7 +126,11 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
             MasterMappingEntity.deleteAllMappings(organisation.getUuid());
             OrganisationEntity.updateOrganisation(organisation);
         } else {
-            organisation.setUuid(UUID.nameUUIDFromBytes((organisation.getName() + organisation.getOdsCode()).getBytes()).toString());
+            String hashString = organisation.getName() + organisation.getOdsCode();
+            if (organisation.getIsService().equals("1")) {
+                hashString += "service";
+            }
+            organisation.setUuid(UUID.nameUUIDFromBytes(hashString.getBytes()).toString());
             OrganisationEntity.saveOrganisation(organisation);
         }
 
