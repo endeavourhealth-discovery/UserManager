@@ -31,8 +31,6 @@ export class Organisation {
             {label: 'ICO code', property: 'icoCode'},
             {label: 'IG toolkit status', property: 'igToolkitStatus'},
             {label: 'Date of registration', property: 'dateOfRegistration'},
-            {label: 'Registration person', property: 'registrationPerson'},
-            {label: 'Evidence Of registration', property: 'evidenceOfRegistration'},
             {label: 'Type', property: 'type'}
         ];
     }

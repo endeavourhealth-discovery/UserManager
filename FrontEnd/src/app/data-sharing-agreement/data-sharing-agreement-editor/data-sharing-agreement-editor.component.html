@@ -74,6 +74,8 @@
             </ng-template>
             <ng-template ngbPanelContent>
               <entity-viewer
+                (deleted)="removeFromPurposes($event)"
+                (clicked)="clickOnPurpose($event)"
                 [items]="purposes"
                 [primary]="'title'"
                 [primaryOrderText]="'Title'"
@@ -82,7 +84,9 @@
                 [secondaryOrderText]="'Detail'"
                 [typeDescription]="'Purpose'"
                 [model]="'purpose'"
-                [detailsToShow]="purposeDetailsToShow">
+                [detailsToShow]="purposeDetailsToShow"
+                [allowDelete]="allowEdit"
+                [noLink]="true">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -103,6 +107,8 @@
             </ng-template>
             <ng-template ngbPanelContent>
               <entity-viewer
+                (deleted)="removeFromBenefits($event)"
+                (clicked)="clickOnBenefit($event)"
                 [items]="benefits"
                 [primary]="'title'"
                 [primaryOrderText]="'Title'"
@@ -111,7 +117,9 @@
                 [secondaryOrderText]="'Detail'"
                 [typeDescription]="'Benefit'"
                 [model]="'benefit'"
-                [detailsToShow]="purposeDetailsToShow">
+                [detailsToShow]="purposeDetailsToShow"
+                [allowDelete]="allowEdit"
+                [noLink]="true">
               </entity-viewer>
             </ng-template>
           </ngb-panel>
@@ -239,14 +247,15 @@
               </div>
             </ng-template>
             <ng-template ngbPanelContent>
-              <entity-viewer (deleted)="delete($event)"
+              <entity-viewer (deleted)="removeFromDocumentation($event)"
                              [items]="documentations"
                              [primary]="'title'"
                              [primaryOrderText]="'Title'"
                              [displayClass]="'region'"
                              [typeDescription]="'Associated Documentation'"
                              [model]="'documentation'"
-                             [detailsToShow]="documentDetailsToShow">
+                             [detailsToShow]="documentDetailsToShow"
+                             [allowDelete]="allowEdit">
               </entity-viewer>
               <div *ngIf="allowEdit" class="row">
                 <div class="col-md-6">

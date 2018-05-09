@@ -20,6 +20,8 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="btn" (click)="cancel()">Cancel</button>
-  <button type="button" class="btn btn-primary" (click)="Add();">Add</button>
-  <button type="button" class="btn btn-primary" (click)="AddAnother();">Add another</button>
+  <button *ngIf="!editMode" type="button" class="btn btn-primary" (click)="Add();">Add</button>
+  <button *ngIf="!editMode" type="button" class="btn btn-primary" (click)="AddAnother();">Add another</button>
+  <button *ngIf="editMode" type="button" class="btn btn-primary" (click)="save();">Save</button>
+  <button *ngIf="editMode" type="button" class="btn btn-primary" (click)="saveAndAddAnother();">Save and add another</button>
 </div>

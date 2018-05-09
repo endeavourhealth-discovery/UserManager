@@ -219,8 +219,11 @@ export class DataFlowEditorComponent implements OnInit {
       );
   }
 
-  delete($event) {
-    console.log($event);
+  removeFromDocumentation(match: Documentation) {
+    const index = this.documentations.indexOf(match, 0);
+    if (index > -1) {
+      this.documentations.splice(index, 1);
+    }
   }
 
   fileChange(event) {

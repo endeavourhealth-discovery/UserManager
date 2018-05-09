@@ -217,18 +217,18 @@ export class DataSharingAgreementEditorComponent implements OnInit {
     );
   }
 
-  private editPurposes() {
+  private editPurposes(index: number = -1) {
     const vm = this;
-    PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose')
+    PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose', index)
       .result.then(function
       (result: Purpose[]) { vm.purposes = result; },
       () => vm.log.info('Edit Purposes cancelled')
     );
   }
 
-  private editBenefits() {
+  private editBenefits(index: number = -1) {
     const vm = this;
-    PurposeAddComponent.open(vm.$modal, vm.benefits, 'Benefit')
+    PurposeAddComponent.open(vm.$modal, vm.benefits, 'Benefit', index)
       .result.then(function
       (result: Purpose[]) { vm.benefits = result; },
       () => vm.log.info('Edit Benefits cancelled')
@@ -326,8 +326,35 @@ export class DataSharingAgreementEditorComponent implements OnInit {
       )
   }
 
-  delete($event) {
-    console.log($event);
+  clickOnPurpose($event) {
+    let index = this.purposes.indexOf($event, 0);
+    this.editPurposes(index);
+  }
+
+  clickOnBenefit($event) {
+    let index = this.benefits.indexOf($event, 0);
+    this.editBenefits(index);
+  }
+
+  removeFromPurposes(match: Purpose) {
+    const index = this.purposes.indexOf(match, 0);
+    if (index > -1) {
+      this.purposes.splice(index, 1);
+    }
+  }
+
+  removeFromBenefits(match: Purpose) {
+    const index = this.benefits.indexOf(match, 0);
+    if (index > -1) {
+      this.benefits.splice(index, 1);
+    }
+  }
+
+  removeFromDocumentation(match: Documentation) {
+    const index = this.documentations.indexOf(match, 0);
+    if (index > -1) {
+      this.documentations.splice(index, 1);
+    }
   }
 
   swapMarkers() {
