@@ -113,6 +113,7 @@ export class OrganisationEditorComponent implements OnInit {
       bulkImported : 0,
       bulkItemUpdated : 0
     } as Organisation;
+    this.addresses = [];
 
   }
 
@@ -121,7 +122,6 @@ export class OrganisationEditorComponent implements OnInit {
     vm.organisationService.getOrganisation(uuid)
       .subscribe(result =>  {
           vm.organisation = result;
-          console.log(result);
           if (vm.organisation.isService) {
             vm.orgType = 'Service';
           } else { // only get these for organisations, not services
@@ -140,7 +140,6 @@ export class OrganisationEditorComponent implements OnInit {
   }
 
   save(close: boolean) {
-    console.log('saving');
     const vm = this;
     // Populate organisations regions before save
     vm.organisation.regions = {};
@@ -206,7 +205,6 @@ export class OrganisationEditorComponent implements OnInit {
   addAddress() {
     const vm = this;
 
-    console.log(vm.addresses);
     const address: Address = <Address>{};
     address.organisationUuid = vm.organisation.uuid;
     address.buildingName = '';
@@ -216,11 +214,9 @@ export class OrganisationEditorComponent implements OnInit {
     address.county = '';
     address.postcode = '';
     vm.addresses.push(address);
-    console.log(vm.addresses);
   }
 
   private editRegions() {
-    console.log('yes');
     const vm = this;
     RegionPickerComponent.open(vm.$modal, vm.regions)
       .result.then(function (result: Region[]) {
@@ -326,7 +322,6 @@ export class OrganisationEditorComponent implements OnInit {
     vm.organisationService.getOrganisationTypes()
       .subscribe(
         result => {vm.organisationTypes = result;
-                        console.log(vm.organisationTypes);
         },
         error => vm.log.error('Failed to load organisation types', error, 'Load organisation types')
       );
