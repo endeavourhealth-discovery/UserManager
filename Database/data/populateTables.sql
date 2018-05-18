@@ -135,12 +135,12 @@ values (0, "TLS/MA");
 insert into data_sharing_manager.security_architecture (id, security_architecture)
 values (1, "Secure FTP");
 
-/*data_sharing_manager.security_architecture*/
+/*data_sharing_manager.deidentification_level*/
 insert into data_sharing_manager.deidentification_level (id, deidentification_level)
 values (0, "Patient identifiable data");
 
 insert into data_sharing_manager.deidentification_level (id, deidentification_level)
-values (1, "Pseudonomised data");
+values (1, "Pseudonymised data");
 
 /*data_sharing_manager.ConsentModel*/
 insert into data_sharing_manager.consent_model (id, consent_model)
