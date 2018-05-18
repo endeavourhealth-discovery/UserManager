@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { DataFlowService } from './data-flow.service';
+import { DataExchangeService } from './data-exchange.service';
 
 describe('DataExchangeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DataFlowService]
+      providers: [DataExchangeService]
     });
   });
 
-  it('should be created', inject([DataFlowService], (service: DataFlowService) => {
+  it('should be created', inject([DataExchangeService], (service: DataExchangeService) => {
     expect(service).toBeTruthy();
   }));
 });

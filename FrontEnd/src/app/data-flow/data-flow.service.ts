@@ -4,6 +4,8 @@ import {Observable} from 'rxjs/Observable';
 import {DataFlow} from './models/DataFlow';
 import {Dpa} from '../data-processing-agreement/models/Dpa';
 import {Dsa} from '../data-sharing-agreement/models/Dsa';
+import {DataExchange} from "../data-exchange/models/DataExchange";
+import {Organisation} from "../organisation/models/Organisation";
 
 @Injectable()
 export class DataFlowService {
@@ -59,6 +61,30 @@ export class DataFlowService {
     const params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/dataFlow/dsas', { search : params })
+      .map((response) => response.json());
+  }
+
+  getLinkedExchanges(uuid: string):  Observable<DataExchange[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dataFlow/exchanges', { search : params })
+      .map((response) => response.json());
+  }
+
+  getLinkedPublishers(uuid: string):  Observable<Organisation[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dataFlow/publishers', { search : params })
+      .map((response) => response.json());
+  }
+
+  getLinkedSubscribers(uuid: string):  Observable<Organisation[]> {
+    const vm = this;
+    const params = new URLSearchParams();
+    params.set('uuid', uuid);
+    return vm.http.get('api/dataFlow/subscribers', { search : params })
       .map((response) => response.json());
   }
 

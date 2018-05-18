@@ -21,6 +21,8 @@ import {CohortEditorComponent} from './cohort/cohort-editor/cohort-editor.compon
 import {DataSetComponent} from './data-set/data-set/data-set.component';
 import {DataSetEditorComponent} from './data-set/data-set-editor/data-set-editor.component';
 import {MySharingOverviewComponent} from "./my-sharing/my-sharing-overview/my-sharing-overview.component";
+import {DataExchangeComponent} from "./data-exchange/data-exchange/data-exchange.component";
+import {DataExchangeEditorComponent} from "./data-exchange/data-exchange-editor/data-exchange-editor.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider  {
@@ -35,6 +37,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'region/:id/:mode', component: RegionEditorComponent},
       { path: 'dataFlows', component: DataFlowComponent},
       { path: 'dataFlow/:id/:mode', component: DataFlowEditorComponent},
+      { path: 'dataExchanges', component: DataExchangeComponent},
+      { path: 'dataExchange/:id/:mode', component: DataExchangeEditorComponent},
       { path: 'dsas', component: DataSharingAgreementComponent},
       { path: 'dsa/:id/:mode', component: DataSharingAgreementEditorComponent},
       { path: 'dpas', component: DataProcessingAgreementComponent},

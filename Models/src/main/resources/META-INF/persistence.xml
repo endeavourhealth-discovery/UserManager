@@ -14,6 +14,7 @@
         <class>org.endeavourhealth.datasharingmanagermodel.models.database.PurposeEntity</class>
         <class>org.endeavourhealth.datasharingmanagermodel.models.database.RegionEntity</class>
         <class>org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationTypeEntity</class>
+        <class>org.endeavourhealth.datasharingmanagermodel.models.database.DataExchangeEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

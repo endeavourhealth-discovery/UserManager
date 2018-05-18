@@ -115,6 +115,8 @@ values (11, "Benefit");
 insert into data_sharing_manager.map_type (id, map_type)
 values (12, "Document");
 
+insert into data_sharing_manager.map_type (id, map_type)
+values (13, "Data Exchange");
 
 /*data_sharing_manager.security_infrastructure*/
 insert into data_sharing_manager.security_infrastructure (id, security_infrastructure)
@@ -132,6 +134,13 @@ values (0, "TLS/MA");
 
 insert into data_sharing_manager.security_architecture (id, security_architecture)
 values (1, "Secure FTP");
+
+/*data_sharing_manager.security_architecture*/
+insert into data_sharing_manager.deidentification_level (id, deidentification_level)
+values (0, "Patient identifiable data");
+
+insert into data_sharing_manager.deidentification_level (id, deidentification_level)
+values (1, "Pseudonomised data");
 
 /*data_sharing_manager.ConsentModel*/
 insert into data_sharing_manager.consent_model (id, consent_model)

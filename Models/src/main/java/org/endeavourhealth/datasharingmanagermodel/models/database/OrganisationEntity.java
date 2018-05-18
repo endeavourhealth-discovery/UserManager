@@ -84,12 +84,23 @@ import java.util.*;
         @NamedQuery(name="dataFlow.total",
                 query="select 'Total number of data flows', count(distinct df.uuid) " +
                         "from DataFlowEntity df "),
-        @NamedQuery(name="dataFlow.totalVolume",
-                query="select 'Total volume for all data flows', coalesce(sum(df.approximateVolume), 0) " +
-                        "from DataFlowEntity df "),
-        @NamedQuery(name="dataFlow.averageVolume",
-                query="select 'Average volume for data flows', coalesce(avg(df.approximateVolume), 0) " +
-                        "from DataFlowEntity df "),
+        @NamedQuery(name="dataExchange.total",
+                query="select 'Total number of data exchanges', count(distinct de.uuid) " +
+                        "from DataExchangeEntity de "),
+        @NamedQuery(name="dataExchange.totalPubs",
+                query="select 'Total number of publisher data exchanges', count(distinct de.uuid) " +
+                        "from DataExchangeEntity de " +
+                        "where de.publisher = 1  "),
+        @NamedQuery(name="dataExchange.totalSubs",
+                query="select 'Total number of subscriber data exchanges', count(distinct de.uuid) " +
+                        "from DataExchangeEntity de " +
+                        "where de.publisher = 0  "),
+        @NamedQuery(name="dataExchange.totalVolume",
+                query="select 'Total volume for all data flows', coalesce(sum(de.approximateVolume), 0) " +
+                        "from DataExchangeEntity de "),
+        @NamedQuery(name="dataExchange.averageVolume",
+                query="select 'Average volume for data flows', coalesce(avg(de.approximateVolume), 0) " +
+                        "from DataExchangeEntity de "),
         @NamedQuery(name="dpa.total",
                 query="select 'Total number of data processing agreements', count(distinct dpa.uuid) " +
                         "from DataProcessingAgreementEntity dpa "),
@@ -686,6 +697,8 @@ public class OrganisationEntity {
                 return getDataSetStatisticsQueries();
             case "dsa":
                 return getDSAStatisticsQueries();
+            case "exchange":
+                return getDataExchangeStatisticsQueries();
             case "summary":
                 return getDSSStatisticsQueries();
             default:
@@ -730,8 +743,16 @@ public class OrganisationEntity {
     private static List<String> getDataFlowStatisticsQueries() throws Exception {
         List<String> queryNames = new ArrayList<>();
         queryNames.add("dataFlow.total");
-        queryNames.add("dataFlow.totalVolume");
-        queryNames.add("dataFlow.averageVolume");
+        return queryNames;
+    }
+
+    private static List<String> getDataExchangeStatisticsQueries() throws Exception {
+        List<String> queryNames = new ArrayList<>();
+        queryNames.add("dataExchange.total");
+        queryNames.add("dataExchange.totalPubs");
+        queryNames.add("dataExchange.totalSubs");
+        queryNames.add("dataExchange.totalVolume");
+        queryNames.add("dataExchange.averageVolume");
         return queryNames;
     }
 

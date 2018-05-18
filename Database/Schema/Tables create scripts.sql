@@ -14,6 +14,7 @@ drop table if exists data_sharing_manager.address;
 drop table if exists data_sharing_manager.cohort;
 drop table if exists data_sharing_manager.dataset;
 drop table if exists data_sharing_manager.data_flow;
+drop table if exists data_sharing_manager.data_exchange;
 drop table if exists data_sharing_manager.data_sharing_agreement;
 drop table if exists data_sharing_manager.data_sharing_summary;
 drop table if exists data_sharing_manager.purpose;
@@ -42,6 +43,7 @@ drop table if exists data_sharing_manager.data_subject_type;
 drop table if exists data_sharing_manager.review_cycle;
 drop table if exists data_sharing_manager.map_type;
 drop table if exists data_sharing_manager.organisation_type;
+drop table if exists data_sharing_manager.deidentification_level;
 
 /*
 Look up tables containing enumerations for certain fields.  
@@ -155,6 +157,13 @@ create table data_sharing_manager.organisation_type (
     constraint data_sharing_manager_organisation_type_id_pk primary key (id)  
 ) comment 'Lookup table holding enumerations for organisation types';
 
+create table data_sharing_manager.deidentification_level (
+	id smallint not null comment 'Lookup Id',
+    deidentification_level varchar(100) not null comment 'Lookup Value',   
+    
+    constraint data_sharing_manager_consent_model_id_pk primary key (id)  
+) comment 'Lookup table holding enumerations for the de-identification level used';
+
 /*Main entity tables containing the core information*/
 create table data_sharing_manager.region (
 	uuid char(36) not null comment 'Unique identifier for the region',
@@ -232,27 +241,42 @@ create table data_sharing_manager.dataset (
 
 create table data_sharing_manager.data_flow (
 	uuid char(36) not null comment 'Unique identifier for the data flow agreement',
+    purpose varchar(500) null comment 'The purpose of the data flow',
     name varchar(100) not null comment 'Name of the data flow agreement',
-    direction_id smallint null comment 'Whether the data flow is inbound or outbound', 
-    flow_schedule_id smallint not null comment 'The flow schedule eg Daily, On Demand', 
-    approximate_volume int not null comment 'Approximate volume of data that is contained in the data flow',
-    data_exchange_method_id smallint not null comment 'The data exchange method eg Paper, electronic',
-    flow_status_id smallint not null comment 'The status of the data flow eg In development, Live',    
-    additional_documentation varchar(100) null comment 'Any Associated documentation',
-    sign_off varchar(10) comment 'Who signed off the data flow',
     storage_protocol_id smallint not null comment 'Storage protocol eg Temporary store and forward, permanent',
-    security_infrastructure_id smallint not null comment 'Security Infrastructure eg N3, Internet',
-    security_architecture_id smallint not null comment 'Security Architecture eg TLS/MA, Secure FTP',
+    consent_model_id smallint null comment 'Consent model of the data flow',
+    deidentification_level smallint null comment 'de-Identification level of the data flow eg PID, Pseudonomised',
     
     constraint data_sharing_manager_data_flow_uuid_pk primary key (uuid),
     index data_sharing_manager_data_flow_name_idx (name),
-    foreign key data_sharing_manager_data_flow_flow_scheduleId_fk (flow_schedule_id) references data_sharing_manager.flow_schedule(id),    
-    foreign key data_sharing_manager_data_flow_data_exchange_methodId_fk (data_exchange_method_id) references data_sharing_manager.data_exchange_method(id),
-    foreign key data_sharing_manager_data_flow_flow_statusId_fk (flow_status_id) references data_sharing_manager.flow_status(id),
-    foreign key data_sharing_manager_data_flow_DirectionId_fk (direction_id) references data_sharing_manager.flow_direction(id),
-    foreign key data_sharing_manager_data_storage_protocolId_fk (storage_protocol_id) references data_sharing_manager.storage_protocol(id)
+    foreign key data_sharing_manager_data_storage_protocolId_fk (storage_protocol_id) references data_sharing_manager.storage_protocol(id),
+    foreign key data_sharing_manager_data_flow_consent_model_id_fk (consent_model_id) references data_sharing_manager.consent_model(id),
+    foreign key data_sharing_manager_data_flow_deidentification_level_fk (deidentification_level) references data_sharing_manager.deidentification_level(id)
     
-) comment 'Holds details of the data flow agreements that have been defined';
+) comment 'Holds details of the data flow configurations that have been defined';
+
+create table data_sharing_manager.data_exchange (
+	uuid char(36) not null comment 'Unique identifier for the data flow configuration',
+    name varchar(100) not null comment 'Name of the data flow configuration',
+    publisher boolean not null comment 'Whether the data flow is for a publisher or subscriber',
+    direction_id smallint null comment 'Whether the data flow is inbound or outbound', 
+    system_name varchar(100) null comment 'Name of the system',
+    flow_schedule_id smallint not null comment 'The flow schedule eg Daily, On Demand', 
+    approximate_volume int not null comment 'Approximate volume of data that is contained in the data flow',
+    data_exchange_method_id smallint not null comment 'The data exchange method eg Paper, electronic',
+    flow_status_id smallint not null comment 'The status of the data flow eg In development, Live',  
+    security_infrastructure_id smallint not null comment 'Security Infrastructure eg N3, Internet',
+    security_architecture_id smallint not null comment 'Security Architecture eg TLS/MA, Secure FTP',
+    endpoint varchar(100) not null comment 'Endpoint for the database',
+    
+    constraint data_sharing_manager_data_exchange_uuid_pk primary key (uuid),
+    index data_sharing_manager_data_exchange_name_idx (name),
+    foreign key data_sharing_manager_data_exchange_flow_scheduleId_fk (flow_schedule_id) references data_sharing_manager.flow_schedule(id),    
+    foreign key data_sharing_manager_data_exchange_data_exchange_methodId_fk (data_exchange_method_id) references data_sharing_manager.data_exchange_method(id),
+    foreign key data_sharing_manager_data_exchange_flow_statusId_fk (flow_status_id) references data_sharing_manager.flow_status(id),
+    foreign key data_sharing_manager_data_exchange_DirectionId_fk (direction_id) references data_sharing_manager.flow_direction(id)
+    
+) comment 'Holds details of the data exchange configurations that have been defined';
 
 create table data_sharing_manager.data_processing_agreement (
 	uuid char(36) not null comment 'Unique identifier for the data processing agreement',

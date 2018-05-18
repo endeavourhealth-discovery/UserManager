@@ -12,18 +12,15 @@ import java.util.UUID;
 public class JsonDataFlow {
     private String uuid = null;
     private String name = null;
-    private Short directionId = null;
-    private Short flowScheduleId = null;
-    private Integer approximateVolume = null;
-    private Short dataExchangeMethodId = null;
+    private String purpose = null;
     private Short storageProtocolId = null;
-    private Short securityInfrastructureId = null;
-    private Short securityArchitectureId = null;
-    private Short flowStatusId = null;
-    private String additionalDocumentation = null;
-    private String signOff = null;
+    private Short deidentificationLevel = null;
+    private Short consentModelId = null;
     private Map<UUID, String> dsas = null;
     private Map<UUID, String> dpas = null;
+    private Map<UUID, String> exchanges = null;
+    private Map<UUID, String> publishers = null;
+    private Map<UUID, String> subscribers = null;
     private List<JsonDocumentation> documentations = new ArrayList<>();
 
     public String getUuid() {
@@ -42,60 +39,36 @@ public class JsonDataFlow {
         this.name = name;
     }
 
-    public Short getDirectionId() {
-        return directionId;
+    public String getPurpose() {
+        return purpose;
     }
 
-    public void setDirectionId(Short directionId) {
-        this.directionId = directionId;
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
-    public Short getFlowScheduleId() {
-        return flowScheduleId;
+    public Short getStorageProtocolId() {
+        return storageProtocolId;
     }
 
-    public void setFlowScheduleId(Short flowScheduleId) {
-        this.flowScheduleId = flowScheduleId;
+    public void setStorageProtocolId(Short storageProtocolId) {
+        this.storageProtocolId = storageProtocolId;
     }
 
-    public Short getDataExchangeMethodId() {
-        return dataExchangeMethodId;
+    public Short getDeidentificationLevel() {
+        return deidentificationLevel;
     }
 
-    public void setDataExchangeMethodId(Short dataExchangeMethodId) {
-        this.dataExchangeMethodId = dataExchangeMethodId;
+    public void setDeidentificationLevel(Short deidentificationLevel) {
+        this.deidentificationLevel = deidentificationLevel;
     }
 
-    public Short getFlowStatusId() {
-        return flowStatusId;
+    public Short getConsentModelId() {
+        return consentModelId;
     }
 
-    public void setFlowStatusId(Short flowStatusId) {
-        this.flowStatusId = flowStatusId;
-    }
-
-    public Integer getApproximateVolume() {
-        return approximateVolume;
-    }
-
-    public void setApproximateVolume(Integer approximateVolume) {
-        this.approximateVolume = approximateVolume;
-    }
-
-    public String getAdditionalDocumentation() {
-        return additionalDocumentation;
-    }
-
-    public void setAdditionalDocumentation(String additionalDocumentation) {
-        this.additionalDocumentation = additionalDocumentation;
-    }
-
-    public String getSignOff() {
-        return signOff;
-    }
-
-    public void setSignOff(String signOff) {
-        this.signOff = signOff;
+    public void setConsentModelId(Short consentModelId) {
+        this.consentModelId = consentModelId;
     }
 
     public Map<UUID, String> getDsas() {
@@ -114,28 +87,28 @@ public class JsonDataFlow {
         this.dpas = dpas;
     }
 
-    public Short getStorageProtocolId() {
-        return storageProtocolId;
+    public Map<UUID, String> getExchanges() {
+        return exchanges;
     }
 
-    public void setStorageProtocolId(Short storageProtocolId) {
-        this.storageProtocolId = storageProtocolId;
+    public void setExchanges(Map<UUID, String> exchanges) {
+        this.exchanges = exchanges;
     }
 
-    public Short getSecurityInfrastructureId() {
-        return securityInfrastructureId;
+    public Map<UUID, String> getPublishers() {
+        return publishers;
     }
 
-    public void setSecurityInfrastructureId(Short securityInfrastructureId) {
-        this.securityInfrastructureId = securityInfrastructureId;
+    public void setPublishers(Map<UUID, String> publishers) {
+        this.publishers = publishers;
     }
 
-    public Short getSecurityArchitectureId() {
-        return securityArchitectureId;
+    public Map<UUID, String> getSubscribers() {
+        return subscribers;
     }
 
-    public void setSecurityArchitectureId(Short securityArchitectureId) {
-        this.securityArchitectureId = securityArchitectureId;
+    public void setSubscribers(Map<UUID, String> subscribers) {
+        this.subscribers = subscribers;
     }
 
     public List<JsonDocumentation> getDocumentations() {

@@ -14,7 +14,8 @@ public enum MapType {
     SUBSCRIBER((short)9),
     PURPOSE((short)10),
     BENEFIT((short)11),
-    DOCUMENT((short)12);
+    DOCUMENT((short)12),
+    DATAEXCHANGE((short)13);
 
 
     private Short mapType;

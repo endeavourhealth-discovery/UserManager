@@ -16,47 +16,13 @@
               <label class="control-label">Data flow name</label>
               <input type="text" class="form-control" placeholder="Data flow name" [(ngModel)]="dataFlow.name" name="name">
             </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-3">
-              <label class="control-label">Direction</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.directionId" name="directionId">
-                  <option *ngFor="let direction of flowDirections" [ngValue]="direction.num">{{direction.name}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-3">
-              <label class="control-label">Flow schedule</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.flowScheduleId" name="flowScheduleId">
-                  <option *ngFor="let schedule of flowSchedules" [ngValue]="schedule.num">{{schedule.name}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-3">
-              <label class="control-label">Data exchange method</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.dataExchangeMethodId" name="dataExchangeMethodId">
-                  <option *ngFor="let method of exchangeMethod" [ngValue]="method.num">{{method.name}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-md-3">
-              <label class="control-label">Flow status</label>
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.flowStatusId" name="flowStatusId">
-                  <option *ngFor="let status of flowStatus" [ngValue]="status.num">{{status.name}}</option>
-                </select>
-              </div>
+            <div class="form-group col-md-6">
+              <label class="control-label">Purpose</label>
+              <input type="text" class="form-control" placeholder="Purpose" [(ngModel)]="dataFlow.purpose" name="purpose">
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label class="control-label">Storage protocol</label>
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
@@ -66,33 +32,24 @@
               </div>
             </div>
 
-            <div class="form-group col-md-3">
-              <label class="control-label">Security infrastructure</label>
+            <div class="form-group col-md-4">
+              <label class="control-label">Consent model</label>
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.securityInfrastructureId" name="securityInfrastructureId">
-                  <option *ngFor="let sis of securityInfrastructures" [ngValue]="sis.num">{{sis.name}}</option>
+                <select class="form-control" [(ngModel)]="dataFlow.consentModelId" name="consentModel">
+                  <option *ngFor="let con of consents" [ngValue]="con.num">{{con.name}}</option>
                 </select>
               </div>
             </div>
-            <div class="form-group col-md-3">
-              <label class="control-label">Storage protocol</label>
+
+            <div class="form-group col-md-4">
+              <label class="control-label">De-identification level</label>
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="dataFlow.securityArchitectureId" name="securityArchitectureId">
-                  <option *ngFor="let sas of securityArchitectures" [ngValue]="sas.num">{{sas.name}}</option>
+                <select class="form-control" [(ngModel)]="dataFlow.deidentificationLevel" name="deIdentificationLevel">
+                  <option *ngFor="let did of deidentificationLevel" [ngValue]="did.num">{{did.name}}</option>
                 </select>
               </div>
-            </div>
-            <div class="form-group col-md-3">
-              <label class="control-label">Approximate volume</label>
-              <input type="text" class="form-control" placeholder="Approximate volume" [(ngModel)]="dataFlow.approximateVolume" name="approximateVolume">
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label class="control-label">Sign off</label>
-              <input type="text" class="form-control" placeholder="Sign off" [(ngModel)]="dataFlow.signOff" name="signOff">
             </div>
           </div>
         </fieldset>
@@ -151,6 +108,90 @@
                 [typeDescription]="'Data processing agreement'"
                 [model]="'dpa'"
                 [detailsToShow]="dpaDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="dataexchange">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Data exchange configurations
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{exchanges?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editDataExchanges()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="exchanges"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'approximateVolume'"
+                [secondaryOrderText]="'Approximate volume'"
+                [typeDescription]="'Data exchange'"
+                [model]="'dataExchange'"
+                [detailsToShow]="exchangeDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="pubs">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Publishers
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{publishers?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editPublishers()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="publishers"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Publisher'"
+                [model]="'organisation'"
+                [detailsToShow]="OrganisationDetailsToShow">
+              </entity-viewer>
+            </ng-template>
+          </ngb-panel>
+          <ngb-panel id="subs">
+            <ng-template ngbPanelTitle>
+              <div class="row">
+                <div class="col-md-2">
+                  Subscribers
+                </div>
+                <div class="col-md-1">
+                  <span class="badge badge-pill badge-primary">{{subscribers?.length}}</span>
+                </div>
+                <div class="col-md-1">
+                  <button *ngIf="allowEdit" type="button" class="btn btn-xs btn-success pull-right" (click)="editSubscribers()">Edit</button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <entity-viewer
+                [items]="subscribers"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'odsCode'"
+                [secondaryOrderText]="'ODS Code'"
+                [typeDescription]="'Subscriber'"
+                [model]="'organisation'"
+                [detailsToShow]="OrganisationDetailsToShow">
               </entity-viewer>
             </ng-template>
           </ngb-panel>

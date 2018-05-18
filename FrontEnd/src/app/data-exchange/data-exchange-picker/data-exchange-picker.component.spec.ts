@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataFlowComponent } from './data-flow.component';
+import { DataExchangePickerComponent } from './data-exchange-picker.component';
 
-describe('DataExchangeComponent', () => {
-  let component: DataFlowComponent;
-  let fixture: ComponentFixture<DataFlowComponent>;
+describe('DataExchangePickerComponent', () => {
+  let component: DataExchangePickerComponent;
+  let fixture: ComponentFixture<DataExchangePickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataFlowComponent ]
+      declarations: [ DataExchangePickerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataFlowComponent);
+    fixture = TestBed.createComponent(DataExchangePickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

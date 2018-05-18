@@ -11,6 +11,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ToastsManager} from "ng2-toastr";
 import {Documentation} from "../../documentation/models/Documentation";
 import {DocumentationService} from "../../documentation/documentation.service";
+import {DataExchange} from "../../data-exchange/models/DataExchange";
+import {Organisation} from "../../organisation/models/Organisation";
+import {DataExchangePickerComponent} from "../../data-exchange/data-exchange-picker/data-exchange-picker.component";
+import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
 
 @Component({
   selector: 'app-data-flow-editor',
@@ -24,30 +28,13 @@ export class DataFlowEditorComponent implements OnInit {
   dataFlow: DataFlow = <DataFlow>{};
   dsas: Dsa[];
   dpas: Dpa[];
+  exchanges: DataExchange[];
+  publishers: Organisation[];
+  subscribers: Organisation[];
   documentations: Documentation[];
   allowEdit = false;
   file: File;
   pdfSrc: any;
-
-  flowDirections = [
-    {num: 0, name : 'Inbound'},
-    {num: 1, name : 'Outbound'}
-  ];
-
-  flowSchedules = [
-    {num: 0, name : 'Daily'},
-    {num: 1, name : 'On Demand'}
-  ];
-
-  exchangeMethod = [
-    {num: 0, name : 'Paper'},
-    {num: 1, name : 'Electronic'}
-  ];
-
-  flowStatus = [
-    {num: 0, name : 'In Development'},
-    {num: 1, name : 'Live'}
-  ];
 
   storageProtocols = [
     {num: 0, name: 'Audit only'},
@@ -55,19 +42,20 @@ export class DataFlowEditorComponent implements OnInit {
     {num: 2, name: 'Permanent Record Store'}
   ];
 
-  securityArchitectures = [
-    {num: 0, name: 'TLS/MA'},
-    {num: 1, name: 'Secure FTP'}
+  consents = [
+    {num: 0, name : 'Explicit Consent'},
+    {num: 1, name : 'Implied Consent'}
   ];
 
-  securityInfrastructures = [
-    {num: 0, name: 'N3'},
-    {num: 1, name: 'PSN'},
-    {num: 2, name: 'Internet'}
+  deidentificationLevel = [
+    {num: 0, name: 'Patient identifiable data'},
+    {num: 1, name: 'Pseudonymised data'}
   ];
 
   dsaDetailsToShow = new Dsa().getDisplayItems();
   dpaDetailsToShow = new Dpa().getDisplayItems();
+  exchangeDetailsToShow = new DataExchange().getDisplayItems();
+  OrganisationDetailsToShow = new Organisation().getDisplayItems();
   documentDetailsToShow = new Documentation().getDisplayItems();
 
 
@@ -120,6 +108,9 @@ export class DataFlowEditorComponent implements OnInit {
           vm.dataFlow = result;
           vm.getLinkedDpas();
           vm.getLinkedDsas();
+          vm.getLinkedExchanges();
+          vm.getLinkedPublishers();
+          vm.getLinkedSubscribers();
           vm.getAssociatedDocumentation();
         },
         error => vm.log.error('Error loading', error, 'Error')
@@ -142,6 +133,27 @@ export class DataFlowEditorComponent implements OnInit {
       this.dataFlow.dpas[dpa.uuid] = dpa.name;
     }
 
+    // Populate exchanges before save
+    vm.dataFlow.exchanges = {};
+    for (let idx in this.exchanges) {
+      const exchange: DataExchange = this.exchanges[idx];
+      this.dataFlow.exchanges[exchange.uuid] = exchange.name;
+    }
+
+    // Populate publishers before save
+    vm.dataFlow.publishers = {};
+    for (let idx in this.publishers) {
+      const pub: Organisation = this.publishers[idx];
+      this.dataFlow.publishers[pub.uuid] = pub.name;
+    }
+
+    // Populate subscribers before save
+    vm.dataFlow.subscribers = {};
+    for (let idx in this.subscribers) {
+      const sub: Organisation = this.subscribers[idx];
+      this.dataFlow.subscribers[sub.uuid] = sub.name;
+    }
+
     // Populate documents before save
     vm.dataFlow.documentations = [];
     vm.dataFlow.documentations = vm.documentations;
@@ -158,12 +170,6 @@ export class DataFlowEditorComponent implements OnInit {
 
   close() {
     window.history.back();
-  }
-
-
-  toNumber() {
-    this.dataFlow.directionId = +this.dataFlow.directionId;
-    console.log(this.dataFlow.directionId);
   }
 
   private editDataSharingAgreements() {
@@ -184,12 +190,31 @@ export class DataFlowEditorComponent implements OnInit {
     );
   }
 
-  private editDataSharingAgreement(item: Dsa) {
-    this.router.navigate(['/dsa', item.uuid, 'edit']);
+  private editDataExchanges() {
+    const vm = this;
+    DataExchangePickerComponent.open(vm.$modal, vm.exchanges)
+      .result.then(function
+      (result: DataExchange[]) { vm.exchanges = result; },
+      () => vm.log.info('Edit data exchanges cancelled')
+    );
   }
 
-  private editDataProcessingAgreement(item: Dpa) {
-    this.router.navigate(['/dsa', item.uuid, 'edit']);
+  private editPublishers() {
+    const vm = this;
+    OrganisationPickerComponent.open(vm.$modal, vm.publishers, "organisations")
+      .result.then(function
+      (result: Organisation[]) { vm.publishers = result; },
+      () => vm.log.info('Edit publishers cancelled')
+    );
+  }
+
+  private editSubscribers() {
+    const vm = this;
+    OrganisationPickerComponent.open(vm.$modal, vm.subscribers, "organisations")
+      .result.then(function
+      (result: Organisation[]) { vm.subscribers = result; },
+      () => vm.log.info('Edit subscribers cancelled')
+    );
   }
 
   private getLinkedDpas() {
@@ -206,7 +231,34 @@ export class DataFlowEditorComponent implements OnInit {
     vm.dataFlowService.getLinkedDsas(vm.dataFlow.uuid)
       .subscribe(
         result => vm.dsas = result,
-        error => vm.log.error('Failed to load linked Data Sharing Agreement', error, 'Load Linked Data Sharing Agreement')
+        error => vm.log.error('Failed to load linked data sharing agreement', error, 'Load linked data sharing agreement')
+      );
+  }
+
+  private getLinkedExchanges() {
+    const vm = this;
+    vm.dataFlowService.getLinkedExchanges(vm.dataFlow.uuid)
+      .subscribe(
+        result => vm.exchanges = result,
+        error => vm.log.error('Failed to load linked data exchanges', error, 'Load linked data exchanges')
+      );
+  }
+
+  private getLinkedPublishers() {
+    const vm = this;
+    vm.dataFlowService.getLinkedPublishers(vm.dataFlow.uuid)
+      .subscribe(
+        result => vm.publishers = result,
+        error => vm.log.error('Failed to load linked publishers', error, 'Load linked publishers')
+      );
+  }
+
+  private getLinkedSubscribers() {
+    const vm = this;
+    vm.dataFlowService.getLinkedSubscribers(vm.dataFlow.uuid)
+      .subscribe(
+        result => vm.subscribers = result,
+        error => vm.log.error('Failed to load linked subscribers', error, 'Load linked subscribers')
       );
   }
 

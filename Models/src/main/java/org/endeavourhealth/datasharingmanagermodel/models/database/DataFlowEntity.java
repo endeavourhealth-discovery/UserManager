@@ -9,25 +9,20 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "data_flow", schema = "data_sharing_manager")
 public class DataFlowEntity {
     private String uuid;
+    private String purpose;
     private String name;
-    private Short directionId;
-    private short flowScheduleId;
-    private int approximateVolume;
-    private short dataExchangeMethodId;
-    private short flowStatusId;
-    private String additionalDocumentation;
-    private String signOff;
     private short storageProtocolId;
-    private short securityInfrastructureId;
-    private short securityArchitectureId;
+    private Short consentModelId;
+    private Short deidentificationLevel;
 
     @Id
-    @Column(name = "uuid", nullable = false, length = 36)
+    @Column(name = "uuid")
     public String getUuid() {
         return uuid;
     }
@@ -37,7 +32,17 @@ public class DataFlowEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "purpose")
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    @Basic
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -47,77 +52,7 @@ public class DataFlowEntity {
     }
 
     @Basic
-    @Column(name = "direction_id", nullable = true)
-    public Short getDirectionId() {
-        return directionId;
-    }
-
-    public void setDirectionId(Short directionId) {
-        this.directionId = directionId;
-    }
-
-    @Basic
-    @Column(name = "flow_schedule_id", nullable = false)
-    public short getFlowScheduleId() {
-        return flowScheduleId;
-    }
-
-    public void setFlowScheduleId(short flowScheduleId) {
-        this.flowScheduleId = flowScheduleId;
-    }
-
-    @Basic
-    @Column(name = "approximate_volume", nullable = false)
-    public int getApproximateVolume() {
-        return approximateVolume;
-    }
-
-    public void setApproximateVolume(int approximateVolume) {
-        this.approximateVolume = approximateVolume;
-    }
-
-    @Basic
-    @Column(name = "data_exchange_method_id", nullable = false)
-    public short getDataExchangeMethodId() {
-        return dataExchangeMethodId;
-    }
-
-    public void setDataExchangeMethodId(short dataExchangeMethodId) {
-        this.dataExchangeMethodId = dataExchangeMethodId;
-    }
-
-    @Basic
-    @Column(name = "flow_status_id", nullable = false)
-    public short getFlowStatusId() {
-        return flowStatusId;
-    }
-
-    public void setFlowStatusId(short flowStatusId) {
-        this.flowStatusId = flowStatusId;
-    }
-
-    @Basic
-    @Column(name = "additional_documentation", nullable = true, length = 100)
-    public String getAdditionalDocumentation() {
-        return additionalDocumentation;
-    }
-
-    public void setAdditionalDocumentation(String additionalDocumentation) {
-        this.additionalDocumentation = additionalDocumentation;
-    }
-
-    @Basic
-    @Column(name = "sign_off", nullable = true, length = 10)
-    public String getSignOff() {
-        return signOff;
-    }
-
-    public void setSignOff(String signOff) {
-        this.signOff = signOff;
-    }
-
-    @Basic
-    @Column(name = "storage_protocol_id", nullable = false)
+    @Column(name = "storage_protocol_id")
     public short getStorageProtocolId() {
         return storageProtocolId;
     }
@@ -126,65 +61,41 @@ public class DataFlowEntity {
         this.storageProtocolId = storageProtocolId;
     }
 
-    @Basic
-    @Column(name = "security_infrastructure_id", nullable = false)
-    public short getSecurityInfrastructureId() {
-        return securityInfrastructureId;
-    }
-
-    public void setSecurityInfrastructureId(short securityInfrastructureId) {
-        this.securityInfrastructureId = securityInfrastructureId;
-    }
-
-    @Basic
-    @Column(name = "security_architecture_id", nullable = false)
-    public short getSecurityArchitectureId() {
-        return securityArchitectureId;
-    }
-
-    public void setSecurityArchitectureId(short securityArchitectureId) {
-        this.securityArchitectureId = securityArchitectureId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DataFlowEntity that = (DataFlowEntity) o;
-
-        if (flowScheduleId != that.flowScheduleId) return false;
-        if (approximateVolume != that.approximateVolume) return false;
-        if (dataExchangeMethodId != that.dataExchangeMethodId) return false;
-        if (flowStatusId != that.flowStatusId) return false;
-        if (storageProtocolId != that.storageProtocolId) return false;
-        if (securityInfrastructureId != that.securityInfrastructureId) return false;
-        if (securityArchitectureId != that.securityArchitectureId) return false;
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (directionId != null ? !directionId.equals(that.directionId) : that.directionId != null) return false;
-        if (additionalDocumentation != null ? !additionalDocumentation.equals(that.additionalDocumentation) : that.additionalDocumentation != null)
-            return false;
-        if (signOff != null ? !signOff.equals(that.signOff) : that.signOff != null) return false;
-
-        return true;
+        return storageProtocolId == that.storageProtocolId &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(purpose, that.purpose) &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (directionId != null ? directionId.hashCode() : 0);
-        result = 31 * result + (int) flowScheduleId;
-        result = 31 * result + approximateVolume;
-        result = 31 * result + (int) dataExchangeMethodId;
-        result = 31 * result + (int) flowStatusId;
-        result = 31 * result + (additionalDocumentation != null ? additionalDocumentation.hashCode() : 0);
-        result = 31 * result + (signOff != null ? signOff.hashCode() : 0);
-        result = 31 * result + (int) storageProtocolId;
-        result = 31 * result + (int) securityInfrastructureId;
-        result = 31 * result + (int) securityArchitectureId;
-        return result;
+
+        return Objects.hash(uuid, purpose, name, storageProtocolId);
+    }
+
+    @Basic
+    @Column(name = "consent_model_id")
+    public Short getConsentModelId() {
+        return consentModelId;
+    }
+
+    public void setConsentModelId(Short consentModelId) {
+        this.consentModelId = consentModelId;
+    }
+
+    @Basic
+    @Column(name = "deidentification_level")
+    public Short getDeidentificationLevel() {
+        return deidentificationLevel;
+    }
+
+    public void setDeidentificationLevel(Short deidentificationLevel) {
+        this.deidentificationLevel = deidentificationLevel;
     }
 
     public static List<DataFlowEntity> getAllDataFlows() throws Exception {
@@ -218,16 +129,10 @@ public class DataFlowEntity {
         DataFlowEntity dataFlowEntity = entityManager.find(DataFlowEntity.class, dataFlow.getUuid());
         entityManager.getTransaction().begin();
         dataFlowEntity.setName(dataFlow.getName());
-        dataFlowEntity.setDirectionId(dataFlow.getDirectionId());
-        dataFlowEntity.setFlowScheduleId(dataFlow.getFlowScheduleId());
-        dataFlowEntity.setApproximateVolume(dataFlow.getApproximateVolume());
-        dataFlowEntity.setDataExchangeMethodId(dataFlow.getDataExchangeMethodId());
         dataFlowEntity.setStorageProtocolId(dataFlow.getStorageProtocolId());
-        dataFlowEntity.setSecurityInfrastructureId(dataFlow.getSecurityInfrastructureId());
-        dataFlowEntity.setSecurityArchitectureId(dataFlow.getSecurityArchitectureId());
-        dataFlowEntity.setFlowStatusId(dataFlow.getFlowStatusId());
-        dataFlowEntity.setAdditionalDocumentation(dataFlow.getAdditionalDocumentation());
-        dataFlowEntity.setSignOff(dataFlow.getSignOff());
+        dataFlowEntity.setDeidentificationLevel(dataFlow.getDeidentificationLevel());
+        dataFlowEntity.setConsentModelId(dataFlow.getConsentModelId());
+        dataFlowEntity.setPurpose(dataFlow.getPurpose());
         entityManager.getTransaction().commit();
 
         entityManager.close();
@@ -239,13 +144,10 @@ public class DataFlowEntity {
         DataFlowEntity dataFlowEntity = new DataFlowEntity();
         entityManager.getTransaction().begin();
         dataFlowEntity.setName(dataFlow.getName());
-        dataFlowEntity.setDirectionId(dataFlow.getDirectionId());
-        dataFlowEntity.setFlowScheduleId(dataFlow.getFlowScheduleId());
-        dataFlowEntity.setApproximateVolume(dataFlow.getApproximateVolume());
-        dataFlowEntity.setDataExchangeMethodId(dataFlow.getDataExchangeMethodId());
-        dataFlowEntity.setFlowStatusId(dataFlow.getFlowStatusId());
-        dataFlowEntity.setAdditionalDocumentation(dataFlow.getAdditionalDocumentation());
-        dataFlowEntity.setSignOff(dataFlow.getSignOff());
+        dataFlowEntity.setStorageProtocolId(dataFlow.getStorageProtocolId());
+        dataFlowEntity.setDeidentificationLevel(dataFlow.getDeidentificationLevel());
+        dataFlowEntity.setConsentModelId(dataFlow.getConsentModelId());
+        dataFlowEntity.setPurpose(dataFlow.getPurpose());
         dataFlowEntity.setUuid(dataFlow.getUuid());
         entityManager.persist(dataFlowEntity);
         entityManager.getTransaction().commit();

@@ -19,6 +19,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
   dataflowStats: OrganisationManagerStatistics[];
   cohortStats: OrganisationManagerStatistics[];
   datasetStats: OrganisationManagerStatistics[];
+  dataExchangeStats: OrganisationManagerStatistics[];
 
   constructor(private dataSharingSummaryService: DataSharingSummaryService,
               private organisationService: OrganisationService,
@@ -37,7 +38,8 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
     vm.getDataFlowStatistics();
     vm.getCohortStatistics();
     vm.getDataSetStatistics();
-    // vm.getSummaryStatistics();
+    vm.getSummaryStatistics();
+    vm.getDataExchangeStatistics();
   }
 
   getSummaryStatistics() {
@@ -46,7 +48,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
       .subscribe(result => {
           vm.summaryStats = result
         },
-        error => vm.log.error('Failed to load Data Sharing Summary statistics', error, 'Load Data Sharing Summary statistics')
+        error => vm.log.error('Failed to load data sharing summary statistics', error, 'Load data sharing summary statistics')
       );
   }
 
@@ -56,7 +58,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
       .subscribe(result => {
           vm.dpaStats = result
         },
-        error => vm.log.error('Failed to load Data Processing Agreement statistics', error, 'Load Data Processing Agreement statistics')
+        error => vm.log.error('Failed to load data processing agreement statistics', error, 'Load data processing agreement statistics')
       );
   }
 
@@ -66,7 +68,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
       .subscribe(result => {
           vm.dsaStats = result
         },
-        error => vm.log.error('Failed to load Data Sharing Agreement statistics', error, 'Load Data Sharing Agreement statistics')
+        error => vm.log.error('Failed to load data sharing agreement statistics', error, 'load data sharing agreement statistics')
       );
   }
 
@@ -76,7 +78,7 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
       .subscribe(result => {
           vm.dataflowStats = result
         },
-        error => vm.log.error('Failed to load Data Flow statistics', error, 'Load Data Flow statistics')
+        error => vm.log.error('Failed to load data flow statistics', error, 'Load data flow statistics')
       );
   }
 
@@ -96,7 +98,17 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
       .subscribe(result => {
           vm.datasetStats = result
         },
-        error => vm.log.error('Failed to load Dataset statistics', error, 'Load Dataset statistics')
+        error => vm.log.error('Failed to load dataset statistics', error, 'Load dataset statistics')
+      );
+  }
+
+  getDataExchangeStatistics() {
+    const vm = this;
+    vm.organisationService.getStatistics('exchange')
+      .subscribe(result => {
+          vm.dataExchangeStats = result
+        },
+        error => vm.log.error('Failed to load data exchange statistics', error, 'Load data exchange statistics')
       );
   }
 
@@ -131,6 +143,10 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   goToDataSets() {
     this.router.navigate(['/dataSets']);
+  }
+
+  goToDataExchanges() {
+    this.router.navigate(['/dataExchanges']);
   }
 
 }

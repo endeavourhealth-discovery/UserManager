@@ -158,13 +158,64 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
     @ApiOperation(value = "Returns a list of Json representations of Data Sharing Agreements that are linked " +
             "to the data flow.  Accepts a UUID of a data flow.")
     public Response getLinkedDsasForDataFlow(@Context SecurityContext sc,
-                                  @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
+                                             @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "DSA(s)",
                 "DSA Id", uuid);
 
         return getLinkedDsas(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.getLinkedDataExchanges")
+    @Path("/exchanges")
+    @ApiOperation(value = "Returns a list of Json representations of Data exchanges that are linked " +
+            "to the data flow.  Accepts a UUID of a data flow.")
+    public Response getLinkedDataExchanges(@Context SecurityContext sc,
+                                             @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Data Exchanges(s)",
+                "Dataflow Id", uuid);
+
+        return getLinkedDataExchanges(uuid);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.getLinkedPublishers")
+    @Path("/publishers")
+    @ApiOperation(value = "Returns a list of Json representations of publishers that are linked " +
+            "to the data flow.  Accepts a UUID of a data flow.")
+    public Response getLinkedPublishers(@Context SecurityContext sc,
+                                           @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Publishers(s)",
+                "Dataflow Id", uuid);
+
+        return getLinkedOrganisations(uuid, MapType.PUBLISHER.getMapType());
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DataFlowEndpoint.getLinkedSubscribers")
+    @Path("/subscribers")
+    @ApiOperation(value = "Returns a list of Json representations of subscribers that are linked " +
+            "to the data flow.  Accepts a UUID of a data flow.")
+    public Response getLinkedSubscribers(@Context SecurityContext sc,
+                                        @ApiParam(value = "UUID of data flow") @QueryParam("uuid") String uuid) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Subscribers(s)",
+                "Dataflow Id", uuid);
+
+        return getLinkedOrganisations(uuid, MapType.SUBSCRIBER.getMapType());
     }
 
     private Response getDataFlowList() throws Exception {
@@ -220,6 +271,36 @@ public final class DataFlowEndpoint extends AbstractEndpoint {
 
         if (dsaUuids.size() > 0)
             ret = DataSharingAgreementEntity.getDSAsFromList(dsaUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getLinkedDataExchanges(String dataFlowUuid) throws Exception {
+
+        List<String> exchangeUuids = MasterMappingEntity.getChildMappings(dataFlowUuid, MapType.DATAFLOW.getMapType(), MapType.DATAEXCHANGE.getMapType());
+        List<DataExchangeEntity> ret = new ArrayList<>();
+
+        if (exchangeUuids.size() > 0)
+            ret = DataExchangeEntity.getDataExchangesFromList(exchangeUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getLinkedOrganisations(String dataFlowUuid, Short mapType) throws Exception {
+
+        List<String> orgUUIDs = MasterMappingEntity.getChildMappings(dataFlowUuid, MapType.DATAFLOW.getMapType(), mapType);
+        List<OrganisationEntity> ret = new ArrayList<>();
+
+        if (orgUUIDs.size() > 0)
+            ret = OrganisationEntity.getOrganisationsFromList(orgUUIDs);
 
         clearLogbackMarkers();
         return Response

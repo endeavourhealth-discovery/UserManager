@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DataflowPickerComponent } from './dataflow-picker.component';
 
-describe('DataflowPickerComponent', () => {
+describe('DataExchangePickerComponent', () => {
   let component: DataflowPickerComponent;
   let fixture: ComponentFixture<DataflowPickerComponent>;
 

@@ -386,7 +386,22 @@ public class MasterMappingEntity {
 
         if (dataFlow.getDpas() != null) {
             Map<UUID, String> dpas = dataFlow.getDpas();
-            saveChildMappings(dpas, MapType.DATAPROCESSINGAGREEMENT.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+            saveParentMappings(dpas, MapType.DATAPROCESSINGAGREEMENT.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+        }
+
+        if (dataFlow.getExchanges() != null) {
+            Map<UUID, String> exchanges = dataFlow.getExchanges();
+            saveChildMappings(exchanges, MapType.DATAEXCHANGE.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+        }
+
+        if (dataFlow.getPublishers() != null) {
+            Map<UUID, String> publishers = dataFlow.getPublishers();
+            saveChildMappings(publishers, MapType.PUBLISHER.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+        }
+
+        if (dataFlow.getSubscribers() != null) {
+            Map<UUID, String> subscribers = dataFlow.getSubscribers();
+            saveChildMappings(subscribers, MapType.SUBSCRIBER.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
         }
 
         if (dataFlow.getDocumentations() != null) {
@@ -396,6 +411,14 @@ public class MasterMappingEntity {
                 documentation.put(UUID.fromString(doc.getUuid()), doc.getTitle());
             }
             saveChildMappings(documentation, MapType.DOCUMENT.getMapType(), dataFlow.getUuid(), MapType.DATAFLOW.getMapType());
+        }
+    }
+
+    public static void saveDataExchangeMappings(JsonDataExchange dataExchange) throws Exception {
+
+        if (dataExchange.getDataFlows() != null) {
+            Map<UUID, String> dataFlows = dataExchange.getDataFlows();
+            saveParentMappings(dataFlows, MapType.DATAFLOW.getMapType(),  dataExchange.getUuid(), MapType.DATAEXCHANGE.getMapType());
         }
     }
 

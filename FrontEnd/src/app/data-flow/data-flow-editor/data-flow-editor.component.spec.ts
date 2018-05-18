@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DataFlowEditorComponent } from './data-flow-editor.component';
 
-describe('DataFlowEditorComponent', () => {
+describe('DataExchangeEditorComponent', () => {
   let component: DataFlowEditorComponent;
   let fixture: ComponentFixture<DataFlowEditorComponent>;
 

@@ -20,6 +20,7 @@ import {DataSharingSummaryModule} from './data-sharing-summary/data-sharing-summ
 import {CohortModule} from './cohort/cohort.module';
 import {DataSetModule} from './data-set/data-set.module';
 import {MySharingModule} from "./my-sharing/my-sharing.module";
+import {DataExchangeModule} from "./data-exchange/data-exchange.module";
 
 @NgModule({
   declarations: [],
@@ -33,6 +34,7 @@ import {MySharingModule} from "./my-sharing/my-sharing.module";
     OrganisationModule,
     RegionModule,
     DataFlowModule,
+    DataExchangeModule,
     DataSharingAgreementModule,
     DataProcessingAgreementModule,
     DataSharingSummaryModule,

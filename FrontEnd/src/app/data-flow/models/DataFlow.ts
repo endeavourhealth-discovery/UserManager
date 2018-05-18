@@ -3,25 +3,20 @@ import {Documentation} from "../../documentation/models/Documentation";
 export class DataFlow {
     uuid: string;
     name: string;
-    directionId: number;
-    flowScheduleId: number;
-    approximateVolume: number;
-    dataExchangeMethodId: number;
+    purpose: string;
     storageProtocolId: number;
-    securityInfrastructureId: number;
-    securityArchitectureId: number;
-    flowStatusId: number;
-    additionalDocumentation: string;
-    signOff: string;
+    deidentificationLevel: number;
+    consentModelId: number;
     dsas: { [key: string]: string; };
     dpas: { [key: string]: string; };
+    exchanges: { [key: string]: string; };
+    publishers: { [key: string]: string; };
+    subscribers: { [key: string]: string; };
     documentations: Documentation[];
 
     getDisplayItems(): any[] {
         return [
-            {label: 'Flow status', property: 'flowStatusId'},
-            {label: 'Approximate volume', property: 'approximateVolume'},
-            {label: 'Sign off', property: 'signOff'}
+            {label: 'Purpose', property: 'purpose'}
         ];
     }
 }
