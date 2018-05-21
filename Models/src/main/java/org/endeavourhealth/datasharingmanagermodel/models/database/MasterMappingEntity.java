@@ -426,7 +426,7 @@ public class MasterMappingEntity {
 
         if (dpa.getDataFlows() != null) {
             Map<UUID, String> dataFlows = dpa.getDataFlows();
-            saveParentMappings(dataFlows, MapType.DATAFLOW.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+            saveChildMappings(dataFlows, MapType.DATAFLOW.getMapType(), dpa.getUuid(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
         }
 
         if (dpa.getCohorts() != null) {

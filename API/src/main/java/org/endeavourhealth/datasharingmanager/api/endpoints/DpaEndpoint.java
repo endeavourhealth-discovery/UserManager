@@ -283,6 +283,25 @@ public final class DpaEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.checkOrganisationAndSystem")
+    @Path("/checkOrganisationAndSystem")
+    @ApiOperation(value = "Checks whether an organisation and system is part of a data processing agreement. " +
+            "Returns a list of data processing agreements")
+    public Response checkOrganisationAndSystem(@Context SecurityContext sc,
+                                               @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode,
+                                               @ApiParam(value = "System Type") @QueryParam("systemType") String systemType
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "check Organisation(s)",
+                "ODS Code", odsCode);
+
+        return checkOrganisationIsPartOfDPA(odsCode, true);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.getMarkersOfSubscribersOfDPA")
     @Path("/subscriberMarkers")
     @ApiOperation(value = "Returns a list of Json representations of addresses that are linked " +
@@ -347,7 +366,7 @@ public final class DpaEndpoint extends AbstractEndpoint {
 
     private Response getLinkedDataFlows(String dpaUuid) throws Exception {
 
-        List<String> dataFlowUuids = MasterMappingEntity.getParentMappings(dpaUuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.DATAFLOW.getMapType());
+        List<String> dataFlowUuids = MasterMappingEntity.getChildMappings(dpaUuid, MapType.DATAPROCESSINGAGREEMENT.getMapType(), MapType.DATAFLOW.getMapType());
         List<DataFlowEntity> ret = new ArrayList<>();
 
         if (dataFlowUuids.size() > 0)
