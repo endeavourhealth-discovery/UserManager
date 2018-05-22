@@ -281,6 +281,24 @@ public final class DsaEndpoint extends AbstractEndpoint {
         return AddressEntity.getOrganisationMarkers(uuid, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.DpaEndpoint.checkOrganisationIsPartOfAgreement")
+    @Path("/checkOrganisationIsPartOfAgreement")
+    @ApiOperation(value = "Checks whether an organisation and system is part of a data processing agreement. " +
+            "Returns a list of data processing agreements")
+    public Response checkOrganisationIsPartOfAgreement(@Context SecurityContext sc,
+                                               @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "check Organisation(s)",
+                "ODS Code", odsCode);
+
+        return checkOrganisationIsPartOfDSA(odsCode);
+    }
+
     private Response getDSAList() throws Exception {
 
         List<DataSharingAgreementEntity> dsas = DataSharingAgreementEntity.getAllDSAs();
@@ -416,6 +434,17 @@ public final class DsaEndpoint extends AbstractEndpoint {
         }
 
         return purposes;
+    }
+
+    private Response checkOrganisationIsPartOfDSA(String odsCode) throws Exception {
+
+        List<String> matchingDpaEndpoints = DataSharingAgreementEntity.checkDataSharingAgreementsForOrganisation(odsCode);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(matchingDpaEndpoints)
+                .build();
     }
 
 }

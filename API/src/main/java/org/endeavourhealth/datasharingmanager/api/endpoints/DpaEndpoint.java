@@ -289,14 +289,14 @@ public final class DpaEndpoint extends AbstractEndpoint {
             "Returns a list of data processing agreements")
     public Response checkOrganisationAndSystem(@Context SecurityContext sc,
                                                @ApiParam(value = "ODS Code of organisation") @QueryParam("odsCode") String odsCode,
-                                               @ApiParam(value = "System Type") @QueryParam("systemType") String systemType
+                                               @ApiParam(value = "System Name") @QueryParam("systemName") String systemName
     ) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "check Organisation(s)",
                 "ODS Code", odsCode);
 
-        return checkOrganisationIsPartOfDPA(odsCode, true);
+        return checkOrganisationAndSystemIsPartOfDPA(odsCode, systemName);
     }
 
     @GET
@@ -466,6 +466,17 @@ public final class DpaEndpoint extends AbstractEndpoint {
                     .entity(matchingDpa.size())
                     .build();
         }
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(matchingDpa)
+                .build();
+    }
+
+    private Response checkOrganisationAndSystemIsPartOfDPA(String odsCode, String systemName) throws Exception {
+
+        List<DataProcessingAgreementEntity> matchingDpa = DataProcessingAgreementEntity.getDataProcessingAgreementsForOrganisationAndSystemType(odsCode, systemName);
 
         clearLogbackMarkers();
         return Response

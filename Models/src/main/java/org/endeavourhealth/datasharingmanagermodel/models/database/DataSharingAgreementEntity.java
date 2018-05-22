@@ -2,6 +2,7 @@ package org.endeavourhealth.datasharingmanagermodel.models.database;
 
 
 import org.endeavourhealth.datasharingmanagermodel.PersistenceManager;
+import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonDSA;
 
 import javax.persistence.*;
@@ -252,5 +253,34 @@ public class DataSharingAgreementEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static List<String> checkDataSharingAgreementsForOrganisation(String odsCode) throws Exception {
+
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        Query query = entityManager.createQuery(
+                "select de.endpoint from DataSharingAgreementEntity dsa " +
+                        "inner join MasterMappingEntity mm on mm.parentUuid = dsa.uuid and mm.parentMapTypeId = :dpaType " +
+                        "inner join OrganisationEntity o on o.uuid = mm.childUuid and mm.childMapTypeId = :subscriberType " +
+                        "inner join MasterMappingEntity mdf on mdf.parentUuid = dsa.uuid and mdf.parentMapTypeId = :dpaType " +
+                        "inner join DataFlowEntity df on df.uuid = mdf.childUuid and mm.childMapTypeId = :dataFlowType " +
+                        "inner join MasterMappingEntity mde on mde.parentUuid = df.uuid and mde.parentMapTypeId = :dataFlowType " +
+                        "inner join DataExchangeEntity de on de.uuid = mde.childUuid and mde.childMapTypeId = :exchangeType " +
+                        "where o.odsCode = :ods " +
+                        "and (dsa.startDate is not null and dsa.startDate <= current_date) " +
+                        "and (dsa.endDate is null or dsa.endDate >= current_date) " +
+                        "and dsa.dsaStatusId = 0 ");
+        query.setParameter("dpaType", MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        query.setParameter("ods", odsCode);
+        query.setParameter("subscriberType", MapType.SUBSCRIBER.getMapType());
+        query.setParameter("dataFlowType", MapType.DATAFLOW.getMapType());
+        query.setParameter("exchangeType", MapType.DATAEXCHANGE.getMapType());
+
+        List<String> result = query.getResultList();
+
+        entityManager.close();
+
+        return result;
     }
 }

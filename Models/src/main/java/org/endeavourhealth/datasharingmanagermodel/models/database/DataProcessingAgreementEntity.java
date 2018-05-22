@@ -328,7 +328,7 @@ public class DataProcessingAgreementEntity {
         return result;
     }
 
-    public static List<DataProcessingAgreementEntity> getDataProcessingAgreementsForOrganisationAndSystemType(String odsCode, String systemType) throws Exception {
+    public static List<DataProcessingAgreementEntity> getDataProcessingAgreementsForOrganisationAndSystemType(String odsCode, String systemName) throws Exception {
 
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
@@ -347,7 +347,7 @@ public class DataProcessingAgreementEntity {
                         "and dpa.dsaStatusId = 0 ");
         query.setParameter("dpaType", MapType.DATAPROCESSINGAGREEMENT.getMapType());
         query.setParameter("ods", odsCode);
-        query.setParameter("sysName", systemType);
+        query.setParameter("sysName", systemName);
         query.setParameter("publisherType", MapType.PUBLISHER.getMapType());
         query.setParameter("dataFlowType", MapType.DATAFLOW.getMapType());
         query.setParameter("exchangeType", MapType.DATAEXCHANGE.getMapType());
