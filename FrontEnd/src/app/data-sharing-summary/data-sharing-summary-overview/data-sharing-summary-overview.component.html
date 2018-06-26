@@ -26,28 +26,6 @@
         </div>
         <div class="col-md-6">
           <div class="card h-100">
-            <div class="card-header  bg-success">Data flows</div>
-            <div class="card-block">
-              <div class="row" *ngFor="let dataflow of dataflowStats">
-                <div class="col-md-10">
-                  {{dataflow.label}}
-                </div>
-                <div class="col-md-2">
-                  {{dataflow.value}}
-                </div>
-              </div>
-              <br>
-              <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-success" (click)="goToDataFlow()">View data flows</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card h-100">
             <div class="card-header  bg-warning">Data processing agreements</div>
             <div class="card-block">
               <div class="row" *ngFor="let dpa of dpaStats">
@@ -65,6 +43,31 @@
             </div>
           </div>
         </div>
+      </div>
+      <br>
+      <!--
+      <div class="row">
+
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header  bg-success">Data flows</div>
+            <div class="card-block">
+              <div class="row" *ngFor="let dataflow of dataflowStats">
+                <div class="col-md-10">
+                  {{dataflow.label}}
+                </div>
+                <div class="col-md-2">
+                  {{dataflow.value}}
+                </div>
+              </div>
+              <br>
+              <div class="pull-right">
+                <button type="button" class="btn btn-sm btn-success" (click)="goToDataFlow()">View data flows</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="col-md-6">
           <div class="card h-100">
             <div class="card-header text-white bg-primary">Cohorts</div>
@@ -125,7 +128,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>
