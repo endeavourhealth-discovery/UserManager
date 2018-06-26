@@ -67,7 +67,7 @@
         </div>
         <div *ngIf="allowEdit" class="col-md-6">
           <div class="card h-100">
-            <div class="card-header">Bulk upload</div>
+            <div class="card-header bg-primary text-white">Bulk upload</div>
             <div class="card-block">
               <form endUserRole="form" class="container-fluid">
                 <div class="row">
@@ -83,7 +83,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
-                    <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">OK</button>
+                    <button type="button" class="btn btn-primary" (click)="ok()" [disabled]="!file">Upload files</button>
                   </div>
                 </div>
               </form>

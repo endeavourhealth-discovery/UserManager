@@ -89,7 +89,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card h-100">
-            <div class="card-header">Datasets</div>
+            <div class="card-header" [style.backgroundColor]="'#FF6464'">Datasets</div>
             <div class="card-block">
               <div class="row" *ngFor="let dataset of datasetStats">
                 <div class="col-md-10">
@@ -101,14 +101,14 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-secondary" (click)="goToDataSets()">View datasets</button>
+                <button type="button" class="btn btn-sm btn-secondary" [style.backgroundColor]="'#FF6464'" (click)="goToDataSets()">View datasets</button>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card h-100">
-            <div class="card-header">Data exchange configurations</div>
+            <div class="card-header" [style.backgroundColor]="'#B2A2C7'">Data exchange configurations</div>
             <div class="card-block">
               <div class="row" *ngFor="let exchangeStat of dataExchangeStats">
                 <div class="col-md-10">
@@ -120,7 +120,7 @@
               </div>
               <br>
               <div class="pull-right">
-                <button type="button" class="btn btn-sm btn-secondary" (click)="goToDataExchanges()">View data exchange configurations</button>
+                <button type="button" class="btn btn-sm btn-secondary" [style.backgroundColor]="'#B2A2C7'" (click)="goToDataExchanges()">View data exchange configurations</button>
               </div>
             </div>
           </div>
