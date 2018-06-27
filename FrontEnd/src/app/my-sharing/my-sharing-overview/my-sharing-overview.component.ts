@@ -15,10 +15,11 @@ import {Dsa} from "../../data-sharing-agreement/models/Dsa";
 })
 export class MySharingOverviewComponent implements OnInit {
   currentUser: User;
-  currentOrg = 'c45ccafd-f86a-4778-845a-96269cad6c3d';
-  dpaPublishing: Dpa[];
-  dsaPublishing: Dsa[];
-  dsaSubscribing: Dsa[];
+  userOrgs : string[] = [];
+  currentOrg = 'c45ccafd-f86a-4778-845a-96269cad6c3d';  // d79f403b-963d-4817-b4a5-0fbf6a516cb0
+  dpaPublishing: Dpa[] = [];
+  dsaPublishing: Dsa[] = [];
+  dsaSubscribing: Dsa[] = [];
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
   dsaDetailsToShow = new Dsa().getDisplayItems();
@@ -35,35 +36,44 @@ export class MySharingOverviewComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.currentUser = vm.securityService.getCurrentUser();
-    console.log(this.currentUser);
-    vm.getDPAsPublishingTo();
-    vm.getDSAsPublishingTo();
-    vm.getDSAsSubscribingTo();
+    vm.getOrganisationsForUser(vm.currentUser);
+    // vm.currentOrg = vm.currentUser.organisation;
   }
 
-  private getDPAsPublishingTo() {
+  private getOrganisationsForUser(user: User) {
     const vm = this;
-    vm.organisationService.getDPAPublishing(vm.currentOrg)
+    vm.userOrgs = user.organisationGroups.map(a => a.organisationId);
+    console.log(vm.userOrgs);
+    for (let idx in vm.userOrgs) {
+      vm.getDPAsPublishingTo(vm.userOrgs[idx]);
+      vm.getDSAsPublishingTo(vm.userOrgs[idx]);
+      vm.getDSAsSubscribingTo(vm.userOrgs[idx]);
+    }
+  }
+
+  private getDPAsPublishingTo(org: string) {
+    const vm = this;
+    vm.organisationService.getDPAPublishing(org)
       .subscribe(
-        result => {vm.dpaPublishing = result; console.log(result);},
+        result => {vm.dpaPublishing.push.apply(vm.dpaPublishing, result);},
         error => vm.log.error('Failed to load DPAs organisation publishing to', error, 'Load organisation DPA Publishers')
       );
   }
 
-  private getDSAsPublishingTo() {
+  private getDSAsPublishingTo(org: string) {
     const vm = this;
-    vm.organisationService.getDSAPublishing(vm.currentOrg)
+    vm.organisationService.getDSAPublishing(org)
       .subscribe(
-        result => {vm.dsaPublishing = result; console.log(result);},
+        result => {vm.dsaPublishing.push.apply(vm.dsaPublishing, result);},
         error => vm.log.error('Failed to load DSAs organisation publishing to', error, 'Load organisation DSA Publishers')
       );
   }
 
-  private getDSAsSubscribingTo() {
+  private getDSAsSubscribingTo(org: string) {
     const vm = this;
-    vm.organisationService.getDSASubscribing(vm.currentOrg)
+    vm.organisationService.getDSASubscribing(org)
       .subscribe(
-        result => {vm.dsaSubscribing = result; console.log(result);},
+        result => {vm.dsaSubscribing.push.apply(vm.dsaSubscribing, result);},
         error => vm.log.error('Failed to load DSAs organisation subscribing to', error, 'Load organisation DSA Publishers')
       );
   }

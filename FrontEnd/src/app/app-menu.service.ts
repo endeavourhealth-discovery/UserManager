@@ -28,7 +28,7 @@ import {DataExchangeEditorComponent} from "./data-exchange/data-exchange-editor/
 export class AppMenuService implements  AbstractMenuProvider  {
   static getRoutes(): Routes {
     return [
-      { path: '', redirectTo : 'organisationOverview', pathMatch: 'full' }, // Default route
+      { path: '', redirectTo : 'mySharingOverview', pathMatch: 'full' }, // Default route
       { path: 'organisationOverview', component: OrganisationOverviewComponent},
       { path: 'sharingOverview', component: DataSharingSummaryOverviewComponent},
       { path: 'organisations', component: OrganisationComponent},
@@ -61,9 +61,9 @@ export class AppMenuService implements  AbstractMenuProvider  {
   }
   getMenuOptions(): MenuOption[] {
     return [
+      {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'},
       {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o', role: 'eds-dsa-manager:viewer'},
-      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'},
-      {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'}
+      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'}
     ];
   }
 }
