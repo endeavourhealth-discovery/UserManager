@@ -26,6 +26,7 @@ export class OrganisationOverviewComponent implements OnInit {
   fileList: FileList;
   currentUser: User;
   allowEdit = false;
+  allowBulk = false;
 
   conflictedOrgs: Organisation[];
   orgStats: OrganisationManagerStatistics[];
@@ -45,6 +46,7 @@ export class OrganisationOverviewComponent implements OnInit {
     this.getOverview();
     this.currentUser = this.securityService.getCurrentUser();
     this.checkEditPermission();
+    this.checkBulkPermission();
     console.log(this.currentUser);
   }
 
@@ -52,6 +54,12 @@ export class OrganisationOverviewComponent implements OnInit {
     const vm = this;
     if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:admin'))
       vm.allowEdit = true;
+  }
+
+  checkBulkPermission() {
+    const vm = this;
+    if (vm.securityService.hasPermission('eds-dsa-manager', 'eds-dsa-manager:bulk'))
+      vm.allowBulk = true;
   }
 
   getOverview() {
