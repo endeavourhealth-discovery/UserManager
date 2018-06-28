@@ -464,10 +464,10 @@ public class OrganisationEntity {
     private static void sortOrganisationCache(List<OrganisationEntity> orgs, String orderColumn, boolean descending) throws Exception {
         switch (orderColumn) {
             case "name":
-                orgs.sort(Comparator.comparing(OrganisationEntity::getName));
+                orgs.sort(Comparator.comparing(OrganisationEntity::getName, String.CASE_INSENSITIVE_ORDER));
                 break;
             case "odsCode":
-                orgs.sort(Comparator.comparing(OrganisationEntity::getOdsCode));
+                orgs.sort(Comparator.comparing(OrganisationEntity::getOdsCode, String.CASE_INSENSITIVE_ORDER));
                 break;
             default: throw new Exception("Order column not recognised");
         }
