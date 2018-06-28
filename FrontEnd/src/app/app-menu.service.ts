@@ -63,7 +63,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
     return [
       {caption: 'My Sharing', state: 'mySharingOverview', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'},
       {caption: 'Organisation', state: 'organisationOverview', icon: 'fa fa-hospital-o', role: 'eds-dsa-manager:viewer'},
-      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'}
+      {caption: 'Sharing', state: 'sharingOverview', icon: 'fa-share-alt', role: 'eds-dsa-manager:viewer'}
     ];
   }
 }
