@@ -151,6 +151,7 @@ export class OrganisationService  {
   uploadCsv(fileToUpload: FileUpload): Observable<any> {
     const vm = this;
     return vm.http.post('api/organisation/upload', fileToUpload)
+      .timeout(60000)
       .map((response) => response.json());
   }
 
