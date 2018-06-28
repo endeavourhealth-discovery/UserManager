@@ -47,7 +47,6 @@ export class OrganisationOverviewComponent implements OnInit {
     this.currentUser = this.securityService.getCurrentUser();
     this.checkEditPermission();
     this.checkBulkPermission();
-    console.log(this.currentUser);
   }
 
   checkEditPermission() {
@@ -188,7 +187,6 @@ export class OrganisationOverviewComponent implements OnInit {
 
   private sendToServer(fileToUpload: FileUpload) {
     const vm = this;
-    console.log(fileToUpload);
     vm.organisationService.uploadCsv(fileToUpload)
       .subscribe(result => {
           fileToUpload.success = 1;
