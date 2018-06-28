@@ -52,10 +52,10 @@
                 </select>
               </div>
             </div>
-            <div class="form-group col-md-6">
+            <!--<div class="form-group col-md-6">
               <label class="control-label">Evidence of registration</label>
               <input type="text" class="form-control" placeholder="Evidence of registration" [(ngModel)]="organisation.evidenceOfRegistration" name="evidenceOfRegistration">
-            </div>
+            </div>-->
           </div>
           <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-info" (click)="addAddress()">Add Address</button>
           <div class="well" *ngFor="let address of addresses">
