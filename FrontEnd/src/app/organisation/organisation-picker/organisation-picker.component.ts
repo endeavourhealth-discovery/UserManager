@@ -14,11 +14,13 @@ export class OrganisationPickerComponent implements OnInit {
   searchData: string;
   searchResults: Organisation[];
   searchType: string;
+  uuid: string;
 
-  public static open(modalService: NgbModal, organisations: Organisation[], searchType: string) {
+  public static open(modalService: NgbModal, organisations: Organisation[], searchType: string, uuid: string = '') {
     const modalRef = modalService.open(OrganisationPickerComponent, { backdrop : 'static'});
     modalRef.componentInstance.resultData = Object.assign([], organisations);
     modalRef.componentInstance.searchType = searchType;
+    modalRef.componentInstance.uuid = uuid;
 
     return modalRef;
   }
@@ -37,7 +39,7 @@ export class OrganisationPickerComponent implements OnInit {
     }
     vm.organisationService.search(vm.searchData, vm.searchType)
       .subscribe(
-        (result) => vm.searchResults = result,
+        (result) => vm.searchResults = result.filter(function(x) {return x.uuid != vm.uuid; }),
         (error) => vm.log.error(error)
       );
   }

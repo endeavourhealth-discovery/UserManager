@@ -226,7 +226,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editChildOrganisations() {
     const vm = this;
-    OrganisationPickerComponent.open(vm.$modal, vm.childOrganisations, 'organisation' )
+    OrganisationPickerComponent.open(vm.$modal, vm.childOrganisations, 'organisation', vm.organisation.uuid )
       .result.then(function (result: Organisation[]) {
       vm.childOrganisations = result;
     });
@@ -234,7 +234,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editParentOrganisations() {
     const vm = this;
-    OrganisationPickerComponent.open(vm.$modal, vm.parentOrganisations, 'organisation' )
+    OrganisationPickerComponent.open(vm.$modal, vm.parentOrganisations, 'organisation', vm.organisation.uuid )
       .result.then(function (result: Organisation[]) {
       vm.parentOrganisations = result;
     });
@@ -242,7 +242,7 @@ export class OrganisationEditorComponent implements OnInit {
 
   private editServices() {
     const vm = this;
-    OrganisationPickerComponent.open(vm.$modal, vm.services, 'services' )
+    OrganisationPickerComponent.open(vm.$modal, vm.services, 'services', vm.organisation.uuid )
       .result.then(function (result: Organisation[]) {
       vm.services = result;
     });

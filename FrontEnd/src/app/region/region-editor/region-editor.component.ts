@@ -196,7 +196,7 @@ export class RegionEditorComponent implements OnInit {
 
   private editParentRegions() {
     const vm = this;
-    RegionPickerComponent.open(vm.$modal, vm.parentRegions)
+    RegionPickerComponent.open(vm.$modal, vm.parentRegions, vm.region.uuid)
       .result.then(function (result: Region[]) {
       vm.parentRegions = result;
     });
@@ -204,7 +204,7 @@ export class RegionEditorComponent implements OnInit {
 
   private editChildRegions() {
     const vm = this;
-    RegionPickerComponent.open(vm.$modal, vm.childRegions)
+    RegionPickerComponent.open(vm.$modal, vm.childRegions, vm.region.uuid)
       .result.then(function (result: Region[]) {
       vm.childRegions = result;
     });

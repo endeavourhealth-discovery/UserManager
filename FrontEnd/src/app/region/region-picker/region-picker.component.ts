@@ -14,10 +14,12 @@ export class RegionPickerComponent implements OnInit {
   @Input() resultData: Region[];
   searchData: string;
   searchResults: Region[];
+  uuid: string;
 
-  public static open(modalService: NgbModal, regions: Region[]) {
+  public static open(modalService: NgbModal, regions: Region[], uuid: string = '') {
     const modalRef = modalService.open(RegionPickerComponent, { backdrop : 'static'});
     modalRef.componentInstance.resultData = Object.assign([], regions);
+    modalRef.componentInstance.uuid = uuid;
 
     return modalRef;
   }
@@ -34,9 +36,10 @@ export class RegionPickerComponent implements OnInit {
     if (vm.searchData.length < 3) {
       return;
     }
+    console.log(vm.uuid);
     vm.regionService.search(vm.searchData)
       .subscribe(
-        (result) => vm.searchResults = result,
+        (result) => vm.searchResults = result.filter(function(x) {return x.uuid != vm.uuid; }),
         (error) => vm.log.error(error)
       );
   }
