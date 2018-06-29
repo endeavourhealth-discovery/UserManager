@@ -757,7 +757,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         boolean found = false;
         //OrganisationEntity.deleteUneditedBulkOrganisations();
 
-        List<OrganisationEntity> updatedBulkOrganisations = OrganisationEntity.getUpdatedBulkOrganisations();
+        List<OrganisationEntity> updatedBulkOrganisations = new ArrayList<>(); // OrganisationEntity.getUpdatedBulkOrganisations();
 
         List<OrganisationEntity> organisationEntities = new ArrayList<>();
         List<AddressEntity> addressEntities = new ArrayList<>();

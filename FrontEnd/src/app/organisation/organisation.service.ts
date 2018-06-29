@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 import {Organisation} from './models/Organisation';
 import {Region} from '../region/models/Region';
 import {Address} from './models/Address';
-import {Marker} from '../region/models/Marker';
 import {OrganisationManagerStatistics} from './models/OrganisationManagerStatistics';
 import {FileUpload} from './models/FileUpload';
 import {Dpa} from '../data-processing-agreement/models/Dpa';
