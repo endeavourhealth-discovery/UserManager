@@ -218,7 +218,6 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
   private editPurposes(index: number = -1) {
     const vm = this;
-    console.log(vm.purposes);
     PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose', index)
       .result.then(function
       (result: Purpose[]) { vm.purposes = result; },
