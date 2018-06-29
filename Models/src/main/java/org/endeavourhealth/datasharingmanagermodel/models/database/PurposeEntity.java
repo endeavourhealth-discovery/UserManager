@@ -6,6 +6,7 @@ import org.endeavourhealth.datasharingmanagermodel.models.json.JsonPurpose;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -128,6 +129,7 @@ public class PurposeEntity {
 
         List<PurposeEntity> ret = query.getResultList();
 
+        ret.sort(Comparator.comparing(PurposeEntity::getTitle));
         entityManager.close();
 
         return ret;
