@@ -42,8 +42,8 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   publisherMarkers: Marker[];
   subscriberMarkers: Marker[];
   mapMarkers: Marker[];
-  purposes: Purpose[];
-  benefits: Purpose[];
+  purposes: Purpose[] = [];
+  benefits: Purpose[] = [];
 
   status = [
     {num: 0, name: 'Active'},
@@ -218,6 +218,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
 
   private editPurposes(index: number = -1) {
     const vm = this;
+    console.log(vm.purposes);
     PurposeAddComponent.open(vm.$modal, vm.purposes, 'Purpose', index)
       .result.then(function
       (result: Purpose[]) { vm.purposes = result; },

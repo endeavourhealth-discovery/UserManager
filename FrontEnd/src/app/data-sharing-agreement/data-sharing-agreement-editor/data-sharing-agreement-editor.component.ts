@@ -31,8 +31,8 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   publishers: Organisation[];
   subscribers: Organisation[];
   documentations: Documentation[];
-  purposes: Purpose[];
-  benefits: Purpose[];
+  purposes: Purpose[] = [];
+  benefits: Purpose[] = [];
   publisherMarkers: Marker[];
   subscriberMarkers: Marker[];
   mapMarkers: Marker[];
