@@ -3,7 +3,7 @@
     <div class="module-heading">
       {{orgType}} details
       <div class="pull-right">
-        <button *ngIf="(organisation.isService === 0) && (organisation.uuid) && (allowEdit)" type="button" class="btn btn-sm btn-success" (click)="createServiceFromOrg(false)">Create Service</button>
+        <button *ngIf="(organisation.isService === 0) && (organisation.uuid) && (allowEdit)" type="button" class="btn btn-sm btn-success" (click)="createServiceFromOrg(false)">Create service</button>
         <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-success" (click)="save(false)">Save</button>
         <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-warning" (click)="save(true)">Save & close</button>
         <button type="button" class="btn btn-sm btn-danger" (click)="close()">Cancel</button>
@@ -57,7 +57,7 @@
               <input type="text" class="form-control" placeholder="Evidence of registration" [(ngModel)]="organisation.evidenceOfRegistration" name="evidenceOfRegistration">
             </div>-->
           </div>
-          <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-info" (click)="addAddress()">Add Address</button>
+          <button *ngIf="allowEdit" type="button" class="btn btn-sm btn-info" (click)="addAddress()">Add address</button>
           <div class="well" *ngFor="let address of addresses">
             <div class="row">
               <div class="form-group col-md-4">

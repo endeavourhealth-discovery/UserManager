@@ -36,6 +36,7 @@ export class MySharingOverviewComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.currentUser = vm.securityService.getCurrentUser();
+    console.log(vm.currentUser);
     vm.getOrganisationsForUser(vm.currentUser);
     // vm.currentOrg = vm.currentUser.organisation;
   }
