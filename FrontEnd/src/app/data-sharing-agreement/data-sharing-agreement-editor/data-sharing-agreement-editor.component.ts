@@ -40,6 +40,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
   allowEdit = false;
   file: File;
   pdfSrc: any;
+  disableStatus = false;
 
   status = [
     {num: 0, name : 'Active'},
@@ -105,6 +106,7 @@ export class DataSharingAgreementEditorComponent implements OnInit {
     vm.dsaService.getDsa(uuid)
       .subscribe(result =>  {
           vm.dsa = result;
+          vm.checkEndDate();
           vm.getLinkedDataFlows();
           vm.getLinkedRegions();
           vm.getPublishers();
@@ -403,6 +405,26 @@ export class DataSharingAgreementEditorComponent implements OnInit {
 
   cancel() {
     this.file = null;
+  }
+
+  checkEndDate() {
+    const vm = this;
+
+    if (vm.dsa.endDate === null) {
+      vm.disableStatus = false;
+      return;
+    }
+
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var endDate = new Date(vm.dsa.endDate)
+
+    if (endDate < today) {
+      vm.dsa.dsaStatusId = 1;
+      vm.disableStatus = true;
+    } else {
+      vm.disableStatus = false;
+    }
   }
 
 }

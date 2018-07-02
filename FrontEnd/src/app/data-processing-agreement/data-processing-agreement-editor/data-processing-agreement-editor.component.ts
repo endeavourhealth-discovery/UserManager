@@ -44,6 +44,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   mapMarkers: Marker[];
   purposes: Purpose[] = [];
   benefits: Purpose[] = [];
+  disableStatus = false;
 
   status = [
     {num: 0, name: 'Active'},
@@ -105,7 +106,7 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
     vm.dpaService.getDpa(uuid)
       .subscribe(result => {
           vm.dpa = result;
-          console.log(result);
+          vm.checkEndDate();
           vm.getPublishers();
           vm.getLinkedDataFlows();
           vm.getLinkedCohorts();
@@ -397,6 +398,26 @@ export class DataProcessingAgreementEditorComponent implements OnInit {
   clickOnBenefit($event) {
     let index = this.benefits.indexOf($event, 0);
     this.editBenefits(index);
+  }
+
+  checkEndDate() {
+    const vm = this;
+
+    if (vm.dpa.endDate === null) {
+      vm.disableStatus = false;
+      return;
+    }
+
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var endDate = new Date(vm.dpa.endDate);
+
+    if (endDate < today) {
+      vm.dpa.dsaStatusId = 1;
+      vm.disableStatus = true;
+    } else {
+      vm.disableStatus = false;
+    }
   }
 
 }
