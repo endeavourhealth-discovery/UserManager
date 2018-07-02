@@ -384,13 +384,15 @@ public class AddressEntity {
             JsonParser parser = new JsonParser();
             JsonElement obj = parser.parse(s);
             JsonObject jo = obj.getAsJsonObject();
-            JsonElement results = jo.getAsJsonArray("results").get(0);
-            JsonObject location = results.getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
+            if (jo.getAsJsonArray("results").size() > 0) {
+                JsonElement results = jo.getAsJsonArray("results").get(0);
+                JsonObject location = results.getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
 
-            address.setLat(Double.parseDouble(location.get("lat").toString()));
-            address.setLng(Double.parseDouble(location.get("lng").toString()));
+                address.setLat(Double.parseDouble(location.get("lat").toString()));
+                address.setLng(Double.parseDouble(location.get("lng").toString()));
 
-            AddressEntity.updateGeolocation(address);
+                AddressEntity.updateGeolocation(address);
+            }
         }
     }
 }

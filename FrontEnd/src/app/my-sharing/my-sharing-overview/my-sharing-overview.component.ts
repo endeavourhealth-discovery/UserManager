@@ -41,7 +41,6 @@ export class MySharingOverviewComponent implements OnInit {
     // vm.currentOrg = vm.currentUser.organisation;
   }
 
-
   private getOrganisationsForUser(user: User) {
     const vm = this;
     vm.userOrgs = user.organisationGroups.map(a => a.organisationId);

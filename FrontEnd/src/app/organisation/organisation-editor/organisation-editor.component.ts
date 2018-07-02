@@ -95,15 +95,17 @@ export class OrganisationEditorComponent implements OnInit {
   }
 
   createServiceFromOrg() {
-    const parent: Organisation = (JSON.parse(JSON.stringify(this.organisation)));
-    this.services = null;
-    this.childOrganisations = null;
-    this.regions = null;
-    this.parentOrganisations = [];
-    this.parentOrganisations.push(parent);
-    this.organisation.uuid = null;
-    this.organisation.isService = 1;
-    this.orgType = 'Service';
+    const vm = this;
+    const parent: Organisation = (JSON.parse(JSON.stringify(vm.organisation)));
+    vm.services = null;
+    vm.childOrganisations = null;
+    vm.regions = null;
+    vm.parentOrganisations = [];
+    vm.parentOrganisations.push(parent);
+    vm.organisation.uuid = null;
+    vm.organisation.isService = 1;
+    vm.orgType = 'Service';
+    vm.addresses = [];
   }
 
   create(uuid: string) {
@@ -204,8 +206,8 @@ export class OrganisationEditorComponent implements OnInit {
 
   addAddress() {
     const vm = this;
-
     const address: Address = <Address>{};
+    address.uuid = null;
     address.organisationUuid = vm.organisation.uuid;
     address.buildingName = '';
     address.numberAndStreet = '';
@@ -213,7 +215,11 @@ export class OrganisationEditorComponent implements OnInit {
     address.city = '';
     address.county = '';
     address.postcode = '';
+    address.lat = null;
+    address.lng = null;
+    address.geolocationReprocess = null;
     vm.addresses.push(address);
+
   }
 
   private editRegions() {
@@ -352,6 +358,16 @@ export class OrganisationEditorComponent implements OnInit {
         result => vm.dsaSubscribing = result,
         error => vm.log.error('Failed to load DSAs organisation subscribing to', error, 'Load organisation DSA Publishers')
       );
+  }
+
+  deleteAddress(address: Address) {
+    console.log('deleting');
+    console.log(address);
+    const index = this.addresses.findIndex(a => a.uuid === address.uuid);
+    console.log(index);
+    if (index > -1) {
+      this.addresses.splice(index, 1);
+    }
   }
 
   editOrganisation(item: Organisation) {

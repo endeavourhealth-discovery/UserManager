@@ -138,6 +138,7 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
         //Process Mappings
         MasterMappingEntity.saveOrganisationMappings(organisation);
 
+        AddressEntity.deleteAddressForOrganisations(organisation.getUuid());
         List<JsonAddress> addresses = organisation.getAddresses();
         if (addresses.size() > 0) {
             for (JsonAddress address : addresses) {
@@ -146,10 +147,10 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
 
                 if (address.getUuid() == null) {
                     address.setUuid(UUID.randomUUID().toString());
-                    AddressEntity.saveAddress(address);
                 }
-                else
-                    AddressEntity.updateAddress(address);
+                AddressEntity.saveAddress(address);
+                /*else
+                    AddressEntity.updateAddress(address);*/
 
                 AddressEntity.getGeolocation(address);
             }
