@@ -14,20 +14,22 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <entity-viewer
-              (deleted)="delete($event)"
-              [items]="dsas"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Data sharing agreement'"
-              [allowDelete]="allowEdit"
-              [model]="'dsa'"
-              [pageSize]="20"
-              [detailsToShow]="dsaDetailsToShow">
-            </entity-viewer>
+            <loadingIndicator [done]="dsas || loadingComplete">
+              <entity-viewer
+                (deleted)="delete($event)"
+                [items]="dsas"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Data sharing agreement'"
+                [allowDelete]="allowEdit"
+                [model]="'dsa'"
+                [pageSize]="20"
+                [detailsToShow]="dsaDetailsToShow">
+              </entity-viewer>
+            </loadingIndicator>
           </div>
         </div>
       </form>

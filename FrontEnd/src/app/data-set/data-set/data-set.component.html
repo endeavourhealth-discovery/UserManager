@@ -14,18 +14,20 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <entity-viewer
-              (deleted)="delete($event)"
-              [items]="datasets"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [typeDescription]="'Data set'"
-              [allowDelete]="allowEdit"
-              [model]="'dataSet'"
-              [pageSize]="20"
-              [detailsToShow]="datasetDetailsToShow">
-            </entity-viewer>
+            <loadingIndicator [done]="datasets || loadingComplete">
+              <entity-viewer
+                (deleted)="delete($event)"
+                [items]="datasets"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [typeDescription]="'Data set'"
+                [allowDelete]="allowEdit"
+                [model]="'dataSet'"
+                [pageSize]="20"
+                [detailsToShow]="datasetDetailsToShow">
+              </entity-viewer>
+            </loadingIndicator>
           </div>
         </div>
       </form>

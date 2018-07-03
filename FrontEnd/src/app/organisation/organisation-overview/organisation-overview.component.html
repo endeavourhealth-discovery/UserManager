@@ -9,14 +9,16 @@
           <div class="card h-100">
             <div class="card-header bg-info">Regions</div>
             <div class="card-block">
-              <div class="row" *ngFor="let regionStat of regionStats">
-                <div class="col-md-10">
-                  {{regionStat.label}}
+              <loadingIndicator [done]="regionStats || regionLoadingComplete">
+                <div class="row" *ngFor="let regionStat of regionStats">
+                  <div class="col-md-10">
+                    {{regionStat.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{regionStat.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{regionStat.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-info" (click)="goToRegions()">View regions</button>
@@ -28,7 +30,8 @@
           <div class="card h-100">
             <div class="card-header  bg-success">Organisations</div>
             <div class="card-block">
-              <div class="row" *ngFor="let stat of orgStats">
+              <loadingIndicator [done]="orgStats || orgLoadingComplete">
+                <div class="row" *ngFor="let stat of orgStats">
                 <div class="col-md-10">
                   {{stat.label}}
                 </div>
@@ -36,6 +39,7 @@
                   {{stat.value}}
                 </div>
               </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-success" (click)="goToOrganisations()">View organisations</button>
@@ -50,14 +54,16 @@
           <div class="card h-100">
             <div class="card-header bg-warning">Services</div>
             <div class="card-block">
-              <div class="row" *ngFor="let serviceStat of serviceStats">
-                <div class="col-md-10">
-                  {{serviceStat.label}}
+              <loadingIndicator [done]="serviceStats || serviceLoadingComplete">
+                <div class="row" *ngFor="let serviceStat of serviceStats">
+                  <div class="col-md-10">
+                    {{serviceStat.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{serviceStat.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{serviceStat.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-warning" (click)="goToServices()">View services</button>

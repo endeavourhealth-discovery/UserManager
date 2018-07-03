@@ -10,6 +10,7 @@ import { OrganisationEditorComponent } from './organisation-editor/organisation-
 import { OrganisationPickerComponent } from './organisation-picker/organisation-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
+import {ControlsModule} from "eds-angular4/dist/controls";
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
     EntityViewComponentsModule,
     ToastModule.forRoot(),
     NgbModule,
-    DialogsModule
+    DialogsModule,
+    ControlsModule
   ],
   declarations: [
     OrganisationComponent,

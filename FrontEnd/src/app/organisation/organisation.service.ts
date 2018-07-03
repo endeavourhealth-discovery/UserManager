@@ -64,19 +64,49 @@ export class OrganisationService  {
       .map((response) => response.json());
   }
 
-  getDSAPublishing(uuid: string):  Observable<Dsa[]> {
+  getDPAPublishingFromList(uuid: string[]):  Observable<Dpa[]> {
     const vm = this;
     const params = new URLSearchParams();
+    for (let ix in uuid) {
+      params.append('uuids', uuid[ix]);
+    }
+    return vm.http.get('api/organisation/dpasPublishingFromList', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDSAPublishing(uuid: string):  Observable<Dsa[]> {
+    const vm = this;
+    let params = new URLSearchParams();
     params.set('uuid', uuid);
     return vm.http.get('api/organisation/dsasPublishing', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDSAPublishingFromList(uuid: string[]):  Observable<Dsa[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    for (let ix in uuid) {
+      params.append('uuids', uuid[ix]);
+    }
+    return vm.http.get('api/organisation/dsasPublishingFromList', { search : params })
       .map((response) => response.json());
   }
 
   getDSASubscribing(uuid: string):  Observable<Dsa[]> {
     const vm = this;
     const params = new URLSearchParams();
-    params.set('uuid', uuid);
+    params.set('uuids', uuid);
     return vm.http.get('api/organisation/dsasSubscribing', { search : params })
+      .map((response) => response.json());
+  }
+
+  getDSASubscribingFromList(uuid: string[]):  Observable<Dsa[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    for (let ix in uuid) {
+      params.append('uuids', uuid[ix]);
+    }
+    return vm.http.get('api/organisation/dsasSubscribingFromList', { search : params })
       .map((response) => response.json());
   }
 

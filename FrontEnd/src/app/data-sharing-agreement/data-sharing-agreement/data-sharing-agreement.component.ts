@@ -12,8 +12,9 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./data-sharing-agreement.component.css']
 })
 export class DataSharingAgreementComponent implements OnInit {
-  dsas: Dsa[] = [];
+  dsas: Dsa[];
   allowEdit = false;
+  loadingComplete = false;
 
   dsaDetailsToShow = new Dsa().getDisplayItems();
 
@@ -39,10 +40,17 @@ export class DataSharingAgreementComponent implements OnInit {
 
   getDsas() {
     const vm = this;
+    vm.loadingComplete = false;
     vm.dsaService.getAllDsas()
       .subscribe(
-        result => vm.dsas = result,
-        error => vm.log.error('Failed to load dsas', error, 'Load dsa')
+        result => {
+          vm.dsas = result;
+          vm.loadingComplete = true;
+        },
+        error => {
+          vm.log.error('Failed to load dsas', error, 'Load dsa');
+          vm.loadingComplete = true;
+        }
       );
   }
 

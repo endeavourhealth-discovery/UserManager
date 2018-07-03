@@ -7,6 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 import {OrganisationService} from "../organisation/organisation.service";
 import {MySharingOverviewComponent} from "./my-sharing-overview/my-sharing-overview.component";
+import {ControlsModule} from "eds-angular4/dist/controls";
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {MySharingOverviewComponent} from "./my-sharing-overview/my-sharing-overv
     EntityViewComponentsModule,
     ToastModule.forRoot(),
     NgbModule,
-    DialogsModule
+    DialogsModule,
+    ControlsModule
   ],
   declarations: [
     MySharingOverviewComponent

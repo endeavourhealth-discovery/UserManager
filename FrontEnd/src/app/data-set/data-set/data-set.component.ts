@@ -12,8 +12,9 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./data-set.component.css']
 })
 export class DataSetComponent implements OnInit {
-  datasets: DataSet[] = [];
+  datasets: DataSet[];
   allowEdit = false;
+  loadingComplete = false;
 
   datasetDetailsToShow = new DataSet().getDisplayItems();
 
@@ -38,12 +39,18 @@ export class DataSetComponent implements OnInit {
   }
 
   getDataSets() {
-
     const vm = this;
+    vm.loadingComplete = false;
     vm.dataSetService.getAllDataSets()
       .subscribe(
-        result => vm.datasets = result,
-        error => vm.log.error('Failed to load data sets', error, 'Load data sets')
+        result => {
+          vm.datasets = result;
+          vm.loadingComplete = true;
+        },
+          error => {
+          vm.log.error('Failed to load data sets', error, 'Load data sets');
+          vm.loadingComplete = true;
+        }
       );
   }
 

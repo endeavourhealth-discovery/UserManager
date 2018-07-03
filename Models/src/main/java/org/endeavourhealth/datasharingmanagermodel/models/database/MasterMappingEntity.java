@@ -201,23 +201,29 @@ public class MasterMappingEntity {
         return children;
     }
 
-    public static List<MasterMappingEntity> getAllChildMappings(String parentUuid, Short parentMapTypeId) throws Exception {
+    public static List<String> getParentMappingsFromList(List<String> childUuids, Short childMapTypeId, Short parentMapTypeId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
         Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), parentUuid ),
+        Predicate predicate = cb.and((rootEntry.get("childUuid").in(childUuids) ),
+                cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId),
                 cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId));
 
         cq.where(predicate);
         TypedQuery<MasterMappingEntity> query = entityManager.createQuery(cq);
         List<MasterMappingEntity> maps =  query.getResultList();
 
+        List<String> children = new ArrayList<>();
+        for(MasterMappingEntity mme : maps){
+            children.add(mme.getParentUuid());
+        }
+
         entityManager.close();
 
-        return maps;
+        return children;
     }
 
     public static void saveOrganisationMappings(JsonOrganisation organisation) throws Exception {

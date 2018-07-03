@@ -12,10 +12,11 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./cohort.component.css']
 })
 export class CohortComponent implements OnInit {
-  cohorts: Cohort[] = [];
+  cohorts: Cohort[];
   pageSize = 20;
   allowEdit = false;
   cohortDetailsToShow = new Cohort().getDisplayItems();
+  loadingComplete = false;
 
   constructor(private $modal: NgbModal,
               private cohortService: CohortService,
@@ -39,10 +40,17 @@ export class CohortComponent implements OnInit {
 
   getCohorts() {
     const vm = this;
+    vm.loadingComplete = false;
     vm.cohortService.getAllCohorts()
       .subscribe(
-        result => vm.cohorts = result,
-        error => vm.log.error('Failed to load cohorts', error, 'Load cohorts')
+        result => {
+          vm.cohorts = result;
+          vm.loadingComplete = true;
+        },
+            error => {
+          vm.log.error('Failed to load cohorts', error, 'Load cohorts');
+          vm.loadingComplete = true;
+        }
       );
   }
 

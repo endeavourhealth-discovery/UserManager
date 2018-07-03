@@ -13,27 +13,29 @@
     <div class="module-body">
       <form>
         <div class="form-group col-md-12">
-          <entity-viewer-ssp
-            (onPageChange)="pageChange($event)"
-            (onPageSizeChange)="pageSizeChange($event)"
-            (search)="onSearch($event)"
-            (onOrderChange)="onOrderChange($event)"
-            (deleted)="delete($event)"
-            [items]="organisations"
-            [totalItems]="totalItems"
-            [primary]="'name'"
-            [primaryOrderText]="'Name'"
-            [displayClass]="'region'"
-            [secondary]="'odsCode'"
-            [secondaryOrderText]="'ODS Code'"
-            [typeDescription]="modeType"
-            [allowDelete]="allowEdit"
-            [model]="'organisation'"
-            [pageSize]="pageSize"
-            [pageNumber]="pageNumber"
-            [maxPageSize]="48"
-            [detailsToShow]="orgDetailsToShow">
-          </entity-viewer-ssp>
+          <loadingIndicator [done]="organisations || loadingComplete">
+            <entity-viewer-ssp
+              (onPageChange)="pageChange($event)"
+              (onPageSizeChange)="pageSizeChange($event)"
+              (search)="onSearch($event)"
+              (onOrderChange)="onOrderChange($event)"
+              (deleted)="delete($event)"
+              [items]="organisations"
+              [totalItems]="totalItems"
+              [primary]="'name'"
+              [primaryOrderText]="'Name'"
+              [displayClass]="'region'"
+              [secondary]="'odsCode'"
+              [secondaryOrderText]="'ODS Code'"
+              [typeDescription]="modeType"
+              [allowDelete]="allowEdit"
+              [model]="'organisation'"
+              [pageSize]="pageSize"
+              [pageNumber]="pageNumber"
+              [maxPageSize]="48"
+              [detailsToShow]="orgDetailsToShow">
+            </entity-viewer-ssp>
+          </loadingIndicator>
         </div>
       </form>
     </div>

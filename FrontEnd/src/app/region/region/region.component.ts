@@ -16,6 +16,7 @@ export class RegionComponent implements OnInit {
   organisations: Organisation[];
   regions: Region[] = [];
   allowEdit = false;
+  loadingComplete = false;
 
   regionDetailsToShow = new Region().getDisplayItems();
 
@@ -41,12 +42,17 @@ export class RegionComponent implements OnInit {
 
   getRegions() {
     const vm = this;
+    vm.loadingComplete = false;
     vm.regionService.getAllRegions()
       .subscribe(
         result => {
           vm.regions = result;
+          vm.loadingComplete = true;
         },
-        error => vm.log.error('Failed to load organisations', error, 'Load organisations')
+        error => {
+          vm.log.error('Failed to load regions', error, 'Load regions');
+          vm.loadingComplete = true;
+        }
       );
   }
 

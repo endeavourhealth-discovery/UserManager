@@ -9,14 +9,16 @@
           <div class="card h-100">
             <div class="card-header  bg-info">Data sharing agreements</div>
             <div class="card-block">
-              <div class="row" *ngFor="let dsa of dsaStats">
-                <div class="col-md-10">
-                  {{dsa.label}}
+              <loadingIndicator [done]="dsaStats || dsaLoadingComplete">
+                <div class="row" *ngFor="let dsa of dsaStats">
+                  <div class="col-md-10">
+                    {{dsa.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{dsa.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{dsa.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-info" (click)="goToDsa()">View data sharing agreements</button>
@@ -28,14 +30,16 @@
           <div class="card h-100">
             <div class="card-header  bg-warning">Data processing agreements</div>
             <div class="card-block">
-              <div class="row" *ngFor="let dpa of dpaStats">
-                <div class="col-md-10">
-                  {{dpa.label}}
+              <loadingIndicator [done]="dpaStats || dpaLoadingComplete">
+                <div class="row" *ngFor="let dpa of dpaStats">
+                  <div class="col-md-10">
+                    {{dpa.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{dpa.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{dpa.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-warning" (click)="goToDpa()">View data processing agreements</button>
@@ -45,21 +49,21 @@
         </div>
       </div>
       <br>
-      <!--
-      <div class="row">
-
+      <!--<div class="row">
         <div class="col-md-6">
           <div class="card h-100">
             <div class="card-header  bg-success">Data flows</div>
             <div class="card-block">
-              <div class="row" *ngFor="let dataflow of dataflowStats">
-                <div class="col-md-10">
-                  {{dataflow.label}}
+              <loadingIndicator [done]="dataflowStats || dataflowLoadingComplete">
+                <div class="row" *ngFor="let dataflow of dataflowStats">
+                  <div class="col-md-10">
+                    {{dataflow.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{dataflow.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{dataflow.value}}
-                </div>
-              </div>
+               </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-success" (click)="goToDataFlow()">View data flows</button>
@@ -72,14 +76,16 @@
           <div class="card h-100">
             <div class="card-header text-white bg-primary">Cohorts</div>
             <div class="card-block">
-              <div class="row" *ngFor="let cohort of cohortStats">
-                <div class="col-md-10">
-                  {{cohort.label}}
+              <loadingIndicator [done]="cohortStats || cohortLoadingComplete">
+                <div class="row" *ngFor="let cohort of cohortStats">
+                  <div class="col-md-10">
+                    {{cohort.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{cohort.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{cohort.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-primary" (click)="goToCohorts()">View cohorts</button>
@@ -94,14 +100,16 @@
           <div class="card h-100">
             <div class="card-header" [style.backgroundColor]="'#FF6464'">Datasets</div>
             <div class="card-block">
-              <div class="row" *ngFor="let dataset of datasetStats">
-                <div class="col-md-10">
-                  {{dataset.label}}
+              <loadingIndicator [done]="datasetStats || datasetLoadingComplete">
+                <div class="row" *ngFor="let dataset of datasetStats">
+                  <div class="col-md-10">
+                    {{dataset.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{dataset.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{dataset.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-secondary" [style.backgroundColor]="'#FF6464'" (click)="goToDataSets()">View datasets</button>
@@ -113,14 +121,16 @@
           <div class="card h-100">
             <div class="card-header" [style.backgroundColor]="'#B2A2C7'">Data exchange configurations</div>
             <div class="card-block">
-              <div class="row" *ngFor="let exchangeStat of dataExchangeStats">
-                <div class="col-md-10">
-                  {{exchangeStat.label}}
+              <loadingIndicator [done]="dataExchangeStats || exchangeLoadingComplete">
+                <div class="row" *ngFor="let exchangeStat of dataExchangeStats">
+                  <div class="col-md-10">
+                    {{exchangeStat.label}}
+                  </div>
+                  <div class="col-md-2">
+                    {{exchangeStat.value}}
+                  </div>
                 </div>
-                <div class="col-md-2">
-                  {{exchangeStat.value}}
-                </div>
-              </div>
+              </loadingIndicator>
               <br>
               <div class="pull-right">
                 <button type="button" class="btn btn-sm btn-secondary" [style.backgroundColor]="'#B2A2C7'" (click)="goToDataExchanges()">View data exchange configurations</button>

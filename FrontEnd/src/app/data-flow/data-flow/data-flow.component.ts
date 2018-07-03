@@ -13,8 +13,9 @@ import {ToastsManager} from 'ng2-toastr';
 })
 export class DataFlowComponent implements OnInit {
   private paramSubscriber: any;
-  dataflows: DataFlow[] = [];
+  dataflows: DataFlow[];
   allowEdit = false;
+  loadingComplete = false;
 
   dataflowDetailsToShow = new DataFlow().getDisplayItems();
 
@@ -39,12 +40,18 @@ export class DataFlowComponent implements OnInit {
   }
 
   getDataFlows() {
-
     const vm = this;
+    vm.loadingComplete = false;
     vm.dataFlowService.getAllDataFlows()
       .subscribe(
-        result => vm.dataflows = result,
-        error => vm.log.error('Failed to load data flows', error, 'Load data flows')
+        result => {
+          vm.dataflows = result;
+          vm.loadingComplete = true;
+        },
+            error => {
+          vm.log.error('Failed to load data flows', error, 'Load data flows');
+          vm.loadingComplete = true;
+        }
       );
   }
 

@@ -15,11 +15,17 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   summaryStats: OrganisationManagerStatistics[];
   dpaStats: OrganisationManagerStatistics[];
+  dpaLoadingComplete = false;
   dsaStats: OrganisationManagerStatistics[];
+  dsaLoadingComplete = false;
   dataflowStats: OrganisationManagerStatistics[];
+  dataflowLoadingComplete = false;
   cohortStats: OrganisationManagerStatistics[];
+  cohortLoadingComplete = false;
   datasetStats: OrganisationManagerStatistics[];
+  datasetLoadingComplete = false;
   dataExchangeStats: OrganisationManagerStatistics[];
+  exchangeLoadingComplete = false;
 
   constructor(private dataSharingSummaryService: DataSharingSummaryService,
               private organisationService: OrganisationService,
@@ -54,61 +60,91 @@ export class DataSharingSummaryOverviewComponent implements OnInit {
 
   getDpaStatistics() {
     const vm = this;
+    vm.dpaLoadingComplete = false;
     vm.organisationService.getStatistics('dpa')
       .subscribe(result => {
-          vm.dpaStats = result
+          vm.dpaStats = result;
+          vm.dpaLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load data processing agreement statistics', error, 'Load data processing agreement statistics')
+        error => {
+        vm.log.error('Failed to load data processing agreement statistics', error, 'Load data processing agreement statistics');
+        vm.dpaLoadingComplete = true;
+        }
       );
   }
 
   getDsaStatistics() {
     const vm = this;
+    vm.dsaLoadingComplete = false;
     vm.organisationService.getStatistics('dsa')
       .subscribe(result => {
-          vm.dsaStats = result
+          vm.dsaStats = result;
+          vm.dsaLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load data sharing agreement statistics', error, 'load data sharing agreement statistics')
+        error => {
+        vm.log.error('Failed to load data sharing agreement statistics', error, 'load data sharing agreement statistics');
+        vm.dsaLoadingComplete = true;
+        }
       );
   }
 
   getDataFlowStatistics() {
     const vm = this;
+    vm.dataflowLoadingComplete = false;
     vm.organisationService.getStatistics('dataflow')
       .subscribe(result => {
-          vm.dataflowStats = result
+          vm.dataflowStats = result;
+          vm.dataflowLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load data flow statistics', error, 'Load data flow statistics')
+        error => {
+        vm.log.error('Failed to load data flow statistics', error, 'Load data flow statistics');
+        vm.dataflowLoadingComplete = true;
+        }
       );
   }
 
   getCohortStatistics() {
     const vm = this;
+    vm.cohortLoadingComplete = false;
     vm.organisationService.getStatistics('cohort')
       .subscribe(result => {
-          vm.cohortStats = result
+          vm.cohortStats = result;
+          vm.cohortLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load Cohort statistics', error, 'Load Cohort statistics')
+        error => {
+        vm.log.error('Failed to load Cohort statistics', error, 'Load Cohort statistics');
+        vm.cohortLoadingComplete = true;
+        }
       );
   }
 
   getDataSetStatistics() {
     const vm = this;
+    vm.datasetLoadingComplete = false;
     vm.organisationService.getStatistics('dataset')
       .subscribe(result => {
-          vm.datasetStats = result
+          vm.datasetStats = result;
+          vm.datasetLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load dataset statistics', error, 'Load dataset statistics')
+        error => {
+        vm.log.error('Failed to load dataset statistics', error, 'Load dataset statistics');
+        vm.datasetLoadingComplete = true;
+        }
       );
   }
 
   getDataExchangeStatistics() {
     const vm = this;
+    vm.exchangeLoadingComplete = false;
     vm.organisationService.getStatistics('exchange')
       .subscribe(result => {
-          vm.dataExchangeStats = result
+          vm.dataExchangeStats = result;
+          vm.exchangeLoadingComplete = true;
         },
-        error => vm.log.error('Failed to load data exchange statistics', error, 'Load data exchange statistics')
+        error => {
+        vm.log.error('Failed to load data exchange statistics', error, 'Load data exchange statistics');
+        vm.exchangeLoadingComplete = true;
+        }
       );
   }
 

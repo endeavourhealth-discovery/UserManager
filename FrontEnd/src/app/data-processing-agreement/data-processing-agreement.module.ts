@@ -11,6 +11,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import {DocumentationService} from '../documentation/documentation.service';
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 import {GoogleMapsModule} from "eds-angular4/dist/googleMaps";
+import {ControlsModule} from "eds-angular4/dist/controls";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {GoogleMapsModule} from "eds-angular4/dist/googleMaps";
     EntityViewComponentsModule,
     ToastModule.forRoot(),
     GoogleMapsModule,
-    DialogsModule
+    DialogsModule,
+    ControlsModule
   ],
   declarations: [
     DataProcessingAgreementComponent,

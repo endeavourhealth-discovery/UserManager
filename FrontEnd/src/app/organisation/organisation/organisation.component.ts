@@ -23,6 +23,7 @@ export class OrganisationComponent implements OnInit {
   descending = false;
   allowEdit = false;
   orgDetailsToShow = new Organisation().getDisplayItems();
+  loadingComplete = false;
 
   ngOnInit() {
     this.checkEditPermission();
@@ -140,11 +141,16 @@ export class OrganisationComponent implements OnInit {
 
   private search() {
     const vm = this;
+    vm.loadingComplete = false;
     vm.organisationService.search(vm.searchData, vm.searchType, vm.pageNumber, vm.pageSize, vm.orderColumn, vm.descending)
       .subscribe(result => {
           vm.organisations = result;
+          vm.loadingComplete = true;
         },
-        error => vm.log.error(error)
+        error => {
+          vm.log.error('Failed to load organisations', error, 'Load organisations');
+          vm.loadingComplete = true;
+        }
       );
   }
 

@@ -9,18 +9,20 @@
           <div class="card">
             <div class="card-header bg-info">Data sharing agreements publishing to</div>
             <div class="card-block">
-              <entity-viewer
-                [items]="dsaPublishing"
-                [primary]="'name'"
-                [primaryOrderText]="'Name'"
-                [displayClass]="'region'"
-                [secondary]="'description'"
-                [secondaryOrderText]="'Description'"
-                [typeDescription]="'Data Sharing Agreement'"
-                [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow"
-                [noSearch]="true">
-              </entity-viewer>
+              <loadingIndicator [done]="dsaPublishing || dsaPubLoadingComplete">
+                <entity-viewer
+                  [items]="dsaPublishing"
+                  [primary]="'name'"
+                  [primaryOrderText]="'Name'"
+                  [displayClass]="'region'"
+                  [secondary]="'description'"
+                  [secondaryOrderText]="'Description'"
+                  [typeDescription]="'Data Sharing Agreement'"
+                  [model]="'dsa'"
+                  [detailsToShow]="dsaDetailsToShow"
+                  [noSearch]="true">
+                </entity-viewer>
+              </loadingIndicator>
             </div>
           </div>
         </div>
@@ -31,18 +33,20 @@
           <div class="card">
             <div class="card-header bg-info">Data sharing agreements subscribing to</div>
             <div class="card-block">
-              <entity-viewer
-                [items]="dsaSubscribing"
-                [primary]="'name'"
-                [primaryOrderText]="'Name'"
-                [displayClass]="'region'"
-                [secondary]="'description'"
-                [secondaryOrderText]="'Description'"
-                [typeDescription]="'Data Sharing Agreement'"
-                [model]="'dsa'"
-                [detailsToShow]="dsaDetailsToShow"
-                [noSearch]="true">
-              </entity-viewer>
+              <loadingIndicator [done]="dsaSubscribing || dsaSubLoadingComplete">
+                <entity-viewer
+                  [items]="dsaSubscribing"
+                  [primary]="'name'"
+                  [primaryOrderText]="'Name'"
+                  [displayClass]="'region'"
+                  [secondary]="'description'"
+                  [secondaryOrderText]="'Description'"
+                  [typeDescription]="'Data Sharing Agreement'"
+                  [model]="'dsa'"
+                  [detailsToShow]="dsaDetailsToShow"
+                  [noSearch]="true">
+                </entity-viewer>
+              </loadingIndicator>
             </div>
           </div>
         </div>
@@ -53,18 +57,20 @@
           <div class="card">
             <div class="card-header bg-info">Data processing agreements publishing to</div>
             <div class="card-block">
-              <entity-viewer
-                [items]="dpaPublishing"
-                [primary]="'name'"
-                [primaryOrderText]="'Name'"
-                [displayClass]="'region'"
-                [secondary]="'description'"
-                [secondaryOrderText]="'Description'"
-                [typeDescription]="'Data Sharing Agreement'"
-                [model]="'dpa'"
-                [detailsToShow]="dpaDetailsToShow"
-                [noSearch]="true">
-              </entity-viewer>
+              <loadingIndicator [done]="dpaPublishing || dpaPubLoadingComplete">
+                <entity-viewer
+                  [items]="dpaPublishing"
+                  [primary]="'name'"
+                  [primaryOrderText]="'Name'"
+                  [displayClass]="'region'"
+                  [secondary]="'description'"
+                  [secondaryOrderText]="'Description'"
+                  [typeDescription]="'Data Sharing Agreement'"
+                  [model]="'dpa'"
+                  [detailsToShow]="dpaDetailsToShow"
+                  [noSearch]="true">
+                </entity-viewer>
+              </loadingIndicator>
             </div>
           </div>
         </div>

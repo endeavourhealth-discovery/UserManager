@@ -14,20 +14,22 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <entity-viewer
-              (deleted)="delete($event)"
-              [items]="regions"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'description'"
-              [secondaryOrderText]="'Description'"
-              [typeDescription]="'Region'"
-              [model]="'region'"
-              [allowDelete]="allowEdit"
-              [pageSize]="20"
-              [detailsToShow]="regionDetailsToShow">
-            </entity-viewer>
+            <loadingIndicator [done]="regions || loadingComplete">
+              <entity-viewer
+                (deleted)="delete($event)"
+                [items]="regions"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'description'"
+                [secondaryOrderText]="'Description'"
+                [typeDescription]="'Region'"
+                [model]="'region'"
+                [allowDelete]="allowEdit"
+                [pageSize]="20"
+                [detailsToShow]="regionDetailsToShow">
+              </entity-viewer>
+            </loadingIndicator>
           </div>
         </div>
       </form>

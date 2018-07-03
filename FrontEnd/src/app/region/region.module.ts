@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 import {GoogleMapsModule} from "eds-angular4/dist/googleMaps";
+import {ControlsModule} from "eds-angular4/dist/controls";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {GoogleMapsModule} from "eds-angular4/dist/googleMaps";
     NgbModule,
     ToastModule.forRoot(),
     GoogleMapsModule,
-    DialogsModule
+    DialogsModule,
+    ControlsModule
   ],
   declarations: [
     RegionComponent,

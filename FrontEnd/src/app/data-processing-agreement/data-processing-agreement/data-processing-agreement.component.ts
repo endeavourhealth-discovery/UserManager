@@ -12,8 +12,9 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./data-processing-agreement.component.css']
 })
 export class DataProcessingAgreementComponent implements OnInit {
-  dpas: Dpa[] = [];
+  dpas: Dpa[];
   allowEdit = false;
+  loadingComplete = false;
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
 
@@ -39,10 +40,17 @@ export class DataProcessingAgreementComponent implements OnInit {
 
   getDsas() {
     const vm = this;
+    vm.loadingComplete = false;
     vm.dpaService.getAllDpas()
       .subscribe(
-        result => vm.dpas = result,
-        error => vm.log.error('Failed to load dpas', error, 'Load dpa')
+        result => {
+          vm.dpas = result;
+          vm.loadingComplete = true;
+        },
+            error => {
+          vm.log.error('Failed to load dpas', error, 'Load dpa');
+          vm.loadingComplete = true;
+        }
       );
   }
 

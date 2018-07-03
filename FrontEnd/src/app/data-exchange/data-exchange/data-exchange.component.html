@@ -14,20 +14,22 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <entity-viewer
-              (deleted)="delete($event)"
-              [items]="exchanges"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'approximateVolume'"
-              [secondaryOrderText]="'Approximate Volume'"
-              [typeDescription]="'Data exchange'"
-              [allowDelete]="allowEdit"
-              [model]="'dataExchange'"
-              [pageSize]="20"
-              [detailsToShow]="dataExchangeDetailsToShow">
-            </entity-viewer>
+            <loadingIndicator [done]="exchanges || loadingComplete">
+              <entity-viewer
+                (deleted)="delete($event)"
+                [items]="exchanges"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'approximateVolume'"
+                [secondaryOrderText]="'Approximate Volume'"
+                [typeDescription]="'Data exchange'"
+                [allowDelete]="allowEdit"
+                [model]="'dataExchange'"
+                [pageSize]="20"
+                [detailsToShow]="dataExchangeDetailsToShow">
+              </entity-viewer>
+            </loadingIndicator>
           </div>
         </div>
       </form>

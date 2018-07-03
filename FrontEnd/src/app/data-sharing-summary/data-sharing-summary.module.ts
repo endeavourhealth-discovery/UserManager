@@ -9,6 +9,7 @@ import {DialogsModule} from 'eds-angular4';
 import {FormsModule} from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
+import {ControlsModule} from "eds-angular4/dist/controls";
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
     NgbModule,
     EntityViewComponentsModule,
     ToastModule.forRoot(),
-    DialogsModule
+    DialogsModule,
+    ControlsModule
   ],
   declarations: [
     DataSharingSummaryComponent,

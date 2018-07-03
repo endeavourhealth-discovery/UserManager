@@ -285,6 +285,24 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDPAsOrganisationPublishingFromList")
+    @Path("/dpasPublishingFromList")
+    @ApiOperation(value = "Returns a list of Json representations of DPAs that " +
+            "the organisation is publishing to.  Accepts a UUID of an organisation.")
+    public Response getDPAsOrganisationPublishingFromList(@Context SecurityContext sc,
+                                                  @ApiParam(value = "UUID of organisation") @QueryParam("uuids") List<String > uuids
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DPA(s)",
+                "Organisation Id", uuids);
+
+        return getDPAsOrganisationPublishingToFromList(uuids);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDSAsOrganisationPublishing")
     @Path("/dsasPublishing")
     @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
@@ -303,6 +321,24 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDSAsOrganisationPublishingFromList")
+    @Path("/dsasPublishingFromList")
+    @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
+            "the organisation is publishing to.  Accepts a UUID of an organisation.")
+    public Response getDSAsOrganisationPublishingFromList(@Context SecurityContext sc,
+                                                  @ApiParam(value = "UUID of organisation") @QueryParam("uuids") List<String> uuids
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DSA(s)",
+                "Organisation Id", uuids);
+
+        return getDSAsOrganisationPublishingToFromList(uuids);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDPAsOrganisationPublishing")
     @Path("/dsasSubscribing")
     @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
@@ -316,6 +352,26 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 "Organisation Id", uuid);
 
         return getDSAsOrganisationSubscribingTo(uuid);
+    }
+
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="DataSharingManager.OrganisationEndpoint.getDSAsOrganisationSubscribingFromList")
+    @Path("/dsasSubscribingFromList")
+    @ApiOperation(value = "Returns a list of Json representations of DSAs that " +
+            "the organisation is subscribing to.  Accepts a UUID of an organisation.")
+    public Response getDSAsOrganisationSubscribingFromList(@Context SecurityContext sc,
+                                                   @ApiParam(value = "UUID of organisation") @QueryParam("uuids") List<String> uuids
+    ) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "DPA(s)",
+                "Organisation Id", uuids);
+
+        return getDSAsOrganisationSubscribingToFromList(uuids);
     }
 
     @GET
@@ -619,6 +675,21 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
+    private Response getDPAsOrganisationPublishingToFromList(List<String> organisationUuids) throws Exception {
+
+        List<String> dpaUUIDs = MasterMappingEntity.getParentMappingsFromList(organisationUuids, MapType.PUBLISHER.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType());
+        List<DataProcessingAgreementEntity> ret = new ArrayList<>();
+
+        if (dpaUUIDs.size() > 0)
+            ret = DataProcessingAgreementEntity.getDPAsFromList(dpaUUIDs);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
     private Response getDSAsOrganisationSubscribingTo(String organisationUuid) throws Exception {
 
         List<String> dsaUuids = MasterMappingEntity.getParentMappings(organisationUuid, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
@@ -634,9 +705,39 @@ public final class OrganisationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
+    private Response getDSAsOrganisationSubscribingToFromList(List<String> organisationUuids) throws Exception {
+
+        List<String> dsaUuids = MasterMappingEntity.getParentMappingsFromList(organisationUuids, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
+        List<DataSharingAgreementEntity> ret = new ArrayList<>();
+
+        if (dsaUuids.size() > 0)
+            ret = DataSharingAgreementEntity.getDSAsFromList(dsaUuids);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
     private Response getDSAsOrganisationPublishingTo(String organisationUuid) throws Exception {
 
         List<String> dsaUUIds = MasterMappingEntity.getParentMappings(organisationUuid, MapType.PUBLISHER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
+        List<DataSharingAgreementEntity> ret = new ArrayList<>();
+
+        if (dsaUUIds.size() > 0)
+            ret = DataSharingAgreementEntity.getDSAsFromList(dsaUUIds);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(ret)
+                .build();
+    }
+
+    private Response getDSAsOrganisationPublishingToFromList(List<String> organisationUuids) throws Exception {
+
+        List<String> dsaUUIds = MasterMappingEntity.getParentMappingsFromList(organisationUuids, MapType.PUBLISHER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
         List<DataSharingAgreementEntity> ret = new ArrayList<>();
 
         if (dsaUUIds.size() > 0)

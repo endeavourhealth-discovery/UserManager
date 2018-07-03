@@ -17,9 +17,12 @@ export class MySharingOverviewComponent implements OnInit {
   currentUser: User;
   userOrgs : string[] = [];
   currentOrg = 'c45ccafd-f86a-4778-845a-96269cad6c3d';  // d79f403b-963d-4817-b4a5-0fbf6a516cb0
-  dpaPublishing: Dpa[] = [];
-  dsaPublishing: Dsa[] = [];
-  dsaSubscribing: Dsa[] = [];
+  dpaPublishing: Dpa[];
+  dsaPublishing: Dsa[];
+  dsaSubscribing: Dsa[];
+  dsaPubLoadingComplete = false;
+  dsaSubLoadingComplete = false;
+  dpaPubLoadingComplete = false;
 
   dpaDetailsToShow = new Dpa().getDisplayItems();
   dsaDetailsToShow = new Dsa().getDisplayItems();
@@ -45,37 +48,56 @@ export class MySharingOverviewComponent implements OnInit {
     const vm = this;
     vm.userOrgs = user.organisationGroups.map(a => a.organisationId);
     console.log(vm.userOrgs);
-    for (let idx in vm.userOrgs) {
-      vm.getDPAsPublishingTo(vm.userOrgs[idx]);
-      vm.getDSAsPublishingTo(vm.userOrgs[idx]);
-      vm.getDSAsSubscribingTo(vm.userOrgs[idx]);
-    }
+    vm.getDPAsPublishingTo(vm.userOrgs);
+    vm.getDSAsPublishingTo(vm.userOrgs);
+    vm.getDSAsSubscribingTo(vm.userOrgs);
   }
 
-  private getDPAsPublishingTo(org: string) {
+  private getDPAsPublishingTo(orgs: string[]) {
     const vm = this;
-    vm.organisationService.getDPAPublishing(org)
+    vm.dpaPubLoadingComplete = false;
+    vm.organisationService.getDPAPublishingFromList(orgs)
       .subscribe(
-        result => {vm.dpaPublishing.push.apply(vm.dpaPublishing, result);},
-        error => vm.log.error('Failed to load DPAs organisation publishing to', error, 'Load organisation DPA Publishers')
+        result => {
+          vm.dpaPublishing = result;
+          vm.dpaPubLoadingComplete = true;
+          },
+        error => {
+          vm.log.error('Failed to load DPAs organisation publishing to', error, 'Load organisation DPA Publishers');
+          vm.dpaPubLoadingComplete = true;
+        }
       );
   }
 
-  private getDSAsPublishingTo(org: string) {
+  private getDSAsPublishingTo(orgs: string[]) {
     const vm = this;
-    vm.organisationService.getDSAPublishing(org)
+    vm.dsaPubLoadingComplete = false;
+    vm.organisationService.getDSAPublishingFromList(orgs)
       .subscribe(
-        result => {vm.dsaPublishing.push.apply(vm.dsaPublishing, result);},
-        error => vm.log.error('Failed to load DSAs organisation publishing to', error, 'Load organisation DSA Publishers')
+        result => {
+          vm.dsaPublishing = result;
+          vm.dsaPubLoadingComplete = true;
+          },
+        error => {
+          vm.log.error('Failed to load DSAs organisation publishing to', error, 'Load organisation DSA Publishers');
+          vm.dsaPubLoadingComplete = true;
+        }
       );
   }
 
-  private getDSAsSubscribingTo(org: string) {
+  private getDSAsSubscribingTo(orgs: string[]) {
     const vm = this;
-    vm.organisationService.getDSASubscribing(org)
+    vm.dsaSubLoadingComplete = false;
+    vm.organisationService.getDSASubscribingFromList(orgs)
       .subscribe(
-        result => {vm.dsaSubscribing.push.apply(vm.dsaSubscribing, result);},
-        error => vm.log.error('Failed to load DSAs organisation subscribing to', error, 'Load organisation DSA Publishers')
+        result => {
+          vm.dsaSubscribing = result;
+          vm.dsaSubLoadingComplete = true;
+          },
+        error => {
+          vm.log.error('Failed to load DSAs organisation subscribing to', error, 'Load organisation DSA Publishers');
+          vm.dsaSubLoadingComplete = true;
+        }
       );
   }
 }

@@ -12,8 +12,9 @@ import {ToastsManager} from 'ng2-toastr';
   styleUrls: ['./data-exchange.component.css']
 })
 export class DataExchangeComponent implements OnInit {
-  exchanges: DataExchange[] = [];
+  exchanges: DataExchange[];
   allowEdit = false;
+  loadingComplete = false;
 
   dataExchangeDetailsToShow = new DataExchange().getDisplayItems();
 
@@ -38,12 +39,18 @@ export class DataExchangeComponent implements OnInit {
   }
 
   getDataExchanges() {
-
     const vm = this;
+    vm.loadingComplete = false;
     vm.dataExchangeService.getAllDataExchanges()
       .subscribe(
-        result => vm.exchanges = result,
-        error => vm.log.error('Failed to load data exchanges', error, 'Load data exchanges')
+        result => {
+          vm.exchanges = result;
+          vm.loadingComplete = true;
+        },
+            error => {
+          vm.log.error('Failed to load data exchanges', error, 'Load data exchanges');
+          vm.loadingComplete = true;
+        }
       );
   }
 

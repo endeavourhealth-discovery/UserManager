@@ -17,8 +17,6 @@ import {User} from 'eds-angular4/dist/security/models/User';
 })
 export class OrganisationOverviewComponent implements OnInit {
   organisations: Organisation[];
-  regions: Region[] = [];
-  services: Organisation[];
   file: File;
   existingOrg: Organisation;
   newOrg: Organisation;
@@ -30,8 +28,11 @@ export class OrganisationOverviewComponent implements OnInit {
 
   conflictedOrgs: Organisation[];
   orgStats: OrganisationManagerStatistics[];
+  orgLoadingComplete = false;
   serviceStats: OrganisationManagerStatistics[];
+  serviceLoadingComplete = false;
   regionStats: OrganisationManagerStatistics[];
+  regionLoadingComplete = false;
 
   constructor(private $modal: NgbModal,
               private organisationService: OrganisationService,
@@ -72,31 +73,46 @@ export class OrganisationOverviewComponent implements OnInit {
 
   getOrganisationStatistics() {
     const vm = this;
+    vm.orgLoadingComplete = false;
     vm.organisationService.getStatistics('organisation')
       .subscribe(result => {
           vm.orgStats = result;
+          vm.orgLoadingComplete = true;
         },
-        error => console.log('Failed to load organisation statistics', error, 'Load service statistics')
+        error => {
+          console.log('Failed to load organisation statistics', error, 'Load service statistics');
+          vm.orgLoadingComplete = true;
+        }
       );
   }
 
   getServiceStatistics() {
     const vm = this;
+    vm.serviceLoadingComplete = false;
     vm.organisationService.getStatistics('service')
       .subscribe(result => {
-          vm.serviceStats = result
+          vm.serviceStats = result;
+          vm.serviceLoadingComplete = true;
         },
-        error => console.log('Failed to load service statistics', error, 'Load service statistics')
+        error => {
+          console.log('Failed to load service statistics', error, 'Load service statistics');
+          vm.serviceLoadingComplete = true;
+        }
       );
   }
 
   getRegionStatistics() {
     const vm = this;
+    vm.regionLoadingComplete = false;
     vm.organisationService.getStatistics('region')
       .subscribe(result => {
-          vm.regionStats = result
+          vm.regionStats = result;
+          vm.regionLoadingComplete = true;
         },
-        error => console.log('Failed to load region statistics', error, 'Load region statistics')
+        error => {
+          console.log('Failed to load region statistics', error, 'Load region statistics');
+          vm.regionLoadingComplete = true;
+        }
       );
   }
 

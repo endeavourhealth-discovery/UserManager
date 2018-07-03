@@ -14,20 +14,22 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <entity-viewer
-              (deleted)="delete($event)"
-              [items]="dataflows"
-              [primary]="'name'"
-              [primaryOrderText]="'Name'"
-              [displayClass]="'region'"
-              [secondary]="'approximateVolume'"
-              [secondaryOrderText]="'Approximate Volume'"
-              [typeDescription]="'Data flow'"
-              [allowDelete]="allowEdit"
-              [model]="'dataFlow'"
-              [pageSize]="20"
-              [detailsToShow]="dataflowDetailsToShow">
-            </entity-viewer>
+            <loadingIndicator [done]="dataflows || loadingComplete">
+              <entity-viewer
+                (deleted)="delete($event)"
+                [items]="dataflows"
+                [primary]="'name'"
+                [primaryOrderText]="'Name'"
+                [displayClass]="'region'"
+                [secondary]="'approximateVolume'"
+                [secondaryOrderText]="'Approximate Volume'"
+                [typeDescription]="'Data flow'"
+                [allowDelete]="allowEdit"
+                [model]="'dataFlow'"
+                [pageSize]="20"
+                [detailsToShow]="dataflowDetailsToShow">
+              </entity-viewer>
+            </loadingIndicator>
           </div>
         </div>
       </form>
