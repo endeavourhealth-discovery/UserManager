@@ -9,7 +9,7 @@
           <div class="card h-100">
             <div class="card-header bg-info">Regions</div>
             <div class="card-block">
-              <loadingIndicator [done]="regionStats || regionLoadingComplete">
+              <loadingIndicator [done]="regionLoadingComplete">
                 <div class="row" *ngFor="let regionStat of regionStats">
                   <div class="col-md-10">
                     {{regionStat.label}}
@@ -30,7 +30,7 @@
           <div class="card h-100">
             <div class="card-header  bg-success">Organisations</div>
             <div class="card-block">
-              <loadingIndicator [done]="orgStats || orgLoadingComplete">
+              <loadingIndicator [done]="orgLoadingComplete">
                 <div class="row" *ngFor="let stat of orgStats">
                 <div class="col-md-10">
                   {{stat.label}}
@@ -54,7 +54,7 @@
           <div class="card h-100">
             <div class="card-header bg-warning">Services</div>
             <div class="card-block">
-              <loadingIndicator [done]="serviceStats || serviceLoadingComplete">
+              <loadingIndicator [done]="serviceLoadingComplete">
                 <div class="row" *ngFor="let serviceStat of serviceStats">
                   <div class="col-md-10">
                     {{serviceStat.label}}

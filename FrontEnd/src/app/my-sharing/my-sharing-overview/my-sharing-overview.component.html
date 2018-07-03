@@ -9,7 +9,7 @@
           <div class="card">
             <div class="card-header bg-info">Data sharing agreements publishing to</div>
             <div class="card-block">
-              <loadingIndicator [done]="dsaPublishing || dsaPubLoadingComplete">
+              <loadingIndicator [done]="dsaPubLoadingComplete">
                 <entity-viewer
                   [items]="dsaPublishing"
                   [primary]="'name'"
@@ -33,7 +33,7 @@
           <div class="card">
             <div class="card-header bg-info">Data sharing agreements subscribing to</div>
             <div class="card-block">
-              <loadingIndicator [done]="dsaSubscribing || dsaSubLoadingComplete">
+              <loadingIndicator [done]="dsaSubLoadingComplete">
                 <entity-viewer
                   [items]="dsaSubscribing"
                   [primary]="'name'"
@@ -57,7 +57,7 @@
           <div class="card">
             <div class="card-header bg-info">Data processing agreements publishing to</div>
             <div class="card-block">
-              <loadingIndicator [done]="dpaPublishing || dpaPubLoadingComplete">
+              <loadingIndicator [done]="dpaPubLoadingComplete">
                 <entity-viewer
                   [items]="dpaPublishing"
                   [primary]="'name'"

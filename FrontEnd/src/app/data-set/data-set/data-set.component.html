@@ -14,7 +14,7 @@
       <form>
         <div class="row">
           <div class="form-group col-md-12">
-            <loadingIndicator [done]="datasets || loadingComplete">
+            <loadingIndicator [done]="loadingComplete">
               <entity-viewer
                 (deleted)="delete($event)"
                 [items]="datasets"

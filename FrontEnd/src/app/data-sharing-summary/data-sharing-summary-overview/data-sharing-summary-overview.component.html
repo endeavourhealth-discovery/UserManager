@@ -9,7 +9,7 @@
           <div class="card h-100">
             <div class="card-header  bg-info">Data sharing agreements</div>
             <div class="card-block">
-              <loadingIndicator [done]="dsaStats || dsaLoadingComplete">
+              <loadingIndicator [done]="dsaLoadingComplete">
                 <div class="row" *ngFor="let dsa of dsaStats">
                   <div class="col-md-10">
                     {{dsa.label}}
@@ -30,7 +30,7 @@
           <div class="card h-100">
             <div class="card-header  bg-warning">Data processing agreements</div>
             <div class="card-block">
-              <loadingIndicator [done]="dpaStats || dpaLoadingComplete">
+              <loadingIndicator [done]="dpaLoadingComplete">
                 <div class="row" *ngFor="let dpa of dpaStats">
                   <div class="col-md-10">
                     {{dpa.label}}
@@ -54,7 +54,7 @@
           <div class="card h-100">
             <div class="card-header  bg-success">Data flows</div>
             <div class="card-block">
-              <loadingIndicator [done]="dataflowStats || dataflowLoadingComplete">
+              <loadingIndicator [done]="dataflowLoadingComplete">
                 <div class="row" *ngFor="let dataflow of dataflowStats">
                   <div class="col-md-10">
                     {{dataflow.label}}
@@ -76,7 +76,7 @@
           <div class="card h-100">
             <div class="card-header text-white bg-primary">Cohorts</div>
             <div class="card-block">
-              <loadingIndicator [done]="cohortStats || cohortLoadingComplete">
+              <loadingIndicator [done]="cohortLoadingComplete">
                 <div class="row" *ngFor="let cohort of cohortStats">
                   <div class="col-md-10">
                     {{cohort.label}}
@@ -100,7 +100,7 @@
           <div class="card h-100">
             <div class="card-header" [style.backgroundColor]="'#FF6464'">Datasets</div>
             <div class="card-block">
-              <loadingIndicator [done]="datasetStats || datasetLoadingComplete">
+              <loadingIndicator [done]="datasetLoadingComplete">
                 <div class="row" *ngFor="let dataset of datasetStats">
                   <div class="col-md-10">
                     {{dataset.label}}
@@ -121,7 +121,7 @@
           <div class="card h-100">
             <div class="card-header" [style.backgroundColor]="'#B2A2C7'">Data exchange configurations</div>
             <div class="card-block">
-              <loadingIndicator [done]="dataExchangeStats || exchangeLoadingComplete">
+              <loadingIndicator [done]="exchangeLoadingComplete">
                 <div class="row" *ngFor="let exchangeStat of dataExchangeStats">
                   <div class="col-md-10">
                     {{exchangeStat.label}}

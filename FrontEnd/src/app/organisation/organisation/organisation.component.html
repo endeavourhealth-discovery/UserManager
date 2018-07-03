@@ -13,7 +13,7 @@
     <div class="module-body">
       <form>
         <div class="form-group col-md-12">
-          <loadingIndicator [done]="organisations || loadingComplete">
+          <loadingIndicator [done]="loadingComplete">
             <entity-viewer-ssp
               (onPageChange)="pageChange($event)"
               (onPageSizeChange)="pageSizeChange($event)"
