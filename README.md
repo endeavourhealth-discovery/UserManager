@@ -1,9 +1,6 @@
-# Data Sharing Manager
+# User Manager
 
-Hold all of the organisations, services, regions, data sharing agreements, data processing agreements, data flow 
-agreements, cohorts and data sets.  
-
-Includes an importer to allow you to import organisations from the trud spreadsheets.
+Application used to manage users and grant access to certain applications throughout the discovery product suite
 
 ## API Information  
 ![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/version.svg)
@@ -30,7 +27,7 @@ Contains common utilities used throughout the project
 ![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/build.svg)
 ![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/unit-test.svg)
 
-The models for the data sharing manager is setup as a separate maven project that can be imported into other applications.  
+The models for the user manager is setup as a separate maven project that can be imported into other applications.  
 This gives you the ability to access the models and also directly access the database functions without using the API.  
 
 The structure of the models is as follows
@@ -51,9 +48,10 @@ create a run configuration in intelliJ using Tomcat -> Local.
 In deployment tab, click + choose Artifact and select API:war exploded
 In the startup tab, click on debug and add these options into the environment variables. 
 
-CONFIG_JDBC_USERNAME=postgres
-CONFIG_JDBC_PASSWORD=YOURPOSTGRESPASSWORD
-CONFIG_JDBC_URL=jdbc:postgresql://localhost:5432/config
+CONFIG_JDBC_USERNAME=YOURUSERNAME
+CONFIG_JDBC_PASSWORD=YOURPASSWORD
+CONFIG_JDBC_URL=jdbc:mysql://localhost:3306/config?useSSL=false
+CONFIG_JDBC_CLASS=com.mysql.cj.jdbc.Driver
 
 Click run and it should be up and running.
 
