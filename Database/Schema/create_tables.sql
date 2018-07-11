@@ -1,4 +1,4 @@
-USE application;
+USE user_manager;
 
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS role_type;
