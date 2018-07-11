@@ -33,7 +33,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="DataSharingManager.UserEndpoint.Get")
+    @Timed(absolute = true, name="UserManager.UserEndpoint.Get")
     @Path("/")
     @ApiOperation(value = "Returns a list of all users")
     public Response getOrganisation(@Context SecurityContext sc,

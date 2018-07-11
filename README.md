@@ -3,9 +3,9 @@
 Application used to manage users and grant access to certain applications throughout the discovery product suite
 
 ## API Information  
-![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/version.svg)
-![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/build.svg)
-![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/DataSharingManager/unit-test.svg)
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/version.svg)
+![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/build.svg)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/unit-test.svg)
 
 The project is setup as follows.
 
