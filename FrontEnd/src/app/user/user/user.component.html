@@ -1,10 +1,165 @@
 <div class="module">
   <div class="container-fluid">
-    <div class="module-heading">
-      Users
-    </div>
+    <div class="module-heading">User Manager</div>
     <div class="module-body">
-      <p>Yes</p>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              Users
+              <label *ngIf="!hasPermission('eds-user-manager:user-manager-add')" class="btn btn-sm btn-success pull-right disabled" style="cursor:not-allowed">Add new</label>
+              <label *ngIf="hasPermission('eds-user-manager:user-manager-add')" class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="addUser()">Add new</label>
+            </div>
+            <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
+              <div class="table" style="margin-bottom: 15px">
+                <div class="row">
+                  <div class="form-group">
+                    <!--<div class="col-md-7">
+                      <select class="form-control" [(ngModel)]="selectedOrganisation" (ngModelChange)="setOrganisation($event)" name="Organisation" #organisation>
+                        <option *ngFor="let item of userOrganisations" [ngValue]="item">{{item.name}}</option>
+                      </select>
+                    </div>-->
+                    <!--<div class="col-md-5">
+                      <div class="input-group">
+                        <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term...">
+                        <span *ngIf="searched" class="btn input-group-addon" (click)="clearSearch(); ">
+												<i class="fa fa-remove" title="Clear search"></i>
+											</span>
+                        <span class="btn input-group-addon" (click)="searchUsers()">
+												<i class="fa fa-search" title="Search"></i>
+											</span>
+                      </div>
+                    </div>-->
+                  </div>
+                </div>
+              </div>
+              <div class="table scroll-box-350 form-control" style="height:100%; min-height: 650px; max-height: 650px">
+                <loadingIndicator [done]="filteredUserList">
+                  <table class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                      <th class="col-md-3"  (click)="sort('username');">Username
+                        <span *ngIf="sortField == 'username'"
+                              class="fa fa-sm"
+                              [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
+
+                      </th>
+                      <th class="col-md-2" (click)="sort('surname'); sortReverse=!sortReverse">Surname
+                        <span *ngIf="sortField == 'surname'"
+                              class="fa fa-sm"
+                              [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
+                      </th>
+                      <th class="col-md-2" (click)="sort('forename')">Forename
+                        <span *ngIf="sortField == 'forename'"
+                              class="fa fa-sm"
+                              [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
+                      </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let user of filteredUserList" class="hover-box show-child-on-hover"
+                        (click)="selectedUser = user;"
+                        [ngClass]="{'selection': user == selectedUser}">
+
+                      <td>{{user.username}}</td>
+                      <td>{{user.surname}}</td>
+                      <td>{{user.forename}}</td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+                </loadingIndicator>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <label *ngIf="selectedUser && !hasPermission('eds-user-manager:user-manager-edit')" class="btn btn-sm btn-success pull-right disabled" style="cursor:not-allowed">Edit</label>
+              <label *ngIf="selectedUser && hasPermission('eds-user-manager:user-manager-edit')" class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="editUser(selectedUser)">Edit</label>
+
+              <label *ngIf="selectedUser && !hasPermission('eds-user-manager:user-manager-delete')" class="btn btn-sm btn-success pull-right disabled" style="cursor:not-allowed">Delete</label>
+              <label *ngIf="selectedUser && hasPermission('eds-user-manager:user-manager-delete')" class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="deleteUser(selectedUser)">Delete</label>
+
+              User details
+            </div>
+            <div class="card-block" style="overflow:hidden; height:100%; min-height: 720px">
+              <div class="form-group col-md-12" *ngIf="selectedUser==null">No user selected</div>
+              <div class="table" *ngIf="selectedUser">
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <div>
+                      <label class="control-label">Username</label>
+                      <input type="text" readonly class="form-control" placeholder="Username" [(ngModel)]="selectedUser.username" name="username">
+                    </div>
+                    <div>
+                      <label class="control-label">Forename</label>
+                      <input type="text" readonly class="form-control" placeholder="Forename" [(ngModel)]="selectedUser.forename" name="forename">
+                    </div>
+                    <div>
+                      <label class="control-label">Surname</label>
+                      <input type="text" readonly class="form-control" placeholder="Surname" [(ngModel)]="selectedUser.surname" name="surname">
+                    </div>
+                    <div>
+                      <label class="control-label">Email</label>
+                      <input type="text" readonly class="form-control" placeholder="Email" [(ngModel)]="selectedUser.email" name="email">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <div>
+                      <label class="control-box">Photo</label>
+                      <input type="text" readonly class="form-control" placeholder="Photo URL" [(ngModel)]="selectedUser.photo" name="photo">
+                      <img src="{{selectedUser.photo}}" class="img-rounded" height="118px" width="118px">
+                    </div>
+                    <div>
+                      <label class="control-label">Mobile</label>
+                      <input type="text" readonly class="form-control" placeholder="Mobile" [(ngModel)]="selectedUser.mobile" name="mobile">
+                    </div>
+                  </div>
+                </div>
+                <!--<div class="row">
+                  <div class="form-group col-md-12">
+                    <label>Roles</label>
+                    <loadingIndicator [done]="userRoleList">
+                      <div class="form-group col-md-12" *ngIf="userRoleList!=null&&userRoleList.length==0">No roles assigned</div>
+                      <ngb-tabset active="activeTab">
+                        <ngb-tab *ngFor="let role of getUserRoleList()" id="{{role.uuid}}" title="{{role.name}}">
+                          <ng-template ngbTabContent>
+                            <div class="row">
+                              <div class="form-group col-md-6">
+                                <div>
+                                  <label for="description">Description</label>
+                                  <textarea class="form-control" readonly="true" id="description" [(ngModel)]="role.description" name="description"></textarea>
+                                </div>
+                                <div>
+                                  <label class="control-label">Organisation</label>
+                                  <input type="text" readonly="true"  class="form-control" [(ngModel)]="role.group.name" name="organisation">
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label class="control-label">Client Access Profile</label>
+                                <span class="list-group">
+																	<li class="list-group-item" *ngFor="let item of role.clientRoles"
+                                      readonly="false" value="{{item.uuid}}">{{item.name}}
+																		<span class="fa fa-info-circle fa-right-pad text-muted" ngbTooltip="{{item.description}}" *ngIf="item.description"></span>
+																	</li>
+																</span>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+                      </ngb-tabset>
+                    </loadingIndicator>
+                  </div>
+                </div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

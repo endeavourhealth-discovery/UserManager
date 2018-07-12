@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-import {DialogsModule} from 'eds-angular4';
+import {DialogsModule, LoggerService} from 'eds-angular4';
 import {ControlsModule} from "eds-angular4/dist/controls";
 import {UserService} from "./user.service";
 import { UserComponent } from './user/user.component';
@@ -23,6 +23,6 @@ import { UserComponent } from './user/user.component';
   entryComponents: [
 
   ],
-  providers: [UserService]
+  providers: [UserService, LoggerService]
 })
 export class UserModule { }
