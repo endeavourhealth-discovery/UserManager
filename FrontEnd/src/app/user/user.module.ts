@@ -7,6 +7,7 @@ import {DialogsModule, LoggerService} from 'eds-angular4';
 import {ControlsModule} from "eds-angular4/dist/controls";
 import {UserService} from "./user.service";
 import { UserComponent } from './user/user.component';
+import { UserEditorComponent } from './user-editor/user-editor.component';
 
 @NgModule({
   imports: [
@@ -18,10 +19,11 @@ import { UserComponent } from './user/user.component';
     ControlsModule
   ],
   declarations: [
-    UserComponent
+    UserComponent,
+    UserEditorComponent
   ],
   entryComponents: [
-
+    UserEditorComponent
   ],
   providers: [UserService, LoggerService]
 })

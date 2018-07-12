@@ -14,4 +14,20 @@ export class UserService {
       .map((response) => response.json());
   }
 
+  saveUser(editedUser: User, editMode: Boolean): Observable<User> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('editMode', editMode == true ? "1":"0");
+    return vm.http.post('api/user/users/save', editedUser, {search: params})
+      .map((response) => response.json());
+  }
+
+  deleteUser(userId: string) {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.delete('api/user/users/delete', {search: params})
+      .map((response) => response.text());;
+  }
+
 }

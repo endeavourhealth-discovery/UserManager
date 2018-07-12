@@ -19,6 +19,12 @@
             <version>${eds-api.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.endeavourhealth.common</groupId>
+            <artifactId>security</artifactId>
+            <version>${eds-security.version}</version>
+        </dependency>
+
         <!-- End Common -->
 
         <!-- Data Sharing Manager Models -->

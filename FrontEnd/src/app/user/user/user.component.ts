@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {LoggerService, SecurityService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, SecurityService} from "eds-angular4";
 import {UserService} from "../user.service";
 import {NgbModal, NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
+import {UserEditorComponent} from "../user-editor/user-editor.component";
 
 @Component({
   selector: 'app-user',
@@ -16,6 +17,7 @@ export class UserComponent implements OnInit {
   filteredUserList : User[];
   sortReverse : boolean;
   sortField = 'username';
+  searched : Boolean;
 
   constructor(public log:LoggerService,
               private userService : UserService,
@@ -74,6 +76,95 @@ export class UserComponent implements OnInit {
 
   hasPermission(role : string) : boolean {
     return this.securityService.hasPermission('eds-user-manager', role);
+  }
+
+  addUser() {
+    let vm = this;
+    UserEditorComponent.open(vm.$modal, null, false)
+      .result.then(
+      (editedUser) => vm.saveUser(null, editedUser),
+      () => vm.log.info('User add cancelled')
+    );
+  }
+
+  editUser(user:User) {
+    let vm = this;
+    UserEditorComponent.open(vm.$modal, user, true)
+      .result.then(
+      (editedUser) => vm.saveUser(user, editedUser),
+      () => vm.log.info('User edit cancelled')
+    );
+  }
+
+  private saveUser(user, editedUser : User) {
+    let vm = this;
+    let editMode = (user != null);
+
+    vm.userService.saveUser(editedUser, editMode)
+      .subscribe(
+        (response) => {
+          if (editMode) {
+            vm.selectedUser = response;
+            vm.updateUser(response);
+          }
+
+          let msg = (!editMode) ? 'Add user' : 'Edit user';
+          vm.log.success('User saved', response, msg);
+        },
+        (error) => vm.log.error('Error saving user', error, 'Error')
+      );
+  }
+
+  updateUser(editedUser: User){
+    let vm = this;
+    var index1 = 0;
+    for(let user of vm.userList){
+      if (user.uuid == editedUser.uuid){
+        vm.userList[index1] = editedUser;
+        if (vm.searched){
+          var index2 = 0;
+          for(let filteredUser of vm.filteredUserList){
+            if (filteredUser.uuid == editedUser.uuid) {
+              vm.filteredUserList[index2] = editedUser;
+              return;
+            }
+            index2++;
+          }
+        }
+        return;
+      }
+      index1++;
+    }
+  }
+
+  deleteUser(user:User) {
+    let vm = this;
+    let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;
+    if (user.uuid == loggedOnUserUuid)
+    {
+      vm.log.warning("You cannot delete yourself!");
+    }
+    else {
+      let userName = user.forename + " " + user.surname;
+
+      MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete user: " + userName.trim() + "?", "Yes", "No")
+        .result.then(
+        (result) => {
+          let userId = user.uuid;
+          vm.userService.deleteUser(userId)
+            .subscribe(
+              (result) => {
+                result;
+                vm.selectedUser = null;
+                vm.log.info("User deleted");
+              },
+              (error) => vm.log.error('Error deleting user', error, 'Error')
+            );
+        },
+        (reason) => {
+        }
+      );
+    }
   }
 
 
