@@ -13,11 +13,8 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.coreui.json.JsonEndUser;
-import org.endeavourhealth.coreui.json.JsonEndUserRole;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.GroupRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +81,10 @@ public final class UserEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
     @Path("/users/save")
     @RequiresAdmin
+    @ApiOperation(value = "Saves a user or updates an existing user")
     public Response saveUser(@Context SecurityContext sc, JsonEndUser user, @QueryParam("editMode") String editMode) throws Exception {
         super.setLogbackMarkers(sc);
 
@@ -163,8 +162,10 @@ public final class UserEndpoint extends AbstractEndpoint {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.deleteUser")
     @Path("/users/delete")
     @RequiresAdmin
+    @ApiOperation(value = "Deletes a user")
     public Response deleteUser(@Context SecurityContext sc, @QueryParam("userId") String userId) throws Exception {
         super.setLogbackMarkers(sc);
 

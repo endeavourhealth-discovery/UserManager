@@ -3,9 +3,9 @@
 Application used to manage users and grant access to certain applications throughout the discovery product suite
 
 ## API Information  
-![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/version.svg)
-![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/build.svg)
-![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/UserManager/unit-test.svg)
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserManager/version.svg)
+![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserManager/build.svg)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserManager/unit-test.svg)
 
 The project is setup as follows.
 
@@ -23,9 +23,9 @@ Contains the standard implementations for the metrics code
 Contains common utilities used throughout the project
 
 ## Model
-![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/version.svg)
-![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/build.svg)
-![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/Models/unit-test.svg)
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserModels/version.svg)
+![Build Status](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserModels/build.svg)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/badges/org.endeavourhealth.userManager.UserModels/unit-test.svg)
 
 The models for the user manager is setup as a separate maven project that can be imported into other applications.  
 This gives you the ability to access the models and also directly access the database functions without using the API.  

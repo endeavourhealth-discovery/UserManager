@@ -18,6 +18,7 @@
         <gson.version>2.3</gson.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <jersey.version>2.22.1</jersey.version>
+        <data-sharing-manager.version>0.0.4-SNAPSHOT</data-sharing-manager.version>
 
     </properties>
 
@@ -26,6 +27,12 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.endeavourhealth.dataSharingManager</groupId>
+            <artifactId>Models</artifactId>
+            <version>${data-sharing-manager.version}</version>
         </dependency>
 
         <!-- hikari -->

@@ -25,3 +25,12 @@ values ('user-manager','keycloak',
   "public-client": true
 }'
 );
+
+insert into config.config
+select 'user-manager', 'keycloak_proxy',
+'{
+  "user" : "eds-ui",
+  "pass" : "bd285adbc36842d7a27088e93c36c13e29ed69fa63a6",
+  "url" : "https://devauth.endeavourhealth.net/auth"
+ }'
+ 

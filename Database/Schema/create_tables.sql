@@ -11,23 +11,24 @@ DROP TABLE IF EXISTS application;
 DROP TABLE IF EXISTS project;
 DROP TABLE IF EXISTS audit;
 DROP TABLE IF EXISTS active_item;
+DROP TABLE IF EXISTS delegation_relationship;
+DROP TABLE IF EXISTS delegation;
 
 
 CREATE TABLE user_role
 (
 	id varchar(36) NOT NULL,
 	user_id varchar(36) NOT NULL,
-	role_type_id varchar(36) NOT NULL,
+	role_type_id varchar(36) NULL,
 	organisation_id varchar(36) NOT NULL,
-	user_access_profile_id varchar(36) NOT NULL,
-    is_deleted boolean,
+	user_access_profile_id varchar(36) NULL,
+    is_deleted boolean null,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'A role which is assigned to a user, linking them to an organisation, project and access profile';
 
 CREATE INDEX ix_user_id
 	ON user_role (user_id);
-
 
 CREATE TABLE role_type
 (
@@ -120,6 +121,32 @@ CREATE TABLE project
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'A list of project definitions available to assign to users';
+
+CREATE TABLE delegation
+(
+	uuid varchar(36) NOT NULL comment 'the UUID of the delegation',
+	name varchar(100) NOT NULL comment 'The name of the delegation',
+    root_organisation varchar(36) NULL comment 'the root organisation for the delegation',
+
+	CONSTRAINT user_manager_delegation_pk primary key (uuid)
+) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
+
+CREATE INDEX ix_delegation_name
+ON delegation (name);
+
+CREATE TABLE delegation_relationship
+(
+	delegation varchar(36) NOT NULL comment 'the delegation that this relationship belongs to',
+	parent_uuid varchar(36) NOT NULL comment 'the UUID of the parent in the delegation',
+	parent_type smallint NOT NULL comment 'The type of the parent eg. organisation, region',
+	child_uuid varchar(36) NOT NULL comment 'the UUID of the child in the delegation',
+    child_type smallint NOT NULL comment 'The type of the child eg. organisation, region',
+	include_all_children boolean NOT NULL comment 'Whether to include all children and future children',
+	create_super_users boolean NOT NULL comment 'Whether the parent can create super users for the children',
+	create_users boolean NOT NULL comment 'Whether the parent can create users for the children',
+
+	CONSTRAINT user_manager_delegation_relationship_pk primary key  (delegation, child_uuid, child_type, parent_uuid, parent_type)
+) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
 
 CREATE TABLE audit
 (

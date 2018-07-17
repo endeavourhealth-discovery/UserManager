@@ -12,6 +12,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule} from "ng2-toastr";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserModule} from "./user/user.module";
+import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
+import {DelegationModule} from "./delegation/delegation.module";
 
 @NgModule({
   declarations: [],
@@ -23,7 +25,9 @@ import {UserModule} from "./user/user.module";
     RouterModule.forRoot(AppMenuService.getRoutes(), {useHash: true}),
     NgbModule.forRoot(),
     ToastModule.forRoot(),
-    UserModule
+    UserModule,
+    DelegationModule,
+    EntityViewComponentsModule
   ],
   providers: [
     KeycloakService,
