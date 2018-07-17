@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import {LoggerService} from "eds-angular4";
 import {OrganisationService} from "./organisation.service";
 import { OrganisationPickerComponent } from './organisation-picker/organisation-picker.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   declarations: [OrganisationPickerComponent],
   providers: [OrganisationService, LoggerService]
