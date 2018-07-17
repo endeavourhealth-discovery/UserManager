@@ -144,9 +144,11 @@ CREATE TABLE delegation_relationship
 	include_all_children boolean NOT NULL comment 'Whether to include all children and future children',
 	create_super_users boolean NOT NULL comment 'Whether the parent can create super users for the children',
 	create_users boolean NOT NULL comment 'Whether the parent can create users for the children',
+    root boolean NOT NULL comment 'indicates if this is the root parent of the delegation',
 
 	CONSTRAINT user_manager_delegation_relationship_pk primary key  (delegation, child_uuid, child_type, parent_uuid, parent_type)
 ) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
+
 
 CREATE TABLE audit
 (

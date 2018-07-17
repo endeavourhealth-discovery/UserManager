@@ -7,7 +7,6 @@ import {DialogsModule} from "eds-angular4";
 import {ControlsModule} from "eds-angular4/dist/controls";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {DelegationService} from "./delegation.service";
-import {TreeDiagram} from "angular2-tree-diagram";
 
 @NgModule({
   imports: [
@@ -16,9 +15,7 @@ import {TreeDiagram} from "angular2-tree-diagram";
     NgbModule,
     ToastModule.forRoot(),
     DialogsModule,
-    ControlsModule,
-    TreeDiagram
-
+    ControlsModule
   ],
   declarations: [
     DelegationComponent],
