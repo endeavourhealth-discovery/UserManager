@@ -1,6 +1,5 @@
 export class Delegation {
-  uuid : string;
-  displayName : number;
-  odsCode : string;
-  children : Delegation[];
+  uuid: string;
+  name: string;
+  rootOrganisation: string;
 }

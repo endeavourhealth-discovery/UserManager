@@ -28,7 +28,7 @@
     "font-awesome": "^4.7.0",
     "keycloak-js": "^3.1.0",
     "ng2-toastr": "^4.1.2",
-    "orgchart": "^2.1.1",
+    "orgchart.js": "^0.0.4",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },

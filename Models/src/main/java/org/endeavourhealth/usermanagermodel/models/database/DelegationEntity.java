@@ -1,6 +1,13 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
+import org.endeavourhealth.usermanagermodel.PersistenceManager;
+
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -54,5 +61,38 @@ public class DelegationEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, rootOrganisation);
+    }
+
+    public static List<DelegationEntity> getAllDelegations() throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
+        Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
+
+        TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
+        List<DelegationEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static String getRootOrganisation(String delegationId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
+        Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("uuid"), delegationId);
+
+        cq.where(predicate);
+        TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
+        List<DelegationEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret.get(0).rootOrganisation;
     }
 }

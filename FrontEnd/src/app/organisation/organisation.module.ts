@@ -11,6 +11,9 @@ import {FormsModule} from "@angular/forms";
     FormsModule
   ],
   declarations: [OrganisationPickerComponent],
+  entryComponents: [
+    OrganisationPickerComponent
+  ],
   providers: [OrganisationService, LoggerService]
 })
 export class OrganisationModule { }

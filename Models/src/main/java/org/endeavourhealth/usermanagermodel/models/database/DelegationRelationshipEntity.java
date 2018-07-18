@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "delegation_relationship", schema = "user_manager", catalog = "")
+@Table(name = "delegation_relationship", schema = "user_manager")
 @IdClass(DelegationRelationshipEntityPK.class)
 public class DelegationRelationshipEntity {
     private String parentUuid;
@@ -22,7 +22,6 @@ public class DelegationRelationshipEntity {
     private byte createSuperUsers;
     private byte createUsers;
     private String delegation;
-    private byte root;
 
     @Id
     @Column(name = "parent_uuid")
@@ -124,16 +123,6 @@ public class DelegationRelationshipEntity {
         this.delegation = delegation;
     }
 
-    @Basic
-    @Column(name = "root")
-    public byte getRoot() {
-        return root;
-    }
-
-    public void setRoot(byte root) {
-        this.root = root;
-    }
-
     public static List<DelegationRelationshipEntity> getDelegations(String delegationId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
@@ -143,7 +132,7 @@ public class DelegationRelationshipEntity {
 
         Predicate predicate = cb.equal(rootEntry.get("delegation"), delegationId);
 
-        cq.where(predicate).orderBy(cb.desc(rootEntry.get("root")));
+        cq.where(predicate);
         TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
         List<DelegationRelationshipEntity> ret = query.getResultList();
 
@@ -151,4 +140,5 @@ public class DelegationRelationshipEntity {
 
         return ret;
     }
+
 }

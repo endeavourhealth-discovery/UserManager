@@ -14,6 +14,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserModule} from "./user/user.module";
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 import {DelegationModule} from "./delegation/delegation.module";
+import {OrganisationModule} from "./organisation/organisation.module";
 
 @NgModule({
   declarations: [],
@@ -27,6 +28,7 @@ import {DelegationModule} from "./delegation/delegation.module";
     ToastModule.forRoot(),
     UserModule,
     DelegationModule,
+    OrganisationModule,
     EntityViewComponentsModule
   ],
   providers: [

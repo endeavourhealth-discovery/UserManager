@@ -24,7 +24,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
   getMenuOptions(): MenuOption[] {
     return [
       {caption: 'Users', state: 'user', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'},
-      {caption: 'Delegation', state: 'delegation', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'}
+      {caption: 'DelegationData', state: 'delegation', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'}
     ];
   }
 }
