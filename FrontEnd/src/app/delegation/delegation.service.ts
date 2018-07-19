@@ -17,6 +17,14 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
+  getDelegationRelationshipsD3(delegationId: string): Observable<DelegationData> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('delegationId', delegationId);
+    return vm.http.get('api/delegationRelationship/getd3', {search: params})
+      .map((response) => response.json());
+  }
+
   getDelegations(): Observable<Delegation[]> {
     const vm = this;
     return vm.http.get('api/delegation/get')

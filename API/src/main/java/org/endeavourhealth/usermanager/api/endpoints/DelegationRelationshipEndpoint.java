@@ -54,6 +54,22 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
 
         return getDelegations(delegationId);
 
+    }@GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.DelegationRelationshipEndpoint.getOrganisation")
+    @Path("/getd3")
+    @ApiOperation(value = "Returns a list of delegation relationships")
+    public Response getDelegationTreed3(@Context SecurityContext sc,
+                                      @ApiParam(value = "Delegation Id") @QueryParam("delegationId") String delegationId) throws Exception {
+
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Organisation(s)",
+                "delegationId", delegationId);
+
+        return getDelegations(delegationId);
+
     }
 
     private Response getDelegations(String delegationId) throws Exception {
@@ -112,7 +128,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
             if (parentOrgDelegation == null) {
                 parentOrgDelegation = new JsonOrganisationDelegation();
                 parentOrgDelegation.setUuid(parentOrg.getUuid());
-                parentOrgDelegation.setDisplayName(parentOrg.getName());
+                parentOrgDelegation.setName(parentOrg.getName());
                 parentOrgDelegation.setOdsCode(parentOrg.getOdsCode());
                 delegationMap.put(parentOrg.getUuid(), parentOrgDelegation);
             }
@@ -120,7 +136,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
             if (childOrgDelegation == null) {
                 childOrgDelegation = new JsonOrganisationDelegation();
                 childOrgDelegation.setUuid(childOrg.getUuid());
-                childOrgDelegation.setDisplayName(childOrg.getName());
+                childOrgDelegation.setName(childOrg.getName());
                 childOrgDelegation.setOdsCode(childOrg.getOdsCode());
                 delegationMap.put(childOrg.getUuid(), childOrgDelegation);
             }

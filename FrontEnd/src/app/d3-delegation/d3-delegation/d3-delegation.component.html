@@ -19,25 +19,12 @@
       </div>
 
       <div class="row">
-        <div class="col-md-12">
-          <!--<div #graphContainer>
-            <div id="delegate-chart" class="chart-container" #delegateChart></div>
-          </div>-->
-          <tree-graph [definition]="chartDef" (nodeClick)="nodeClick($event)" #treeChart></tree-graph>
+        <div class="form-group col-md-12">
+          <div #graphContainer>
+            <d3-tree-graph [definition]="root" (nodeClick)="nodeClick($event)" #d3tree></d3-tree-graph>
+          </div>
         </div>
       </div>
-
-      <!--<div class="row">
-        <div class="col-md-12">
-          &lt;!&ndash;<div #graphContainer>
-            <div id="delegate-chart" class="chart-container" #delegateChart></div>
-          </div>&ndash;&gt;
-          <div id="delegate-Chart"></div>
-        </div>
-      </div>-->
-
-
-      <br>
     </div>
   </div>
 </div>

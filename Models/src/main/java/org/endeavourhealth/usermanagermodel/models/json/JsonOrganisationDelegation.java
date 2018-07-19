@@ -1,13 +1,11 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
-import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonOrganisationDelegation {
     private String uuid = null;
-    private String displayName = null;
+    private String name = null;
     private String odsCode = null;
     private List<JsonOrganisationDelegation> children = null;
 
@@ -19,12 +17,12 @@ public class JsonOrganisationDelegation {
         this.uuid = uuid;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getName() {
+        return name;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOdsCode() {
@@ -50,7 +48,7 @@ public class JsonOrganisationDelegation {
 
         /*JsonOrganisationDelegation delegation = new JsonOrganisationDelegation();
         delegation.setUuid(organisation.getUuid());
-        delegation.setDisplayName(organisation.getName());
+        delegation.setName(organisation.getName());
         delegation.setOdsCode(organisation.getOdsCode());*/
         this.children.add(organisation);
     }

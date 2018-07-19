@@ -15,6 +15,7 @@ import {UserModule} from "./user/user.module";
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
 import {DelegationModule} from "./delegation/delegation.module";
 import {OrganisationModule} from "./organisation/organisation.module";
+import {D3DelegationModule} from "./d3-delegation/d3-delegation.module";
 
 @NgModule({
   declarations: [],
@@ -29,7 +30,8 @@ import {OrganisationModule} from "./organisation/organisation.module";
     UserModule,
     DelegationModule,
     OrganisationModule,
-    EntityViewComponentsModule
+    EntityViewComponentsModule,
+    D3DelegationModule
   ],
   providers: [
     KeycloakService,

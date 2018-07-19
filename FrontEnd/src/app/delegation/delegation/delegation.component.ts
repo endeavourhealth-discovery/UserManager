@@ -23,6 +23,9 @@ export class DelegationComponent implements OnInit, AfterViewInit {
   chartDef : any;
   selectedOrgs: Organisation[];
 
+  root: any;
+
+
 
   @ViewChild('graphContainer') graphContainer: any;
   @ViewChild('delegate-chart') chart: any;
@@ -88,12 +91,12 @@ export class DelegationComponent implements OnInit, AfterViewInit {
     console.log(vm.delegationData);
     vm.chartDef = {
       'data': vm.delegationData,
-      'nodeTitle' : 'displayName',
+      'nodeTitle' : 'name',
       'nodeContent' : 'odsCode',
       'direction': 'l2r'
     };
-
-    console.log(vm.orgchart);
+/*
+    console.log(vm.orgchart);*/
 
     /*$('#delegate-chart').empty();
     var delegate = $('#delegate-chart').orgchart({
@@ -171,7 +174,7 @@ export class DelegationComponent implements OnInit, AfterViewInit {
       for(let org of vm.selectedOrgs) {
         let child = new DelegationData();
         child.uuid = org.uuid;
-        child.displayName = org.name;
+        child.name = org.name;
         child.odsCode = org.odsCode;
         childData.push(child);
       }

@@ -1,6 +1,5 @@
 import {Component, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {User} from "../models/User";
-import {UserRole} from "../models/UserRole";
 import {NgbModal, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoggerService, MessageBoxDialog} from "eds-angular4";
 import {UserService} from "../user.service";
