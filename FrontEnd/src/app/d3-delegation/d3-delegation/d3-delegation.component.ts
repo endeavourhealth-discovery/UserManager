@@ -49,6 +49,14 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     console.log($event);
   }
 
+  addChildOrganisation() {
+
+  }
+
+  addChildOrganisationToChart() {
+
+  }
+
   getDelegations() {
     let vm = this;
     vm.delegationService.getDelegations()
