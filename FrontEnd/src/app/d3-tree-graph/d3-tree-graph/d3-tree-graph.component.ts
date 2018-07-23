@@ -9,6 +9,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
+import * as d3H from 'd3-hierarchy';
+import {DelegationData} from "../../delegation/models/DelegationData";
+
 @Component({
   selector: 'd3-tree-graph',
   templateUrl: './d3-tree-graph.component.html',
@@ -51,7 +54,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
   }
 
   draw() {
-    console.log(this.root);
     if (this.root == null) {
       return;
     }
@@ -76,8 +78,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
       .append("svg:g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-
-      console.log(this.root);
       this.root.x0 = h / 2;
       this.root.y0 = 0;
 
@@ -98,11 +98,38 @@ export class D3TreeGraphComponent implements AfterViewInit {
     }
   }
 
+  deselectAll(vm: D3TreeGraphComponent, d: any) {
+    console.log(d);
+    if (d.children) {
+      d.children.forEach(this.deselectAll);
+      this.deselect(d);
+
+    }
+  }
+
+  deselect(d) {
+    console.log(d);
+    d.selected = false;
+    /*if (d.selected) {
+      d.selected = !d.selected;
+    } else {
+      d.selected = true;
+    }*/
+  }
+
+  select(d) {
+    d.selected = true;
+  }
+
   update(source) {
+    if (this.root.children) {
+      this.root.children.forEach((c) => this.deselectAll(this, c));
+    }
+
+
     this.nodeClick.emit(source);
     this.selectedNode = source;
 
-    console.log('update');
       var duration = 500;
 
       // Compute the new tree layout.
@@ -119,7 +146,7 @@ export class D3TreeGraphComponent implements AfterViewInit {
       var nodeEnter = node.enter().append("svg:g")
         .attr("class", "node")
         .attr("transform", (d) => { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-        .on("click", (d) => { this.toggle(d); this.update(d); });
+        .on("click", (d) => { this.deselectAll(this, d); this.select(d); this.toggle(d); this.update(d); });
 
       nodeEnter.append("svg:circle")
         .attr("r", 1e-6)
@@ -144,9 +171,8 @@ export class D3TreeGraphComponent implements AfterViewInit {
       nodeUpdate.select("text")
         .style("fill-opacity", 1);
 
-      console.log(nodeUpdate.select("circle"));
-      nodeUpdate.select("text")
-        .style("color", (d) => { return d.selected ? "#11a" : "#332"});
+    nodeUpdate.select("text")
+        .style("fill", (d) => { return d.selected ? "#11a" : "#332"});
 
       // Transition exiting nodes to the parent's new position.
       var nodeExit = node.exit().transition()
@@ -196,20 +222,28 @@ export class D3TreeGraphComponent implements AfterViewInit {
       });
     }
 
+    addChild(newOrgs: DelegationData[]) {
+      if (this.selectedNode.children) {
+        this.selectedNode.children.push.apply(this.selectedNode.children, newOrgs);
+      } else {
+        this.selectedNode.children = newOrgs;
+      }
+      this.update(this.root);
+    }
+
   addRandomChild() {
     console.log(this.root);
-    this.root.children[1].children.push( {"name": "SOME ORG", "balls": 283});
+    if (this.selectedNode.children) {
+      this.selectedNode.children.push.apply(this.selectedNode.children,  {"name": "SOME ORG", "balls": 283});
+    } else {
+      this.selectedNode.children =  [{"name": "SOME ORG", "balls": 283}];
+    }
+    // this.root.children[1].children.push( {"name": "SOME ORG", "balls": 283});
     this.update(this.root);
   }
 
   // Toggle children.
   toggle(d) {
-    console.log(d);
-    if (d.selected) {
-      d.selected = !d.selected;
-    } else {
-      d.selected = true;
-    }
     if (d.children) {
       d._children = d.children;
       d.children = null;
@@ -217,6 +251,17 @@ export class D3TreeGraphComponent implements AfterViewInit {
       d.children = d._children;
       d._children = null;
     }
+  }
+
+  stratify(data: any) {
+
+    var root = d3H.stratify()
+      .id(function(d) { return d.name; })
+      .parentId(function(d) { return d.parent; })
+      (data);
+    return root;
+
+
   }
 
 }

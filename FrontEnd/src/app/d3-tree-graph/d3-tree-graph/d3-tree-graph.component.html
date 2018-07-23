@@ -1,3 +1,4 @@
-<button type="button" class="btn" (click)="draw()">Draw</button>
-<button type="button" class="btn" (click)="addRandomChild()">Add</button>
+<!--<button type="button" class="btn" (click)="draw()">Draw</button>
+<button type="button" class="btn" (click)="addRandomChild()">Add</button>-->
+<p *ngIf="selectedNode">Selected Organisation : {{selectedNode.name}}</p>
 <svg #treeGraphSvg></svg>
