@@ -4,6 +4,14 @@
     <div class="module-body">
       <div class="row">
         <div class="col-md-6">
+          Selected Delegation = {{hackDelegation}}
+        </div>
+        <div class="col-md-6">
+          Selected Organisation = {{hackOrganisation}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-primary text-white">
               Users
@@ -12,6 +20,14 @@
             </div>
             <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
               <div class="table" style="margin-bottom: 15px">
+                <label class="control-label">Select Organisation</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                  <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
+                    <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
+                  </select>
+                </div>
+
                 <div class="row">
                   <div class="form-group">
                     <!--<div class="col-md-7">

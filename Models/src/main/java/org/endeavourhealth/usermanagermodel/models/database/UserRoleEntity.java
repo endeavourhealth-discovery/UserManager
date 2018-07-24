@@ -118,5 +118,44 @@ public class UserRoleEntity {
         return ret;
     }
 
+    public static List<UserRoleEntity> getUsersAtOrganisation(String organisationId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
+        Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("organisationId"), organisationId);
+
+        cq.where(predicate);
+        TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
+        List<UserRoleEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static List<UserRoleEntity> getSuperUserOrganisations(String userId, String superUserRoleTypeId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
+        Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
+
+        Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
+                cb.equal(rootEntry.get("roleTypeId"), superUserRoleTypeId));
+
+        cq.where(predicate);
+        TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
+        List<UserRoleEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+
+
 
 }

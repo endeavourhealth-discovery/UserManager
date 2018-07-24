@@ -49,13 +49,19 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Path("/users")
     @ApiOperation(value = "Returns a list of all users")
     public Response getUsers(@Context SecurityContext sc,
+                             @ApiParam(value = "Organisation Id") @QueryParam("organisationId") String organisationId,
                              @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
-                "Users", "Search Data", searchData);
+                "Users", "Search Data", searchData, "Organisation Id", organisationId);
 
         LOG.trace("getUsers");
+
+        List<UserRoleEntity> userRoleEntities = UserRoleEntity.getUsersAtOrganisation(organisationId);
+        List<String> usersAtOrg = userRoleEntities.stream()
+                .map(UserRoleEntity::getUserId)
+                .collect(Collectors.toList());
 
         List<JsonEndUser> userList = new ArrayList<>();
         List<UserRepresentation> users;
@@ -70,7 +76,9 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         //Add as Json
         for (UserRepresentation user : users) {
-            userList.add(new JsonEndUser(user));
+            if (usersAtOrg.contains(user.getId())) {
+                userList.add(new JsonEndUser(user));
+            }
         }
 
         AbstractEndpoint.clearLogbackMarkers();

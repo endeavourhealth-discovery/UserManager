@@ -147,4 +147,10 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     this.graphContainer.nativeElement.style.height = (window.innerHeight * 7) + 'px';
   }
 
+  setOrganisation() {
+    const vm = this;
+    vm.delegationService.updateSelectedDelegation(vm.selectedDelegation.uuid);
+    vm.delegationService.updateSelectedOrganisation(vm.selectedOrganisation.uuid);
+  }
+
 }

@@ -11,8 +11,10 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
+import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/delegation")
@@ -36,16 +39,36 @@ public class DelegationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.DelegationEndpoint.getOrganisation")
+    @Timed(absolute = true, name="UserManager.DelegationEndpoint.getDelegations")
     @Path("/get")
     @ApiOperation(value = "Returns a list of delegations")
-    public Response getDelegationTree(@Context SecurityContext sc) throws Exception {
+    public Response getDelegations(@Context SecurityContext sc) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
         return getAllDelegations();
+
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.DelegationEndpoint.getDelegatedOrganisations")
+    @Path("/getDelegatedOrganisations")
+    @ApiOperation(value = "Returns a list of roles available at delegated organisations")
+    public Response getDelegatedOrganisations(@Context SecurityContext sc,
+                                                      @ApiParam(value = "User Id") @QueryParam("userId") String userId,
+                                                      @ApiParam(value = "delegation Id") @QueryParam("delegationId") String delegationId,
+                                                      @ApiParam(value = "organisation Id") @QueryParam("organisationId") String organisationId) throws Exception {
+
+        // TODO remove the hack and select organisation based on userId
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Organisation(s)");
+
+        return getDelegatedOrganisations(userId, delegationId, organisationId);
 
     }
 
@@ -56,6 +79,21 @@ public class DelegationEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(delegations)
+                .build();
+    }
+
+    private Response getDelegatedOrganisations(String userId, String delegationId, String organisationId) throws Exception {
+
+        List<String> orgs = DelegationRelationshipEntity.getDelegatedOrganisations(delegationId, organisationId);
+
+        orgs.add(organisationId);
+
+        List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(orgList)
                 .build();
     }
 }

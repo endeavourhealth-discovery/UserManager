@@ -9,6 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "delegation_relationship", schema = "user_manager")
@@ -139,6 +140,27 @@ public class DelegationRelationshipEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static List<String> getDelegatedOrganisations(String delegationId, String organisationId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+
+        Predicate predicate = cb.and(cb.equal(rootEntry.get("delegation"), delegationId),
+                cb.equal(rootEntry.get("parentUuid"), organisationId));
+
+        cq.where(predicate);
+        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+        List<DelegationRelationshipEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret.stream()
+                .map(DelegationRelationshipEntity::getChildUuid)
+                .collect(Collectors.toList());
     }
 
 }

@@ -9,9 +9,11 @@ export class UserService {
 
   constructor(private http: Http) { }
 
-  getUsers(): Observable<User[]> {
+  getUsers(organisationId: string): Observable<User[]> {
     const vm = this;
-    return vm.http.get('api/user/users')
+    let params = new URLSearchParams();
+    params.set('organisationId', organisationId);
+    return vm.http.get('api/user/users', {search: params})
       .map((response) => response.json());
   }
 

@@ -68,28 +68,64 @@
         </div>
       </form>
     </div>
-    <!------------------------------------------------------------------------------------------------->
-    <!-- USER CREDENTIALS -->
-    <!------------------------------------------------------------------------------------------------->
-    <div class="card">
-      <div class="card-header bg-primary text-white">Roles</div>
-      <div class="card-block">
-        <form UserDetails2="form" class="container-fluid">
-          <div class="row">
-            <div class="col col-md-4">
-              <label class="control-label">New Password *</label>
-              <span class="fa fa-info-circle fa-right-pad text-muted" [ngbTooltip]="tipContentPassword"></span>
-              <ng-template #tipContentPassword>The password must be at least eight characters long, include at least one digit and one Uppercase letter.</ng-template>
-              <input type="password" class="form-control" placeholder="Password" name="passwordNew" #password1>
+  </div>
+
+
+  <!------------------------------------------------------------------------------------------------->
+  <!-- ROLES -->
+  <!------------------------------------------------------------------------------------------------->
+  <div class="card">
+    <div class="card-header bg-primary text-white">Roles</div>
+    <div class="card-block">
+      <form UserDetails2="form" class="container-fluid">
+        <div class="row">
+          <div class="col col-md-6">
+            <div class="col-md-12" style="padding-bottom: 11px;padding-left: 1px">
+              <label class="control-label">Current</label>
             </div>
-            <div class="col col-md-4">
-              <label class="control-label">Password Confirmation *</label>
-              <input type="password" class="form-control" placeholder="Password" [(ngModel)]="resultData.password" name="passwordConf" #password2>
+            <div class="scroll-box-150 form-control">
+              <div *ngFor="let role of resultData.userRoles"
+                   class="hover-box show-child-on-hover striped">
+
+                {{role.organisationName}} ({{role.roleTypeName}})
+
+                <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
+                  <span class="fa fa-sm fa-minus"></span>
+                </button>
+              </div>
             </div>
           </div>
-        </form>
-      </div>
+          <div class="col col-md-6">
+            <div class="col col-md-2" style="padding: 1px">
+              <label class="control-label">Available</label>
+            </div>
+            <div class="col col-md-10" style="padding: 1px">
+              <label class="control-label">Select Organisation</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="checkAvailableRoles()">
+                  <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="scroll-box-150 form-control">
+              <loadingIndicator [done]="roleTypes">
+                <div *ngFor="let role of roleTypes"
+                     class="hover-box show-child-on-hover striped"
+                     [ngClass]="{'selection': role == selectedAvailableRole}">
 
+                  {{role.name}}
+
+                  <button type="button" class="btn btn-xs btn-success pull-right child-to-show" (click)="addAvailableRole(role)" title="Add role">
+                    <span class="fa fa-sm fa-plus"></span>
+                  </button>
+                </div>
+              </loadingIndicator>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn"

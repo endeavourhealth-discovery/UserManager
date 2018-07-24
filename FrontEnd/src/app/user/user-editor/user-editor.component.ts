@@ -3,6 +3,11 @@ import {User} from "../models/User";
 import {NgbModal, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoggerService, MessageBoxDialog} from "eds-angular4";
 import {UserService} from "../user.service";
+import {Organisation} from "../../organisation/models/Organisation";
+import {DelegationService} from "../../delegation/delegation.service";
+import {ConfigurationService} from "../../configuration/configuration.service";
+import {RoleType} from "../../configuration/models/RoleType";
+import {UserRole} from "../models/UserRole";
 
 @Component({
   selector: 'app-user-editor',
@@ -23,6 +28,9 @@ export class UserEditorComponent {
   @Input() editMode: Boolean;
   @Input() $modal: NgbModal;
   dialogTitle: String;
+  selectedOrg: Organisation;
+  delegatedOrganisations: Organisation[];
+  roleTypes: RoleType[];
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;
@@ -35,12 +43,15 @@ export class UserEditorComponent {
 
   constructor(private log: LoggerService,
               protected activeModal: NgbActiveModal,
-              protected userService: UserService) {
+              protected userService: UserService,
+              private delegationService: DelegationService,
+              private configurationService: ConfigurationService) {
 
   }
 
   ngOnInit(): void {
     let vm = this;
+    vm.getDelegatedOrganisations();
     if (!vm.editMode) {
       vm.dialogTitle = "Add user";
 
@@ -73,6 +84,8 @@ export class UserEditorComponent {
         userRoles: this.resultData.userRoles
       } as User;
     }
+
+
 
   }
 
@@ -173,6 +186,83 @@ export class UserEditorComponent {
     }
 
     return result;
+  }
+
+  removeCurrentRole(currentRole: UserRole) {
+    let i = this.resultData.userRoles.indexOf(currentRole);
+    if (i !== -1) {
+      this.resultData.userRoles.splice(i, 1);
+    }
+
+    var newRoleType: RoleType = new RoleType();
+    newRoleType.id = currentRole.roleTypeId;
+    newRoleType.name = currentRole.roleTypeName;
+
+    this.roleTypes.push(newRoleType);
+  }
+
+  //remove from available and add into current, i.e. add into resultData
+  addAvailableRole(availableRole: RoleType) {
+    var newRole = new UserRole();
+    newRole.roleTypeName = availableRole.name;
+    newRole.organisationName = this.selectedOrg.name;
+    newRole.roleTypeId = availableRole.id;
+    newRole.organisationId = this.selectedOrg.uuid;
+    newRole.isDeleted = false;
+    newRole.userAccessProfileId = '3242343432323';
+    let i = this.roleTypes.indexOf(availableRole);
+    if (i !== -1) {
+      this.roleTypes.splice(i, 1);
+    }
+
+    this.resultData.userRoles.push(newRole);
+  }
+
+  getDelegatedOrganisations() {
+    let vm = this;
+    vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
+      .subscribe(
+        (result) => {
+          vm.delegatedOrganisations = result;
+          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+            return r.uuid === vm.delegationService.getSelectedOrganisation();
+          });
+          vm.getRoleTypes();
+
+          console.log(result);
+        },
+        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
+      );
+  }
+
+  getRoleTypes(){
+    let vm = this;
+    vm.configurationService.getRoleTypes()
+      .subscribe(
+        (result) => {
+          vm.roleTypes = result;
+        },
+        (error) => vm.log.error('Error loading users and roles', error, 'Error')
+      );
+  }
+
+  checkAvailableRoles() {
+    const vm = this;
+    vm.getRoleTypes();
+    for (let role of vm.resultData.userRoles) {
+      if (role.organisationId === vm.selectedOrg.uuid) {
+        var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);
+        console.log(roleToDelete);
+        if (roleToDelete != null) {
+          let i = vm.roleTypes.indexOf(roleToDelete);
+          console.log(i);
+          if (i !== -1) {
+            vm.roleTypes.splice(i, 1);
+            console.log('deleted', vm.roleTypes);
+          }
+        }
+      }
+    }
   }
 
 }

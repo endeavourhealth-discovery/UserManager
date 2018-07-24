@@ -17,6 +17,10 @@
           <button type="button" class="btn btn-sm btn-success" (click)="addChildOrganisationToChart()">New Delegation</button>
         </div>
       </div>
+      <div class="row">
+        <p *ngIf="selectedOrganisation">Selected Organisation : {{selectedOrganisation.name}}</p>
+        <button type="button" class="btn btn-sm btn-success" (click)="setOrganisation()">Set as My Organisation</button>
+      </div>
 
       <div class="row">
         <div class="form-group col-md-12">

@@ -7,6 +7,8 @@ import {UserEditorComponent} from "../user-editor/user-editor.component";
 import {UserRole} from "../models/UserRole";
 import {RoleType} from "../../configuration/models/RoleType";
 import {ConfigurationService} from "../../configuration/configuration.service";
+import {DelegationService} from "../../delegation/delegation.service";
+import {Organisation} from "../../organisation/models/Organisation";
 
 @Component({
   selector: 'app-user',
@@ -18,30 +20,36 @@ export class UserComponent implements OnInit {
   userList: User[];
   roleTypes: RoleType[];
   selectedUser : User = null;
+  selectedOrg: Organisation;
   filteredUserList : User[];
+  delegatedOrganisations: Organisation[];
   sortReverse : boolean;
   sortField = 'username';
   searched : boolean;
   loadingRolesCompleted: boolean;
+  hackOrganisation: string;
+  hackDelegation: string;
 
   constructor(public log:LoggerService,
               private userService: UserService,
               private securityService: SecurityService,
               private configurationService: ConfigurationService,
+              private delegationService: DelegationService,
               private $modal : NgbModal) {
 
   }
 
   ngOnInit() {
-    this.getUsers();
     this.getRoleTypes();
+    this.getSelectedOrgs();
+    this.getDelegatedOrganisations();
   }
 
   //gets all users in the realm
   getUsers(){
     let vm = this;
     vm.userList = null;
-    vm.userService.getUsers()
+    vm.userService.getUsers(vm.selectedOrg.uuid)
       .subscribe(
         (result) => {
           vm.userList = result;
@@ -61,6 +69,23 @@ export class UserComponent implements OnInit {
           vm.roleTypes = result;
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
+      );
+  }
+
+  getDelegatedOrganisations(){
+    let vm = this;
+    vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
+      .subscribe(
+        (result) => {
+          vm.delegatedOrganisations = result;
+          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+            return r.uuid === vm.delegationService.getSelectedOrganisation();
+          });
+          vm.getUsers();
+
+          console.log(result);
+        },
+        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
       );
   }
 
@@ -85,13 +110,11 @@ export class UserComponent implements OnInit {
     {
       let topUserInList = vm.filteredUserList[0];
       vm.selectedUser = topUserInList;
-      console.log(vm.selectedUser);
+      vm.getUserRoles(vm.selectedUser.uuid);
     }
     else {
       vm.selectedUser = null;
     }
-
-    vm.getUserRoles(vm.selectedUser.uuid);
   }
 
   hasPermission(role : string) : boolean {
@@ -220,6 +243,12 @@ export class UserComponent implements OnInit {
       role.roleTypeName = result.name;
     }
     return userRoles;
+  }
+
+  getSelectedOrgs() {
+    const vm = this;
+    vm.hackDelegation = vm.delegationService.getSelectedDelegation();
+    vm.hackOrganisation = vm.delegationService.getSelectedOrganisation();
   }
 
 
