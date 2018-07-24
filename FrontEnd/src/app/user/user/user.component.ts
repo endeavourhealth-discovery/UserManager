@@ -4,6 +4,9 @@ import {UserService} from "../user.service";
 import {NgbModal, NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
 import {UserEditorComponent} from "../user-editor/user-editor.component";
+import {UserRole} from "../models/UserRole";
+import {RoleType} from "../../configuration/models/RoleType";
+import {ConfigurationService} from "../../configuration/configuration.service";
 
 @Component({
   selector: 'app-user',
@@ -13,21 +16,25 @@ import {UserEditorComponent} from "../user-editor/user-editor.component";
 export class UserComponent implements OnInit {
 
   userList: User[];
+  roleTypes: RoleType[];
   selectedUser : User = null;
   filteredUserList : User[];
   sortReverse : boolean;
   sortField = 'username';
-  searched : Boolean;
+  searched : boolean;
+  loadingRolesCompleted: boolean;
 
   constructor(public log:LoggerService,
-              private userService : UserService,
-              private securityService : SecurityService,
+              private userService: UserService,
+              private securityService: SecurityService,
+              private configurationService: ConfigurationService,
               private $modal : NgbModal) {
 
-    this.getUsers();
   }
 
   ngOnInit() {
+    this.getUsers();
+    this.getRoleTypes();
   }
 
   //gets all users in the realm
@@ -41,6 +48,17 @@ export class UserComponent implements OnInit {
           vm.filteredUserList = result;
           console.log(result);
           vm.selectTopUser();
+        },
+        (error) => vm.log.error('Error loading users and roles', error, 'Error')
+      );
+  }
+
+  getRoleTypes(){
+    let vm = this;
+    vm.configurationService.getRoleTypes()
+      .subscribe(
+        (result) => {
+          vm.roleTypes = result;
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
       );
@@ -72,6 +90,8 @@ export class UserComponent implements OnInit {
     else {
       vm.selectedUser = null;
     }
+
+    vm.getUserRoles(vm.selectedUser.uuid);
   }
 
   hasPermission(role : string) : boolean {
@@ -165,6 +185,41 @@ export class UserComponent implements OnInit {
         }
       );
     }
+  }
+
+  changeSelectedUser(user: User) {
+    const vm = this;
+    vm.selectedUser = user;
+    vm.getUserRoles(user.uuid)
+  }
+
+  getUserRoles(userId: string){
+    let vm = this;
+    vm.loadingRolesCompleted = false;
+    if (vm.selectedUser.userRoles) {
+      vm.loadingRolesCompleted = true;
+      return;
+    }
+    vm.userService.getUserRoles(userId)
+      .subscribe(
+        (result) => {
+          vm.selectedUser.userRoles = vm.addRoleNameToRole(result);
+          vm.loadingRolesCompleted = true;
+        },
+        (error) => vm.log.error('Error loading user roles', error, 'Error')
+      );
+  }
+
+  addRoleNameToRole(userRoles : UserRole[]): UserRole[] {
+    const vm = this;
+    for (let role of userRoles) {
+      var result = vm.roleTypes.find(r => {
+        return r.id === role.roleTypeId;
+      });
+
+      role.roleTypeName = result.name;
+    }
+    return userRoles;
   }
 
 

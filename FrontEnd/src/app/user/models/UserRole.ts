@@ -1,14 +1,11 @@
-import {Organisation} from "./Organisation";
-import {Group} from "./Group";
 export class UserRole {
 
-	constructor() {
-	}
-
-	uuid:string;
-	name:string;
-	description:string;
-	group: Group;
-	organisation: Organisation;
-	clientRoles: UserRole[];
+	id: string;
+	userId: string;
+	roleTypeId :string;
+	roleTypeName: string;
+	organisationId: string;
+	organisationName: string;
+	userAccessProfileId: string;
+	isDeleted: boolean;
 }

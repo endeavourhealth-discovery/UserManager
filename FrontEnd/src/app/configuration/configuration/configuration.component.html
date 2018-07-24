@@ -1,0 +1,45 @@
+<div class="module">
+  <div class="container-fluid">
+    <div class="module-heading">Configuration</div>
+    <div class="module-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              Role Types
+            </div>
+            <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
+              <div class="table" style="margin-bottom: 15px">
+                <div class="row">
+                  <div class="form-group">
+                  </div>
+                </div>
+              </div>
+              <div class="table scroll-box-350 form-control" style="height:100%; min-height: 650px; max-height: 650px">
+                <loadingIndicator [done]="roleTypes">
+                  <table class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                      <th class="w-25">Name</th>
+                      <th class="w-75">Description</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let roleType of roleTypes" class="hover-box show-child-on-hover">
+
+                      <td>{{roleType.name}}</td>
+                      <td>{{roleType.description}}</td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+                </loadingIndicator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -107,7 +107,7 @@ public class UserRoleEntity {
         CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
         Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("user_id"), userId);
+        Predicate predicate = cb.equal(rootEntry.get("userId"), userId);
 
         cq.where(predicate);
         TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http, URLSearchParams} from "@angular/http";
 import {User} from "./models/User";
 import {Observable} from "rxjs/Observable";
+import {UserRole} from "./models/UserRole";
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,14 @@ export class UserService {
     params.set('userId', userId);
     return vm.http.delete('api/user/users/delete', {search: params})
       .map((response) => response.text());;
+  }
+
+  getUserRoles(userId: string): Observable<UserRole[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/user/getRoles', {search: params})
+      .map((response) => response.json());
   }
 
 }

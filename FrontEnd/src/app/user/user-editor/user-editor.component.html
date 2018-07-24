@@ -6,52 +6,74 @@
   <!------------------------------------------------------------------------------------------------->
   <!-- USER PROFILE DETAILS -->
   <!------------------------------------------------------------------------------------------------->
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">Profile</div>
-      <div class="panel-body">
-        <form UserDetails="form" class="container-fluid">
-          <div class="row">
-            <div class="col col-md-6">
-              <div>
-                <label class="control-label">Username *</label>
-                <input type="text" *ngIf="isEditMode()" disabled class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
-                <input type="text" *ngIf="!isEditMode()" class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
-              </div>
-              <div>
-                <label class="control-label">Forename *</label>
-                <input type="text" class="form-control" placeholder="Forename" [(ngModel)]="resultData.forename" name="forename" #forename>
-              </div>
-              <div>
-                <label class="control-label">Surname *</label>
-                <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="resultData.surname" name="surname" #surname>
-              </div>
-              <div>
-                <label class="control-label">Email *</label>
-                <input type="text" class="form-control" placeholder="Email" [(ngModel)]="resultData.email" name="email" #email>
-              </div>
+
+  <div class="card">
+    <div class="card-header bg-primary text-white">Profile</div>
+    <div class="card-block">
+      <form UserDetails="form" class="container-fluid">
+        <div class="row">
+          <div class="col col-md-6">
+            <div>
+              <label class="control-label">Username *</label>
+              <input type="text" *ngIf="isEditMode()" disabled class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
+              <input type="text" *ngIf="!isEditMode()" class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
             </div>
-            <div class="col col-md-6">
-              <div>
-                <label class="control-box">Photo</label>
-                <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
-                <img src="{{resultData.photo}}" class="img-rounded" height="118px" width="118px">
-              </div>
-              <div>
-                <label class="control-label">Mobile</label>
-                <input type="text" class="form-control" placeholder="Mobile" [(ngModel)]="resultData.mobile" name="mobile">
-              </div>
+            <div>
+              <label class="control-label">Forename *</label>
+              <input type="text" class="form-control" placeholder="Forename" [(ngModel)]="resultData.forename" name="forename" #forename>
+            </div>
+            <div>
+              <label class="control-label">Surname *</label>
+              <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="resultData.surname" name="surname" #surname>
+            </div>
+            <div>
+              <label class="control-label">Email *</label>
+              <input type="text" class="form-control" placeholder="Email" [(ngModel)]="resultData.email" name="email" #email>
             </div>
           </div>
-        </form>
-      </div>
+          <div class="col col-md-6">
+            <div>
+              <label class="control-box">Photo</label>
+              <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
+              <img src="{{resultData.photo}}" class="img-rounded" height="118px" width="118px">
+            </div>
+            <div>
+              <label class="control-label">Mobile</label>
+              <input type="text" class="form-control" placeholder="Mobile" [(ngModel)]="resultData.mobile" name="mobile">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+  <!------------------------------------------------------------------------------------------------->
+  <!-- USER CREDENTIALS -->
+  <!------------------------------------------------------------------------------------------------->
+  <div class="card">
+    <div class="card-header bg-primary text-white">Credentials</div>
+    <div class="card-block">
+      <form UserDetails2="form" class="container-fluid">
+        <div class="row">
+          <div class="col col-md-4">
+            <label class="control-label">New Password *</label>
+            <span class="fa fa-info-circle fa-right-pad text-muted" [ngbTooltip]="tipContentPassword"></span>
+            <ng-template #tipContentPassword>The password must be at least eight characters long, include at least one digit and one Uppercase letter.</ng-template>
+            <input type="password" class="form-control" placeholder="Password" name="passwordNew" #password1>
+          </div>
+          <div class="col col-md-4">
+            <label class="control-label">Password Confirmation *</label>
+            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="resultData.password" name="passwordConf" #password2>
+          </div>
+        </div>
+      </form>
     </div>
     <!------------------------------------------------------------------------------------------------->
     <!-- USER CREDENTIALS -->
     <!------------------------------------------------------------------------------------------------->
-    <div class="panel panel-default">
-      <div class="panel-heading">Credentials</div>
-      <div class="panel-body">
+    <div class="card">
+      <div class="card-header bg-primary text-white">Roles</div>
+      <div class="card-block">
         <form UserDetails2="form" class="container-fluid">
           <div class="row">
             <div class="col col-md-4">
@@ -67,7 +89,6 @@
           </div>
         </form>
       </div>
-    </div>
 
   </div>
   <div class="modal-footer">

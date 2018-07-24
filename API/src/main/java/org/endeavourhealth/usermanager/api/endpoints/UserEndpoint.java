@@ -13,7 +13,10 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.coreui.json.JsonEndUser;
+import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -24,9 +27,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
 import static org.endeavourhealth.common.security.SecurityUtils.hasRole;
@@ -179,6 +181,56 @@ public final class UserEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(success)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getRoles")
+    @Path("/getRoles")
+    @ApiOperation(value = "Returns a list of all users")
+    public Response getRoles(@Context SecurityContext sc,
+                             @ApiParam(value = "User Id") @QueryParam("userId") String userId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Roles", "userId", userId);
+
+        LOG.trace("getUsers");
+
+        return getRolesForUser(userId);
+
+    }
+
+    private Response getRolesForUser(String userId) throws Exception {
+        List<UserRoleEntity> roles = UserRoleEntity.getUserRoles(userId);
+        List<JsonUserRole> jsonUserRoles = new ArrayList<>();
+
+        if (roles.size() > 0) {
+
+            List<String> organisations = roles.stream()
+                    .map(UserRoleEntity::getOrganisationId)
+                    .collect(Collectors.toList());
+
+            Map<String, String> orgNameMap = new HashMap<>();
+            List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(organisations);
+            for (OrganisationEntity org : orgList) {
+                orgNameMap.put(org.getUuid(), org.getName());
+            }
+
+
+            for (UserRoleEntity re : roles) {
+                JsonUserRole jsonRole = new JsonUserRole(re);
+                jsonRole.setOrganisationName(orgNameMap.get(re.getOrganisationId()));
+                jsonUserRoles.add(jsonRole);
+            }
+        }
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(jsonUserRoles)
                 .build();
     }
 
