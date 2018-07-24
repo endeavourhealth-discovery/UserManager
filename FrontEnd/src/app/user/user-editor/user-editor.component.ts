@@ -241,6 +241,7 @@ export class UserEditorComponent {
       .subscribe(
         (result) => {
           vm.roleTypes = result;
+          vm.checkAvailableRoles()
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
       );
@@ -248,7 +249,6 @@ export class UserEditorComponent {
 
   checkAvailableRoles() {
     const vm = this;
-    vm.getRoleTypes();
     for (let role of vm.resultData.userRoles) {
       if (role.organisationId === vm.selectedOrg.uuid) {
         var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);

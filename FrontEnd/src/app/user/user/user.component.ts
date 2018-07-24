@@ -67,6 +67,7 @@ export class UserComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.roleTypes = result;
+          console.log(result);
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
       );
