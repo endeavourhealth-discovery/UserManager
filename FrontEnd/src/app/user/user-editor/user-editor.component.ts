@@ -203,19 +203,21 @@ export class UserEditorComponent {
 
   //remove from available and add into current, i.e. add into resultData
   addAvailableRole(availableRole: RoleType) {
+    const vm = this;
     var newRole = new UserRole();
     newRole.roleTypeName = availableRole.name;
-    newRole.organisationName = this.selectedOrg.name;
+    newRole.userId = vm.resultData.uuid;
+    newRole.organisationName = vm.selectedOrg.name;
     newRole.roleTypeId = availableRole.id;
-    newRole.organisationId = this.selectedOrg.uuid;
-    newRole.isDeleted = false;
+    newRole.organisationId = vm.selectedOrg.uuid;
+    newRole.deleted = false;
     newRole.userAccessProfileId = '3242343432323';
-    let i = this.roleTypes.indexOf(availableRole);
+    let i = vm.roleTypes.indexOf(availableRole);
     if (i !== -1) {
-      this.roleTypes.splice(i, 1);
+      vm.roleTypes.splice(i, 1);
     }
 
-    this.resultData.userRoles.push(newRole);
+    vm.resultData.userRoles.push(newRole);
   }
 
   getDelegatedOrganisations() {

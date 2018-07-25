@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -155,7 +156,21 @@ public class UserRoleEntity {
         return ret;
     }
 
+    public static void saveUserRole(JsonUserRole userRole) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
 
+        entityManager.getTransaction().begin();
+        UserRoleEntity userRoleEntity = new UserRoleEntity();
+        userRoleEntity.setId(userRole.getId());
+        userRoleEntity.setUserId(userRole.getUserId());
+        userRoleEntity.setOrganisationId(userRole.getOrganisationId());
+        userRoleEntity.setRoleTypeId(userRole.getRoleTypeId());
+        userRoleEntity.setUserAccessProfileId(userRole.getUserAccessProfileId());
+        userRoleEntity.setIsDeleted(userRole.isDeleted() ? (byte)1 : (byte)0);
+        entityManager.merge(userRoleEntity);
+        entityManager.getTransaction().commit();
 
+        entityManager.close();
+    }
 
 }

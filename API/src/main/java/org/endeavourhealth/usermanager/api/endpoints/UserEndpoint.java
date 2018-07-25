@@ -16,6 +16,7 @@ import org.endeavourhealth.coreui.json.JsonEndUser;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -95,7 +96,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Path("/users/save")
     @RequiresAdmin
     @ApiOperation(value = "Saves a user or updates an existing user")
-    public Response saveUser(@Context SecurityContext sc, JsonEndUser user, @QueryParam("editMode") String editMode) throws Exception {
+    public Response saveUser(@Context SecurityContext sc, JsonUser user, @QueryParam("editMode") String editMode) throws Exception {
         super.setLogbackMarkers(sc);
 
         boolean editModeb = editMode.equalsIgnoreCase("1") ? true:false;
@@ -136,7 +137,7 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         String userId;
         if (!editModeb) {
-            userRep = keycloakClient.realms().users().postUser(userRep);
+            // userRep = keycloakClient.realms().users().postUser(userRep);
             //This is the newly created userId
             userId = userRep.getId();
             user.setUuid(UUID.fromString(userId));  //new uuid to return to client
@@ -144,7 +145,7 @@ public final class UserEndpoint extends AbstractEndpoint {
             //This is the existing userId, so we set for update
             userId = user.getUuid().toString();
             userRep.setId(userId);
-            userRep = keycloakClient.realms().users().putUser(userRep);
+            // userRep = keycloakClient.realms().users().putUser(userRep);
         }
 
         //Now, file the new temporary password if it is not blank (edit mode password may be blank)
@@ -153,13 +154,22 @@ public final class UserEndpoint extends AbstractEndpoint {
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(user.getPassword());
             credential.setTemporary(true);
-            keycloakClient.realms().users().setUserPassword (userId, credential);
+            // keycloakClient.realms().users().setUserPassword (userId, credential);
         }
 
         //Blank out password for audit object
         user.setPassword("*********");
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "User", "User", user);
+
+        if (user.getUserRoles().size() > 1) {
+            for (JsonUserRole role : user.getUserRoles()) {
+                if (role.getId() == null) {
+                    role.setId(UUID.randomUUID().toString());
+                }
+                UserRoleEntity.saveUserRole(role);
+            }
+        }
 
         clearLogbackMarkers();
 

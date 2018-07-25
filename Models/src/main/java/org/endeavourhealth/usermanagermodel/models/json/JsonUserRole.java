@@ -6,10 +6,14 @@ public class JsonUserRole {
     private String id = null;
     private String userId = null;
     private String roleTypeId = null;
+    private String roleTypeName = null;
     private String organisationId = null;
     private String organisationName = null;
     private String userAccessProfileId = null;
     private boolean isDeleted;
+
+    public JsonUserRole() {
+    }
 
     public JsonUserRole(UserRoleEntity roleEntity) {
         this.id = roleEntity.getId();
@@ -74,5 +78,13 @@ public class JsonUserRole {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getRoleTypeName() {
+        return roleTypeName;
+    }
+
+    public void setRoleTypeName(String roleTypeName) {
+        this.roleTypeName = roleTypeName;
     }
 }
