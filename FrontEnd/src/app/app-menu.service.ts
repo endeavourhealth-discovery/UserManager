@@ -29,8 +29,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
     return [
       {caption: 'Users', state: 'user', icon: 'fa fa-user', role: 'eds-dsa-manager:viewer'},
       {caption: 'Configuration', state: 'configuration', icon: 'fa fa-cogs', role: 'eds-dsa-manager:viewer'},
-      {caption: 'Delegation Data', state: 'delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'},
-      {caption: 'D3 Delegation Data', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'}
+      {caption: 'Delegation', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'}
+      /*{caption: 'Delegation Data', state: 'delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'},*/
     ];
   }
 }
