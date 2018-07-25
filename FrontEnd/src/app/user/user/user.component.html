@@ -17,6 +17,7 @@
               Users
               <label *ngIf="!hasPermission('eds-user-manager:user-manager-add')" class="btn btn-sm btn-success pull-right disabled" style="cursor:not-allowed">Add new</label>
               <label *ngIf="hasPermission('eds-user-manager:user-manager-add')" class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="addUser()">Add new</label>
+              <label *ngIf="hasPermission('eds-user-manager:user-manager-add')" class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="addExisting()">Add existing user</label>
             </div>
             <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
               <div class="table" style="margin-bottom: 15px">

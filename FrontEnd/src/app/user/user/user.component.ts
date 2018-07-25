@@ -131,6 +131,15 @@ export class UserComponent implements OnInit {
     );
   }
 
+  addExisting() {
+    let vm = this;
+    UserEditorComponent.open(vm.$modal, null, true, true)
+      .result.then(
+      (editedUser) => vm.saveUser(editedUser, editedUser),
+      () => vm.log.info('User add cancelled')
+    );
+  }
+
   editUser(user:User) {
     let vm = this;
     UserEditorComponent.open(vm.$modal, user, true)

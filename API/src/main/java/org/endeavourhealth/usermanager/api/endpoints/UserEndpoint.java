@@ -59,12 +59,17 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         LOG.trace("getUsers");
 
-        List<UserRoleEntity> userRoleEntities = UserRoleEntity.getUsersAtOrganisation(organisationId);
-        List<String> usersAtOrg = userRoleEntities.stream()
-                .map(UserRoleEntity::getUserId)
-                .collect(Collectors.toList());
+        List<String> usersAtOrg = new ArrayList<>();
 
-        List<JsonEndUser> userList = new ArrayList<>();
+        if (organisationId != null) {
+
+            List<UserRoleEntity> userRoleEntities = UserRoleEntity.getUsersAtOrganisation(organisationId);
+            usersAtOrg = userRoleEntities.stream()
+                    .map(UserRoleEntity::getUserId)
+                    .collect(Collectors.toList());
+        }
+
+        List<JsonUser> userList = new ArrayList<>();
         List<UserRepresentation> users;
 
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
@@ -77,8 +82,8 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         //Add as Json
         for (UserRepresentation user : users) {
-            if (usersAtOrg.contains(user.getId())) {
-                userList.add(new JsonEndUser(user));
+            if (searchData != null || usersAtOrg.contains(user.getId())) {
+                userList.add(new JsonUser(user));
             }
         }
 
@@ -137,7 +142,12 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         String userId;
         if (!editModeb) {
-            userRep = keycloakClient.realms().users().postUser(userRep);
+            try {
+                userRep = keycloakClient.realms().users().postUser(userRep);
+            }
+            catch (Exception e) {
+                // TODO REMOVE ONCE DEV IS COMPLETE OR FIND OUT WHY THIS DOESN'T WORK LOCALLY
+            }
             //This is the newly created userId
             userId = userRep.getId();
             user.setUuid(UUID.fromString(userId));  //new uuid to return to client
@@ -145,7 +155,11 @@ public final class UserEndpoint extends AbstractEndpoint {
             //This is the existing userId, so we set for update
             userId = user.getUuid().toString();
             userRep.setId(userId);
-            userRep = keycloakClient.realms().users().putUser(userRep);
+            try {
+                userRep = keycloakClient.realms().users().putUser(userRep);
+            } catch (Exception e) {
+                // TODO REMOVE ONCE DEV IS COMPLETE OR FIND OUT WHY THIS DOESN'T WORK LOCALLY
+            }
         }
 
         //Now, file the new temporary password if it is not blank (edit mode password may be blank)
@@ -154,7 +168,11 @@ public final class UserEndpoint extends AbstractEndpoint {
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(user.getPassword());
             credential.setTemporary(true);
-            keycloakClient.realms().users().setUserPassword (userId, credential);
+            try {
+                keycloakClient.realms().users().setUserPassword(userId, credential);
+            } catch (Exception e) {
+                // TODO REMOVE ONCE DEV IS COMPLETE OR FIND OUT WHY THIS DOESN'T WORK LOCALLY
+            }
         }
 
         //Blank out password for audit object
@@ -162,7 +180,7 @@ public final class UserEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "User", "User", user);
 
-        if (user.getUserRoles().size() > 1) {
+        if (user.getUserRoles().size() > 0) {
             for (JsonUserRole role : user.getUserRoles()) {
                 if (role.getId() == null && role.isDeleted()) {
                     continue;  // role was never saved in the DB so no need to add it

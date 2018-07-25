@@ -16,21 +16,27 @@ import {UserRole} from "../models/UserRole";
 })
 export class UserEditorComponent {
 
-  public static open(modalService: NgbModal, user: User, editMode) {
+  public static open(modalService: NgbModal, user: User, editMode, existing = false) {
     const modalRef = modalService.open(UserEditorComponent, {backdrop: "static", size: "lg"});
     modalRef.componentInstance.resultData = Object.assign( [], user);
     modalRef.componentInstance.editMode = editMode;
     modalRef.componentInstance.$modal = modalService;
+    modalRef.componentInstance.existing = existing;
     return modalRef;
   }
 
   @Input() resultData: User;
-  @Input() editMode: Boolean;
+  @Input() editMode: boolean;
+  @Input() existing: boolean;
   @Input() $modal: NgbModal;
   dialogTitle: String;
   selectedOrg: Organisation;
   delegatedOrganisations: Organisation[];
   roleTypes: RoleType[];
+  searchTerm: string;
+  searched: boolean = true;
+  userList: User[];
+  loadingRolesCompleted: boolean = true;
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;
@@ -40,6 +46,7 @@ export class UserEditorComponent {
   @ViewChild('password1') password1Box;
   @ViewChild('password2') password2Box;
   @ViewChildren('username') vc;
+  @ViewChild('searchBox') searchBox;
 
   constructor(private log: LoggerService,
               protected activeModal: NgbActiveModal,
@@ -84,9 +91,6 @@ export class UserEditorComponent {
         userRoles: this.resultData.userRoles
       } as User;
     }
-
-
-
   }
 
   isEditMode(){
@@ -94,7 +98,9 @@ export class UserEditorComponent {
   }
 
   ngAfterViewInit() {
-    if (!this.isEditMode()) {
+    if (this.existing) {
+      this.searchBox.nativeElement.focus();
+    } else if (!this.isEditMode()) {
       this.usernameBox.nativeElement.focus();
     }
     else
@@ -255,20 +261,87 @@ export class UserEditorComponent {
 
   checkAvailableRoles() {
     const vm = this;
-    for (let role of vm.resultData.userRoles) {
-      if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
-        var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);
-        console.log(roleToDelete);
-        if (roleToDelete != null) {
-          let i = vm.roleTypes.indexOf(roleToDelete);
-          console.log(i);
-          if (i !== -1) {
-            vm.roleTypes.splice(i, 1);
-            console.log('deleted', vm.roleTypes);
+    if (vm.resultData.userRoles) {
+      for (let role of vm.resultData.userRoles) {
+        if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
+          var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);
+          console.log(roleToDelete);
+          if (roleToDelete != null) {
+            let i = vm.roleTypes.indexOf(roleToDelete);
+            console.log(i);
+            if (i !== -1) {
+              vm.roleTypes.splice(i, 1);
+              console.log('deleted', vm.roleTypes);
+            }
           }
         }
       }
     }
+  }
+
+  searchUsers() {
+    let vm = this;
+    vm.searched = false;
+    let searchTerm = this.searchTerm.trim().toLowerCase();
+
+    if (searchTerm.length > 2) {
+      vm.userList = null;
+      vm.userService.getUsers(null, vm.searchTerm)
+        .subscribe(
+          (result) => {
+            vm.userList = result;
+            vm.searched = true;
+            console.log(result);
+          },
+          (error) => vm.log.error('Error loading users and roles', error, 'Error')
+        );
+    }
+    vm.searched = true;
+  }
+
+  clearSearch(){
+    let vm = this;
+    vm.searched = false;
+    vm.searchTerm = "";
+    vm.userList = [];
+  }
+
+  selectUser(user: User) {
+    const vm = this;
+    vm.resultData = user;
+    vm.resultData.userRoles = [];
+    vm.resultData.password = '';
+    vm.existing = false;
+  }
+
+  getUserRoles(userId: string){
+    let vm = this;
+    vm.getRoleTypes();
+    vm.loadingRolesCompleted = false;
+    if (vm.resultData.userRoles) {
+      vm.loadingRolesCompleted = true;
+      return;
+    }
+    vm.userService.getUserRoles(userId)
+      .subscribe(
+        (result) => {
+          vm.resultData.userRoles = vm.addRoleNameToRole(result);
+          vm.loadingRolesCompleted = true;
+        },
+        (error) => vm.log.error('Error loading user roles', error, 'Error')
+      );
+  }
+
+  addRoleNameToRole(userRoles : UserRole[]): UserRole[] {
+    const vm = this;
+    for (let role of userRoles) {
+      var result = vm.roleTypes.find(r => {
+        return r.id === role.roleTypeId;
+      });
+
+      role.roleTypeName = result.name;
+    }
+    return userRoles;
   }
 
 }
