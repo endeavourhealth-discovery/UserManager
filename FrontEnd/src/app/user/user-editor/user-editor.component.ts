@@ -189,16 +189,20 @@ export class UserEditorComponent {
   }
 
   removeCurrentRole(currentRole: UserRole) {
-    let i = this.resultData.userRoles.indexOf(currentRole);
+    /*let i = this.resultData.userRoles.indexOf(currentRole);
     if (i !== -1) {
       this.resultData.userRoles.splice(i, 1);
     }
+    */
+    currentRole.deleted = true;
 
-    var newRoleType: RoleType = new RoleType();
-    newRoleType.id = currentRole.roleTypeId;
-    newRoleType.name = currentRole.roleTypeName;
+    if (currentRole.organisationId == this.selectedOrg.uuid) {
+      var newRoleType: RoleType = new RoleType();
+      newRoleType.id = currentRole.roleTypeId;
+      newRoleType.name = currentRole.roleTypeName;
 
-    this.roleTypes.push(newRoleType);
+      this.roleTypes.push(newRoleType);
+    }
   }
 
   //remove from available and add into current, i.e. add into resultData
@@ -252,7 +256,7 @@ export class UserEditorComponent {
   checkAvailableRoles() {
     const vm = this;
     for (let role of vm.resultData.userRoles) {
-      if (role.organisationId === vm.selectedOrg.uuid) {
+      if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
         var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);
         console.log(roleToDelete);
         if (roleToDelete != null) {

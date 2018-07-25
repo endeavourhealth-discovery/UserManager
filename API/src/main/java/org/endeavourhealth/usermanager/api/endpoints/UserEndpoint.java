@@ -137,7 +137,7 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         String userId;
         if (!editModeb) {
-            // userRep = keycloakClient.realms().users().postUser(userRep);
+            userRep = keycloakClient.realms().users().postUser(userRep);
             //This is the newly created userId
             userId = userRep.getId();
             user.setUuid(UUID.fromString(userId));  //new uuid to return to client
@@ -145,7 +145,7 @@ public final class UserEndpoint extends AbstractEndpoint {
             //This is the existing userId, so we set for update
             userId = user.getUuid().toString();
             userRep.setId(userId);
-            // userRep = keycloakClient.realms().users().putUser(userRep);
+            userRep = keycloakClient.realms().users().putUser(userRep);
         }
 
         //Now, file the new temporary password if it is not blank (edit mode password may be blank)
@@ -154,7 +154,7 @@ public final class UserEndpoint extends AbstractEndpoint {
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(user.getPassword());
             credential.setTemporary(true);
-            // keycloakClient.realms().users().setUserPassword (userId, credential);
+            keycloakClient.realms().users().setUserPassword (userId, credential);
         }
 
         //Blank out password for audit object
@@ -164,6 +164,10 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         if (user.getUserRoles().size() > 1) {
             for (JsonUserRole role : user.getUserRoles()) {
+                if (role.getId() == null && role.isDeleted()) {
+                    continue;  // role was never saved in the DB so no need to add it
+                }
+
                 if (role.getId() == null) {
                     role.setId(UUID.randomUUID().toString());
                 }

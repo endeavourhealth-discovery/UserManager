@@ -86,8 +86,9 @@
             <div class="scroll-box-150 form-control">
               <div *ngFor="let role of resultData.userRoles"
                    class="hover-box show-child-on-hover striped">
-
-                {{role.organisationName}} ({{role.roleTypeName}})
+                <div *ngIf="!role.deleted">
+                  {{role.organisationName}} ({{role.roleTypeName}})
+                </div>
 
                 <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
                   <span class="fa fa-sm fa-minus"></span>
@@ -103,7 +104,7 @@
               <label class="control-label">Select Organisation</label>
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="checkAvailableRoles()">
+                <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getRoleTypes()">
                   <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
                 </select>
               </div>

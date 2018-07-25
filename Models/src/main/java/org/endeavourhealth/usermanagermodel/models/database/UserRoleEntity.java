@@ -108,7 +108,8 @@ public class UserRoleEntity {
         CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
         Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("userId"), userId);
+        Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
+                cb.equal(rootEntry.get("isDeleted"), (byte)0));
 
         cq.where(predicate);
         TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
