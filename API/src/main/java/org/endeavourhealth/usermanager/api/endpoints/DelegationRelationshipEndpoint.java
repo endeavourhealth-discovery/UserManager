@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
+import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
@@ -16,6 +17,7 @@ import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationE
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
 import org.endeavourhealth.usermanagermodel.models.json.JsonOrganisationDelegation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +54,11 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 "Organisation(s)",
                 "delegationId", delegationId);
 
-        return getDelegations(delegationId);
+        return getDelegationRelationships(delegationId);
 
-    }@GET
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.DelegationRelationshipEndpoint.getOrganisation")
@@ -70,6 +74,35 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
 
         return getDelegations(delegationId);
 
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveRelationship")
+    @Path("/saveRelationship")
+    @ApiOperation(value = "Save a new delegation relationship or update an existing one.  Accepts a JSON representation " +
+            "of a delegation relationship.")
+    @RequiresAdmin
+    public Response saveRelationship(@Context SecurityContext sc,
+                                 @ApiParam(value = "Json representation of delegation relationship to save or update") JsonDelegationRelationship delegationRelationship) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
+                "Role Type",
+                "roleType", delegationRelationship);
+
+        return saveDelegationRelationship(delegationRelationship);
+    }
+
+    private Response getDelegationRelationships(String delegationId) throws Exception {
+
+        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getDelegations(delegationId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(delegations)
+                .build();
     }
 
     private Response getDelegations(String delegationId) throws Exception {
@@ -128,17 +161,20 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
             if (parentOrgDelegation == null) {
                 parentOrgDelegation = new JsonOrganisationDelegation();
                 parentOrgDelegation.setUuid(parentOrg.getUuid());
-                parentOrgDelegation.setName(parentOrg.getName());
-                parentOrgDelegation.setOdsCode(parentOrg.getOdsCode());
+                parentOrgDelegation.setName(parentOrg.getName() + "(" + parentOrg.getOdsCode() + ")");
                 delegationMap.put(parentOrg.getUuid(), parentOrgDelegation);
             }
 
             if (childOrgDelegation == null) {
                 childOrgDelegation = new JsonOrganisationDelegation();
                 childOrgDelegation.setUuid(childOrg.getUuid());
-                childOrgDelegation.setName(childOrg.getName());
-                childOrgDelegation.setOdsCode(childOrg.getOdsCode());
+                childOrgDelegation.setName(childOrg.getName() + "(" + childOrg.getOdsCode() + ")");
+                childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte)0 ? false : true);
+                childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte)0 ? false : true);
                 delegationMap.put(childOrg.getUuid(), childOrgDelegation);
+            } else { // If previously added as a parent...add the options here
+                childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte)0 ? false : true);
+                childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte)0 ? false : true);
             }
         }
 
@@ -155,6 +191,16 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
             delegation.addChild(delegationMap.get(parent.getChildUuid()));
             addChildren(delegationMap.get(parent.getChildUuid()), relationships, parent.getChildUuid());
         }
+    }
+
+    private Response saveDelegationRelationship(JsonDelegationRelationship delegationRelationship) throws Exception {
+
+        DelegationRelationshipEntity.saveDelegationRelationship(delegationRelationship);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
     }
 
 }

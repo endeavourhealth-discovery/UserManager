@@ -3,7 +3,7 @@
     <div class="module-heading">User Manager</div>
     <div class="module-body">
       <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
           <label class="control-label">Select Delegation</label>
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
@@ -12,15 +12,33 @@
             </select>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-8">
+          <div class="row" *ngIf="selectedOrganisation">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header bg-primary text-white">Selected Organisation</div>
+                <div class="card-block">
+                  <p>{{selectedOrganisation.name}}</p>
+                  <div *ngIf="!selectedIsRoot">
+                    <label>
+                      <input type="checkbox" [(ngModel)]="selectedRelationship.createSuperUsers" name="createSuperUser">Create Super Users
+                    </label>
+                    <label>
+                      <input type="checkbox" [(ngModel)]="selectedRelationship.createUsers" name="createSuperUser">Create Users
+                    </label>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-success pull-right" (click)="setOrganisation()">Set as My Organisation</button>
+                  <button type="button" class="btn btn-sm btn-success pull-left" (click)="saveRelationship()">Save</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
           <button type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
           <button type="button" class="btn btn-sm btn-success" (click)="addChildOrganisationToChart()">New Delegation</button>
         </div>
       </div>
-      <div class="row">
-        <p *ngIf="selectedOrganisation">Selected Organisation : {{selectedOrganisation.name}}</p>
-        <button type="button" class="btn btn-sm btn-success" (click)="setOrganisation()">Set as My Organisation</button>
-      </div>
+
 
       <div class="row">
         <div class="form-group col-md-12">

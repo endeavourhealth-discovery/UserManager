@@ -7,6 +7,7 @@ import {Delegation} from "../../delegation/models/Delegation";
 import {D3TreeGraphComponent} from "../../d3-tree-graph/d3-tree-graph/d3-tree-graph.component";
 import {Organisation} from "../../organisation/models/Organisation";
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
+import {DelegationRelationship} from "../../delegation/models/DelegationRelationship";
 
 
 
@@ -22,6 +23,9 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   selectedDelegation: Delegation;
   selectedOrganisation: DelegationData;
   selectedOrgs: Organisation[];
+  delegationRelationships : DelegationRelationship[];
+  selectedRelationship: DelegationRelationship;
+  selectedIsRoot: boolean;
 
 
   @ViewChild("d3tree") d3Tree: D3TreeGraphComponent;
@@ -34,18 +38,30 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getDelegations();
-    this.getDelegationDataD3('416fae5a-88e1-11e8-91d9-80fa5b320513');
+    // this.getDelegationDataD3('416fae5a-88e1-11e8-91d9-80fa5b320513');
+  }
+
+  getDelegationRelationships(delegationId: string){
+    let vm = this;
+    vm.delegationService.getDelegationRelationships(delegationId)
+      .subscribe(
+        (result) => {
+          vm.delegationRelationships = result;
+          vm.getDelegationDataD3(delegationId)
+          console.log(result);
+        },
+        (error) => vm.log.error('Error loading delegations', error, 'Error')
+      );
   }
 
   getDelegationDataD3(delegationId: string){
     let vm = this;
-    vm.delegationService.getDelegationRelationshipsD3(delegationId)
+    vm.delegationService.getTreeData(delegationId)
       .subscribe(
         (result) => {
           vm.root = result;
           vm.d3Tree.setData(result);
           vm.d3Tree.draw();
-          console.log(result);
           // vm.refresh();
         },
         (error) => vm.log.error('Error loading delegations', error, 'Error')
@@ -53,8 +69,16 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   }
 
   nodeClick($event) {
-    this.selectedOrganisation = $event;
-    console.log($event);
+    const vm = this;
+    vm.selectedIsRoot = false;
+    vm.selectedOrganisation = $event;
+    var result = vm.delegationRelationships.find(e => e.childUuid === $event.uuid);
+    if (result == null) {
+      result = vm.delegationRelationships.find(e => e.parentUuid === $event.uuid);
+      vm.selectedIsRoot = true;
+    }
+    vm.selectedRelationship = result;
+    console.log(vm.selectedRelationship);
   }
 
   addChildOrganisation() {
@@ -84,14 +108,14 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   addChildOrganisationToChart() {
     const vm = this;
     let selected = vm.selectedOrganisation;
-    console.log(selected);
     if (selected != null) {
       let childData: DelegationData[] = [];
       for(let org of vm.selectedOrgs) {
         let child = new DelegationData();
         child.uuid = org.uuid;
         child.name = org.name;
-        child.odsCode = org.odsCode;
+        child.createUsers = false;
+        child.createSuperUsers = false;
         childData.push(child);
       }
 
@@ -130,8 +154,8 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
           vm.delegations = result;
           if (vm.delegations.length > 0) {
             vm.selectedDelegation = vm.delegations[0];
+            vm.getDelegationRelationships(vm.selectedDelegation.uuid);
           }
-          console.log(result);
         },
         (error) => vm.log.error('Error loading delegations', error, 'Error')
       );
@@ -151,6 +175,17 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     const vm = this;
     vm.delegationService.updateSelectedDelegation(vm.selectedDelegation.uuid);
     vm.delegationService.updateSelectedOrganisation(vm.selectedOrganisation.uuid);
+  }
+
+  saveRelationship() {
+    const vm = this;
+    vm.delegationService.saveRelationship(vm.selectedRelationship)
+      .subscribe(
+        (result) => {
+          vm.log.success('Successfully saved changes', null, 'Success')
+        },
+        (error) => vm.log.error('Error saving details', error, 'Error')
+      );
   }
 
 }

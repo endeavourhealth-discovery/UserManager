@@ -6,7 +6,8 @@ import java.util.List;
 public class JsonOrganisationDelegation {
     private String uuid = null;
     private String name = null;
-    private String odsCode = null;
+    private boolean createSuperUsers;
+    private boolean createUsers;
     private List<JsonOrganisationDelegation> children = null;
 
     public String getUuid() {
@@ -25,12 +26,20 @@ public class JsonOrganisationDelegation {
         this.name = name;
     }
 
-    public String getOdsCode() {
-        return odsCode;
+    public boolean isCreateSuperUsers() {
+        return createSuperUsers;
     }
 
-    public void setOdsCode(String odsCode) {
-        this.odsCode = odsCode;
+    public void setCreateSuperUsers(boolean createSuperUsers) {
+        this.createSuperUsers = createSuperUsers;
+    }
+
+    public boolean isCreateUsers() {
+        return createUsers;
+    }
+
+    public void setCreateUsers(boolean createUsers) {
+        this.createUsers = createUsers;
     }
 
     public List<JsonOrganisationDelegation> getChildren() {

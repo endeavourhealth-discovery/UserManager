@@ -241,7 +241,6 @@ export class UserEditorComponent {
           });
           vm.getRoleTypes();
 
-          console.log(result);
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
       );
@@ -265,13 +264,10 @@ export class UserEditorComponent {
       for (let role of vm.resultData.userRoles) {
         if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
           var roleToDelete = vm.roleTypes.find(e => e.id === role.roleTypeId);
-          console.log(roleToDelete);
           if (roleToDelete != null) {
             let i = vm.roleTypes.indexOf(roleToDelete);
-            console.log(i);
             if (i !== -1) {
               vm.roleTypes.splice(i, 1);
-              console.log('deleted', vm.roleTypes);
             }
           }
         }
@@ -291,7 +287,6 @@ export class UserEditorComponent {
           (result) => {
             vm.userList = result;
             vm.searched = true;
-            console.log(result);
           },
           (error) => vm.log.error('Error loading users and roles', error, 'Error')
         );

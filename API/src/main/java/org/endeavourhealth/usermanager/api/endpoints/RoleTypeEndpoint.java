@@ -54,8 +54,8 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveRoleType")
-    @Path("/saveRoleType")
+    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveDelegationRelationship")
+    @Path("/saveDelegationRelationship")
     @ApiOperation(value = "Save a new role type or update an existing one.  Accepts a JSON representation " +
             "of a role type.")
     @RequiresAdmin

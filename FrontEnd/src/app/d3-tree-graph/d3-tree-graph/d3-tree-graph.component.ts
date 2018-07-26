@@ -25,7 +25,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
 
   @Input()
   set definition(definition: any) {
-    console.log(definition);
     this.root = definition;
     // this.draw();
   }
@@ -46,7 +45,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.instanceId = 'svg_' + D3TreeGraphComponent.globalId++;
     this.graphSvg.nativeElement.id = this.instanceId;
-    console.log(this.instanceId);
   }
 
   setData(data: any) {
@@ -99,7 +97,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
   }
 
   deselectAll(vm: D3TreeGraphComponent, d: any) {
-    console.log(d);
     if (d.children) {
       d.children.forEach(this.deselectAll);
       this.deselect(d);
@@ -108,7 +105,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
   }
 
   deselect(d) {
-    console.log(d);
     d.selected = false;
     /*if (d.selected) {
       d.selected = !d.selected;
@@ -232,7 +228,6 @@ export class D3TreeGraphComponent implements AfterViewInit {
     }
 
   addRandomChild() {
-    console.log(this.root);
     if (this.selectedNode.children) {
       this.selectedNode.children.push.apply(this.selectedNode.children,  {"name": "SOME ORG", "balls": 283});
     } else {

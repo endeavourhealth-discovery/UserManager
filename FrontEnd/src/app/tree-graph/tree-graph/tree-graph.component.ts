@@ -56,8 +56,6 @@ export class TreeGraphComponent implements OnInit {
     if (!node)
       node = this.getSelected();
 
-    console.log(node);
-
     if (node.parentNode.colSpan > 1) {
       // Add as sibling
       let sibling = this.closest(node, el => el.nodeName === 'TABLE').querySelector('.nodes').querySelector('.node');
@@ -71,8 +69,6 @@ export class TreeGraphComponent implements OnInit {
   addChildren(node: any, data: any[]) {                                    // CHANGE HERE FOR PASSING ARRAY
     if (!node)
       node = this.getSelected();
-
-    console.log(node);
 
     if (node.parentNode.colSpan > 1) {
       // Add as sibling

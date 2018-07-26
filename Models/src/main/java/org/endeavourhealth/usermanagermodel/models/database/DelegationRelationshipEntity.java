@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -161,6 +162,25 @@ public class DelegationRelationshipEntity {
         return ret.stream()
                 .map(DelegationRelationshipEntity::getChildUuid)
                 .collect(Collectors.toList());
+    }
+
+    public static void saveDelegationRelationship(JsonDelegationRelationship delegationRelationship) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        DelegationRelationshipEntity relationshipEntity = new DelegationRelationshipEntity();
+        relationshipEntity.setDelegation(delegationRelationship.getDelegation());
+        relationshipEntity.setParentUuid(delegationRelationship.getParentUuid());
+        relationshipEntity.setParentType(delegationRelationship.getParentType());
+        relationshipEntity.setChildUuid(delegationRelationship.getChildUuid());
+        relationshipEntity.setChildType(delegationRelationship.getChildType());
+        relationshipEntity.setIncludeAllChildren(delegationRelationship.isIncludeAllChildren() ? (byte)1 : (byte)0);
+        relationshipEntity.setCreateSuperUsers(delegationRelationship.isCreateSuperUsers() ? (byte)1 : (byte)0);
+        relationshipEntity.setCreateUsers(delegationRelationship.isCreateUsers() ? (byte)1 : (byte)0);
+        entityManager.getTransaction().begin();
+        entityManager.merge(relationshipEntity);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
 }

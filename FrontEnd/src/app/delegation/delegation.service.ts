@@ -4,6 +4,7 @@ import {Observable} from "rxjs/Observable";
 import {DelegationData} from "./models/DelegationData";
 import {Delegation} from "./models/Delegation";
 import {Organisation} from "../organisation/models/Organisation";
+import {DelegationRelationship} from "./models/DelegationRelationship";
 
 @Injectable()
 export class DelegationService {
@@ -29,7 +30,7 @@ export class DelegationService {
     return this.selectedDelegation;
   }
 
-  getDelegationRelationships(delegationId: string): Observable<DelegationData> {
+  getDelegationRelationships(delegationId: string): Observable<DelegationRelationship[]> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('delegationId', delegationId);
@@ -37,7 +38,7 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
-  getDelegationRelationshipsD3(delegationId: string): Observable<DelegationData> {
+  getTreeData(delegationId: string): Observable<DelegationData> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('delegationId', delegationId);
@@ -59,6 +60,12 @@ export class DelegationService {
     params.set('organisationId', organisationId);
     return vm.http.get('api/delegation/getDelegatedOrganisations', {search: params})
       .map((response) => response.json());
+  }
+
+  saveRelationship(relationship: DelegationRelationship): Observable<any> {
+    const vm = this;
+    return vm.http.post('api/delegationRelationship/saveRelationship', relationship)
+      .map((response) => response.text());
   }
 
 }

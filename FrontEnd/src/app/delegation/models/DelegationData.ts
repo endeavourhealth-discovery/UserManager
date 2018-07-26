@@ -1,6 +1,7 @@
 export class DelegationData {
   uuid : string;
   name : string;
-  odsCode : string;
+  createSuperUsers : boolean;
+  createUsers : boolean;
   children : DelegationData[];
 }

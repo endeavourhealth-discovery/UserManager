@@ -46,11 +46,10 @@ export class DelegationComponent implements OnInit, AfterViewInit {
   //gets all users in the realm
   getDelegationData(delegationId: string){
     let vm = this;
-    vm.delegationService.getDelegationRelationships(delegationId)
+    vm.delegationService.getTreeData(delegationId)
       .subscribe(
         (result) => {
           vm.delegationData = result;
-          console.log(result);
           vm.refresh();
         },
         (error) => vm.log.error('Error loading delegations', error, 'Error')
@@ -66,7 +65,6 @@ export class DelegationComponent implements OnInit, AfterViewInit {
           if (vm.delegations.length > 0) {
             vm.selectedDelegation = vm.delegations[0];
           }
-          console.log(result);
         },
         (error) => vm.log.error('Error loading delegations', error, 'Error')
       );
@@ -79,7 +77,6 @@ export class DelegationComponent implements OnInit, AfterViewInit {
 
   refresh() {
     const vm = this;
-    console.log(vm.delegationData);
     /*vm.orgchart = new OrgChart({
       'chartContainer': '#delegate-Chart',
       'data': vm.delegationData,
@@ -114,7 +111,6 @@ export class DelegationComponent implements OnInit, AfterViewInit {
     }
 
     let org = JSON.parse(selected.getAttribute('data-source'));
-    console.log(org.uuid);
     // this.treeChart.addChild(selected, {'displayName': 'some bloke', 'title': 'Test'});
     let list = [1, 2, 3];
 
@@ -168,14 +164,14 @@ export class DelegationComponent implements OnInit, AfterViewInit {
   addChildOrganisationToChart() {
     const vm = this;
     let selected = this.treeChart.getSelected();
-    console.log(selected);
     if (selected != null) {
       let childData: DelegationData[] = [];
       for(let org of vm.selectedOrgs) {
         let child = new DelegationData();
         child.uuid = org.uuid;
         child.name = org.name;
-        child.odsCode = org.odsCode;
+        child.createUsers = false;
+        child.createSuperUsers = false;
         childData.push(child);
       }
       let parent = selected.getAttribute('data-source');
@@ -187,8 +183,6 @@ export class DelegationComponent implements OnInit, AfterViewInit {
   showNode() {
     // let selectedNode = document.getElementById(document.getElementById('node.focused').dataset.node);
 
-    console.log(this.orgchart);
-    console.log('showing');
     // $('#delegate-chart').orgchart.
     // console.log($('#selected-node').val(this.find('.title').text()).data('node', $this););
   }

@@ -54,7 +54,6 @@ export class UserComponent implements OnInit {
         (result) => {
           vm.userList = result;
           vm.filteredUserList = result;
-          console.log(result);
           vm.selectTopUser();
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
