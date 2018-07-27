@@ -117,6 +117,8 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
         child.createUsers = false;
         child.createSuperUsers = false;
         childData.push(child);
+        vm.saveNewRelationship(org);
+
       }
 
       this.d3TreeComponent.addChild(childData);
@@ -180,6 +182,27 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   saveRelationship() {
     const vm = this;
     vm.delegationService.saveRelationship(vm.selectedRelationship)
+      .subscribe(
+        (result) => {
+          vm.log.success('Successfully saved changes', null, 'Success')
+        },
+        (error) => vm.log.error('Error saving details', error, 'Error')
+      );
+  }
+
+  saveNewRelationship(org: Organisation) {
+    const vm = this;
+    let childRel = new DelegationRelationship();
+    childRel.parentUuid = vm.selectedOrganisation.uuid;
+    childRel.parentType = 0;
+    childRel.delegation = vm.selectedDelegation.uuid;
+    childRel.childUuid = org.uuid;
+    childRel.childType = 0;
+    childRel.includeAllChildren = 0;
+    childRel.createUsers = false;
+    childRel.createSuperUsers = false;
+
+    vm.delegationService.saveRelationship(childRel)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success')
