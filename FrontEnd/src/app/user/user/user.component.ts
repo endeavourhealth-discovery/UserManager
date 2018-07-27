@@ -9,6 +9,7 @@ import {RoleType} from "../../configuration/models/RoleType";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../delegation/delegation.service";
 import {Organisation} from "../../organisation/models/Organisation";
+import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
 
 @Component({
   selector: 'app-user',
@@ -20,9 +21,9 @@ export class UserComponent implements OnInit {
   userList: User[];
   roleTypes: RoleType[];
   selectedUser : User = null;
-  selectedOrg: Organisation;
+  selectedOrg: DelegatedOrganisation;
   filteredUserList : User[];
-  delegatedOrganisations: Organisation[];
+  delegatedOrganisations: DelegatedOrganisation[];
   sortReverse : boolean;
   sortField = 'username';
   searched : boolean;
@@ -78,6 +79,7 @@ export class UserComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
+          console.log(result);
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
             return r.uuid === vm.delegationService.getSelectedOrganisation();
           });

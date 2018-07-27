@@ -143,7 +143,7 @@ public class DelegationRelationshipEntity {
         return ret;
     }
 
-    public static List<String> getDelegatedOrganisations(String delegationId, String organisationId) throws Exception {
+    public static List<DelegationRelationshipEntity> getDelegatedOrganisations(String delegationId, String organisationId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -159,9 +159,9 @@ public class DelegationRelationshipEntity {
 
         entityManager.close();
 
-        return ret.stream()
+        return ret; /*.stream()
                 .map(DelegationRelationshipEntity::getChildUuid)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
     }
 
     public static void saveDelegationRelationship(JsonDelegationRelationship delegationRelationship) throws Exception {

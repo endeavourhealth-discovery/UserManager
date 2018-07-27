@@ -15,6 +15,8 @@ import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationE
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegatedOrganisation;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/delegation")
 @Metrics(registry = "UserManagerRegistry")
@@ -84,16 +87,44 @@ public class DelegationEndpoint extends AbstractEndpoint {
 
     private Response getDelegatedOrganisations(String userId, String delegationId, String organisationId) throws Exception {
 
-        List<String> orgs = DelegationRelationshipEntity.getDelegatedOrganisations(delegationId, organisationId);
+        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(delegationId, organisationId);
+
+        List<String> orgs = relationships.stream()
+                .map(DelegationRelationshipEntity::getChildUuid)
+                .collect(Collectors.toList());
 
         orgs.add(organisationId);
 
         List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
 
+        List<JsonDelegatedOrganisation> delegated = new ArrayList<>();
+
+        // Add the parent first as that is the org the user belongs to
+        JsonDelegatedOrganisation parentDel = new JsonDelegatedOrganisation();
+        OrganisationEntity parentOrg = orgList.stream().filter(o -> o.getUuid().equals(relationships.get(0).getParentUuid())).findFirst().orElse(null);
+        if (parentOrg != null) {
+            parentDel.setUuid(parentOrg.getUuid());
+            parentDel.setName(parentOrg.getName());
+            parentDel.setOdsCode(parentOrg.getOdsCode());
+        }
+        delegated.add(parentDel);
+
+        for (DelegationRelationshipEntity rel : relationships) {
+            JsonDelegatedOrganisation del = new JsonDelegatedOrganisation(rel);
+            OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(rel.getChildUuid())).findFirst().orElse(null);
+
+            if (org != null) {
+                del.setName(org.getName());
+                del.setOdsCode(org.getOdsCode());
+            }
+
+            delegated.add(del);
+        }
+
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(orgList)
+                .entity(delegated)
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import {DelegationData} from "./models/DelegationData";
 import {Delegation} from "./models/Delegation";
 import {Organisation} from "../organisation/models/Organisation";
 import {DelegationRelationship} from "./models/DelegationRelationship";
+import {DelegatedOrganisation} from "./models/DelegatedOrganisation";
 
 @Injectable()
 export class DelegationService {
@@ -52,7 +53,7 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
-  getDelegatedOrganisations(organisationId: string, delegationId: string): Observable<Organisation[]> {
+  getDelegatedOrganisations(organisationId: string, delegationId: string): Observable<DelegatedOrganisation[]> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userId', 'tete');

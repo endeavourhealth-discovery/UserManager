@@ -8,6 +8,7 @@ import {DelegationService} from "../../delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {RoleType} from "../../configuration/models/RoleType";
 import {UserRole} from "../models/UserRole";
+import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
 
 @Component({
   selector: 'app-user-editor',
@@ -30,8 +31,8 @@ export class UserEditorComponent {
   @Input() existing: boolean;
   @Input() $modal: NgbModal;
   dialogTitle: String;
-  selectedOrg: Organisation;
-  delegatedOrganisations: Organisation[];
+  selectedOrg: DelegatedOrganisation;
+  delegatedOrganisations: DelegatedOrganisation[];
   roleTypes: RoleType[];
   searchTerm: string;
   searched: boolean = true;
@@ -260,6 +261,16 @@ export class UserEditorComponent {
 
   checkAvailableRoles() {
     const vm = this;
+    if (!vm.selectedOrg.createSuperUsers) {
+      var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
+      vm.roleTypes.splice(superUser, 1);
+    }
+
+    if (!vm.selectedOrg.createUsers) {
+      var user = vm.roleTypes.findIndex(e => e.id === '00972413-8f50-11e8-839e-80fa5b320513');
+      vm.roleTypes.splice(user, 1);
+    }
+
     if (vm.resultData.userRoles) {
       for (let role of vm.resultData.userRoles) {
         if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
