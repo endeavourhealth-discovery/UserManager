@@ -107,7 +107,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private createDelegation() {
+  createDelegation() {
     const vm = this;
     DelegationCreatorComponent.open(vm.$modal)
       .result.then(function (result: Delegation) {
