@@ -79,7 +79,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveRelationship")
+    @Timed(absolute = true, name="UserManager.DelegationRelationshipEndpoint.saveRelationship")
     @Path("/saveRelationship")
     @ApiOperation(value = "Save a new delegation relationship or update an existing one.  Accepts a JSON representation " +
             "of a delegation relationship.")
@@ -109,13 +109,38 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
 
         List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getDelegations(delegationId);
 
-        JsonOrganisationDelegation orgDelegations = processDelegationOrganisations(delegations);
+        JsonOrganisationDelegation organisationDelegation = null;
+
+        if (delegations.isEmpty()) {
+            organisationDelegation = processEmptyDelegation(delegationId);
+        } else {
+            organisationDelegation = processDelegationOrganisations(delegations);
+        }
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(orgDelegations)
+                .entity(organisationDelegation)
                 .build();
+    }
+
+    private JsonOrganisationDelegation processEmptyDelegation(String delegationId) throws Exception {
+        String rootOrganisation = DelegationEntity.getRootOrganisation(delegationId);
+
+        OrganisationEntity organisation = OrganisationEntity.getOrganisation(rootOrganisation);
+
+        if (organisation != null) {
+            JsonOrganisationDelegation orgDelegation = new JsonOrganisationDelegation();
+            orgDelegation.setUuid(organisation.getUuid());
+            orgDelegation.setName(organisation.getName() + "(" + organisation.getOdsCode() + ")");
+            orgDelegation.setCreateSuperUsers(false);
+            orgDelegation.setCreateUsers(false);
+            orgDelegation.setChildren(new ArrayList<>());
+
+            return orgDelegation;
+        }
+
+        return null;
     }
 
     private JsonOrganisationDelegation processDelegationOrganisations(List<DelegationRelationshipEntity> delegations) throws Exception {

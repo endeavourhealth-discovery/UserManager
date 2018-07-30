@@ -22,7 +22,7 @@ import {D3TreeGraphModule} from "../d3-tree-graph/d3-tree-graph.module";
     D3TreeGraphModule
   ],
   declarations: [
-    DelegationComponent],
+    DelegationComponent,],
   providers: [
     DelegationService
   ]

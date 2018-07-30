@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegation;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -94,5 +95,19 @@ public class DelegationEntity {
         entityManager.close();
 
         return ret.get(0).rootOrganisation;
+    }
+
+    public static void saveDelegation(JsonDelegation delegation) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        DelegationEntity delegationEntity = new DelegationEntity();
+        delegationEntity.setUuid(delegation.getUuid());
+        delegationEntity.setName(delegation.getName());
+        delegationEntity.setRootOrganisation(delegation.getRootOrganisation());
+        entityManager.getTransaction().begin();
+        entityManager.merge(delegationEntity);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 }

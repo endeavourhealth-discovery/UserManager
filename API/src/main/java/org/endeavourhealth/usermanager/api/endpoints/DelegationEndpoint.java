@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
+import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
@@ -16,7 +17,7 @@ import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonDelegatedOrganisation;
-import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
+import org.endeavourhealth.usermanagermodel.models.json.JsonDelegation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +76,24 @@ public class DelegationEndpoint extends AbstractEndpoint {
 
     }
 
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.DelegationEndpoint.saveDelegation")
+    @Path("/saveDelegation")
+    @ApiOperation(value = "Save a new delegation or update an existing one.  Accepts a JSON representation " +
+            "of a delegation.")
+    @RequiresAdmin
+    public Response saveDelegation(@Context SecurityContext sc,
+                                     @ApiParam(value = "Json representation of delegation to save or update") JsonDelegation delegation) throws Exception {
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
+                "Role Type",
+                "roleType", delegation);
+
+        return saveDelegation(delegation);
+    }
+
     private Response getAllDelegations() throws Exception {
         List<DelegationEntity> delegations = DelegationEntity.getAllDelegations();
 
@@ -125,6 +144,16 @@ public class DelegationEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(delegated)
+                .build();
+    }
+
+    private Response saveDelegation(JsonDelegation delegation) throws Exception {
+
+        DelegationEntity.saveDelegation(delegation);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
                 .build();
     }
 }

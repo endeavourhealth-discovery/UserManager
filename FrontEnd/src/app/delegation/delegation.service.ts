@@ -69,4 +69,10 @@ export class DelegationService {
       .map((response) => response.text());
   }
 
+  saveDelegation(delegation: Delegation): Observable<any> {
+    const vm = this;
+    return vm.http.post('api/delegation/saveDelegation', delegation)
+      .map((response) => response.text());
+  }
+
 }

@@ -8,6 +8,7 @@ import {D3TreeGraphComponent} from "../../d3-tree-graph/d3-tree-graph/d3-tree-gr
 import {Organisation} from "../../organisation/models/Organisation";
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
 import {DelegationRelationship} from "../../delegation/models/DelegationRelationship";
+import {DelegationCreatorComponent} from "../delegation-creator/delegation-creator.component";
 
 
 
@@ -26,6 +27,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   delegationRelationships : DelegationRelationship[];
   selectedRelationship: DelegationRelationship;
   selectedIsRoot: boolean;
+  newDelegation: Delegation;
 
 
   @ViewChild("d3tree") d3Tree: D3TreeGraphComponent;
@@ -90,11 +92,11 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
         () => {return}
       );
     } else {
-      vm.selectOrganisations(vm.selectedOrganisation);
+      vm.selectOrganisations();
     }
   }
 
-  private selectOrganisations(node: any) {
+  private selectOrganisations() {
     const vm = this;
     vm.selectedOrgs = [];
     let parent = vm.selectedOrganisation;
@@ -103,6 +105,27 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
       vm.selectedOrgs = result;
       vm.addChildOrganisationToChart();
     });
+  }
+
+  private createDelegation() {
+    const vm = this;
+    DelegationCreatorComponent.open(vm.$modal)
+      .result.then(function (result: Delegation) {
+      vm.newDelegation = result;
+      vm.saveDelegation();
+    });
+  }
+
+  saveDelegation() {
+    const vm = this;
+    vm.delegationService.saveDelegation(vm.newDelegation)
+      .subscribe(
+        (result) => {
+          vm.log.success('Successfully saved changes', null, 'Success');
+          vm.getDelegations();
+        },
+        (error) => vm.log.error('Error saving details', error, 'Error')
+      );
   }
 
   addChildOrganisationToChart() {
@@ -155,6 +178,9 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
         (result) => {
           vm.delegations = result;
           if (vm.delegations.length > 0) {
+            if (vm.newDelegation != null) {
+              vm.selectedDelegation = vm.delegations.find(value => value.name === vm.newDelegation.name);
+            }
             vm.selectedDelegation = vm.delegations[0];
             vm.getDelegationRelationships(vm.selectedDelegation.uuid);
           }
