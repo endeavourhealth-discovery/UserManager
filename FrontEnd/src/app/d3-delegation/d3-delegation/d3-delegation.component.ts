@@ -9,6 +9,7 @@ import {Organisation} from "../../organisation/models/Organisation";
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
 import {DelegationRelationship} from "../../delegation/models/DelegationRelationship";
 import {DelegationCreatorComponent} from "../delegation-creator/delegation-creator.component";
+import {Router} from "@angular/router";
 
 
 
@@ -36,7 +37,8 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   constructor(public log:LoggerService,
               private $modal: NgbModal,
-              private delegationService: DelegationService) { }
+              private delegationService: DelegationService,
+              private router: Router) { }
 
   ngOnInit() {
     this.getDelegations();
@@ -105,6 +107,12 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
       vm.selectedOrgs = result;
       vm.addChildOrganisationToChart();
     });
+  }
+
+  goToOrganisation() {
+    const vm = this;
+    vm.delegationService.updateSelectedDelegation(vm.selectedDelegation.uuid);
+    this.router.navigate(['/user', vm.selectedOrganisation.uuid]);
   }
 
   createDelegation() {

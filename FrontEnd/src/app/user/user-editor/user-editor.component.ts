@@ -9,6 +9,7 @@ import {ConfigurationService} from "../../configuration/configuration.service";
 import {RoleType} from "../../configuration/models/RoleType";
 import {UserRole} from "../models/UserRole";
 import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-editor',
@@ -16,6 +17,7 @@ import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisati
   styleUrls: ['./user-editor.component.css']
 })
 export class UserEditorComponent {
+  private paramSubscriber: any;
 
   public static open(modalService: NgbModal, user: User, editMode, existing = false) {
     const modalRef = modalService.open(UserEditorComponent, {backdrop: "static", size: "lg"});
@@ -38,6 +40,7 @@ export class UserEditorComponent {
   searched: boolean = true;
   userList: User[];
   loadingRolesCompleted: boolean = true;
+  paramOrganisation: String;
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;

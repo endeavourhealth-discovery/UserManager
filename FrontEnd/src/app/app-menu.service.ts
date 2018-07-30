@@ -13,6 +13,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
     return [
       { path: '', redirectTo : 'user', pathMatch: 'full' }, // Default route
       { path: 'user', component: UserComponent},
+      { path: 'user/:organisationId', component: UserComponent},
       { path: 'delegation', component: DelegationComponent},
       { path: 'd3delegation', component: D3DelegationComponent},
       { path: 'configuration', component: ConfigurationComponent}

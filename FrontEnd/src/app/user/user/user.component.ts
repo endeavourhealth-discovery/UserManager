@@ -8,8 +8,8 @@ import {UserRole} from "../models/UserRole";
 import {RoleType} from "../../configuration/models/RoleType";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../delegation/delegation.service";
-import {Organisation} from "../../organisation/models/Organisation";
 import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-user',
@@ -17,6 +17,7 @@ import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisati
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
+  private paramSubscriber: any;
 
   userList: User[];
   roleTypes: RoleType[];
@@ -30,19 +31,26 @@ export class UserComponent implements OnInit {
   loadingRolesCompleted: boolean;
   hackOrganisation: string;
   hackDelegation: string;
+  paramOrganisation: string;
 
   constructor(public log:LoggerService,
               private userService: UserService,
               private securityService: SecurityService,
               private configurationService: ConfigurationService,
               private delegationService: DelegationService,
-              private $modal : NgbModal) {
+              private $modal : NgbModal,
+              private router: Router,
+              private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
     this.getRoleTypes();
     this.getSelectedOrgs();
+    this.paramSubscriber = this.route.params.subscribe(
+      params => {
+        this.paramOrganisation = params['organisationId'];
+      });
     this.getDelegatedOrganisations();
   }
 
@@ -75,13 +83,15 @@ export class UserComponent implements OnInit {
 
   getDelegatedOrganisations(){
     let vm = this;
-    vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
+    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.delegationService.getSelectedOrganisation();
+    vm.delegationService.getDelegatedOrganisations(orgSelector, vm.delegationService.getSelectedDelegation())
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
           console.log(result);
+          console.log(vm.paramOrganisation);
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
-            return r.uuid === vm.delegationService.getSelectedOrganisation();
+            return r.uuid === orgSelector;
           });
           vm.getUsers();
 

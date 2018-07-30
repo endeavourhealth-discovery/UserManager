@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Path("/delegation")
@@ -120,7 +121,7 @@ public class DelegationEndpoint extends AbstractEndpoint {
 
         // Add the parent first as that is the org the user belongs to
         JsonDelegatedOrganisation parentDel = new JsonDelegatedOrganisation();
-        OrganisationEntity parentOrg = orgList.stream().filter(o -> o.getUuid().equals(relationships.get(0).getParentUuid())).findFirst().orElse(null);
+        OrganisationEntity parentOrg = orgList.stream().filter(o -> o.getUuid().equals(organisationId)).findFirst().orElse(null);
         if (parentOrg != null) {
             parentDel.setUuid(parentOrg.getUuid());
             parentDel.setName(parentOrg.getName());
@@ -148,6 +149,10 @@ public class DelegationEndpoint extends AbstractEndpoint {
     }
 
     private Response saveDelegation(JsonDelegation delegation) throws Exception {
+
+        if (delegation.getUuid() == null) {
+            delegation.setUuid(UUID.randomUUID().toString());
+        }
 
         DelegationEntity.saveDelegation(delegation);
 
