@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 @Path("/delegation")
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the delegation.")
-
 public class DelegationEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(UserEndpoint.class);
 

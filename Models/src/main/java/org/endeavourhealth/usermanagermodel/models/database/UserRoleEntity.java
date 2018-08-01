@@ -1,6 +1,8 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
+import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 
 import javax.persistence.*;
@@ -171,6 +173,14 @@ public class UserRoleEntity {
         userRoleEntity.setIsDeleted(userRole.isDeleted() ? (byte)1 : (byte)0);
         entityManager.merge(userRoleEntity);
         entityManager.getTransaction().commit();
+
+        if (userRole.isDeleted()) {
+            AuditEntity.addToAuditTrail("2c8f7553-8f50-11e8-973f-0656437f9c14",
+                    AuditAction.DELETE, ItemType.ROLE, userRole.getId(), null, null);
+        } else {
+            AuditEntity.addToAuditTrail("2c8f7553-8f50-11e8-973f-0656437f9c14",
+                    AuditAction.ADD, ItemType.ROLE, null, userRole.getId(), null);
+        }
 
         entityManager.close();
     }

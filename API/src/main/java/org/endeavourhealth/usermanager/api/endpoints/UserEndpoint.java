@@ -15,6 +15,7 @@ import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.coreui.json.JsonEndUser;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
