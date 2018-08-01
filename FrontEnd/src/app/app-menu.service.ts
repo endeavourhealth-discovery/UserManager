@@ -21,7 +21,7 @@ export class AppMenuService implements  AbstractMenuProvider  {
   }
 
   getClientId(): string {
-    return 'eds-dsa-manager';
+    return 'eds-user-manager';
   }
   getApplicationTitle(): string {
     return 'User Manager';
