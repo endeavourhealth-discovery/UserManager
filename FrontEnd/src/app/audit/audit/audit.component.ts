@@ -13,6 +13,10 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 export class AuditComponent implements OnInit {
   auditSummaries: AuditSummary[];
   loadingComplete = false;
+  totalItems = 5;
+  pageNumber = 1;
+  pageSize = 20;
+
 
   constructor(private $modal: NgbModal,
               public log:LoggerService,
@@ -21,12 +25,13 @@ export class AuditComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.getAudit();
+    vm.getAuditCount();
   }
 
   getAudit(){
     let vm = this;
     vm.loadingComplete = false;
-    vm.auditService.getAuditSummary()
+    vm.auditService.getAuditSummary(vm.pageNumber, vm.pageSize)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;
@@ -39,6 +44,17 @@ export class AuditComponent implements OnInit {
       );
   }
 
+  getAuditCount() {
+    const vm = this;
+    vm.auditService.getAuditCount()
+      .subscribe(
+        (result) => {
+          vm.totalItems = result;
+        },
+        (error) => console.log(error)
+      );
+  }
+
   showDetails(audit: AuditSummary) {
     const vm = this;
     AuditDetailComponent.open(vm.$modal, audit)
@@ -47,5 +63,14 @@ export class AuditComponent implements OnInit {
           return;
     })
   }
+
+  pageChanged($event) {
+    const vm = this;
+    vm.pageNumber = $event;
+    console.log(vm.pageNumber);
+    vm.getAudit();
+  }
+
+
 
 }

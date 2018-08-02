@@ -122,7 +122,7 @@ public class AuditEntity {
         return Objects.hash(id, userRoleId, timestamp, auditType, itemBefore, itemAfter, itemType, auditJson);
     }
 
-    public static List<Object[]> getAudit() throws Exception {
+    public static List<Object[]> getAudit(Integer pageNumber, Integer pageSize) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         try {
@@ -139,14 +139,36 @@ public class AuditEntity {
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
                     " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
-                    " join ItemTypeEntity it on it.id = a.itemType";
+                    " join ItemTypeEntity it on it.id = a.itemType" +
+                    " order by a.timestamp desc ";
 
             Query query = entityManager.createQuery(sql);
+            query.setFirstResult((pageNumber - 1) * pageSize);
+            query.setMaxResults(pageSize);
 
             List<Object[]> results = query.getResultList();
 
 
             return results;
+
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public static long getAuditCount() throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        try {
+            String sql = "select count (a.id)" +
+                    " from AuditEntity a";
+
+            Query query = entityManager.createQuery(sql);
+
+            long count = (long)query.getSingleResult();
+
+
+            return count;
 
         } finally {
             entityManager.close();

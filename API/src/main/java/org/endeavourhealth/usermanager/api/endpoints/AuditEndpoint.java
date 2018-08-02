@@ -2,7 +2,6 @@ package org.endeavourhealth.usermanager.api.endpoints;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -33,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.keycloak.util.JsonSerialization.mapper;
-
 @Path("/audit")
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the audits.")
@@ -50,13 +47,21 @@ public class AuditEndpoint extends AbstractEndpoint {
     @Timed(absolute = true, name="UserManager.AuditEndpoint.getAudit")
     @Path("/getAudit")
     @ApiOperation(value = "Returns a list of audit entries")
-    public Response getAudit(@Context SecurityContext sc) throws Exception {
+    public Response getAudit(@Context SecurityContext sc,
+                             @ApiParam(value = "Optional page number (defaults to 1 if not provided)") @QueryParam("pageNumber") Integer pageNumber,
+                             @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
-        return getAuditEntries();
+        if (pageNumber == null) {
+            pageNumber = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        return getAuditEntries(pageNumber, pageSize);
 
     }
 
@@ -77,8 +82,38 @@ public class AuditEndpoint extends AbstractEndpoint {
 
     }
 
-    private Response getAuditEntries() throws Exception {
-        List<Object[]> queryResults = AuditEntity.getAudit();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.AuditEndpoint.auditCount")
+    @Path("/auditCount")
+    @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
+    public Response getAuditCount(@Context SecurityContext sc,
+                                               @ApiParam(value = "expression to filter organisations by") @QueryParam("expression") String expression,
+                                               @ApiParam(value = "Searching for organisations or services") @QueryParam("searchType") String searchType
+    ) throws Exception {
+
+        boolean searchServices = false;
+        if (searchType != null && searchType.equals("services"))
+            searchServices = true;
+
+        if (expression == null)
+            expression = "";
+
+        return getAuditCount();
+    }
+
+    private Response getAuditCount() throws Exception {
+        Long count = AuditEntity.getAuditCount();
+
+        return Response
+                .ok()
+                .entity(count)
+                .build();
+    }
+
+    private Response getAuditEntries(Integer pageNumber, Integer pageSize) throws Exception {
+        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize);
 
         List<JsonAuditSummary> auditDetails = new ArrayList<>();
 

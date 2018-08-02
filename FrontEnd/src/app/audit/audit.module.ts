@@ -7,6 +7,7 @@ import {ControlsModule} from "eds-angular4/dist/controls";
 import {DialogsModule} from "eds-angular4";
 import {AuditService} from "./audit.service";
 import { AuditDetailComponent } from './audit-detail/audit-detail.component';
+import {NgxPaginationModule} from "ngx-pagination";
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { AuditDetailComponent } from './audit-detail/audit-detail.component';
     NgbModule,
     ControlsModule,
     DialogsModule,
+    NgxPaginationModule
   ],
   declarations: [AuditComponent, AuditDetailComponent],
   providers: [
