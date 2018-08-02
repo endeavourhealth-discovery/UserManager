@@ -14,6 +14,7 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/audit")
 @Metrics(registry = "UserManagerRegistry")
@@ -130,6 +132,19 @@ public class AuditEndpoint extends AbstractEndpoint {
             detail.setItemType(obj[7].toString());
 
             auditDetails.add(detail);
+        }
+
+        List<String> orgs = auditDetails.stream()
+                .map(JsonAuditSummary::getOrganisation)
+                .collect(Collectors.toList());
+
+        List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
+
+        for (JsonAuditSummary sum: auditDetails) {
+            OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
+            if (org != null) {
+                sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
+            }
         }
 
         return Response
