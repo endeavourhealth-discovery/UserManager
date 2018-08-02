@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
+import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
@@ -19,6 +20,7 @@ import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonAuditSummary;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("/audit")
@@ -140,10 +140,31 @@ public class AuditEndpoint extends AbstractEndpoint {
 
         List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
 
+        Map<String, String> userNameMap = new HashMap<>();
+
+
+        KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
+
         for (JsonAuditSummary sum: auditDetails) {
             OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
             if (org != null) {
                 sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
+            }
+
+            if (userNameMap.containsKey(sum.getUserName())) {
+                sum.setUserName(userNameMap.get(sum.getUserName()));
+            } else {
+                try {
+                    UserRepresentation user = keycloakClient.realms().users().getUser(sum.getUserName());
+
+                    if (user != null) {
+                        userNameMap.put(user.getId(), user.getUsername());
+                        sum.setUserName(user.getUsername());
+                    }
+                } catch (Exception e ) {
+                    userNameMap.put(sum.getUserName(), "Unknown User");
+                    sum.setUserName("Unknown User");
+                }
             }
         }
 
