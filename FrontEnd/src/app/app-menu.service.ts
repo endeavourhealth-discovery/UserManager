@@ -6,6 +6,7 @@ import {UserComponent} from "./user/user/user.component";
 import {DelegationComponent} from "./delegation/delegation/delegation.component";
 import {D3DelegationComponent} from "./d3-delegation/d3-delegation/d3-delegation.component";
 import {ConfigurationComponent} from "./configuration/configuration/configuration.component";
+import {AuditComponent} from "./audit/audit/audit.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider  {
@@ -16,7 +17,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'user/:organisationId', component: UserComponent},
       { path: 'delegation', component: DelegationComponent},
       { path: 'd3delegation', component: D3DelegationComponent},
-      { path: 'configuration', component: ConfigurationComponent}
+      { path: 'configuration', component: ConfigurationComponent},
+      { path: 'audit', component: AuditComponent}
     ];
   }
 
@@ -30,7 +32,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
     return [
       {caption: 'Users', state: 'user', icon: 'fa fa-user', role: 'eds-user-manager:user-manager'},
       {caption: 'Configuration', state: 'configuration', icon: 'fa fa-cogs', role: 'eds-user-manager:user-manager'},
-      {caption: 'Delegation', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'eds-user-manager:user-manager'}
+      {caption: 'Delegation', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'eds-user-manager:user-manager'},
+      {caption: 'Audit', state: 'audit', icon: 'fa fa-list-ul', role: 'eds-user-manager:user-manager'}
       /*{caption: 'Delegation Data', state: 'delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'},*/
     ];
   }

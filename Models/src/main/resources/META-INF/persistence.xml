@@ -6,6 +6,8 @@
         <class>org.endeavourhealth.usermanagermodel.models.database.DelegationEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.AuditEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.AuditActionEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.ItemTypeEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

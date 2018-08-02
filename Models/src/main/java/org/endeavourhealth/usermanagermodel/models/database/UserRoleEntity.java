@@ -122,6 +122,24 @@ public class UserRoleEntity {
         return ret;
     }
 
+    public static UserRoleEntity getUserRole(String roleId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
+        Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("id"), roleId);
+
+        cq.where(predicate);
+        TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
+        UserRoleEntity ret = query.getSingleResult();
+
+        entityManager.close();
+
+        return ret;
+    }
+
     public static List<UserRoleEntity> getUsersAtOrganisation(String organisationId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 

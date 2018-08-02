@@ -17,6 +17,7 @@ import {DelegationModule} from "./delegation/delegation.module";
 import {OrganisationModule} from "./organisation/organisation.module";
 import {D3DelegationModule} from "./d3-delegation/d3-delegation.module";
 import {ConfigurationModule} from "./configuration/configuration.module";
+import {AuditModule} from "./audit/audit.module";
 
 @NgModule({
   declarations: [],
@@ -33,7 +34,8 @@ import {ConfigurationModule} from "./configuration/configuration.module";
     OrganisationModule,
     EntityViewComponentsModule,
     D3DelegationModule,
-    ConfigurationModule
+    ConfigurationModule,
+    AuditModule
   ],
   providers: [
     KeycloakService,

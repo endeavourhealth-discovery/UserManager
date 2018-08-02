@@ -3,7 +3,6 @@ package org.endeavourhealth.usermanagermodel.models.database;
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
 import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
-import org.endeavourhealth.usermanagermodel.models.json.JsonAuditDetail;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -133,10 +132,14 @@ public class AuditEntity {
                     " a.timestamp," +
                     " a.auditType," +
                     " ur.organisationId," +
-                    " ur.userId" +
+                    " ur.userId," +
+                    " aa.actionType," +
+                    " it.itemType" +
                     " from AuditEntity a" +
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
-                    " join RoleTypeEntity rt on rt.id = ur.roleTypeId";
+                    " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
+                    " join AuditActionEntity aa on aa.id = a.auditType" +
+                    " join ItemTypeEntity it on it.id = a.itemType";
 
             Query query = entityManager.createQuery(sql);
 
@@ -144,6 +147,26 @@ public class AuditEntity {
 
 
             return results;
+
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public static AuditEntity getAuditDetail(String auditId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        try {
+            String sql = "select a" +
+                    " from AuditEntity a " +
+                    " where a.id = :auditId";
+
+            Query query = entityManager.createQuery(sql, AuditEntity.class)
+                    .setParameter("auditId", auditId);
+
+            AuditEntity result = (AuditEntity)query.getSingleResult();
+
+            return result;
 
         } finally {
             entityManager.close();

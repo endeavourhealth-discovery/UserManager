@@ -148,14 +148,18 @@ CREATE TABLE delegation_relationship
 	CONSTRAINT user_manager_delegation_relationship_pk primary key  (delegation, child_uuid, child_type, parent_uuid, parent_type)
 ) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
 
-
+drop table audit;
 CREATE TABLE audit
 (
     id varchar(36),
-    organisation_id varchar(36),
+    user_role_id varchar(36),
     timestamp datetime,
-    end_user_id varchar(36),
-    CONSTRAINT pk_item_type PRIMARY KEY (id, organisation_id, timestamp)
+    audit_type tinyint,
+    item_before varchar(36),
+    item_after varchar(36),
+    item_type tinyint,
+    audit_json text,
+    CONSTRAINT pk_item_type PRIMARY KEY (id, user_role_id, timestamp)
 );
 
 CREATE INDEX ix_audit_organisation_timestamp_id
@@ -185,3 +189,18 @@ ON active_item (item_id, organisation_id, item_type_id);
 
 CREATE INDEX ix_active_item_audit_organisation_type
 ON active_item (audit_id, organisation_id, item_type_id);
+
+
+CREATE TABLE audit_action
+(
+    id tinyint,
+    action_type varchar(50),
+    CONSTRAINT pk_audit_action PRIMARY KEY (id)
+);
+
+CREATE TABLE item_type
+(
+    id tinyint,
+    item_type varchar(50),
+    CONSTRAINT pk_item_type PRIMARY KEY (id)
+);
