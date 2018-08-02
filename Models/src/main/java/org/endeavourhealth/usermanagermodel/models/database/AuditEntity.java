@@ -122,10 +122,12 @@ public class AuditEntity {
         return Objects.hash(id, userRoleId, timestamp, auditType, itemBefore, itemAfter, itemType, auditJson);
     }
 
-    public static List<Object[]> getAudit(Integer pageNumber, Integer pageSize) throws Exception {
+    public static List<Object[]> getAudit(Integer pageNumber, Integer pageSize,
+                                          String organisationId, String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         try {
+            String orderby = " order by a.timestamp desc ";
             String sql = "select " +
                     " a.id," +
                     " rt.name," +
@@ -139,10 +141,26 @@ public class AuditEntity {
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
                     " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
-                    " join ItemTypeEntity it on it.id = a.itemType" +
-                    " order by a.timestamp desc ";
+                    " join ItemTypeEntity it on it.id = a.itemType";
+
+            if (organisationId != null) {
+                sql += " where ur.organisationId = :orgId";
+
+                if (userId != null) {
+                    sql += " and ur.userId = :userId";
+                }
+            }
+
+            sql += orderby;
 
             Query query = entityManager.createQuery(sql);
+            if (organisationId != null) {
+                query.setParameter("orgId", organisationId);
+
+                if (userId != null) {
+                    query.setParameter("userId", userId);
+                }
+            }
             query.setFirstResult((pageNumber - 1) * pageSize);
             query.setMaxResults(pageSize);
 
@@ -156,14 +174,33 @@ public class AuditEntity {
         }
     }
 
-    public static long getAuditCount() throws Exception {
+    public static long getAuditCount(String organisationId, String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         try {
             String sql = "select count (a.id)" +
                     " from AuditEntity a";
 
+            if (organisationId != null) {
+                sql = "select count (a.id)" +
+                        " from AuditEntity a " +
+                        " join UserRoleEntity ur on ur.id = a.userRoleId" +
+                        " where ur.organisationId = :orgId";
+
+                if (userId != null) {
+                    sql += " and ur.userId = :userId";
+                }
+            }
+
             Query query = entityManager.createQuery(sql);
+
+            if (organisationId != null) {
+                query.setParameter("orgId", organisationId);
+
+                if (userId != null) {
+                    query.setParameter("userId", userId);
+                }
+            }
 
             long count = (long)query.getSingleResult();
 

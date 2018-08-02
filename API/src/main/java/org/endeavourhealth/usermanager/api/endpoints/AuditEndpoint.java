@@ -51,7 +51,9 @@ public class AuditEndpoint extends AbstractEndpoint {
     @ApiOperation(value = "Returns a list of audit entries")
     public Response getAudit(@Context SecurityContext sc,
                              @ApiParam(value = "Optional page number (defaults to 1 if not provided)") @QueryParam("pageNumber") Integer pageNumber,
-                             @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize) throws Exception {
+                             @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize,
+                             @ApiParam(value = "Optional organisation id")@QueryParam("organisationId") String organisationId,
+                             @ApiParam(value = "Optional user id ")@QueryParam("userId") String userId) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -63,7 +65,7 @@ public class AuditEndpoint extends AbstractEndpoint {
         if (pageSize == null) {
             pageSize = 20;
         }
-        return getAuditEntries(pageNumber, pageSize);
+        return getAuditEntries(pageNumber, pageSize, organisationId, userId);
 
     }
 
@@ -91,22 +93,14 @@ public class AuditEndpoint extends AbstractEndpoint {
     @Path("/auditCount")
     @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
     public Response getAuditCount(@Context SecurityContext sc,
-                                               @ApiParam(value = "expression to filter organisations by") @QueryParam("expression") String expression,
-                                               @ApiParam(value = "Searching for organisations or services") @QueryParam("searchType") String searchType
-    ) throws Exception {
+                                  @ApiParam(value = "Optional organisation id")@QueryParam("organisationId") String organisationId,
+                                  @ApiParam(value = "Optional user id ")@QueryParam("userId") String userId) throws Exception {
 
-        boolean searchServices = false;
-        if (searchType != null && searchType.equals("services"))
-            searchServices = true;
-
-        if (expression == null)
-            expression = "";
-
-        return getAuditCount();
+        return getAuditCount(organisationId, userId);
     }
 
-    private Response getAuditCount() throws Exception {
-        Long count = AuditEntity.getAuditCount();
+    private Response getAuditCount(String organisationId, String userId) throws Exception {
+        Long count = AuditEntity.getAuditCount(organisationId, userId);
 
         return Response
                 .ok()
@@ -114,8 +108,9 @@ public class AuditEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getAuditEntries(Integer pageNumber, Integer pageSize) throws Exception {
-        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize);
+    private Response getAuditEntries(Integer pageNumber, Integer pageSize,
+                                     String organisationId, String userId) throws Exception {
+        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize, organisationId, userId);
 
         List<JsonAuditSummary> auditDetails = new ArrayList<>();
 
@@ -134,36 +129,39 @@ public class AuditEndpoint extends AbstractEndpoint {
             auditDetails.add(detail);
         }
 
-        List<String> orgs = auditDetails.stream()
-                .map(JsonAuditSummary::getOrganisation)
-                .collect(Collectors.toList());
+        if (!queryResults.isEmpty()) {
 
-        List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
+            List<String> orgs = auditDetails.stream()
+                    .map(JsonAuditSummary::getOrganisation)
+                    .collect(Collectors.toList());
 
-        Map<String, String> userNameMap = new HashMap<>();
+            List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
+
+            Map<String, String> userNameMap = new HashMap<>();
 
 
-        KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
+            KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
 
-        for (JsonAuditSummary sum: auditDetails) {
-            OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
-            if (org != null) {
-                sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
-            }
+            for (JsonAuditSummary sum : auditDetails) {
+                OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
+                if (org != null) {
+                    sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
+                }
 
-            if (userNameMap.containsKey(sum.getUserName())) {
-                sum.setUserName(userNameMap.get(sum.getUserName()));
-            } else {
-                try {
-                    UserRepresentation user = keycloakClient.realms().users().getUser(sum.getUserName());
+                if (userNameMap.containsKey(sum.getUserName())) {
+                    sum.setUserName(userNameMap.get(sum.getUserName()));
+                } else {
+                    try {
+                        UserRepresentation user = keycloakClient.realms().users().getUser(sum.getUserName());
 
-                    if (user != null) {
-                        userNameMap.put(user.getId(), user.getUsername());
-                        sum.setUserName(user.getUsername());
+                        if (user != null) {
+                            userNameMap.put(user.getId(), user.getUsername());
+                            sum.setUserName(user.getUsername());
+                        }
+                    } catch (Exception e) {
+                        userNameMap.put(sum.getUserName(), "Unknown User");
+                        sum.setUserName("Unknown User");
                     }
-                } catch (Exception e ) {
-                    userNameMap.put(sum.getUserName(), "Unknown User");
-                    sum.setUserName("Unknown User");
                 }
             }
         }

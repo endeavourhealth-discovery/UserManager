@@ -4,8 +4,32 @@
     <div class="module-body">
       <loadingIndicator [done]="loadingComplete">
         <div class="row">
+          <div class="col-md-4">
+            <label class="control-label">Select Organisation</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+              <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
+                <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="control-label">Select User</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+              <select class="form-control" [(ngModel)]="selectedUser" name="selectedUser">
+                <option *ngFor="let usr of userList" [ngValue]="usr">{{usr.username}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="filter()">Filter</label>
+            <label class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="reset()">Reset</label>
+          </div>
+        </div>
+        <br>
+        <div class="row">
           <div class="col-md-12">
-
             <div class="table scroll-box-300 form-control" style="height:100%; min-height: 650px; max-height: 650px">
                 <table class="table table-striped table-condensed">
                   <thead>

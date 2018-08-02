@@ -54,7 +54,7 @@ export class UserComponent implements OnInit {
     this.getDelegatedOrganisations();
   }
 
-  //gets all users in the realm
+  //gets all users in the selected organisation
   getUsers(){
     let vm = this;
     vm.userList = null;

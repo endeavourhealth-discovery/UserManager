@@ -8,18 +8,32 @@ export class AuditService {
 
   constructor(private http: Http) { }
 
-  getAuditSummary(pageNumber: number, pageSize: number): Observable<AuditSummary[]> {
+  getAuditSummary(pageNumber: number, pageSize: number,
+                  organisationId: string = null, userId: string = null): Observable<AuditSummary[]> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('pageNumber', pageNumber.toString());
     params.set('pageSize', pageSize.toString());
+    if (organisationId != null) {
+      params.set('organisationId', organisationId);
+    }
+    if (userId != null) {
+      params.set('userId', userId);
+    }
 
     return vm.http.get('api/audit/getAudit', {search: params})
       .map((response) => response.json());
   }
 
-  getAuditCount(): Observable<number> {
+  getAuditCount(organisationId: string = null, userId: string = null): Observable<number> {
     const vm = this;
+    let params = new URLSearchParams();
+    if (organisationId != null) {
+      params.set('organisationId', organisationId);
+    }
+    if (userId != null) {
+      params.set('userId', userId);
+    }
 
     return vm.http.get('api/audit/auditCount')
       .map((response) => response.json());
