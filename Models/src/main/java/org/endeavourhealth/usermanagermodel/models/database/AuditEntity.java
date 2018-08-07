@@ -123,8 +123,11 @@ public class AuditEntity {
     }
 
     public static List<Object[]> getAudit(Integer pageNumber, Integer pageSize,
-                                          String organisationId, String userId) throws Exception {
+                                          String organisationId, String userId,
+                                          Timestamp startDate, Timestamp endDate) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        String whereAnd = " where ";
 
         try {
             String orderby = " order by a.timestamp desc ";
@@ -141,14 +144,24 @@ public class AuditEntity {
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
                     " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
-                    " join ItemTypeEntity it on it.id = a.itemType";
+                    " join ItemTypeEntity it on it.id = a.itemType ";
 
             if (organisationId != null) {
-                sql += " where ur.organisationId = :orgId";
+                sql += whereAnd + " ur.organisationId = :orgId";
 
+                whereAnd = " and ";
                 if (userId != null) {
                     sql += " and ur.userId = :userId";
                 }
+            }
+
+            if (startDate != null) {
+                sql += whereAnd + " a.timestamp >= :fromDate";
+                whereAnd = " and ";
+            }
+
+            if (endDate != null) {
+                sql += whereAnd + " a.timestamp <= :toDate";
             }
 
             sql += orderby;
@@ -161,6 +174,14 @@ public class AuditEntity {
                     query.setParameter("userId", userId);
                 }
             }
+
+            if (startDate != null) {
+                query.setParameter("fromDate", startDate);
+            }
+            if (endDate != null) {
+                query.setParameter("toDate", endDate);
+            }
+
             query.setFirstResult((pageNumber - 1) * pageSize);
             query.setMaxResults(pageSize);
 

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { AuditComponent } from './audit/audit.component';
 import {FormsModule} from "@angular/forms";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,7 @@ import {DialogsModule} from "eds-angular4";
 import {AuditService} from "./audit.service";
 import { AuditDetailComponent } from './audit-detail/audit-detail.component';
 import {NgxPaginationModule} from "ngx-pagination";
+import {AngularDateTimePickerModule} from "angular2-datetimepicker";
 
 @NgModule({
   imports: [
@@ -16,11 +17,13 @@ import {NgxPaginationModule} from "ngx-pagination";
     NgbModule,
     ControlsModule,
     DialogsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    AngularDateTimePickerModule
   ],
   declarations: [AuditComponent, AuditDetailComponent],
   providers: [
-    AuditService
+    AuditService,
+    DatePipe
   ],
   entryComponents: [
     AuditDetailComponent

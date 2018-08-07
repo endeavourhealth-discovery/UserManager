@@ -27,6 +27,23 @@
             <label class="btn btn-sm btn-success pull-right" style="cursor:pointer" (click)="reset()">Reset</label>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="control-label">From date</label>
+              <angular2-date-picker [(ngModel)]="dateFrom" [settings]="settings" (onDateSelect)="onDateSelect($event)"></angular2-date-picker>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <label class="control-label">To date</label>
+              <angular2-date-picker [(ngModel)]="dateTo" [settings]="settings" (onDateSelect)="onDateSelect($event)"></angular2-date-picker>
+            </div>
+          </div>
+          <div class="col-md-4">
+            {{dateFrom}} - {{dateTo}}
+          </div>
+        </div>
         <br>
         <div class="row">
           <div class="col-md-12">

@@ -29,6 +29,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,7 +54,9 @@ public class AuditEndpoint extends AbstractEndpoint {
                              @ApiParam(value = "Optional page number (defaults to 1 if not provided)") @QueryParam("pageNumber") Integer pageNumber,
                              @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize,
                              @ApiParam(value = "Optional organisation id")@QueryParam("organisationId") String organisationId,
-                             @ApiParam(value = "Optional user id ")@QueryParam("userId") String userId) throws Exception {
+                             @ApiParam(value = "Optional user id ")@QueryParam("userId") String userId,
+                             @ApiParam(value = "Optional date from ")@QueryParam("dateFrom") String dateFrom,
+                             @ApiParam(value = "Optional date to ")@QueryParam("dateTo") String dateTo) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
@@ -65,7 +68,27 @@ public class AuditEndpoint extends AbstractEndpoint {
         if (pageSize == null) {
             pageSize = 20;
         }
-        return getAuditEntries(pageNumber, pageSize, organisationId, userId);
+
+        Timestamp timestampFrom = null;
+        Timestamp timestampTo = null;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (dateFrom != null) {
+            /*Date startDate = new Date(dateFrom);
+            timestampFrom = new Timestamp(startDate.getTime());*/
+            Date parsedDateFrom = dateFormat.parse(dateFrom);
+            timestampFrom = new Timestamp(parsedDateFrom.getTime());
+        }
+
+        if (dateTo != null) {
+            Date parsedDateTo = dateFormat.parse(dateTo);
+            timestampTo = new Timestamp(parsedDateTo.getTime());
+        }
+
+        /*System.out.println(timestampFrom);
+        System.out.println(timestampTo);*/
+        return getAuditEntries(pageNumber, pageSize, organisationId, userId, timestampFrom, timestampTo);
 
     }
 
@@ -109,8 +132,9 @@ public class AuditEndpoint extends AbstractEndpoint {
     }
 
     private Response getAuditEntries(Integer pageNumber, Integer pageSize,
-                                     String organisationId, String userId) throws Exception {
-        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize, organisationId, userId);
+                                     String organisationId, String userId,
+                                     Timestamp startDate, Timestamp endDate) throws Exception {
+        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize, organisationId, userId, startDate, endDate);
 
         List<JsonAuditSummary> auditDetails = new ArrayList<>();
 

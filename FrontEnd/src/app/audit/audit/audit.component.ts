@@ -25,10 +25,15 @@ export class AuditComponent implements OnInit {
   userList: User[];
   selectedUser: User;
   filtered = false;
-  dateFrom: Date;
-  dateTo: Date;
+  dateFrom: Date = new Date();
+  dateTo: Date = new Date();
 
-
+  settings = {
+    bigBanner: true,
+    timePicker: true,
+    format: 'dd-MM-yyyy hh:mm:ss',
+    defaultOpen: false
+  };
 
   constructor(private $modal: NgbModal,
               public log:LoggerService,
@@ -38,6 +43,8 @@ export class AuditComponent implements OnInit {
 
   ngOnInit() {
     const vm = this;
+    console.log(vm.dateTo.toLocaleDateString() + ' ' +  vm.dateTo.toLocaleTimeString());
+    console.log(vm.dateFrom.toISOString());
     vm.getAudit();
     vm.getAuditCount();
     vm.getDelegatedOrganisations();
@@ -48,11 +55,19 @@ export class AuditComponent implements OnInit {
     vm.loadingComplete = false;
     let orgId = null;
     let usrId = null;
+    let fromDate = null;
+    let toDate = null
     if (vm.filtered) {
-      orgId = vm.selectedOrg.uuid;
-      usrId = vm.selectedUser.uuid;
+      if (vm.selectedOrg != null) {
+        orgId = vm.selectedOrg.uuid;
+      }
+      if (vm.selectedUser != null) {
+        usrId = vm.selectedUser.uuid;
+      }
+      fromDate = vm.dateFrom;
+      toDate = vm.dateTo;
     }
-    vm.auditService.getAuditSummary(vm.pageNumber, vm.pageSize, orgId, usrId)
+    vm.auditService.getAuditSummary(vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;
@@ -97,15 +112,20 @@ export class AuditComponent implements OnInit {
     vm.getAudit();
   }
 
+  onDateSelect($event) {
+    const vm = this;
+    console.log($event);
+    console.log(typeof vm.dateTo);
+    console.log(vm.dateFrom);
+    console.log();
+  }
+
   getDelegatedOrganisations(){
     let vm = this;
     vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
-          vm.getUsers();
-
-          console.log(result);
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
       );
