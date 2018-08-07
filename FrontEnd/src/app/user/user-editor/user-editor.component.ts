@@ -165,11 +165,11 @@ export class UserEditorComponent {
     {
       let passwordInput = this.resultData.password.trim();
       if (passwordInput == '') {
-        if (!this.isEditMode()) {
+        /*if (!this.isEditMode()) {
           vm.log.warning('Password must not be blank');
           this.password1Box.nativeElement.focus();
           result = false;
-        }
+        }*/
       } else
       //passwords must match and map onto the password policy (1 upper, 1 digit, 8 length and not be the same as username)
       if (this.password2Box.nativeElement.value != this.password1Box.nativeElement.value) {
