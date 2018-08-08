@@ -135,7 +135,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   close(withConfirm: boolean) {
     if (withConfirm)
-      MessageBoxDialog.open(this.$modal, "Confirmation", "Are you sure you want to cancel?", "Yes", "No")
+      MessageBoxDialog.open(this.$modal, "Add user", "Any unsaved changes will be lost. Do you want to close without saving?", "Close without saving", "Continue editing")
         .result.then(
         (result) => this.location.back(),
         (reason) => {}
@@ -327,7 +327,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   clearSearch(){
     let vm = this;
-    vm.searched = false;
+    vm.searched = true;
     vm.searchTerm = "";
     vm.userList = [];
   }

@@ -5,22 +5,16 @@
       <loadingIndicator [done]="loadingComplete">
         <div class="row">
           <div class="form-group col-md-3">
-            <label class="control-label">Select Organisation</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-building-o fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
-                <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
-              </select>
-            </div>
+            <label class="control-label">Select organisation</label>
+            <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
+              <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
+            </select>
           </div>
           <div class="form-group col-md-3">
-            <label class="control-label">Select User</label>
-            <div class="input-group">
-              <span class="input-group-addon"><i class="fa fa-user fa-lg fa-fw"></i></span>
-              <select class="form-control" [(ngModel)]="selectedUser" name="selectedUser">
-                <option *ngFor="let usr of userList" [ngValue]="usr">{{usr.username}}</option>
-              </select>
-            </div>
+            <label class="control-label">Select user</label>
+            <select class="form-control" [(ngModel)]="selectedUser" name="selectedUser">
+              <option *ngFor="let usr of userList" [ngValue]="usr">{{usr.username}}</option>
+            </select>
           </div>
           <div class="form-group col-md-2">
               <label class="control-label">From date</label>
