@@ -1,37 +1,27 @@
-import {Component, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {Location} from '@angular/common';
 import {User} from "../models/User";
-import {NgbModal, NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoggerService, MessageBoxDialog} from "eds-angular4";
 import {UserService} from "../user.service";
-import {Organisation} from "../../organisation/models/Organisation";
 import {DelegationService} from "../../delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {RoleType} from "../../configuration/models/RoleType";
 import {UserRole} from "../models/UserRole";
 import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {ModuleStateService} from 'eds-angular4/dist/common';
 
 @Component({
   selector: 'app-user-editor',
   templateUrl: './user-editor.component.html',
   styleUrls: ['./user-editor.component.css']
 })
-export class UserEditorComponent {
-  private paramSubscriber: any;
-
-  public static open(modalService: NgbModal, user: User, editMode, existing = false) {
-    const modalRef = modalService.open(UserEditorComponent, {backdrop: "static", size: "lg"});
-    modalRef.componentInstance.resultData = Object.assign( [], user);
-    modalRef.componentInstance.editMode = editMode;
-    modalRef.componentInstance.$modal = modalService;
-    modalRef.componentInstance.existing = existing;
-    return modalRef;
-  }
+export class UserEditorComponent implements OnInit, AfterViewInit {
 
   @Input() resultData: User;
   @Input() editMode: boolean;
   @Input() existing: boolean;
-  @Input() $modal: NgbModal;
   dialogTitle: String;
   selectedOrg: DelegatedOrganisation;
   delegatedOrganisations: DelegatedOrganisation[];
@@ -40,7 +30,6 @@ export class UserEditorComponent {
   searched: boolean = true;
   userList: User[];
   loadingRolesCompleted: boolean = true;
-  paramOrganisation: String;
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;
@@ -53,14 +42,27 @@ export class UserEditorComponent {
   @ViewChild('searchBox') searchBox;
 
   constructor(private log: LoggerService,
-              protected activeModal: NgbActiveModal,
+              private $modal: NgbModal,
+              private router: Router,
+              private location: Location,
               protected userService: UserService,
               private delegationService: DelegationService,
-              private configurationService: ConfigurationService) {
+              private configurationService: ConfigurationService,
+              private state: ModuleStateService) {
 
   }
 
   ngOnInit(): void {
+    let s = this.state.getState('userEdit');
+    if (s == null) {
+      this.resultData = {} as User;
+      this.router.navigate(['user']);
+      return;
+    }
+    this.resultData = Object.assign( [], s.user);
+    this.editMode = s.editMode;
+    this.existing = s.existing;
+
     let vm = this;
     vm.getDelegatedOrganisations();
     if (!vm.editMode) {
@@ -111,20 +113,35 @@ export class UserEditorComponent {
       this.forenameBox.nativeElement.focus();
   }
 
-  save() {
+  save(close: boolean) {
     if (this.validateFormInput() == true) {
-      this.activeModal.close(this.resultData);
+      this.userService.saveUser(this.resultData, this.editMode)
+        .subscribe(
+          (response) => {
+            // if (this.editMode) {
+            //   this.selectedUser = response;
+            //   vm.updateUser(response);
+            // }
+
+            let msg = (!this.editMode) ? 'Add user' : 'Edit user';
+            this.log.success('User saved', response, msg);
+            if (close)
+              this.close(false);
+          },
+          (error) => this.log.error('Error saving user', error, 'Error')
+        );
     }
   }
 
-  cancel() {
-    MessageBoxDialog.open(this.$modal, "Confirmation", "Are you sure you want to cancel?", "Yes", "No")
-      .result.then(
-      (result) => {
-        this.activeModal.dismiss('cancel');
-      },
-      (reason) => {}
-    );
+  close(withConfirm: boolean) {
+    if (withConfirm)
+      MessageBoxDialog.open(this.$modal, "Confirmation", "Are you sure you want to cancel?", "Yes", "No")
+        .result.then(
+        (result) => this.location.back(),
+        (reason) => {}
+      );
+    else
+      this.location.back();
   }
 
   validateFormInput(){

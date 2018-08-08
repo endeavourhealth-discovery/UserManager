@@ -4,7 +4,8 @@
     <div class="module-body">
       <div class="row">
         <div class="form-group col-md-4">
-          <label class="control-label">Select Delegation</label>
+          <label class="control-label">Delegation</label>
+          <button type="button" class="btn btn-sm btn-success pull-right" (click)="createDelegation()">Add</button>
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
             <select class="form-control" [(ngModel)]="selectedDelegation" name="selectedDelegation" (change)="loadDelegation()">
@@ -16,7 +17,7 @@
           <div class="row" *ngIf="selectedOrganisation">
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header bg-primary text-white">Selected Organisation</div>
+                <div class="card-header text-white">Selected Organisation</div>
                 <div class="card-block">
                   <p>{{selectedOrganisation.name}}</p>
                   <div *ngIf="!selectedIsRoot">
@@ -28,15 +29,16 @@
                     </label>
                   </div>
                   <button type="button" class="btn btn-sm btn-success pull-right" (click)="setOrganisation()">Set as my organisation</button>
-                  <button type="button" class="btn btn-sm btn-success pull-left" (click)="saveRelationship()">Save</button>
-                  <button type="button" class="btn btn-sm btn-success pull-left" (click)="goToOrganisation()">View users at organisation</button>
-                  <button type="button" class="btn btn-sm btn-success pull-left" (click)="addChildOrganisation()">Add Child</button>
+                  <div class="pull-left">
+                    <button type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
+                    <button type="button" class="btn btn-sm btn-success" (click)="goToOrganisation()">View users at organisation</button>
+                    <button type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
+                  </div>
 
                 </div>
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-success" (click)="createDelegation()">New Delegation</button>
         </div>
       </div>
 

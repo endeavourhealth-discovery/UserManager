@@ -1,175 +1,186 @@
-<div class="modal-header">
-  <button type="button" class="close" (click)="cancel()" aria-hidden="true">&times;</button>
-  <h4 class="modal-title">{{dialogTitle}}</h4>
-</div>
-<div class="modal-body">
-  <div *ngIf="existing">
-    <div class="card">
-      <div class="card-header bg-primary text-white">Add exising user</div>
-      <div class="card-block">
-        <form existingUserForm="form" class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="input-group">
-                <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
-                <span *ngIf="searched" class="btn input-group-addon" (click)="clearSearch(); ">
-												<i class="fa fa-remove" title="Clear search"></i>
-											</span>
-                <span class="btn input-group-addon" (click)="searchUsers()">
-												<i class="fa fa-search" title="Search"></i>
-											</span>
-              </div>
-
-              <div class="scroll-box-150 form-control">
-                <loadingIndicator [done]="searched">
-                  <div *ngFor="let user of userList"
-                       class="hover-box show-child-on-hover striped"
-                       [ngClass]="{'selection': role == selectedAvailableRole}">
-
-                    {{user.forename}} {{user.surname}} ({{user.email}})
-
-                    <button type="button" class="btn btn-xs btn-success pull-right child-to-show" (click)="selectUser(user)" title="Select user">
-                      <span class="fa fa-sm fa-plus"></span>
-                    </button>
+<div class="module">
+  <div class="container-fluid">
+    <div class="module-heading">{{dialogTitle}}
+      <div class="pull-right">
+        <button type="button" class="btn btn-success" (click)="save(false);">Save</button>
+        <button type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
+        <button type="button" class="btn btn-danger" (click)="close(true)">Cancel</button>
+      </div>
+    </div>
+    <div class="module-body">
+      <div *ngIf="existing">
+        <div class="card">
+          <div class="card-header">Add exising user</div>
+          <div class="card-block">
+            <form existingUserForm="form" class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Search users</label>
+                    <div class="input-group">
+                      <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
+                      <span *ngIf="searched" class="btn input-group-addon" (click)="clearSearch(); ">
+                        <i class="fa fa-remove" title="Clear search"></i>
+                       </span>
+                      <span class="btn input-group-addon" (click)="searchUsers()">
+                        <i class="fa fa-search" title="Search"></i>
+                      </span>
+                    </div>
                   </div>
-                </loadingIndicator>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <!------------------------------------------------------------------------------------------------->
-  <!-- USER PROFILE DETAILS -->
-  <!------------------------------------------------------------------------------------------------->
-  <div *ngIf="!existing">
-    <div class="card">
-      <div class="card-header bg-primary text-white">Profile</div>
-      <div class="card-block">
-        <form UserDetails="form" class="container-fluid">
-          <div class="row">
-            <div class="col col-md-6">
-              <div>
-                <label class="control-label">Username *</label>
-                <input type="text" *ngIf="isEditMode()" disabled class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
-                <input type="text" *ngIf="!isEditMode()" class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
-              </div>
-              <div>
-                <label class="control-label">Forename *</label>
-                <input type="text" class="form-control" placeholder="Forename" [(ngModel)]="resultData.forename" name="forename" #forename>
-              </div>
-              <div>
-                <label class="control-label">Surname *</label>
-                <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="resultData.surname" name="surname" #surname>
-              </div>
-              <div>
-                <label class="control-label">Email *</label>
-                <input type="text" class="form-control" placeholder="Email" [(ngModel)]="resultData.email" name="email" #email>
-              </div>
-            </div>
-            <div class="col col-md-6">
-              <div>
-                <label class="control-box">Photo</label>
-                <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
-                <img src="{{resultData.photo}}" class="img-rounded" height="118px" width="118px">
-              </div>
-              <div>
-                <label class="control-label">Mobile</label>
-                <input type="text" class="form-control" placeholder="Mobile" [(ngModel)]="resultData.mobile" name="mobile">
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <br>
-    <!------------------------------------------------------------------------------------------------->
-    <!-- USER CREDENTIALS -->
-    <!------------------------------------------------------------------------------------------------->
-    <div class="card">
-      <div class="card-header bg-primary text-white">Credentials</div>
-      <div class="card-block">
-        <form UserDetails2="form" class="container-fluid">
-          <div class="row">
-            <div class="col col-md-4">
-              <label class="control-label">New Password *</label>
-              <span class="fa fa-info-circle fa-right-pad text-muted" [ngbTooltip]="tipContentPassword"></span>
-              <ng-template #tipContentPassword>The password must be at least eight characters long, include at least one digit and one Uppercase letter.</ng-template>
-              <input type="password" class="form-control" placeholder="Password" name="passwordNew" #password1>
-            </div>
-            <div class="col col-md-4">
-              <label class="control-label">Password Confirmation *</label>
-              <input type="password" class="form-control" placeholder="Password" [(ngModel)]="resultData.password" name="passwordConf" #password2>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+                </div>
 
+                <div class="form-group col-md-12">
+                  <label class="label">Search results</label>
+                  <div class="scroll-box-150 form-control">
+                    <loadingIndicator [done]="searched">
+                      <div *ngFor="let user of userList"
+                           class="hover-box show-child-on-hover striped"
+                           [ngClass]="{'selection': role == selectedAvailableRole}">
 
-    <!------------------------------------------------------------------------------------------------->
-    <!-- ROLES -->
-    <!------------------------------------------------------------------------------------------------->
-    <div class="card">
-      <div class="card-header bg-primary text-white">Roles</div>
-      <div class="card-block">
-        <form UserDetails2="form" class="container-fluid">
-          <div class="row">
-            <div class="col col-md-6">
-              <div class="col-md-12" style="padding-bottom: 11px;padding-left: 1px">
-                <label class="control-label">Current</label>
-              </div>
-              <div class="scroll-box-150 form-control">
-                <div *ngFor="let role of resultData.userRoles"
-                     class="hover-box show-child-on-hover striped">
-                  <div *ngIf="!role.deleted">
-                    {{role.organisationName}} ({{role.roleTypeName}})
+                        {{user.forename}} {{user.surname}} ({{user.email}})
+
+                        <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="selectUser(user)" title="Select user">
+                          <span class="fa fa-plus"></span>
+                        </button>
+                      </div>
+                    </loadingIndicator>
                   </div>
-
-                  <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
-                    <span class="fa fa-sm fa-minus"></span>
-                  </button>
                 </div>
               </div>
-            </div>
-            <div class="col col-md-6">
-              <div class="col col-md-2" style="padding: 1px">
-                <label class="control-label">Available</label>
-              </div>
-              <div class="col col-md-10" style="padding: 1px">
-                <label class="control-label">Select Organisation</label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
-                  <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getRoleTypes()">
-                    <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="scroll-box-150 form-control">
-                <loadingIndicator [done]="roleTypes">
-                  <div *ngFor="let role of roleTypes"
-                       class="hover-box show-child-on-hover striped"
-                       [ngClass]="{'selection': role == selectedAvailableRole}">
-
-                    {{role.name}}
-
-                    <button type="button" class="btn btn-xs btn-success pull-right child-to-show" (click)="addAvailableRole(role)" title="Add role">
-                      <span class="fa fa-sm fa-plus"></span>
-                    </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!------------------------------------------------------------------------------------------------->
+      <!-- USER PROFILE DETAILS -->
+      <!------------------------------------------------------------------------------------------------->
+      <div *ngIf="!existing">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">Profile</div>
+              <div class="card-block">
+                <form UserDetails="form" class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Username *</label>
+                        <input type="text" *ngIf="isEditMode()" disabled class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
+                        <input type="text" *ngIf="!isEditMode()" class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label">Forename *</label>
+                        <input type="text" class="form-control" placeholder="Forename" [(ngModel)]="resultData.forename" name="forename" #forename>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label">Surname *</label>
+                        <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="resultData.surname" name="surname" #surname>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label">Email *</label>
+                        <input type="text" class="form-control" placeholder="Email" [(ngModel)]="resultData.email" name="email" #email>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-box">Photo</label>
+                        <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
+                        <img src="{{resultData.photo}}" class="img-rounded" height="156px" width="156px">
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label">Mobile</label>
+                        <input type="text" class="form-control" placeholder="Mobile" [(ngModel)]="resultData.mobile" name="mobile">
+                      </div>
+                    </div>
                   </div>
-                </loadingIndicator>
+                </form>
               </div>
             </div>
           </div>
-        </form>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6">
+            <!------------------------------------------------------------------------------------------------->
+            <!-- USER CREDENTIALS -->
+            <!------------------------------------------------------------------------------------------------->
+            <div class="card">
+              <div class="card-header">Credentials</div>
+              <div class="card-block">
+                <form UserDetails2="form" class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">New Password *</label>
+                        <span class="fa fa-info-circle fa-right-pad text-muted" [ngbTooltip]="tipContentPassword"></span>
+                        <ng-template #tipContentPassword>The password must be at least eight characters long, include at least one digit and one Uppercase letter.</ng-template>
+                        <input type="password" class="form-control" placeholder="Password" name="passwordNew" #password1>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Password Confirmation *</label>
+                        <input type="password" class="form-control" placeholder="Password" [(ngModel)]="resultData.password" name="passwordConf" #password2>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <!------------------------------------------------------------------------------------------------->
+            <!-- ROLES -->
+            <!------------------------------------------------------------------------------------------------->
+            <div class="card">
+              <div class="card-header">Roles</div>
+              <div class="card-block">
+                <form UserDetails2="form" class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Assigned</label>
+                        <div class="scroll-box-250 form-control">
+                          <div *ngFor="let role of resultData.userRoles"
+                               class="hover-box show-child-on-hover striped">
+                            <div *ngIf="!role.deleted">
+                              {{role.organisationName}} ({{role.roleTypeName}})
+                              <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
+                                <span class="fa fa-sm fa-minus"></span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Available at</label>
+                        <!--<div class="input-group">-->
+                          <!--<span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>-->
+                          <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getRoleTypes()">
+                            <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
+                          </select>
+                        <!--</div>-->
+                      </div>
+                      <div class="scroll-box-150 form-control">
+                        <loadingIndicator [done]="roleTypes">
+                          <div *ngFor="let role of roleTypes"
+                               class="hover-box show-child-on-hover striped"
+                               [ngClass]="{'selection': role == selectedAvailableRole}">
+                            {{role.name}}
+                            <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="addAvailableRole(role)" title="Add role"><i class="fa fa-sm fa-plus"></i></button>
+                          </div>
+                        </loadingIndicator>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn"
-            (click)="cancel()">Cancel</button>
-    <button type="button" class="btn btn-primary"
-            (click)="save();">Save</button>
   </div>
 </div>

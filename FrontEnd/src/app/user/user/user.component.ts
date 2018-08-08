@@ -3,13 +3,13 @@ import {LoggerService, MessageBoxDialog, SecurityService} from "eds-angular4";
 import {UserService} from "../user.service";
 import {NgbModal, NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
-import {UserEditorComponent} from "../user-editor/user-editor.component";
 import {UserRole} from "../models/UserRole";
 import {RoleType} from "../../configuration/models/RoleType";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../delegation/delegation.service";
 import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ModuleStateService} from 'eds-angular4/dist/common';
 
 @Component({
   selector: 'app-user',
@@ -40,7 +40,8 @@ export class UserComponent implements OnInit {
               private delegationService: DelegationService,
               private $modal : NgbModal,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private state: ModuleStateService) {
 
   }
 
@@ -50,6 +51,7 @@ export class UserComponent implements OnInit {
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.paramOrganisation = params['organisationId'];
+        this.getDelegatedOrganisations();
       });
     this.getDelegatedOrganisations();
   }
@@ -134,71 +136,21 @@ export class UserComponent implements OnInit {
   }
 
   addUser() {
-    let vm = this;
-    UserEditorComponent.open(vm.$modal, null, false)
-      .result.then(
-      (editedUser) => vm.saveUser(null, editedUser),
-      () => vm.log.info('User add cancelled')
-    );
+    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
+    this.state.setState('userEdit', {user: null, editMode: false});
+    this.router.navigate(['userEdit']);
   }
 
   addExisting() {
-    let vm = this;
-    UserEditorComponent.open(vm.$modal, null, true, true)
-      .result.then(
-      (editedUser) => vm.saveUser(editedUser, editedUser),
-      () => vm.log.info('User add cancelled')
-    );
+    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
+    this.state.setState('userEdit', {user: null, editMode: true, existing: true});
+    this.router.navigate(['userEdit']);
   }
 
   editUser(user:User) {
-    let vm = this;
-    UserEditorComponent.open(vm.$modal, user, true)
-      .result.then(
-      (editedUser) => vm.saveUser(user, editedUser),
-      () => vm.log.info('User edit cancelled')
-    );
-  }
-
-  private saveUser(user, editedUser : User) {
-    let vm = this;
-    let editMode = (user != null);
-
-    vm.userService.saveUser(editedUser, editMode)
-      .subscribe(
-        (response) => {
-          if (editMode) {
-            vm.selectedUser = response;
-            vm.updateUser(response);
-          }
-
-          let msg = (!editMode) ? 'Add user' : 'Edit user';
-          vm.log.success('User saved', response, msg);
-        },
-        (error) => vm.log.error('Error saving user', error, 'Error')
-      );
-  }
-
-  updateUser(editedUser: User){
-    let vm = this;
-    var index1 = 0;
-    for(let user of vm.userList){
-      if (user.uuid == editedUser.uuid){
-        vm.userList[index1] = editedUser;
-        if (vm.searched){
-          var index2 = 0;
-          for(let filteredUser of vm.filteredUserList){
-            if (filteredUser.uuid == editedUser.uuid) {
-              vm.filteredUserList[index2] = editedUser;
-              return;
-            }
-            index2++;
-          }
-        }
-        return;
-      }
-      index1++;
-    }
+    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
+    this.state.setState('userEdit', {user: user, editMode: true});
+    this.router.navigate(['userEdit']);
   }
 
   deleteUser(user:User) {

@@ -8,6 +8,7 @@ import {ControlsModule} from "eds-angular4/dist/controls";
 import {UserService} from "./user.service";
 import { UserComponent } from './user/user.component';
 import { UserEditorComponent } from './user-editor/user-editor.component';
+import {ModuleStateService} from 'eds-angular4/dist/common';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { UserEditorComponent } from './user-editor/user-editor.component';
   entryComponents: [
     UserEditorComponent
   ],
-  providers: [UserService, LoggerService]
+  providers: [UserService, LoggerService, ModuleStateService]
 })
 export class UserModule { }

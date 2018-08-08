@@ -19,7 +19,7 @@ export class AuditComponent implements OnInit {
   loadingComplete = false;
   totalItems = 5;
   pageNumber = 1;
-  pageSize = 20;
+  pageSize = 15;
   delegatedOrganisations: DelegatedOrganisation[];
   selectedOrg: DelegatedOrganisation;
   userList: User[];

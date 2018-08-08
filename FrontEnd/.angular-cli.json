@@ -21,8 +21,7 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "scssStyles.scss",
-        "lessStyles.less"
+        "scssStyles.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
