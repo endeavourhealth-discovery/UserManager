@@ -22,6 +22,7 @@ CREATE TABLE user_role
 	role_type_id varchar(36) NULL,
 	organisation_id varchar(36) NOT NULL,
 	user_access_profile_id varchar(36) NULL,
+    is_default boolean null default 0,
     is_deleted boolean null,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)

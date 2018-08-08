@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "user_role", schema = "user_manager")
+@Table(name = "user_role", schema = "user_manager", catalog = "")
 public class UserRoleEntity {
     private String id;
     private String userId;
@@ -23,6 +23,7 @@ public class UserRoleEntity {
     private String organisationId;
     private String userAccessProfileId;
     private Byte isDeleted;
+    private Byte isDefault;
 
     @Id
     @Column(name = "id")
@@ -102,6 +103,17 @@ public class UserRoleEntity {
 
         return Objects.hash(id, userId, roleTypeId, organisationId, userAccessProfileId, isDeleted);
     }
+
+    @Basic
+    @Column(name = "is_default")
+    public Byte getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Byte isDefault) {
+        this.isDefault = isDefault;
+    }
+
 
     public static List<UserRoleEntity> getUserRoles(String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
@@ -202,5 +214,4 @@ public class UserRoleEntity {
 
         entityManager.close();
     }
-
 }
