@@ -54,7 +54,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     }
 
-    @GET
+   /* @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.OrganisationEndpoint.organisationsForUser")
@@ -70,7 +70,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
         return getOrganisationsForUser(userId);
 
-    }
+    }*/
 
     private Response searchOrganisations(String searchData, UUID userId) throws Exception {
 
@@ -86,7 +86,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
 
 
-    private static Response getOrganisationsForUser(String userId) throws Exception {
+   /* private static Response getOrganisationsForUser(String userId) throws Exception {
         List<OrganisationEntity> orgList = new ArrayList<>();
 
         List<UserRoleEntity> userRoles = UserRoleEntity.getUserRoles(userId);
@@ -106,5 +106,5 @@ public class OrganisationEndpoint extends AbstractEndpoint {
                 .ok()
                 .entity(orgList)
                 .build();
-    }
+    }*/
 }

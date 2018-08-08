@@ -24,6 +24,10 @@ export class AppMenuService implements  AbstractMenuProvider  {
     ];
   }
 
+  useUserManagerForRoles(): boolean {
+    return true;
+  }
+
   getClientId(): string {
     return 'eds-user-manager';
   }

@@ -115,23 +115,34 @@ public class UserRoleEntity {
     }
 
 
-    public static List<UserRoleEntity> getUserRoles(String userId) throws Exception {
+    public static List<Object[]> getUserRoles(String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserRoleEntity> cq = cb.createQuery(UserRoleEntity.class);
-        Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
+        try {
+            String sql = "select " +
+                    " ur.id," +
+                    " ur.userId," +
+                    " ur.roleTypeId," +
+                    " rt.name," +
+                    " ur.organisationId," +
+                    " ur.userAccessProfileId," +
+                    " ur.isDeleted," +
+                    " ur.isDefault" +
+                    " from UserRoleEntity ur" +
+                    " join RoleTypeEntity rt on ur.roleTypeId = rt.id" +
+                    " where ur.userId = :userId";
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
-                cb.equal(rootEntry.get("isDeleted"), (byte)0));
+            Query query = entityManager.createQuery(sql);
 
-        cq.where(predicate);
-        TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
-        List<UserRoleEntity> ret = query.getResultList();
+            query.setParameter("userId", userId);
 
-        entityManager.close();
+            List<Object[]> results = query.getResultList();
 
-        return ret;
+            return results;
+        } finally {
+            entityManager.close();
+        }
+
     }
 
     public static UserRoleEntity getUserRole(String roleId) throws Exception {

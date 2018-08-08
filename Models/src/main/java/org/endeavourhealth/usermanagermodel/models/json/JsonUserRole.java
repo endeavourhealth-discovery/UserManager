@@ -11,6 +11,7 @@ public class JsonUserRole {
     private String organisationName = null;
     private String userAccessProfileId = null;
     private boolean isDeleted;
+    private boolean isDefault;
 
     public JsonUserRole() {
     }
@@ -22,6 +23,7 @@ public class JsonUserRole {
         this.organisationId = roleEntity.getOrganisationId();
         this.userAccessProfileId = roleEntity.getUserAccessProfileId();
         this.isDeleted = roleEntity.getIsDeleted().equals((byte)1) ? true : false;
+        this.isDefault = roleEntity.getIsDefault().equals((byte)1) ? true : false;
     }
 
     public String getId() {
@@ -86,5 +88,13 @@ public class JsonUserRole {
 
     public void setRoleTypeName(String roleTypeName) {
         this.roleTypeName = roleTypeName;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }

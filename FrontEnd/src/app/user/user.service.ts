@@ -38,7 +38,7 @@ export class UserService {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userId', userId);
-    return vm.http.get('api/user/getRoles', {search: params})
+    return vm.http.get('api/userManager/getRoles', {search: params})
       .map((response) => response.json());
   }
 
