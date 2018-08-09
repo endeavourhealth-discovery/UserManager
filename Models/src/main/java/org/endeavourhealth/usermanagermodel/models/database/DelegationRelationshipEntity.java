@@ -143,15 +143,14 @@ public class DelegationRelationshipEntity {
         return ret;
     }
 
-    public static List<DelegationRelationshipEntity> getDelegatedOrganisations(String delegationId, String organisationId) throws Exception {
+    public static List<DelegationRelationshipEntity> getDelegatedOrganisations(String organisationId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
         Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("delegation"), delegationId),
-                cb.equal(rootEntry.get("parentUuid"), organisationId));
+        Predicate predicate = cb.equal(rootEntry.get("parentUuid"), organisationId);
 
         cq.where(predicate);
         TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
@@ -159,9 +158,7 @@ public class DelegationRelationshipEntity {
 
         entityManager.close();
 
-        return ret; /*.stream()
-                .map(DelegationRelationshipEntity::getChildUuid)
-                .collect(Collectors.toList());*/
+        return ret;
     }
 
     public static void saveDelegationRelationship(JsonDelegationRelationship delegationRelationship) throws Exception {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuditSummary} from "../models/AuditSummary";
-import {LoggerService} from "eds-angular4";
+import {LoggerService, UserManagerService} from "eds-angular4";
 import {AuditService} from "../audit.service";
 import {AuditDetailComponent} from "../audit-detail/audit-detail.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,7 @@ import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisati
 import {DelegationService} from "../../delegation/delegation.service";
 import {User} from "../../user/models/User";
 import {UserService} from "../../user/user.service";
+import {UserRole} from "../../user/models/UserRole";
 
 @Component({
   selector: 'app-audit',
@@ -28,6 +29,9 @@ export class AuditComponent implements OnInit {
   dateFrom: Date = new Date();
   dateTo: Date = new Date();
 
+  public activeRole: UserRole;
+  superUser = false;
+
   settings = {
     bigBanner: true,
     timePicker: true,
@@ -39,12 +43,26 @@ export class AuditComponent implements OnInit {
               public log:LoggerService,
               private auditService: AuditService,
               private delegationService: DelegationService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private userManagerService: UserManagerService) { }
 
   ngOnInit() {
     const vm = this;
-    console.log(vm.dateTo.toLocaleDateString() + ' ' +  vm.dateTo.toLocaleTimeString());
-    console.log(vm.dateFrom.toISOString());
+    this.userManagerService.activeRole.subscribe(active => {
+      this.activeRole = active;
+      this.roleChanged();
+    });
+
+  }
+
+  roleChanged() {
+    const vm = this;
+    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+      vm.superUser = true;
+    } else {
+      vm.superUser = false;
+    }
+
     vm.getAudit();
     vm.getAuditCount();
     vm.getDelegatedOrganisations();
@@ -67,7 +85,7 @@ export class AuditComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
-    vm.auditService.getAuditSummary(vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
+    vm.auditService.getAuditSummary(vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;
@@ -122,7 +140,7 @@ export class AuditComponent implements OnInit {
 
   getDelegatedOrganisations(){
     let vm = this;
-    vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
+    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;

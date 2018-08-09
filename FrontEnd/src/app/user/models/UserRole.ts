@@ -8,4 +8,5 @@ export class UserRole {
 	organisationName: string;
 	userAccessProfileId: string;
 	deleted: boolean;
+  default: boolean;
 }

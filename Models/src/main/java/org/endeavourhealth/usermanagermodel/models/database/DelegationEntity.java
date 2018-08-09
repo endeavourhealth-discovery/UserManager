@@ -64,6 +64,13 @@ public class DelegationEntity {
         return Objects.hash(uuid, name, rootOrganisation);
     }
 
+    public static List<DelegationEntity> getDelegations(String organisationId) throws Exception {
+        if (organisationId == null) {
+            return getAllDelegations();
+        } else return getSelectedDelegations(organisationId);
+
+    }
+
     public static List<DelegationEntity> getAllDelegations() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
@@ -77,6 +84,32 @@ public class DelegationEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static List<DelegationEntity> getSelectedDelegations(String organisationId) throws Exception {
+
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        try {
+            String orderby = " order by a.timestamp desc ";
+            String sql = "select distinct" +
+                    " d" +
+                    " from DelegationEntity d" +
+                    " join DelegationRelationshipEntity rel on rel.delegation = d.uuid" +
+                    " where rel.childUuid = :org or rel.parentUuid = :org";
+
+
+            Query query = entityManager.createQuery(sql, DelegationEntity.class)
+                    .setParameter("org", organisationId);
+
+            List<DelegationEntity> results = query.getResultList();
+
+            return results;
+
+        } finally {
+            entityManager.close();
+        }
+
     }
 
     public static String getRootOrganisation(String delegationId) throws Exception {

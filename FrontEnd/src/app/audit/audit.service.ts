@@ -10,11 +10,12 @@ export class AuditService {
   constructor(private http: Http,
               private datePipe: DatePipe) { }
 
-  getAuditSummary(pageNumber: number, pageSize: number,
+  getAuditSummary(userOrganisationId: string, pageNumber: number, pageSize: number,
                   organisationId: string = null, userId: string = null,
                   dateFrom: Date = null, dateTo: Date = null): Observable<AuditSummary[]> {
     const vm = this;
     let params = new URLSearchParams();
+    params.set('userOrganisationId', userOrganisationId);
     params.set('pageNumber', pageNumber.toString());
     params.set('pageSize', pageSize.toString());
     if (organisationId != null) {

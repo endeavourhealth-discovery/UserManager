@@ -58,7 +58,7 @@ export class DelegationComponent implements OnInit, AfterViewInit {
 
   getDelegations() {
     let vm = this;
-    vm.delegationService.getDelegations()
+    vm.delegationService.getDelegations('3453454344554')
       .subscribe(
         (result) => {
           vm.delegations = result;

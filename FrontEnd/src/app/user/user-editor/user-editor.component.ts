@@ -2,7 +2,7 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewChildren} from '
 import {Location} from '@angular/common';
 import {User} from "../models/User";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {LoggerService, MessageBoxDialog} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {UserService} from "../user.service";
 import {DelegationService} from "../../delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
@@ -31,6 +31,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   userList: User[];
   loadingRolesCompleted: boolean = true;
 
+  public activeRole: UserRole;
+  superUser = false;
+
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;
   @ViewChild('surname') surnameBox;
@@ -48,7 +51,8 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
               protected userService: UserService,
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
-              private state: ModuleStateService) {
+              private state: ModuleStateService,
+              private userManagerService: UserManagerService) {
 
   }
 
@@ -64,6 +68,11 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     this.existing = s.existing;
 
     let vm = this;
+
+    vm.userManagerService.activeRole.subscribe(active => {
+      vm.activeRole = active;
+      vm.roleChanged();
+    });
     vm.getDelegatedOrganisations();
     if (!vm.editMode) {
       vm.dialogTitle = "Add user";
@@ -96,6 +105,15 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         defaultOrgId: this.resultData.defaultOrgId == null ? '': this.resultData.defaultOrgId,
         userRoles: this.resultData.userRoles
       } as User;
+    }
+  }
+
+  roleChanged() {
+    const vm = this;
+    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+      vm.superUser = true;
+    } else {
+      vm.superUser = false;
     }
   }
 
@@ -253,7 +271,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   getDelegatedOrganisations() {
     let vm = this;
-    vm.delegationService.getDelegatedOrganisations(vm.delegationService.getSelectedOrganisation(), vm.delegationService.getSelectedDelegation())
+    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;

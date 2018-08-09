@@ -51,6 +51,7 @@ public class AuditEndpoint extends AbstractEndpoint {
     @Path("/getAudit")
     @ApiOperation(value = "Returns a list of audit entries")
     public Response getAudit(@Context SecurityContext sc,
+                             @ApiParam(value = "Organisation id of user role (used to limit the audit results)") @QueryParam("userOrganisationId") String userOrganisationId,
                              @ApiParam(value = "Optional page number (defaults to 1 if not provided)") @QueryParam("pageNumber") Integer pageNumber,
                              @ApiParam(value = "Optional page size (defaults to 20 if not provided)")@QueryParam("pageSize") Integer pageSize,
                              @ApiParam(value = "Optional organisation id")@QueryParam("organisationId") String organisationId,
@@ -88,7 +89,7 @@ public class AuditEndpoint extends AbstractEndpoint {
 
         /*System.out.println(timestampFrom);
         System.out.println(timestampTo);*/
-        return getAuditEntries(pageNumber, pageSize, organisationId, userId, timestampFrom, timestampTo);
+        return getAuditEntries(userOrganisationId, pageNumber, pageSize, organisationId, userId, timestampFrom, timestampTo);
 
     }
 
@@ -131,10 +132,11 @@ public class AuditEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getAuditEntries(Integer pageNumber, Integer pageSize,
+    private Response getAuditEntries(String userOrganisationId, Integer pageNumber, Integer pageSize,
                                      String organisationId, String userId,
                                      Timestamp startDate, Timestamp endDate) throws Exception {
-        List<Object[]> queryResults = AuditEntity.getAudit(pageNumber, pageSize, organisationId, userId, startDate, endDate);
+
+        List<Object[]> queryResults = AuditEntity.getAudit(userOrganisationId, pageNumber, pageSize, organisationId, userId, startDate, endDate);
 
         List<JsonAuditSummary> auditDetails = new ArrayList<>();
 

@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DelegationData} from "../../delegation/models/DelegationData";
 import {DelegationService} from "../../delegation/delegation.service";
-import {LoggerService, MessageBoxDialog} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Delegation} from "../../delegation/models/Delegation";
 import {D3TreeGraphComponent} from "../../d3-tree-graph/d3-tree-graph/d3-tree-graph.component";
@@ -10,6 +10,7 @@ import {OrganisationPickerComponent} from "../../organisation/organisation-picke
 import {DelegationRelationship} from "../../delegation/models/DelegationRelationship";
 import {DelegationCreatorComponent} from "../delegation-creator/delegation-creator.component";
 import {Router} from "@angular/router";
+import {UserRole} from "../../user/models/UserRole";
 
 
 
@@ -30,6 +31,9 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   selectedIsRoot: boolean;
   newDelegation: Delegation;
 
+  public activeRole: UserRole;
+  superUser = false;
+
 
   @ViewChild("d3tree") d3Tree: D3TreeGraphComponent;
   @ViewChild('graphContainer') graphContainer: any;
@@ -38,11 +42,25 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   constructor(public log:LoggerService,
               private $modal: NgbModal,
               private delegationService: DelegationService,
-              private router: Router) { }
+              private router: Router,
+              private userManagerService: UserManagerService) { }
 
   ngOnInit() {
+
+    this.userManagerService.activeRole.subscribe(active => {
+      this.activeRole = active;
+      this.roleChanged();
+    });
+  }
+
+  roleChanged() {
+    const vm = this;
+    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+      vm.superUser = true;
+    } else {
+      vm.superUser = false;
+    }
     this.getDelegations();
-    // this.getDelegationDataD3('416fae5a-88e1-11e8-91d9-80fa5b320513');
   }
 
   getDelegationRelationships(delegationId: string){
@@ -111,7 +129,6 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   goToOrganisation() {
     const vm = this;
-    vm.delegationService.updateSelectedDelegation(vm.selectedDelegation.uuid);
     this.router.navigate(['/user', vm.selectedOrganisation.uuid]);
   }
 
@@ -181,7 +198,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   getDelegations() {
     let vm = this;
-    vm.delegationService.getDelegations()
+    vm.delegationService.getDelegations(vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegations = result;
@@ -205,12 +222,6 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
     this.graphContainer.nativeElement.style.height = (window.innerHeight * 7) + 'px';
-  }
-
-  setOrganisation() {
-    const vm = this;
-    vm.delegationService.updateSelectedDelegation(vm.selectedDelegation.uuid);
-    vm.delegationService.updateSelectedOrganisation(vm.selectedOrganisation.uuid);
   }
 
   saveRelationship() {

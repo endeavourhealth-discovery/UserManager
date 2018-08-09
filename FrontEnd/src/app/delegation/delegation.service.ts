@@ -10,14 +10,9 @@ import {DelegatedOrganisation} from "./models/DelegatedOrganisation";
 @Injectable()
 export class DelegationService {
 
-  private selectedOrganisation: string = '995fbac1-3d99-3318-a65b-2581f3301d0e';
-  private selectedDelegation: string = '416fae5a-88e1-11e8-91d9-80fa5b320513';
+  private selectedOrganisation: string;
 
   constructor(private http: Http) { }
-
-  updateSelectedDelegation(delegationId: string) {
-    this.selectedDelegation = delegationId;
-  }
 
   updateSelectedOrganisation(organisationId: string) {
     this.selectedOrganisation = organisationId;
@@ -25,10 +20,6 @@ export class DelegationService {
 
   getSelectedOrganisation() {
     return this.selectedOrganisation;
-  }
-
-  getSelectedDelegation() {
-    return this.selectedDelegation;
   }
 
   getDelegationRelationships(delegationId: string): Observable<DelegationRelationship[]> {
@@ -47,17 +38,20 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
-  getDelegations(): Observable<Delegation[]> {
+  getDelegations(organisationId: string = null): Observable<Delegation[]> {
     const vm = this;
-    return vm.http.get('api/delegation/get')
+    console.log(organisationId);
+    let params = new URLSearchParams();
+    if (organisationId != null) {
+      params.set('organisationId', organisationId);
+    }
+    return vm.http.get('api/delegation/get', {search: params})
       .map((response) => response.json());
   }
 
-  getDelegatedOrganisations(organisationId: string, delegationId: string): Observable<DelegatedOrganisation[]> {
+  getDelegatedOrganisations(organisationId: string): Observable<DelegatedOrganisation[]> {
     const vm = this;
     let params = new URLSearchParams();
-    params.set('userId', 'tete');
-    params.set('delegationId', delegationId);
     params.set('organisationId', organisationId);
     return vm.http.get('api/delegation/getDelegatedOrganisations', {search: params})
       .map((response) => response.json());

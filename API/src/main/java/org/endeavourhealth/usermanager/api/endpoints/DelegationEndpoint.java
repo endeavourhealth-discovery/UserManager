@@ -46,13 +46,14 @@ public class DelegationEndpoint extends AbstractEndpoint {
     @Timed(absolute = true, name="UserManager.DelegationEndpoint.getDelegations")
     @Path("/get")
     @ApiOperation(value = "Returns a list of delegations")
-    public Response getDelegations(@Context SecurityContext sc) throws Exception {
+    public Response getDelegations(@Context SecurityContext sc,
+                                   @ApiParam(value = "organisation Id") @QueryParam("organisationId") String organisationId) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
-        return getAllDelegations();
+        return getDelegations(organisationId);
 
     }
 
@@ -63,16 +64,14 @@ public class DelegationEndpoint extends AbstractEndpoint {
     @Path("/getDelegatedOrganisations")
     @ApiOperation(value = "Returns a list of roles available at delegated organisations")
     public Response getDelegatedOrganisations(@Context SecurityContext sc,
-                                                      @ApiParam(value = "User Id") @QueryParam("userId") String userId,
-                                                      @ApiParam(value = "delegation Id") @QueryParam("delegationId") String delegationId,
-                                                      @ApiParam(value = "organisation Id") @QueryParam("organisationId") String organisationId) throws Exception {
+                                              @ApiParam(value = "organisation Id") @QueryParam("organisationId") String organisationId) throws Exception {
 
         // TODO remove the hack and select organisation based on userId
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
-        return getDelegatedOrganisations(userId, delegationId, organisationId);
+        return getDelegatedOrganisations(organisationId);
 
     }
 
@@ -94,8 +93,8 @@ public class DelegationEndpoint extends AbstractEndpoint {
         return saveDelegation(delegation);
     }
 
-    private Response getAllDelegations() throws Exception {
-        List<DelegationEntity> delegations = DelegationEntity.getAllDelegations();
+    private Response getDelegations(String organisationId) throws Exception {
+        List<DelegationEntity> delegations = DelegationEntity.getDelegations(organisationId);
 
         clearLogbackMarkers();
         return Response
@@ -104,9 +103,9 @@ public class DelegationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getDelegatedOrganisations(String userId, String delegationId, String organisationId) throws Exception {
+    private Response getDelegatedOrganisations(String organisationId) throws Exception {
 
-        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(delegationId, organisationId);
+        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(organisationId);
 
         List<String> orgs = relationships.stream()
                 .map(DelegationRelationshipEntity::getChildUuid)

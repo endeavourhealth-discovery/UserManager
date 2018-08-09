@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {LoggerService, MessageBoxDialog, SecurityService} from "eds-angular4";
+import {Component, OnInit} from '@angular/core';
+import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} from "eds-angular4";
 import {UserService} from "../user.service";
-import {NgbModal, NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
 import {UserRole} from "../models/UserRole";
 import {RoleType} from "../../configuration/models/RoleType";
@@ -29,9 +29,10 @@ export class UserComponent implements OnInit {
   sortField = 'username';
   searched : boolean;
   loadingRolesCompleted: boolean;
-  hackOrganisation: string;
-  hackDelegation: string;
   paramOrganisation: string;
+
+  public activeRole: UserRole;
+  superUser = false;
 
   constructor(public log:LoggerService,
               private userService: UserService,
@@ -41,19 +42,33 @@ export class UserComponent implements OnInit {
               private $modal : NgbModal,
               private router: Router,
               private route: ActivatedRoute,
-              private state: ModuleStateService) {
+              private state: ModuleStateService,
+              private userManagerService: UserManagerService) {
 
   }
 
   ngOnInit() {
     this.getRoleTypes();
-    this.getSelectedOrgs();
+
+    this.userManagerService.activeRole.subscribe(active => {
+      this.activeRole = active;
+      this.roleChanged();
+    });
+
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.paramOrganisation = params['organisationId'];
-        this.getDelegatedOrganisations();
       });
-    this.getDelegatedOrganisations();
+  }
+
+  roleChanged() {
+    const vm = this;
+    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+      vm.superUser = true;
+    } else {
+      vm.superUser = false;
+    }
+    vm.getDelegatedOrganisations();
   }
 
   //gets all users in the selected organisation
@@ -77,27 +92,22 @@ export class UserComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.roleTypes = result;
-          console.log(result);
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
       );
   }
 
-  getDelegatedOrganisations(){
+  getDelegatedOrganisations() {
     let vm = this;
-    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.delegationService.getSelectedOrganisation();
-    vm.delegationService.getDelegatedOrganisations(orgSelector, vm.delegationService.getSelectedDelegation())
+    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
+    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
-          console.log(result);
-          console.log(vm.paramOrganisation);
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
             return r.uuid === orgSelector;
           });
           vm.getUsers();
-
-          console.log(result);
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
       );
@@ -217,12 +227,4 @@ export class UserComponent implements OnInit {
     }
     return userRoles;
   }
-
-  getSelectedOrgs() {
-    const vm = this;
-    vm.hackDelegation = vm.delegationService.getSelectedDelegation();
-    vm.hackOrganisation = vm.delegationService.getSelectedOrganisation();
-  }
-
-
 }
