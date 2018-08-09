@@ -102,7 +102,9 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Path("/users/save")
     @RequiresAdmin
     @ApiOperation(value = "Saves a user or updates an existing user")
-    public Response saveUser(@Context SecurityContext sc, JsonUser user, @QueryParam("editMode") String editMode) throws Exception {
+    public Response saveUser(@Context SecurityContext sc, JsonUser user,
+                             @ApiParam(value = "edit mode") @QueryParam("editMode") String editMode,
+                             @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
         boolean editModeb = editMode.equalsIgnoreCase("1") ? true:false;
@@ -190,7 +192,7 @@ public final class UserEndpoint extends AbstractEndpoint {
                 if (role.getId() == null) {
                     role.setId(UUID.randomUUID().toString());
                 }
-                UserRoleEntity.saveUserRole(role);
+                UserRoleEntity.saveUserRole(role, userRoleId);
             }
         }
 

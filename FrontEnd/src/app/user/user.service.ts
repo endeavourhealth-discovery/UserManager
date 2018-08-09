@@ -18,10 +18,11 @@ export class UserService {
       .map((response) => response.json());
   }
 
-  saveUser(editedUser: User, editMode: Boolean): Observable<User> {
+  saveUser(editedUser: User, editMode: Boolean, userRoleId: string): Observable<User> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('editMode', editMode == true ? "1":"0");
+    params.set('userRoleId', userRoleId);
     return vm.http.post('api/user/users/save', editedUser, {search: params})
       .map((response) => response.json());
   }

@@ -133,7 +133,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   save(close: boolean) {
     if (this.validateFormInput() == true) {
-      this.userService.saveUser(this.resultData, this.editMode)
+      this.userService.saveUser(this.resultData, this.editMode, this.activeRole.id)
         .subscribe(
           (response) => {
             // if (this.editMode) {
@@ -299,14 +299,19 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   checkAvailableRoles() {
     const vm = this;
-    if (!vm.selectedOrg.createSuperUsers) {
-      var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
-      vm.roleTypes.splice(superUser, 1);
-    }
 
-    if (!vm.selectedOrg.createUsers) {
-      var user = vm.roleTypes.findIndex(e => e.id === '00972413-8f50-11e8-839e-80fa5b320513');
-      vm.roleTypes.splice(user, 1);
+    if (vm.selectedOrg.uuid != vm.activeRole.organisationId) {
+      // my organisation is based on my roles but delegated organisations are based on the permissions given to us
+
+      if (!vm.selectedOrg.createSuperUsers) {
+        var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
+        vm.roleTypes.splice(superUser, 1);
+      }
+
+      if (!vm.selectedOrg.createUsers) {
+        var user = vm.roleTypes.findIndex(e => e.id === '00972413-8f50-11e8-839e-80fa5b320513');
+        vm.roleTypes.splice(user, 1);
+      }
     }
 
     if (vm.resultData.userRoles) {

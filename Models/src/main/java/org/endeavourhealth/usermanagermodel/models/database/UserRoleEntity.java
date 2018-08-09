@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "user_role", schema = "user_manager", catalog = "")
+@Table(name = "user_role", schema = "user_manager")
 public class UserRoleEntity {
     private String id;
     private String userId;
@@ -201,7 +201,7 @@ public class UserRoleEntity {
         return ret;
     }
 
-    public static void saveUserRole(JsonUserRole userRole) throws Exception {
+    public static void saveUserRole(JsonUserRole userRole, String userRoleId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         entityManager.getTransaction().begin();
@@ -212,14 +212,15 @@ public class UserRoleEntity {
         userRoleEntity.setRoleTypeId(userRole.getRoleTypeId());
         userRoleEntity.setUserAccessProfileId(userRole.getUserAccessProfileId());
         userRoleEntity.setIsDeleted(userRole.isDeleted() ? (byte)1 : (byte)0);
+        userRoleEntity.setIsDefault(userRole.isDefault() ? (byte)1 : (byte)0);
         entityManager.merge(userRoleEntity);
         entityManager.getTransaction().commit();
 
         if (userRole.isDeleted()) {
-            AuditEntity.addToAuditTrail("2c8f7553-8f50-11e8-973f-0656437f9c14",
+            AuditEntity.addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.ROLE, userRole.getId(), null, null);
         } else {
-            AuditEntity.addToAuditTrail("2c8f7553-8f50-11e8-973f-0656437f9c14",
+            AuditEntity.addToAuditTrail(userRoleId,
                     AuditAction.ADD, ItemType.ROLE, null, userRole.getId(), null);
         }
 
