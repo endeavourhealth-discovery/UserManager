@@ -10,14 +10,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
-import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
+import org.endeavourhealth.usermanagermodel.models.caching.RoleTypeCache;
+import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
+import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonAuditSummary;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -161,12 +164,7 @@ public class AuditEndpoint extends AbstractEndpoint {
                     .map(JsonAuditSummary::getOrganisation)
                     .collect(Collectors.toList());
 
-            List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
-
-            Map<String, String> userNameMap = new HashMap<>();
-
-
-            KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
+            List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(orgs);
 
             for (JsonAuditSummary sum : auditDetails) {
                 OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
@@ -174,20 +172,11 @@ public class AuditEndpoint extends AbstractEndpoint {
                     sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
                 }
 
-                if (userNameMap.containsKey(sum.getUserName())) {
-                    sum.setUserName(userNameMap.get(sum.getUserName()));
+                UserRepresentation user = UserCache.getUserDetails(sum.getUserName());
+                if (user != null) {
+                    sum.setUserName(user.getUsername());
                 } else {
-                    try {
-                        UserRepresentation user = keycloakClient.realms().users().getUser(sum.getUserName());
-
-                        if (user != null) {
-                            userNameMap.put(user.getId(), user.getUsername());
-                            sum.setUserName(user.getUsername());
-                        }
-                    } catch (Exception e) {
-                        userNameMap.put(sum.getUserName(), "Unknown User");
-                        sum.setUserName("Unknown User");
-                    }
+                    sum.setUserName("Unknown user");
                 }
             }
         }
@@ -220,14 +209,22 @@ public class AuditEndpoint extends AbstractEndpoint {
             role = UserRoleEntity.getUserRole(audit.getItemBefore());
         }
 
+        UserRepresentation user = UserCache.getUserDetails(role.getUserId());
+        OrganisationEntity org = OrganisationCache.getOrganisationDetails(role.getOrganisationId());
+        RoleTypeEntity roleEntity = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
         // https://stackoverflow.com/questions/40967921/create-json-object-using-jackson-in-java
         ((ObjectNode)auditJson).put("title", title);
         ((ObjectNode)auditJson).put("id", role.getId());
-        ((ObjectNode)auditJson).put("userId", role.getUserId());
-        ((ObjectNode)auditJson).put("roleType", role.getRoleTypeId());
-        ((ObjectNode)auditJson).put("organisation", role.getOrganisationId());
+        if (user != null) {
+            ((ObjectNode)auditJson).put("userId", user.getUsername());
+        } else {
+            ((ObjectNode)auditJson).put("userId","Unknown user");
+        }
+        ((ObjectNode)auditJson).put("roleType", roleEntity.getName());
+        ((ObjectNode)auditJson).put("organisation", org.getName() + " (" + org.getOdsCode() + ")");
         ((ObjectNode)auditJson).put("accessProfile", role.getUserAccessProfileId());
 
         return Response

@@ -6,6 +6,7 @@ import org.endeavourhealth.usermanagermodel.models.json.JsonRoleType;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
@@ -96,6 +97,16 @@ public class RoleTypeEntity {
 
         TypedQuery<RoleTypeEntity> query = entityManager.createQuery(cq);
         List<RoleTypeEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static RoleTypeEntity getRoleType(String roleId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        RoleTypeEntity ret = entityManager.find(RoleTypeEntity.class, roleId);
 
         entityManager.close();
 

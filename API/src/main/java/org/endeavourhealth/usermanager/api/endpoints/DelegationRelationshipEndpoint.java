@@ -15,6 +15,7 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
@@ -157,7 +158,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                     .forEachOrdered(organisations::add);
 
             if (organisations.size() > 0) {
-                List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(organisations);
+                List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(organisations);
 
                 return replaceUuidsWithOrganisation(delegations, orgList);
             }

@@ -14,6 +14,7 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
 import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonDelegatedOrganisation;
@@ -113,7 +114,7 @@ public class DelegationEndpoint extends AbstractEndpoint {
 
         orgs.add(organisationId);
 
-        List<OrganisationEntity> orgList = OrganisationEntity.getOrganisationsFromList(orgs);
+        List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(orgs);
 
         List<JsonDelegatedOrganisation> delegated = new ArrayList<>();
 
