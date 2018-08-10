@@ -10,9 +10,29 @@
           <h2>{{auditDetails?.title}}</h2>
         </div>
       </div>
-      <div *ngFor="let display of displayItems" class="row">
-        <div class="form-group col-md-12">
-          <b>{{display.label}} : </b>{{auditDetails[display.property]}}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="scroll-box-500">
+            <table class="table table-striped table-sm">
+              <thead>
+              <tr>
+                <th>Property</th>
+                <th *ngIf="auditDetails.before">Before</th>
+                <th *ngIf="auditDetails.after">After</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let display of displayItems" class="hover-box show-child-on-hover">
+
+                <td><b>{{display.label}}</b></td>
+                <td *ngIf="auditDetails.before">{{auditDetails.before[display.property]}}</td>
+                <td *ngIf="auditDetails.after">{{auditDetails.after[display.property]}}</td>
+
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </form>

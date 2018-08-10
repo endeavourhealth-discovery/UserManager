@@ -147,17 +147,24 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   saveRoles(close: boolean) {
     const vm = this;
-    this.userService.saveUserRoles(vm.editedRoles, vm.activeRole.id)
-      .subscribe(
-        (response) => {
+    if (vm.editedRoles.length > 0) {
+      this.userService.saveUserRoles(vm.editedRoles, vm.activeRole.id)
+        .subscribe(
+          (response) => {
 
-          let msg = (!this.editMode) ? 'Add user' : 'Edit user';
-          this.log.success('User saved', response, msg);
-          if (close)
-            this.close(false);
-        },
-        (error) => this.log.error('Error saving user', error, 'Error')
-      );
+            let msg = (!this.editMode) ? 'Add user' : 'Edit user';
+            this.log.success('User saved', response, msg);
+            if (close)
+              this.close(false);
+          },
+          (error) => this.log.error('Error saving user', error, 'Error')
+        );
+    } else {
+      let msg = (!this.editMode) ? 'Add user' : 'Edit user';
+      this.log.success('User saved', msg);
+      if (close)
+        this.close(false);
+    }
 
   }
 

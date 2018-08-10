@@ -193,22 +193,56 @@ public class AuditEndpoint extends AbstractEndpoint {
 
         switch (auditEntity.getItemType()) {
             case 0: return getJsonForRoleAudit(auditEntity); // Role
+            case 1: return getJsonForUserAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
     }
 
+    private Response getJsonForUserAudit(AuditEntity audit) throws Exception {
+
+        return Response
+                .ok()
+                .entity(audit.getAuditJson())
+                .build();
+    }
+
     private Response getJsonForRoleAudit(AuditEntity audit) throws Exception {
         String title = "";
         UserRoleEntity role;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
-            title = "Role Added";
+            title = "Role added";
             role = UserRoleEntity.getUserRole(audit.getItemAfter());
+            afterJson = generateRoleAuditJson(role);
         } else {
-            title = "Role Deleted";
+            title = "Role deleted";
             role = UserRoleEntity.getUserRole(audit.getItemBefore());
+            beforeJson = generateRoleAuditJson(role);
         }
 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateRoleAuditJson(UserRoleEntity role) throws Exception {
         UserRepresentation user = UserCache.getUserDetails(role.getUserId());
         OrganisationEntity org = OrganisationCache.getOrganisationDetails(role.getOrganisationId());
         RoleTypeEntity roleEntity = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
@@ -216,7 +250,6 @@ public class AuditEndpoint extends AbstractEndpoint {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
         // https://stackoverflow.com/questions/40967921/create-json-object-using-jackson-in-java
-        ((ObjectNode)auditJson).put("title", title);
         ((ObjectNode)auditJson).put("id", role.getId());
         if (user != null) {
             ((ObjectNode)auditJson).put("userId", user.getUsername());
@@ -227,11 +260,7 @@ public class AuditEndpoint extends AbstractEndpoint {
         ((ObjectNode)auditJson).put("organisation", org.getName() + " (" + org.getOdsCode() + ")");
         ((ObjectNode)auditJson).put("accessProfile", role.getUserAccessProfileId());
 
-        return Response
-                .ok()
-                .entity(auditJson)
-                .build();
+        return auditJson;
     }
-
 
 }

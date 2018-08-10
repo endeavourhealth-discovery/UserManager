@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {LoggerService} from "eds-angular4";
 import {AuditService} from "../audit.service";
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import {AuditSummary} from "../models/AuditSummary";
 import {DisplayDetails} from "../models/DisplayDetails";
 
@@ -26,7 +26,18 @@ export class AuditDetailComponent implements OnInit {
   }
 
   public static open(modalService: NgbModal, audit: AuditSummary) {
-    const modalRef = modalService.open(AuditDetailComponent, { backdrop: 'static' });
+    var options: NgbModalOptions = {
+      backdrop: 'static'
+    };
+
+    if (audit.auditAction === 'Edit') {
+      options = {
+        backdrop: 'static',
+        size: 'lg'
+      }
+    }
+
+    const modalRef = modalService.open(AuditDetailComponent, options);
     modalRef.componentInstance.audit = audit;
 
     return modalRef;
@@ -62,6 +73,7 @@ export class AuditDetailComponent implements OnInit {
     const dd = new DisplayDetails();
     switch (itemType) {
       case "Role": return dd.getRoleDisplayDetails();
+      case "User": return dd.getUserDisplayDetails();
     }
   }
 

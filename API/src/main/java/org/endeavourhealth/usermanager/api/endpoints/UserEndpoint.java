@@ -2,6 +2,9 @@ package org.endeavourhealth.usermanager.api.endpoints;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.astefanutti.metrics.aspectj.Metrics;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,11 +15,11 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.coreui.json.JsonEndUser;
-import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
+import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -109,6 +112,8 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         boolean editModeb = editMode.equalsIgnoreCase("1") ? true:false;
 
+        UserRepresentation oldUser = null;
+
         //If editing and the user IDs don't match, then throw an error if user does not have correct role
         //This prevents security vunerability when an authenticated user could execute API outside of app without role
         if (editModeb){
@@ -157,6 +162,8 @@ public final class UserEndpoint extends AbstractEndpoint {
         } else {
             //This is the existing userId, so we set for update
             userId = user.getUuid().toString();
+
+            oldUser = UserCache.getUserDetails(userId);
             userRep.setId(userId);
             try {
                 userRep = keycloakClient.realms().users().putUser(userRep);
@@ -183,6 +190,14 @@ public final class UserEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "User", "User", user);
 
+        // populate the username for audit purposes
+        userRep.setUsername(user.getUsername());
+        if (editModeb) {
+            auditUserEdit(userRep, oldUser, userRoleId);
+        } else {
+            auditUserAdd(userRep, userRoleId);
+        }
+
         clearLogbackMarkers();
 
         return Response
@@ -195,7 +210,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
-    @Path("/users/saveRoles")
+    @Path("/users/")
     @RequiresAdmin
     @ApiOperation(value = "Saves a user or updates an existing user")
     public Response saveRoles(@Context SecurityContext sc, List<JsonUserRole> userRoles,
@@ -227,20 +242,114 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Path("/users/delete")
     @RequiresAdmin
     @ApiOperation(value = "Deletes a user")
-    public Response deleteUser(@Context SecurityContext sc, @QueryParam("userId") String userId) throws Exception {
+    public Response deleteUser(@Context SecurityContext sc,
+                               @ApiParam(value = "User id to be deleted") @QueryParam("userId") String userId,
+                               @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "User", "User Id", userId);
 
+        UserRepresentation deletedUser = UserCache.getUserDetails(userId);
         //Create the keycloak admin client and delete the user
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
         boolean success = keycloakClient.realms().users().deleteUser(userId);
+
+        auditUserDelete(deletedUser, userRoleId);
 
         return Response
                 .ok()
                 .entity(success)
                 .build();
+    }
+
+    private void auditUserEdit(UserRepresentation newUser, UserRepresentation oldUser, String userRoleId) throws Exception {
+
+        JsonNode beforeJson = generateUserAuditJson(oldUser);
+        JsonNode afterJson = generateUserAuditJson(newUser);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", "User edited");
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+        AuditEntity.addToAuditTrail(userRoleId,
+                org.endeavourhealth.usermanagermodel.models.enums.AuditAction.EDIT,
+                ItemType.USER, null, null, prettyPrintJsonString(rootNode));
+
+    }
+
+    private void auditUserAdd(UserRepresentation newUser, String userRoleId) throws Exception {
+
+        JsonNode afterJson = generateUserAuditJson(newUser);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", "User added");
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        AuditEntity.addToAuditTrail(userRoleId,
+                org.endeavourhealth.usermanagermodel.models.enums.AuditAction.ADD,
+                ItemType.USER, null, null, prettyPrintJsonString(rootNode));
+
+    }
+
+    private void auditUserDelete(UserRepresentation deletedUser, String userRoleId) throws Exception {
+
+        JsonNode afterJson = generateUserAuditJson(deletedUser);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", "User deleted");
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        AuditEntity.addToAuditTrail(userRoleId,
+                org.endeavourhealth.usermanagermodel.models.enums.AuditAction.DELETE,
+                ItemType.USER, null, null, prettyPrintJsonString(rootNode));
+
+    }
+
+    private JsonNode generateUserAuditJson(UserRepresentation user) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+
+        ((ObjectNode)auditJson).put("id", user.getId());
+        ((ObjectNode)auditJson).put("username", user.getUsername());
+        ((ObjectNode)auditJson).put("forename", user.getFirstName());
+        ((ObjectNode)auditJson).put("surname", user.getLastName());
+        ((ObjectNode)auditJson).put("email", user.getEmail());
+        Map<String, List<String>> userAttributes =  user.getAttributes();
+        ((ObjectNode)auditJson).put("photo", userAttributes.get("Photo").get(0));
+        ((ObjectNode)auditJson).put("mobile", userAttributes.get("Mobile").get(0));
+
+        return auditJson;
+    }
+
+    public String prettyPrintJsonString(JsonNode jsonNode) throws Exception {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Object json = mapper.readValue(jsonNode.toString(), Object.class);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (Exception e) {
+            throw new Exception("Converting Json to String failed : " + e.getMessage() );
+        }
     }
 
 }
