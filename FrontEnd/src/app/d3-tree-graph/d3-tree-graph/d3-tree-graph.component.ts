@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import * as d3H from 'd3-hierarchy';
-import {DelegationData} from "../../delegation/models/DelegationData";
+import {DelegationData} from "../../d3-delegation/models/DelegationData";
 
 @Component({
   selector: 'd3-tree-graph',

@@ -36,10 +36,11 @@ export class UserService {
       .map((response) => response.text());
   }
 
-  deleteUser(userId: string) {
+  deleteUser(userId: string, userRoleId: string) {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userId', userId);
+    params.set('userRoleId', userRoleId);
     return vm.http.delete('api/user/users/delete', {search: params})
       .map((response) => response.text());;
   }

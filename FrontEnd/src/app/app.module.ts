@@ -13,7 +13,6 @@ import {ToastModule} from "ng2-toastr";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserModule} from "./user/user.module";
 import {EntityViewComponentsModule} from "eds-angular4/dist/entityViewer";
-import {DelegationModule} from "./delegation/delegation.module";
 import {OrganisationModule} from "./organisation/organisation.module";
 import {D3DelegationModule} from "./d3-delegation/d3-delegation.module";
 import {ConfigurationModule} from "./configuration/configuration.module";
@@ -30,7 +29,6 @@ import {AuditModule} from "./audit/audit.module";
     NgbModule.forRoot(),
     ToastModule.forRoot(),
     UserModule,
-    DelegationModule,
     OrganisationModule,
     EntityViewComponentsModule,
     D3DelegationModule,

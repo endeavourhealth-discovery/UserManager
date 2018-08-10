@@ -3,7 +3,7 @@ import {Organisation} from "../../organisation/models/Organisation";
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {OrganisationService} from "../../organisation/organisation.service";
 import {LoggerService} from "eds-angular4";
-import {Delegation} from "../../delegation/models/Delegation";
+import {Delegation} from "../models/Delegation";
 
 @Component({
   selector: 'app-delegation-creator',

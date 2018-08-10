@@ -6,8 +6,8 @@ import {User} from "../models/User";
 import {UserRole} from "../models/UserRole";
 import {RoleType} from "../../configuration/models/RoleType";
 import {ConfigurationService} from "../../configuration/configuration.service";
-import {DelegationService} from "../../delegation/delegation.service";
-import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
+import {DelegationService} from "../../d3-delegation/delegation.service";
+import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
 
@@ -177,7 +177,7 @@ export class UserComponent implements OnInit {
         .result.then(
         (result) => {
           let userId = user.uuid;
-          vm.userService.deleteUser(userId)
+          vm.userService.deleteUser(userId, vm.activeRole.id)
             .subscribe(
               (result) => {
                 result;

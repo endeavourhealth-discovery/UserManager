@@ -4,11 +4,11 @@ import {User} from "../models/User";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {UserService} from "../user.service";
-import {DelegationService} from "../../delegation/delegation.service";
+import {DelegationService} from "../../d3-delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {RoleType} from "../../configuration/models/RoleType";
 import {UserRole} from "../models/UserRole";
-import {DelegatedOrganisation} from "../../delegation/models/DelegatedOrganisation";
+import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
 

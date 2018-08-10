@@ -3,7 +3,6 @@ import {AbstractMenuProvider } from 'eds-angular4';
 import {MenuOption} from 'eds-angular4/dist/layout/models/MenuOption';
 import {Routes} from '@angular/router';
 import {UserComponent} from "./user/user/user.component";
-import {DelegationComponent} from "./delegation/delegation/delegation.component";
 import {D3DelegationComponent} from "./d3-delegation/d3-delegation/d3-delegation.component";
 import {ConfigurationComponent} from "./configuration/configuration/configuration.component";
 import {AuditComponent} from "./audit/audit/audit.component";
@@ -17,7 +16,6 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'user', component: UserComponent},
       { path: 'user/:organisationId', component: UserComponent},
       { path: 'userEdit', component: UserEditorComponent},
-      { path: 'delegation', component: DelegationComponent},
       { path: 'd3delegation', component: D3DelegationComponent},
       { path: 'configuration', component: ConfigurationComponent},
       { path: 'audit', component: AuditComponent}

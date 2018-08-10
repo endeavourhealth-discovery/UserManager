@@ -1,13 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DelegationData} from "../../delegation/models/DelegationData";
-import {DelegationService} from "../../delegation/delegation.service";
+import {DelegationData} from "../models/DelegationData";
+import {DelegationService} from "../delegation.service";
 import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Delegation} from "../../delegation/models/Delegation";
+import {Delegation} from "../models/Delegation";
 import {D3TreeGraphComponent} from "../../d3-tree-graph/d3-tree-graph/d3-tree-graph.component";
 import {Organisation} from "../../organisation/models/Organisation";
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
-import {DelegationRelationship} from "../../delegation/models/DelegationRelationship";
+import {DelegationRelationship} from "../models/DelegationRelationship";
 import {DelegationCreatorComponent} from "../delegation-creator/delegation-creator.component";
 import {Router} from "@angular/router";
 import {UserRole} from "../../user/models/UserRole";

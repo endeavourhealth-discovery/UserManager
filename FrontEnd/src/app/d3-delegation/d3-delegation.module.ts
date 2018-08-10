@@ -6,7 +6,7 @@ import {ControlsModule} from "eds-angular4/dist/controls";
 import {FormsModule} from "@angular/forms";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {D3TreeGraphModule} from "../d3-tree-graph/d3-tree-graph.module";
-import {DelegationService} from "../delegation/delegation.service";
+import {DelegationService} from "./delegation.service";
 import {D3DelegationComponent} from "./d3-delegation/d3-delegation.component";
 import { DelegationCreatorComponent } from './delegation-creator/delegation-creator.component';
 
