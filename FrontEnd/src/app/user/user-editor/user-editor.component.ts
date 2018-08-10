@@ -133,11 +133,12 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   }
 
   save(close: boolean) {
-    if (this.validateFormInput() == true) {
-      this.userService.saveUser(this.resultData, this.editMode, this.activeRole.id)
+    const vm = this;
+    if (vm.validateFormInput() == true) {
+      vm.userService.saveUser(vm.resultData, vm.editMode, vm.activeRole.id)
         .subscribe(
           (response) => {
-
+            vm.resultData = response;
             this.saveRoles(close);
           },
           (error) => this.log.error('Error saving user', error, 'Error')
@@ -147,6 +148,11 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   saveRoles(close: boolean) {
     const vm = this;
+    if (!vm.editMode) {
+      for (let role of vm.editedRoles) {
+        role.userId = vm.resultData.uuid;
+      }
+    }
     if (vm.editedRoles.length > 0) {
       this.userService.saveUserRoles(vm.editedRoles, vm.activeRole.id)
         .subscribe(

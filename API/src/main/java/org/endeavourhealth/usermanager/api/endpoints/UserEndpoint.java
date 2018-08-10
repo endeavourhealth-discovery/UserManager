@@ -158,6 +158,9 @@ public final class UserEndpoint extends AbstractEndpoint {
             }
             //This is the newly created userId
             userId = userRep.getId();
+            if (userId == null) {
+                userId = UUID.randomUUID().toString();
+            }
             user.setUuid(UUID.fromString(userId));  //new uuid to return to client
         } else {
             //This is the existing userId, so we set for update
@@ -209,10 +212,10 @@ public final class UserEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
-    @Path("/users/")
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveRoles")
+    @Path("/users/saveRoles")
     @RequiresAdmin
-    @ApiOperation(value = "Saves a user or updates an existing user")
+    @ApiOperation(value = "Saves roles associated with a user")
     public Response saveRoles(@Context SecurityContext sc, List<JsonUserRole> userRoles,
                              @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
