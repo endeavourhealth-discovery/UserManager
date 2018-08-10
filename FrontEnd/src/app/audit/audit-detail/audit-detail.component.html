@@ -3,18 +3,20 @@
   <button type="button" class="close" (click)="cancel()" aria-hidden="true">&times;</button>
 </div>
 <div class="modal-body">
-  <form auditDetail="form" class="container-fluid">
-    <div class="row">
-      <div class="form-group col-md-12">
-        <h2>{{auditDetails?.title}}</h2>
+  <div *ngIf="auditDetails">
+    <form auditDetail="form" class="container-fluid">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <h2>{{auditDetails?.title}}</h2>
+        </div>
       </div>
-    </div>
-    <div *ngFor="let display of displayItems" class="row">
-      <div class="form-group col-md-12">
-        <b>{{display.label}} : </b>{{auditDetails[display.property]}}
+      <div *ngFor="let display of displayItems" class="row">
+        <div class="form-group col-md-12">
+          <b>{{display.label}} : </b>{{auditDetails[display.property]}}
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-info" (click)="cancel()">Close</button>

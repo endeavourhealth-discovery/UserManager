@@ -183,8 +183,27 @@ public final class UserEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "User", "User", user);
 
-        if (user.getUserRoles().size() > 0) {
-            for (JsonUserRole role : user.getUserRoles()) {
+        clearLogbackMarkers();
+
+        return Response
+                .ok()
+                .entity(user)
+                .build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
+    @Path("/users/saveRoles")
+    @RequiresAdmin
+    @ApiOperation(value = "Saves a user or updates an existing user")
+    public Response saveRoles(@Context SecurityContext sc, List<JsonUserRole> userRoles,
+                             @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        if (userRoles.size() > 0) {
+            for (JsonUserRole role : userRoles) {
                 if (role.getId() == null && role.isDeleted()) {
                     continue;  // role was never saved in the DB so no need to add it
                 }
@@ -196,11 +215,8 @@ public final class UserEndpoint extends AbstractEndpoint {
             }
         }
 
-        clearLogbackMarkers();
-
         return Response
                 .ok()
-                .entity(user)
                 .build();
     }
 

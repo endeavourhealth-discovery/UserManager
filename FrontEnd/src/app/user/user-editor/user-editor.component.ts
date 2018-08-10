@@ -30,6 +30,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   searched: boolean = true;
   userList: User[];
   loadingRolesCompleted: boolean = true;
+  editedRoles: UserRole[] = [];
 
   public activeRole: UserRole;
   superUser = false;
@@ -136,19 +137,28 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       this.userService.saveUser(this.resultData, this.editMode, this.activeRole.id)
         .subscribe(
           (response) => {
-            // if (this.editMode) {
-            //   this.selectedUser = response;
-            //   vm.updateUser(response);
-            // }
 
-            let msg = (!this.editMode) ? 'Add user' : 'Edit user';
-            this.log.success('User saved', response, msg);
-            if (close)
-              this.close(false);
+            this.saveRoles(close);
           },
           (error) => this.log.error('Error saving user', error, 'Error')
         );
     }
+  }
+
+  saveRoles(close: boolean) {
+    const vm = this;
+    this.userService.saveUserRoles(vm.editedRoles, vm.activeRole.id)
+      .subscribe(
+        (response) => {
+
+          let msg = (!this.editMode) ? 'Add user' : 'Edit user';
+          this.log.success('User saved', response, msg);
+          if (close)
+            this.close(false);
+        },
+        (error) => this.log.error('Error saving user', error, 'Error')
+      );
+
   }
 
   close(withConfirm: boolean) {
@@ -240,6 +250,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     }
     */
     currentRole.deleted = true;
+    this.editedRoles.push(currentRole);
 
     if (currentRole.organisationId == this.selectedOrg.uuid) {
       var newRoleType: RoleType = new RoleType();
@@ -260,6 +271,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     newRole.roleTypeId = availableRole.id;
     newRole.organisationId = vm.selectedOrg.uuid;
     newRole.deleted = false;
+    newRole.default = false;
     newRole.userAccessProfileId = '3242343432323';
     let i = vm.roleTypes.indexOf(availableRole);
     if (i !== -1) {
@@ -267,6 +279,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     }
 
     vm.resultData.userRoles.push(newRole);
+    vm.editedRoles.push(newRole);
   }
 
   getDelegatedOrganisations() {

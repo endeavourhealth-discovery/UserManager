@@ -27,6 +27,15 @@ export class UserService {
       .map((response) => response.json());
   }
 
+  saveUserRoles(userRoles: UserRole[], userRoleId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    console.log(userRoles);
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/user/users/saveRoles', userRoles, {search: params})
+      .map((response) => response.text());
+  }
+
   deleteUser(userId: string) {
     const vm = this;
     let params = new URLSearchParams();
