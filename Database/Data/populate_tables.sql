@@ -8,4 +8,6 @@ values
 insert into user_manager.item_type (id, item_type)
 values 
 (0, 'Role'),
-(1, 'User');
+(1, 'User'),
+(3, 'Delegation'),
+(4, 'Delegation relationship');

@@ -17,6 +17,7 @@ public class DelegationEntity {
     private String uuid;
     private String name;
     private String rootOrganisation;
+    private Byte isDeleted;
 
     @Id
     @Column(name = "uuid")
@@ -62,6 +63,16 @@ public class DelegationEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, rootOrganisation);
+    }
+
+    @Basic
+    @Column(name = "is_deleted")
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public static List<DelegationEntity> getDelegations(String organisationId) throws Exception {
@@ -137,10 +148,21 @@ public class DelegationEntity {
         delegationEntity.setUuid(delegation.getUuid());
         delegationEntity.setName(delegation.getName());
         delegationEntity.setRootOrganisation(delegation.getRootOrganisation());
+        delegationEntity.setIsDeleted(delegation.isDeleted() ? (byte)1 : (byte)0);
         entityManager.getTransaction().begin();
         entityManager.merge(delegationEntity);
         entityManager.getTransaction().commit();
 
         entityManager.close();
+    }
+
+    public static DelegationEntity getDelegation(String delegationId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        DelegationEntity ret = entityManager.find(DelegationEntity.class, delegationId);
+
+        entityManager.close();
+
+        return ret;
     }
 }

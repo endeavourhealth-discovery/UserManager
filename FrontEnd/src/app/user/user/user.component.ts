@@ -180,7 +180,7 @@ export class UserComponent implements OnInit {
           vm.userService.deleteUser(userId, vm.activeRole.id)
             .subscribe(
               (result) => {
-                result;
+                vm.getUsers();
                 vm.selectedUser = null;
                 vm.log.info("User deleted");
               },

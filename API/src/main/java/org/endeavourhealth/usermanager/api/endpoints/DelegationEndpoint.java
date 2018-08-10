@@ -85,7 +85,8 @@ public class DelegationEndpoint extends AbstractEndpoint {
             "of a delegation.")
     @RequiresAdmin
     public Response saveDelegation(@Context SecurityContext sc,
-                                     @ApiParam(value = "Json representation of delegation to save or update") JsonDelegation delegation) throws Exception {
+                                   @ApiParam(value = "Json representation of delegation to save or update") JsonDelegation delegation,
+                                   @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",

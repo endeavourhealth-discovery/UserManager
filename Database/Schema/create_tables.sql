@@ -128,6 +128,7 @@ CREATE TABLE delegation
 	uuid varchar(36) NOT NULL comment 'the UUID of the delegation',
 	name varchar(100) NOT NULL comment 'The name of the delegation',
     root_organisation varchar(36) NULL comment 'the root organisation for the delegation',
+    is_deleted boolean,
 
 	CONSTRAINT user_manager_delegation_pk primary key (uuid)
 ) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
@@ -137,6 +138,7 @@ ON delegation (name);
 
 CREATE TABLE delegation_relationship
 (
+	uuid varchar(36) NOT NULL comment 'unique identifier for the relationship',
 	delegation varchar(36) NOT NULL comment 'the delegation that this relationship belongs to',
 	parent_uuid varchar(36) NOT NULL comment 'the UUID of the parent in the delegation',
 	parent_type smallint NOT NULL comment 'The type of the parent eg. organisation, region',
@@ -145,11 +147,15 @@ CREATE TABLE delegation_relationship
 	include_all_children boolean NOT NULL comment 'Whether to include all children and future children',
 	create_super_users boolean NOT NULL comment 'Whether the parent can create super users for the children',
 	create_users boolean NOT NULL comment 'Whether the parent can create users for the children',
+    is_deleted boolean,
+    
 
-	CONSTRAINT user_manager_delegation_relationship_pk primary key  (delegation, child_uuid, child_type, parent_uuid, parent_type)
+	CONSTRAINT user_manager_delegation_relationship_pk primary key  (uuid)
 ) comment 'holds the relationships between organisations to display the delegation of creating users and super users';
 
-drop table audit;
+CREATE INDEX ix_delegation_relationship_delegation_child_parent
+ON delegation_relationship (delegation, child_uuid, child_type, parent_uuid, parent_type);
+
 CREATE TABLE audit
 (
     id varchar(36),

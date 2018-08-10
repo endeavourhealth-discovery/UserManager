@@ -226,7 +226,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   saveRelationship() {
     const vm = this;
-    vm.delegationService.saveRelationship(vm.selectedRelationship)
+    vm.delegationService.saveRelationship(vm.selectedRelationship, vm.activeRole.id)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success')
@@ -247,7 +247,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     childRel.createUsers = false;
     childRel.createSuperUsers = false;
 
-    vm.delegationService.saveRelationship(childRel)
+    vm.delegationService.saveRelationship(childRel, vm.activeRole.id)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success')

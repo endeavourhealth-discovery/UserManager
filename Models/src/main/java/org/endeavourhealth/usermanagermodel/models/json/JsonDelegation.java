@@ -4,6 +4,7 @@ public class JsonDelegation {
     private String uuid = null;
     private String name = null;
     private String rootOrganisation = null;
+    private boolean isDeleted;
 
     public String getUuid() {
         return uuid;
@@ -27,5 +28,13 @@ public class JsonDelegation {
 
     public void setRootOrganisation(String rootOrganisation) {
         this.rootOrganisation = rootOrganisation;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

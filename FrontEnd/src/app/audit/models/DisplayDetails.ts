@@ -19,4 +19,15 @@ export class DisplayDetails {
       { label: 'Mobile', property: 'mobile'}
     ]
   }
+
+  getDelegationRelationshipDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Delegation', property: 'delegation'},
+      { label: 'Parent organisation', property: 'parentOrg'},
+      { label: 'Child organisation', property: 'childOrg'},
+      { label: 'Create super users', property: 'createSuperUsers'},
+      { label: 'Create users', property: 'createUsers'}
+    ]
+  }
 }

@@ -7,4 +7,5 @@ export class DelegationRelationship {
   createSuperUsers: boolean;
   createUsers: boolean;
   delegation: string;
+  isDeleted: boolean;
 }

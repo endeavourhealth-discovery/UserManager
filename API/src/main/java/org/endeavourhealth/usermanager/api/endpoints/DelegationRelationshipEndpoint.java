@@ -86,13 +86,14 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
             "of a delegation relationship.")
     @RequiresAdmin
     public Response saveRelationship(@Context SecurityContext sc,
-                                 @ApiParam(value = "Json representation of delegation relationship to save or update") JsonDelegationRelationship delegationRelationship) throws Exception {
+                                     @ApiParam(value = "Json representation of delegation relationship to save or update") JsonDelegationRelationship delegationRelationship,
+                                     @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",
                 "roleType", delegationRelationship);
 
-        return saveDelegationRelationship(delegationRelationship);
+        return saveDelegationRelationship(delegationRelationship, userRoleId);
     }
 
     private Response getDelegationRelationships(String delegationId) throws Exception {
@@ -219,9 +220,9 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
         }
     }
 
-    private Response saveDelegationRelationship(JsonDelegationRelationship delegationRelationship) throws Exception {
+    private Response saveDelegationRelationship(JsonDelegationRelationship delegationRelationship, String userRoleId) throws Exception {
 
-        DelegationRelationshipEntity.saveDelegationRelationship(delegationRelationship);
+        DelegationRelationshipEntity.saveDelegationRelationship(delegationRelationship, userRoleId);
 
         clearLogbackMarkers();
         return Response

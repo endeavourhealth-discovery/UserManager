@@ -16,12 +16,11 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.DelegationCache;
 import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.usermanagermodel.models.caching.RoleTypeCache;
 import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
-import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
-import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
+import org.endeavourhealth.usermanagermodel.models.database.*;
 import org.endeavourhealth.usermanagermodel.models.json.JsonAuditSummary;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -194,6 +193,7 @@ public class AuditEndpoint extends AbstractEndpoint {
         switch (auditEntity.getItemType()) {
             case 0: return getJsonForRoleAudit(auditEntity); // Role
             case 1: return getJsonForUserAudit(auditEntity);
+            case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
@@ -259,6 +259,67 @@ public class AuditEndpoint extends AbstractEndpoint {
         ((ObjectNode)auditJson).put("roleType", roleEntity.getName());
         ((ObjectNode)auditJson).put("organisation", org.getName() + " (" + org.getOdsCode() + ")");
         ((ObjectNode)auditJson).put("accessProfile", role.getUserAccessProfileId());
+
+        return auditJson;
+    }
+
+    private Response getJsonForDelegationRelationshipAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        DelegationRelationshipEntity relationshipBefore;
+        DelegationRelationshipEntity relationshipAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Delegation relationship added";
+            relationshipAfter = DelegationRelationshipEntity.getDelegationRelationship(audit.getItemAfter());
+            afterJson = generateDelegationRelationshipAuditJson(relationshipAfter);
+        } else if (audit.getAuditType() == 1) {
+            title = "Delegation relationship edited";
+            relationshipBefore = DelegationRelationshipEntity.getDelegationRelationship(audit.getItemBefore());
+            beforeJson = generateDelegationRelationshipAuditJson(relationshipBefore);
+            relationshipAfter = DelegationRelationshipEntity.getDelegationRelationship(audit.getItemAfter());
+            afterJson = generateDelegationRelationshipAuditJson(relationshipAfter);
+        } else {
+            title = "Delegation relationship deleted";
+            relationshipBefore = DelegationRelationshipEntity.getDelegationRelationship(audit.getItemBefore());
+            beforeJson = generateDelegationRelationshipAuditJson(relationshipBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateDelegationRelationshipAuditJson(DelegationRelationshipEntity relationship) throws Exception {
+        OrganisationEntity childOrg = OrganisationCache.getOrganisationDetails(relationship.getChildUuid());
+        OrganisationEntity parentOrg = OrganisationCache.getOrganisationDetails(relationship.getParentUuid());
+        DelegationEntity delegation = DelegationCache.getDelegationDetails(relationship.getDelegation());
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        // https://stackoverflow.com/questions/40967921/create-json-object-using-jackson-in-java
+        ((ObjectNode)auditJson).put("id", relationship.getUuid());
+        ((ObjectNode)auditJson).put("delegation", delegation.getName());
+        ((ObjectNode)auditJson).put("parentOrg", parentOrg.getName() + " (" + parentOrg.getOdsCode() + ")");
+        ((ObjectNode)auditJson).put("childOrg", childOrg.getName() + " (" + childOrg.getOdsCode() + ")");
+        ((ObjectNode)auditJson).put("includeAllChildren", relationship.getIncludeAllChildren() == 1);
+        ((ObjectNode)auditJson).put("createSuperUsers", relationship.getCreateSuperUsers() == 1);
+        ((ObjectNode)auditJson).put("createUsers", relationship.getCreateUsers() == 1);
 
         return auditJson;
     }

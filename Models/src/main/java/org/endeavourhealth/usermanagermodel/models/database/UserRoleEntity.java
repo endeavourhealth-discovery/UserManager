@@ -216,6 +216,8 @@ public class UserRoleEntity {
         entityManager.merge(userRoleEntity);
         entityManager.getTransaction().commit();
 
+        entityManager.close();
+
         if (userRole.isDeleted()) {
             AuditEntity.addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.ROLE, userRole.getId(), null, null);
@@ -223,7 +225,5 @@ public class UserRoleEntity {
             AuditEntity.addToAuditTrail(userRoleId,
                     AuditAction.ADD, ItemType.ROLE, null, userRole.getId(), null);
         }
-
-        entityManager.close();
     }
 }

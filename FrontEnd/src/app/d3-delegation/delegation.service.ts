@@ -57,9 +57,12 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
-  saveRelationship(relationship: DelegationRelationship): Observable<any> {
+  saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
     const vm = this;
-    return vm.http.post('api/delegationRelationship/saveRelationship', relationship)
+    console.log(relationship);
+    let params = new URLSearchParams();
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/delegationRelationship/saveRelationship', relationship, {search: params})
       .map((response) => response.text());
   }
 

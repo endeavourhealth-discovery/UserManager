@@ -2,7 +2,9 @@ package org.endeavourhealth.usermanagermodel.models.enums;
 
 public enum ItemType {
     ROLE((short)0),
-    USER((short)1);
+    USER((short)1),
+    DELEGATION((short)2),
+    DELEGATION_RELATIONSHIP((short)3);
 
     private Short itemType;
 
