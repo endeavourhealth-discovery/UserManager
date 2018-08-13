@@ -129,17 +129,23 @@ public class AuditEntity {
 
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
+        List<String> filterOrgs = new ArrayList<>();
+
         // get a list of all delegated orgs that this user has access to view audit trail for
-        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(userOrganisationId);
+        // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
+        if (userOrganisationId != null) {
+            List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(userOrganisationId);
 
-        List<String> filterOrgs = relationships.stream()
-                .map(DelegationRelationshipEntity::getChildUuid)
-                .collect(Collectors.toList());
+            filterOrgs = relationships.stream()
+                    .map(DelegationRelationshipEntity::getChildUuid)
+                    .collect(Collectors.toList());
 
-        filterOrgs.add(userOrganisationId);
+            filterOrgs.add(userOrganisationId);
+        }
 
         try {
             String orderby = " order by a.timestamp desc ";
+            String whereAnd = " where ";
             String sql = "select distinct" +
                     " a.id," +
                     " rt.name," +
@@ -153,11 +159,16 @@ public class AuditEntity {
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
                     " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
-                    " join ItemTypeEntity it on it.id = a.itemType " +
-                    " where ur.organisationId in :filterOrgIds";
+                    " join ItemTypeEntity it on it.id = a.itemType ";
+
+            if (userOrganisationId != null) {
+                sql += " where ur.organisationId in :filterOrgIds";
+                whereAnd = " and ";
+            }
 
             if (organisationId != null) {
-                sql += "and ur.organisationId = :orgId";
+                sql +=  whereAnd + " ur.organisationId = :orgId";
+                whereAnd = " and ";
 
                 if (userId != null) {
                     sql += " and ur.userId = :userId";
@@ -165,17 +176,22 @@ public class AuditEntity {
             }
 
             if (startDate != null) {
-                sql += " and a.timestamp >= :fromDate";
+                sql += whereAnd +  " a.timestamp >= :fromDate";
+                whereAnd = " and ";
             }
 
             if (endDate != null) {
-                sql += " and a.timestamp <= :toDate";
+                sql += whereAnd + " a.timestamp <= :toDate";
+                whereAnd = " and ";
             }
 
             sql += orderby;
 
             Query query = entityManager.createQuery(sql);
-            query.setParameter("filterOrgIds", filterOrgs);
+
+            if (userOrganisationId != null) {
+                query.setParameter("filterOrgIds", filterOrgs);
+            }
 
             if (organisationId != null) {
                 query.setParameter("orgId", organisationId);

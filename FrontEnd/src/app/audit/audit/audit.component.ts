@@ -31,6 +31,7 @@ export class AuditComponent implements OnInit {
 
   public activeRole: UserRole;
   superUser = false;
+  godMode = false;
 
   settings = {
     bigBanner: true,
@@ -59,8 +60,12 @@ export class AuditComponent implements OnInit {
     const vm = this;
     if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
+    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = true;
     } else {
       vm.superUser = false;
+      vm.godMode = false;
     }
 
     vm.getAudit();
@@ -85,7 +90,7 @@ export class AuditComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
-    vm.auditService.getAuditSummary(vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
+    vm.auditService.getAuditSummary(vm.godMode ? null : vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;

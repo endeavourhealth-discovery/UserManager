@@ -40,7 +40,6 @@ export class DelegationService {
 
   getDelegations(organisationId: string = null): Observable<Delegation[]> {
     const vm = this;
-    console.log(organisationId);
     let params = new URLSearchParams();
     if (organisationId != null) {
       params.set('organisationId', organisationId);
