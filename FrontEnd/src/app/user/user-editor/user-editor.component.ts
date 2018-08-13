@@ -75,7 +75,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       vm.activeRole = active;
       vm.roleChanged();
     });
-    vm.getDelegatedOrganisations();
+
     if (!vm.editMode) {
       vm.dialogTitle = "Add user";
 
@@ -114,11 +114,19 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     const vm = this;
     if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
+      vm.godMode = false;
     } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = true;
     } else {
       vm.superUser = false;
+      vm.godMode = false;
+    }
+
+    if (vm.godMode) {
+      vm.getGodModeOrganisations();
+    } else {
+      vm.getDelegatedOrganisations();
     }
   }
 
@@ -315,6 +323,22 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       );
   }
 
+  getGodModeOrganisations() {
+    let vm = this;
+    vm.delegationService.getGodModeOrganisations()
+      .subscribe(
+        (result) => {
+          vm.delegatedOrganisations = result;
+          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+            return r.uuid === vm.delegationService.getSelectedOrganisation();
+          });
+          vm.getRoleTypes();
+
+        },
+        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
+      );
+  }
+
   getRoleTypes(){
     let vm = this;
     vm.configurationService.getRoleTypes()
@@ -330,9 +354,10 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   checkAvailableRoles() {
     const vm = this;
 
-    if (vm.selectedOrg.uuid != vm.activeRole.organisationId) {
+    if (vm.selectedOrg.uuid != vm.activeRole.organisationId && vm.activeRole.roleTypeId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       // my organisation is based on my roles but delegated organisations are based on the permissions given to us
 
+      console.log('deleting super');
       if (!vm.selectedOrg.createSuperUsers) {
         var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
         vm.roleTypes.splice(superUser, 1);
@@ -342,6 +367,11 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         var user = vm.roleTypes.findIndex(e => e.id === '00972413-8f50-11e8-839e-80fa5b320513');
         vm.roleTypes.splice(user, 1);
       }
+    }
+
+    if (vm.selectedOrg.uuid != '439e9f06-d54c-3eb6-b800-010863bf1399' || vm.activeRole.roleTypeId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      var god = vm.roleTypes.findIndex(e => e.id === '3517dd59-9ecb-11e8-9245-80fa5b320513');
+      vm.roleTypes.splice(god, 1);
     }
 
     if (vm.resultData.userRoles) {
