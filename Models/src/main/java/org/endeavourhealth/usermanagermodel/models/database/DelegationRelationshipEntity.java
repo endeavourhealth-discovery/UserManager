@@ -10,7 +10,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -152,7 +151,7 @@ public class DelegationRelationshipEntity {
         return Objects.hash(uuid, delegation, parentUuid, parentType, childUuid, childType, includeAllChildren, createSuperUsers, createUsers, isDeleted);
     }
 
-    public static List<DelegationRelationshipEntity> getDelegations(String delegationId) throws Exception {
+    public static List<DelegationRelationshipEntity> getAllRelationshipsForDelegation(String delegationId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -291,7 +290,23 @@ public class DelegationRelationshipEntity {
         }
 
         entityManager.close();
+    }
 
+    public static List<DelegationRelationshipEntity> getAllRelationshipsOrganisationsForGodMode() throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
 
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+
+        cq.where(predicate);
+        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+        List<DelegationRelationshipEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
     }
 }

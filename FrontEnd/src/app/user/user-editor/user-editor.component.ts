@@ -31,6 +31,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   userList: User[];
   loadingRolesCompleted: boolean = true;
   editedRoles: UserRole[] = [];
+  godMode = false;
 
   public activeRole: UserRole;
   superUser = false;
@@ -113,6 +114,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     const vm = this;
     if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
+    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = true;
     } else {
       vm.superUser = false;
     }

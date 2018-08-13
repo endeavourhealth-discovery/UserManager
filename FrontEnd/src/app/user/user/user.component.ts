@@ -33,6 +33,7 @@ export class UserComponent implements OnInit {
 
   public activeRole: UserRole;
   superUser = false;
+  godMode = false;
 
   constructor(public log:LoggerService,
               private userService: UserService,
@@ -65,10 +66,18 @@ export class UserComponent implements OnInit {
     const vm = this;
     if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
+    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = true;
     } else {
       vm.superUser = false;
     }
-    vm.getDelegatedOrganisations();
+
+    if (vm.godMode) {
+      vm.getGodModeOrganisations();
+    } else {
+      vm.getDelegatedOrganisations();
+    }
   }
 
   //gets all users in the selected organisation
@@ -107,6 +116,25 @@ export class UserComponent implements OnInit {
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
             return r.uuid === orgSelector;
           });
+          vm.getUsers();
+        },
+        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
+      );
+  }
+
+  getGodModeOrganisations() {
+    let vm = this;
+    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
+    vm.delegationService.getGodModeOrganisations()
+      .subscribe(
+        (result) => {
+          vm.delegatedOrganisations = result;
+          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+            return r.uuid === orgSelector;
+          });
+          if (vm.selectedOrg == null) {
+            vm.selectedOrg = vm.delegatedOrganisations[0];
+          }
           vm.getUsers();
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')

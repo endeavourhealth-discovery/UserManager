@@ -56,6 +56,12 @@ export class DelegationService {
       .map((response) => response.json());
   }
 
+  getGodModeOrganisations(): Observable<DelegatedOrganisation[]> {
+    const vm = this;
+    return vm.http.get('api/delegationRelationship/getGodModeOrganisations')
+      .map((response) => response.json());
+  }
+
   saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
     const vm = this;
     let params = new URLSearchParams();

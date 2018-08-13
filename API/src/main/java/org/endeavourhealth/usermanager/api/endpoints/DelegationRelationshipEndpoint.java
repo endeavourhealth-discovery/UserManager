@@ -73,7 +73,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 "Organisation(s)",
                 "delegationId", delegationId);
 
-        return getDelegations(delegationId);
+        return getDelegationTreeData(delegationId);
 
     }
 
@@ -96,9 +96,25 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
         return saveDelegationRelationship(delegationRelationship, userRoleId);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.DelegationRelationshipEndpoint.getGodModeOrganisations")
+    @Path("/getGodModeOrganisations")
+    @ApiOperation(value = "Returns a list of all organisation that are part of a delegation")
+    public Response getGodModeOrganisations(@Context SecurityContext sc) throws Exception {
+
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Organisation(s)");
+
+        return getGodModeOrganisations();
+
+    }
+
     private Response getDelegationRelationships(String delegationId) throws Exception {
 
-        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getDelegations(delegationId);
+        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getAllRelationshipsForDelegation(delegationId);
 
         clearLogbackMarkers();
         return Response
@@ -107,9 +123,9 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getDelegations(String delegationId) throws Exception {
+    private Response getDelegationTreeData(String delegationId) throws Exception {
 
-        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getDelegations(delegationId);
+        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getAllRelationshipsForDelegation(delegationId);
 
         JsonOrganisationDelegation organisationDelegation = null;
 
@@ -129,7 +145,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
     private JsonOrganisationDelegation processEmptyDelegation(String delegationId) throws Exception {
         String rootOrganisation = DelegationEntity.getRootOrganisation(delegationId);
 
-        OrganisationEntity organisation = OrganisationEntity.getOrganisation(rootOrganisation);
+        OrganisationEntity organisation = OrganisationCache.getOrganisationDetails(rootOrganisation);
 
         if (organisation != null) {
             JsonOrganisationDelegation orgDelegation = new JsonOrganisationDelegation();
@@ -229,5 +245,36 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 .ok()
                 .build();
     }
+
+    private Response getGodModeOrganisations() throws Exception {
+        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getAllRelationshipsOrganisationsForGodMode();
+
+        List<OrganisationEntity> orgList = new ArrayList<>();
+        if (relationships.size() > 0) {
+            List<String> organisations = relationships.stream()
+                    .map(DelegationRelationshipEntity::getParentUuid)
+                    .collect(Collectors.toList());
+
+            relationships.stream()
+                    .map(DelegationRelationshipEntity::getChildUuid)
+                    .forEachOrdered(organisations::add);
+
+            organisations.add("439e9f06-d54c-3eb6-b800-010863bf1399");
+
+            organisations = organisations.stream().distinct().collect(Collectors.toList());
+
+            if (organisations.size() > 0) {
+                orgList = OrganisationCache.getOrganisationDetails(organisations);
+                orgList.sort(Comparator.comparing(OrganisationEntity::getName));
+            }
+        }
+
+        return Response
+                .ok()
+                .entity(orgList)
+                .build();
+
+    }
+
 
 }

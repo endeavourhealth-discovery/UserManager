@@ -70,7 +70,11 @@ export class AuditComponent implements OnInit {
 
     vm.getAudit();
     vm.getAuditCount();
-    vm.getDelegatedOrganisations();
+    if (vm.godMode) {
+      vm.getGodModeOrganisations();
+    } else {
+      vm.getDelegatedOrganisations();
+    }
   }
 
   getAudit(){
@@ -146,6 +150,17 @@ export class AuditComponent implements OnInit {
   getDelegatedOrganisations(){
     let vm = this;
     vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
+      .subscribe(
+        (result) => {
+          vm.delegatedOrganisations = result;
+        },
+        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
+      );
+  }
+
+  getGodModeOrganisations(){
+    let vm = this;
+    vm.delegationService.getGodModeOrganisations()
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;

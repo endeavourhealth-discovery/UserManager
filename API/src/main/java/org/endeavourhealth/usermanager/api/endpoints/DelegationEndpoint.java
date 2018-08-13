@@ -46,7 +46,7 @@ public class DelegationEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.DelegationEndpoint.getDelegations")
+    @Timed(absolute = true, name="UserManager.DelegationEndpoint.getAllRelationshipsForDelegation")
     @Path("/get")
     @ApiOperation(value = "Returns a list of delegations")
     public Response getDelegations(@Context SecurityContext sc,
