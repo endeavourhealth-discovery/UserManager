@@ -1,5 +1,7 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
+import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
+
 public class JsonDelegationRelationship {
     private String uuid = null;
     private String parentUuid = null;
@@ -11,6 +13,23 @@ public class JsonDelegationRelationship {
     private boolean createUsers;
     private String delegation = null;
     private boolean isDeleted;
+
+    public JsonDelegationRelationship() {
+    }
+
+    public JsonDelegationRelationship(DelegationRelationshipEntity relationshipEntity) {
+        this.uuid = relationshipEntity.getUuid();
+        this.parentUuid = relationshipEntity.getParentUuid();
+        this.parentType = relationshipEntity.getParentType();
+        this.childUuid = relationshipEntity.getChildUuid();
+        this.childType = relationshipEntity.getChildType();
+        this.includeAllChildren = relationshipEntity.getIncludeAllChildren() == 1;
+        this.createSuperUsers = relationshipEntity.getCreateSuperUsers() == 1;
+        this.createUsers = relationshipEntity.getCreateUsers() == 1;
+        this.delegation = relationshipEntity.getDelegation();
+        this.isDeleted = relationshipEntity.getIsDeleted() == 1;
+
+    }
 
     public String getUuid() {
         return uuid;

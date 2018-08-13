@@ -30,4 +30,12 @@ export class DisplayDetails {
       { label: 'Create users', property: 'createUsers'}
     ]
   }
+
+  getDelegationDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Name', property: 'name'},
+      { label: 'Root organisation', property: 'rootOrganisation'}
+    ]
+  }
 }

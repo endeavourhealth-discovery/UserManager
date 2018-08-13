@@ -193,6 +193,7 @@ public class AuditEndpoint extends AbstractEndpoint {
         switch (auditEntity.getItemType()) {
             case 0: return getJsonForRoleAudit(auditEntity); // Role
             case 1: return getJsonForUserAudit(auditEntity);
+            case 2: return getJsonForDelegationAudit(auditEntity);
             case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
@@ -283,6 +284,55 @@ public class AuditEndpoint extends AbstractEndpoint {
             title = "Delegation relationship deleted";
             relationshipBefore = DelegationRelationshipEntity.getDelegationRelationship(audit.getItemBefore());
             beforeJson = generateDelegationRelationshipAuditJson(relationshipBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateDelegationAuditJson(DelegationEntity delegation) throws Exception {
+        OrganisationEntity rootOrg = OrganisationCache.getOrganisationDetails(delegation.getRootOrganisation());
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        // https://stackoverflow.com/questions/40967921/create-json-object-using-jackson-in-java
+        ((ObjectNode)auditJson).put("id", delegation.getUuid());
+        ((ObjectNode)auditJson).put("name", delegation.getName());
+        ((ObjectNode)auditJson).put("rootOrganisation", rootOrg.getName() + " (" + rootOrg.getOdsCode() + ")");
+
+        return auditJson;
+    }
+
+    private Response getJsonForDelegationAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        DelegationEntity delegationBefore;
+        DelegationEntity delegationAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Delegation added";
+            delegationAfter = DelegationEntity.getDelegation(audit.getItemAfter());
+            afterJson = generateDelegationAuditJson(delegationAfter);
+        } else {
+            title = "Delegation deleted";
+            delegationBefore = DelegationEntity.getDelegation(audit.getItemBefore());
+            beforeJson = generateDelegationAuditJson(delegationBefore);
         }
 
         ObjectMapper mapper = new ObjectMapper();

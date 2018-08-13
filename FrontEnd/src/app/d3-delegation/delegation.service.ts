@@ -58,16 +58,26 @@ export class DelegationService {
 
   saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
     const vm = this;
-    console.log(relationship);
     let params = new URLSearchParams();
     params.set('userRoleId', userRoleId);
     return vm.http.post('api/delegationRelationship/saveRelationship', relationship, {search: params})
       .map((response) => response.text());
   }
 
-  saveDelegation(delegation: Delegation): Observable<any> {
+  saveDelegation(delegation: Delegation, userRoleId: string): Observable<any> {
     const vm = this;
-    return vm.http.post('api/delegation/saveDelegation', delegation)
+    let params = new URLSearchParams();
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/delegation/saveDelegation', delegation, {search: params})
+      .map((response) => response.text());
+  }
+
+  deleteDelegation(delegation: string, userRoleId: string): Observable<any> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('delegationId', delegation);
+    params.set('userRoleId', userRoleId);
+    return vm.http.delete('api/delegation/deleteDelegation', {search: params})
       .map((response) => response.text());
   }
 

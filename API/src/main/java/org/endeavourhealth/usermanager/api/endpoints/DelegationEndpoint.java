@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
+
 @Path("/delegation")
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the delegation.")
@@ -92,7 +94,29 @@ public class DelegationEndpoint extends AbstractEndpoint {
                 "Role Type",
                 "roleType", delegation);
 
-        return saveDelegation(delegation);
+        return saveDelegation(delegation, userRoleId);
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.DelegationEndpoint.deleteDelegation")
+    @Path("/deleteDelegation")
+    @RequiresAdmin
+    @ApiOperation(value = "Deletes a user")
+    public Response deleteDelegation(@Context SecurityContext sc,
+                               @ApiParam(value = "Delegation id to be deleted") @QueryParam("delegationId") String delegationId,
+                               @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
+                "User", "DelegationId", delegationId, "userRoleId", userRoleId);
+
+        deleteDelegation(delegationId, userRoleId);
+
+        return Response
+                .ok()
+                .build();
     }
 
     private Response getDelegations(String organisationId) throws Exception {
@@ -148,17 +172,23 @@ public class DelegationEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response saveDelegation(JsonDelegation delegation) throws Exception {
+    private Response saveDelegation(JsonDelegation delegation, String userRoleId) throws Exception {
 
         if (delegation.getUuid() == null) {
             delegation.setUuid(UUID.randomUUID().toString());
         }
 
-        DelegationEntity.saveDelegation(delegation);
+        DelegationEntity.saveDelegation(delegation, userRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
                 .build();
+    }
+
+    private void deleteDelegation(String delegationId, String userRoleId) throws Exception {
+
+        DelegationEntity.deleteDelegation(delegationId, userRoleId);
+
     }
 }

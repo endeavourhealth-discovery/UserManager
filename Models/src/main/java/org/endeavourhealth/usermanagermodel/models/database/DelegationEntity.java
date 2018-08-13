@@ -1,6 +1,8 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
+import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonDelegation;
 
 import javax.persistence.*;
@@ -89,6 +91,10 @@ public class DelegationEntity {
         CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
         Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
 
+        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+
+        cq.where(predicate);
+
         TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
         List<DelegationEntity> ret = query.getResultList();
 
@@ -107,7 +113,8 @@ public class DelegationEntity {
                     " d" +
                     " from DelegationEntity d" +
                     " join DelegationRelationshipEntity rel on rel.delegation = d.uuid" +
-                    " where rel.childUuid = :org or rel.parentUuid = :org";
+                    " where rel.childUuid = :org or rel.parentUuid = :org" +
+                    " and d.isDeleted = 0";
 
 
             Query query = entityManager.createQuery(sql, DelegationEntity.class)
@@ -141,7 +148,7 @@ public class DelegationEntity {
         return ret.get(0).rootOrganisation;
     }
 
-    public static void saveDelegation(JsonDelegation delegation) throws Exception {
+    public static void saveDelegation(JsonDelegation delegation, String userRoleId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         DelegationEntity delegationEntity = new DelegationEntity();
@@ -154,6 +161,14 @@ public class DelegationEntity {
         entityManager.getTransaction().commit();
 
         entityManager.close();
+
+        if (delegation.isDeleted()) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.DELETE, ItemType.DELEGATION, delegation.getUuid(), null, null);
+        } else {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.ADD, ItemType.DELEGATION, null, delegation.getUuid(), null);
+        }
     }
 
     public static DelegationEntity getDelegation(String delegationId) throws Exception {
@@ -164,5 +179,17 @@ public class DelegationEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static void deleteDelegation(String delegationId, String userRoleId) throws Exception {
+
+        DelegationRelationshipEntity.deleteAllDelegationRelationships(delegationId, userRoleId);
+
+        JsonDelegation delegation = new JsonDelegation(getDelegation(delegationId));
+
+        delegation.setDeleted(true);
+
+        saveDelegation(delegation, userRoleId);
+
     }
 }

@@ -1,10 +1,22 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
+import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
+
 public class JsonDelegation {
     private String uuid = null;
     private String name = null;
     private String rootOrganisation = null;
     private boolean isDeleted;
+
+    public JsonDelegation() {
+    }
+
+    public JsonDelegation(DelegationEntity delegationEntity) {
+        this.uuid = delegationEntity.getUuid();
+        this.name = delegationEntity.getName();
+        this.rootOrganisation = delegationEntity.getRootOrganisation();
+        this.isDeleted = delegationEntity.getIsDeleted() == 1;
+    }
 
     public String getUuid() {
         return uuid;

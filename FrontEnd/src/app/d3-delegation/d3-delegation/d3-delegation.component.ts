@@ -33,6 +33,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   public activeRole: UserRole;
   superUser = false;
+  godMode = false;
 
 
   @ViewChild("d3tree") d3Tree: D3TreeGraphComponent;
@@ -57,6 +58,9 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     const vm = this;
     if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
+    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = true;
     } else {
       vm.superUser = false;
     }
@@ -143,7 +147,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   saveDelegation() {
     const vm = this;
-    vm.delegationService.saveDelegation(vm.newDelegation)
+    vm.delegationService.saveDelegation(vm.newDelegation, vm.activeRole.id)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success');
@@ -198,7 +202,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   getDelegations() {
     let vm = this;
-    vm.delegationService.getDelegations(vm.activeRole.organisationId)
+    vm.delegationService.getDelegations(vm.godMode ? null :  vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegations = result;
@@ -254,6 +258,25 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
         },
         (error) => vm.log.error('Error saving details', error, 'Error')
       );
+  }
+
+  deleteDelegation() {
+    const vm = this;
+    MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete delegation: " + vm.selectedDelegation.name + "?", "Yes", "No")
+      .result.then(
+      (result) => {
+        vm.delegationService.deleteDelegation(vm.selectedDelegation.uuid, vm.activeRole.id)
+          .subscribe(
+            (result) => {
+              vm.log.success('Successfully deleted delegation', null, 'Success');
+              vm.getDelegations();
+            },
+            (error) => vm.log.error('Error deleting delegation', error, 'Error')
+          );
+      },
+      (reason) => {
+      }
+    )
   }
 
 }

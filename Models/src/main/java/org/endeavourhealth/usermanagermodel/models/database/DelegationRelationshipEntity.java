@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -266,5 +267,31 @@ public class DelegationRelationshipEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static void deleteAllDelegationRelationships(String delegationId, String userRoleId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("delegation"), delegationId);
+
+        cq.where(predicate);
+        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+        List<DelegationRelationshipEntity> results = query.getResultList();
+
+
+        for (DelegationRelationshipEntity result : results) {
+            JsonDelegationRelationship rel = new JsonDelegationRelationship(result);
+            rel.setIsDeleted(true);
+            saveDelegationRelationship(rel, userRoleId);
+
+        }
+
+        entityManager.close();
+
+
     }
 }

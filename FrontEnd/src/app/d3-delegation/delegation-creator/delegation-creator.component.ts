@@ -29,7 +29,7 @@ export class DelegationCreatorComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.resultData = new Delegation();
-    vm.resultData.uuid = '';
+    vm.resultData.uuid = null;
     vm.resultData.name = '';
   }
 
