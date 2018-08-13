@@ -130,7 +130,8 @@ public class UserRoleEntity {
                     " ur.isDefault" +
                     " from UserRoleEntity ur" +
                     " join RoleTypeEntity rt on ur.roleTypeId = rt.id" +
-                    " where ur.userId = :userId";
+                    " where ur.userId = :userId" +
+                    " and ur.isDeleted = 0";
 
             Query query = entityManager.createQuery(sql);
 
