@@ -51,15 +51,15 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.getRoleTypes();
 
-    this.userManagerService.activeRole.subscribe(active => {
-      this.activeRole = active;
-      this.roleChanged();
-    });
-
     this.paramSubscriber = this.route.params.subscribe(
       params => {
         this.paramOrganisation = params['organisationId'];
       });
+
+    this.userManagerService.activeRole.subscribe(active => {
+      this.activeRole = active;
+      this.roleChanged();
+    });
   }
 
   roleChanged() {
@@ -124,6 +124,7 @@ export class UserComponent implements OnInit {
 
   getGodModeOrganisations() {
     let vm = this;
+    console.log('param', vm.paramOrganisation);
     let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
     vm.delegationService.getGodModeOrganisations()
       .subscribe(
