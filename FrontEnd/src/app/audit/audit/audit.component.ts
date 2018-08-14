@@ -36,7 +36,7 @@ export class AuditComponent implements OnInit {
   settings = {
     bigBanner: true,
     timePicker: true,
-    format: 'dd-MM-yyyy hh:mm:ss',
+    format: 'dd-MMM-yyyy hh:mm:00',
     defaultOpen: false
   };
 
@@ -50,8 +50,8 @@ export class AuditComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     this.userManagerService.activeRole.subscribe(active => {
-      this.activeRole = active;
-      this.roleChanged();
+        this.activeRole = active;
+        this.roleChanged();
     });
 
   }
