@@ -357,7 +357,6 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     if (vm.selectedOrg.uuid != vm.activeRole.organisationId && vm.activeRole.roleTypeId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       // my organisation is based on my roles but delegated organisations are based on the permissions given to us
 
-      console.log('deleting super');
       if (!vm.selectedOrg.createSuperUsers) {
         var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
         vm.roleTypes.splice(superUser, 1);

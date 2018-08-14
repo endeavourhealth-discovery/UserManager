@@ -338,9 +338,16 @@ public final class UserEndpoint extends AbstractEndpoint {
         ((ObjectNode)auditJson).put("forename", user.getFirstName());
         ((ObjectNode)auditJson).put("surname", user.getLastName());
         ((ObjectNode)auditJson).put("email", user.getEmail());
-        Map<String, List<String>> userAttributes =  user.getAttributes();
-        ((ObjectNode)auditJson).put("photo", userAttributes.get("Photo").get(0));
-        ((ObjectNode)auditJson).put("mobile", userAttributes.get("Mobile").get(0));
+
+        if (user.getAttributes() != null) {
+            Map<String, List<String>> userAttributes = user.getAttributes();
+            if (userAttributes.get("Photo") != null) {
+                ((ObjectNode) auditJson).put("photo", userAttributes.get("Photo").get(0));
+            }
+            if (userAttributes.get("Mobile") != null) {
+                ((ObjectNode) auditJson).put("mobile", userAttributes.get("Mobile").get(0));
+            }
+        }
 
         return auditJson;
     }
