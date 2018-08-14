@@ -14,6 +14,7 @@
     <dependencies>
         <!-- Common for Exceptions -->
         <dependency>
+
             <groupId>org.endeavourhealth.common</groupId>
             <artifactId>api</artifactId>
             <version>${eds-api.version}</version>
