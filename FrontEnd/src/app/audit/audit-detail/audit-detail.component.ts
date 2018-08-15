@@ -76,6 +76,7 @@ export class AuditDetailComponent implements OnInit {
       case "User": return dd.getUserDisplayDetails();
       case "Delegation": return dd.getDelegationDisplayDetails();
       case "Delegation relationship": return dd.getDelegationRelationshipDisplayDetails();
+      case "Default role change": return dd.getDefaultRoleChangeDisplayDetails();
     }
   }
 

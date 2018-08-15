@@ -9,7 +9,6 @@ import {UserService} from "./user.service";
 import { UserComponent } from './user/user.component';
 import { UserEditorComponent } from './user-editor/user-editor.component';
 import {ModuleStateService} from 'eds-angular4/dist/common';
-import {PopoverModule} from "ngx-popover";
 
 @NgModule({
   imports: [
@@ -18,8 +17,7 @@ import {PopoverModule} from "ngx-popover";
     NgbModule,
     ToastModule.forRoot(),
     DialogsModule,
-    ControlsModule,
-    PopoverModule
+    ControlsModule
   ],
   declarations: [
     UserComponent,

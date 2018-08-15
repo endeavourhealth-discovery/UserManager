@@ -38,4 +38,13 @@ export class DisplayDetails {
       { label: 'Root organisation', property: 'rootOrganisation'}
     ]
   }
+
+  getDefaultRoleChangeDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'User', property: 'user'},
+      { label: 'Role Type', property: 'roleType'},
+      { label: 'Organisation', property: 'organisation'}
+    ]
+  }
 }

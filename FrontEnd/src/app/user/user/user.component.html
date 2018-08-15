@@ -3,19 +3,6 @@
     <div class="module-heading">Users</div>
     <div class="module-body">
       <div class="row">
-        <popover-content #myPopover
-             title="Popover header"
-             placement="bottom"
-             [closeOnMouseOutside]="false"
-             [closeOnClickOutside]="true"
-             [animation]="true">
-              <ul class="list-group">
-                <li *ngFor="let org of delegatedOrganisations" class="list-group-item">{{org.name}}</li>
-              </ul>
-        </popover-content>
-        <button [popover]="myPopover">User Roles</button>
-      </div>
-      <div class="row">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
