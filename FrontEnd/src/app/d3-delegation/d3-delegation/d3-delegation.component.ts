@@ -222,7 +222,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   loadDelegation() {
     const vm = this;
-    vm.getDelegationDataD3(vm.selectedDelegation.uuid);
+    vm.getDelegationRelationships(vm.selectedDelegation.uuid);
   }
 
   ngAfterViewInit() {
