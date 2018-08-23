@@ -46,6 +46,8 @@ export class OrganisationPickerComponent implements OnInit {
 
   private addToSelection(match: Organisation) {
     if (!this.resultData.some(x => x.uuid === match.uuid)) {
+      match.createSuperUsers = false;
+      match.createUsers = false;
       this.resultData.push(match);
     }
   }
@@ -67,4 +69,11 @@ export class OrganisationPickerComponent implements OnInit {
     console.log('Cancel Pressed');
   }
 
+  checkAllUsers(ev) {
+    this.resultData.forEach(x => x.createUsers = ev.target.checked);
+  }
+
+  checkAllSuperUsers(ev) {
+    this.resultData.forEach(x => x.createSuperUsers = ev.target.checked);
+  }
 }

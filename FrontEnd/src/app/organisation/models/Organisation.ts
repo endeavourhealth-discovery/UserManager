@@ -3,6 +3,8 @@ import {Address} from './Address';
 export class Organisation {
     uuid: string;
     name: string;
+    createUsers: boolean;
+    createSuperUsers: boolean;
     alternativeName: string;
     odsCode: string;
     icoCode: string;

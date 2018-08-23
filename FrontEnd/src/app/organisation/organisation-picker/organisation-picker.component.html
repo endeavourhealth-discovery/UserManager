@@ -33,16 +33,45 @@
     <div class="row">
       <div class="form-group col-md-12">
         <label class="control-label">Selection</label> <small class="text-muted"></small>
-        <div class="scroll-box-150 form-control">
-          <div *ngFor="let item of resultData"
-               class="hover-box show-child-on-hover striped">
-            {{ item.name }}
+        <table class="table table-striped table-sm">
+          <thead>
+          <tr class="d-flex">
+            <th class="w-50">Organisation name</th>
+            <th class="w-25">
+              <label>
+                <input type="checkbox" (change)="checkAllUsers($event)">
+              </label>
+              Create users
+            </th>
+            <th class="w-25">
+              <label>
+                <input type="checkbox" (change)="checkAllSuperUsers($event)">
+              </label>
+              Create super users
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of resultData" class="hover-box show-child-on-hover d-flex">
+            <td class="w-50">{{item.name}}</td>
+            <td class="w-25">
+              <label>
+                <input type="checkbox" [(ngModel)]="item.createUsers" name="createUser">
+              </label>
+            </td>
+            <td class="w-25">
+              <label>
+                <input type="checkbox" [(ngModel)]="item.createSuperUsers" name="createSuperUser">
+              </label>
+            </td>
             <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="removeFromSelection(item)">
               <span class="fa fa-sm fa-remove"></span>
             </button>
-          </div>
-        </div>
+          </tr>
+          </tbody>
+        </table>
       </div>
+
     </div>
   </form>
 </div>

@@ -273,8 +273,8 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     childRel.childUuid = org.uuid;
     childRel.childType = 0;
     childRel.includeAllChildren = 0;
-    childRel.createUsers = false;
-    childRel.createSuperUsers = false;
+    childRel.createUsers = org.createUsers;
+    childRel.createSuperUsers = org.createSuperUsers;
 
     vm.delegationService.saveRelationship(childRel, vm.activeRole.id)
       .subscribe(
