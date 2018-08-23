@@ -122,6 +122,20 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     }
   }
 
+  deleteChildOrganisation() {
+    const vm = this;
+    if (vm.selectedOrganisation == null) {
+      MessageBoxDialog.open(vm.$modal, 'Select an organisation', 'You must select an organisation before deleting', 'Ok', '')
+        .result.then(
+        () => {return},
+        () => {return}
+      );
+    } else {
+      vm.selectedRelationship.isDeleted = true;
+      vm.saveRelationship(true);
+    }
+  }
+
   private selectOrganisations() {
     const vm = this;
     vm.selectedOrgs = [];
@@ -230,14 +244,23 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     this.graphContainer.nativeElement.style.height = (window.innerHeight * 7) + 'px';
   }
 
-  saveRelationship() {
+  saveRelationship(deleting: boolean = false) {
     const vm = this;
+    let message = 'Successfully saved changes to organisation';
+    let title = 'Save organisation';
+    let errorMessage = 'The organisation could not be saved. Please try again.'
+    if (deleting) {
+      message = 'Successfully deleted organisation.';
+      title = 'Delete organisation';
+      errorMessage = 'The organisation could not be deleted. Please try again.';
+    }
     vm.delegationService.saveRelationship(vm.selectedRelationship, vm.activeRole.id)
       .subscribe(
         (result) => {
-          vm.log.success('Successfully saved changes', null, 'Success')
+          vm.log.success(message, null, title);
+          vm.loadDelegation();
         },
-        (error) => vm.log.error('Error saving details', error, 'Error')
+        (error) => vm.log.error(errorMessage, error, title)
       );
   }
 

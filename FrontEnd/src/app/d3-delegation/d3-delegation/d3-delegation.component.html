@@ -33,9 +33,10 @@
                     </label>
                   </div>
                   <div class="pull-left">
-                    <button *ngIf="superUser" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
-                    <button type="button" class="btn btn-sm btn-success" (click)="goToOrganisation()">View users at organisation</button>
-                    <button *ngIf="superUser"  type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
+                    <button *ngIf="superUser && !selectedIsRoot" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
+                    <button type="button" class="btn btn-sm btn-info" (click)="goToOrganisation()">View users at organisation</button>
+                    <button *ngIf="superUser" type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
+                    <button *ngIf="superUser && !selectedOrganisation.children" type="button" class="btn btn-sm btn-danger" (click)="deleteChildOrganisation()">Delete</button>
                   </div>
 
                 </div>
