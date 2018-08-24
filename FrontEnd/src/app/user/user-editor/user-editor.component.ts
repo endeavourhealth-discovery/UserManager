@@ -32,6 +32,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   loadingRolesCompleted: boolean = true;
   editedRoles: UserRole[] = [];
   godMode = false;
+  defaultRoleChange : UserRole;
 
   public activeRole: UserRole;
   superUser = false;
@@ -153,7 +154,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
             vm.resultData = response;
             this.saveRoles(close);
           },
-          (error) => this.log.error('Error saving user', error, 'Error')
+          (error) => this.log.error('User details could not be saved. Please try again.', error, 'Save user details')
         );
     }
   }
@@ -169,21 +170,43 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       this.userService.saveUserRoles(vm.editedRoles, vm.activeRole.id)
         .subscribe(
           (response) => {
+            if (vm.defaultRoleChange) {
+              vm.changeDefaultUser(close);
+            } else {
+              vm.successfullySavedUser(close);
+            }
 
-            let msg = (!this.editMode) ? 'Add user' : 'Edit user';
-            this.log.success('User saved', response, msg);
-            if (close)
-              this.close(false);
           },
-          (error) => this.log.error('Error saving user', error, 'Error')
+          (error) => this.log.error('User details could not be saved. Please try again.', error, 'Save user roles')
         );
     } else {
-      let msg = (!this.editMode) ? 'Add user' : 'Edit user';
-      this.log.success('User saved', msg);
-      if (close)
-        this.close(false);
+      if (vm.defaultRoleChange) {
+        vm.changeDefaultUser(close);
+      } else {
+        vm.successfullySavedUser(close);
+      }
     }
 
+  }
+
+  changeDefaultUser(close: boolean) {
+    const vm = this;
+    vm.userManagerService.changeDefaultRole(vm.resultData.uuid, vm.defaultRoleChange.id, vm.activeRole.id)
+      .subscribe(
+        (result) => {
+          vm.successfullySavedUser(close);
+        },
+        (error) => {
+          vm.log.error('User details could not be saved. Please try again.', error, 'Save default role');
+        }
+      );
+  }
+
+  successfullySavedUser(close: boolean) {
+    let msg = (!this.editMode) ? 'Add user' : 'Edit user';
+    this.log.success('User saved', null, msg);
+    if (close)
+      this.close(false);
   }
 
   close(withConfirm: boolean) {
@@ -450,6 +473,12 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       role.roleTypeName = result.name;
     }
     return userRoles;
+  }
+
+  setAsDefaultRole(role: UserRole) {
+    const vm = this;
+    vm.resultData.userRoles.forEach(x => x.default = (x.id === role.id));
+    vm.defaultRoleChange = role;
   }
 
 }

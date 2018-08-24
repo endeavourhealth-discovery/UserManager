@@ -102,7 +102,7 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <!------------------------------------------------------------------------------------------------->
             <!-- USER CREDENTIALS -->
             <!------------------------------------------------------------------------------------------------->
@@ -132,7 +132,10 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
             <!------------------------------------------------------------------------------------------------->
             <!-- ROLES -->
             <!------------------------------------------------------------------------------------------------->
@@ -148,10 +151,22 @@
                           <div *ngFor="let role of resultData.userRoles"
                                class="hover-box show-child-on-hover striped">
                             <div *ngIf="!role.deleted">
-                              {{role.organisationName}} ({{role.roleTypeName}})
-                              <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
-                                <span class="fa fa-sm fa-minus"></span>
-                              </button>
+                              <div class="row">
+                                <div class="col-md-8">
+                                {{role.organisationName}} ({{role.roleTypeName}})
+                                </div>
+                                <div *ngIf="role.default" class="col-md-2">
+                                  <i class="fa fa-star" (click)="setAsDefaultRole(role)"></i>
+                                </div>
+                                <div *ngIf="!role.default" class="col-md-2">
+                                  <i class="fa fa-star-o" (click)="setAsDefaultRole(role)"></i>
+                                </div>
+                                <div class="col-md-1 offset-1">
+                                  <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
+                                    <span class="fa fa-sm fa-minus"></span>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
