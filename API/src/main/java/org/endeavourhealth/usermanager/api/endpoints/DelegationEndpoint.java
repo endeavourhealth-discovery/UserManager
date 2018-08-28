@@ -38,7 +38,7 @@ import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the delegation.")
 public class DelegationEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(UserEndpoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DelegationEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;

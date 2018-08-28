@@ -7,6 +7,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastModule} from "ng2-toastr";
 import {ControlsModule} from "eds-angular4/dist/controls";
 import {ConfigurationService} from "./configuration.service";
+import {Ng4JsonEditorModule} from "angular4-jsoneditor";
+import { ApplicationEditorComponent } from './application-editor/application-editor.component';
 
 @NgModule({
   imports: [
@@ -15,10 +17,10 @@ import {ConfigurationService} from "./configuration.service";
     NgbModule,
     ToastModule.forRoot(),
     DialogsModule,
-    ControlsModule
-
+    ControlsModule,
+    Ng4JsonEditorModule
   ],
-  declarations: [ConfigurationComponent],
+  declarations: [ConfigurationComponent, ApplicationEditorComponent],
   providers: [
     ConfigurationService
   ]

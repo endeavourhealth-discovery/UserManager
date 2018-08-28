@@ -13,8 +13,8 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleType;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,68 +24,64 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
-import java.util.UUID;
 
-@Path("/roleType")
+@Path("/application")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the role types.")
-public class RoleTypeEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(RoleTypeEndpoint.class);
+@Api(description = "API endpoint related to the applications.")
+public class ApplicationEndpoint extends AbstractEndpoint {
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.getRoles")
-    @Path("/getRoles")
-    @ApiOperation(value = "Returns a list of delegations")
-    public Response getRoles(@Context SecurityContext sc) throws Exception {
+    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.getApplications")
+    @Path("/getApplications")
+    @ApiOperation(value = "Returns a list of applications")
+
+    public Response getApplications(@Context SecurityContext sc) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
-                "Organisation(s)");
+                "application(s)");
 
-        return getAllRoleTypes();
+        return getAllApplications();
 
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveRoleType")
-    @Path("/saveRoleType")
-    @ApiOperation(value = "Save a new role type or update an existing one.  Accepts a JSON representation " +
-            "of a role type.")
+    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveApplication")
+    @Path("/saveApplication")
+    @ApiOperation(value = "Save a new application or update an existing one.  Accepts a JSON representation " +
+            "of an application.")
     @RequiresAdmin
-    public Response saveRoleType(@Context SecurityContext sc,
-                            @ApiParam(value = "Json representation of role type to save or update") JsonRoleType roleType) throws Exception {
+    public Response saveApplication(@Context SecurityContext sc,
+                                    @ApiParam(value = "Json representation of the application to save or update") JsonApplication application,
+                                    @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",
-                "roleType", roleType);
+                "application", application);
 
-        return saveRoleType(roleType);
+        return saveApplication(application, userRoleId);
     }
 
-    private Response getAllRoleTypes() throws Exception {
-        List<RoleTypeEntity> roleTypes = RoleTypeEntity.getAllRoleTypes();
+    private Response getAllApplications() throws Exception {
+        List<ApplicationEntity> applications = ApplicationEntity.getAllApplications();
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(roleTypes)
+                .entity(applications)
                 .build();
     }
 
-    private Response saveRoleType(JsonRoleType roleType) throws Exception {
+    private Response saveApplication(JsonApplication application, String userRoleId) throws Exception {
 
-        if (roleType.getId() == null) {
-            roleType.setId(UUID.randomUUID().toString());
-        }
-
-        RoleTypeEntity.saveRoleType(roleType);
+        ApplicationEntity.saveApplication(application, userRoleId);
 
         clearLogbackMarkers();
         return Response

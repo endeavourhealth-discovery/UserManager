@@ -104,6 +104,7 @@ CREATE TABLE application
 (
 	id varchar(36) NOT NULL,
 	name varchar(100) NOT NULL,
+	description varchar(500) NOT NULL,
 	application_tree text NOT NULL,
     is_deleted boolean,
 

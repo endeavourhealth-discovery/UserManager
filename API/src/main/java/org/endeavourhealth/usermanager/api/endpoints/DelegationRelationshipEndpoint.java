@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the delegation relationships.")
 public class DelegationRelationshipEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(UserEndpoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DelegationRelationshipEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;

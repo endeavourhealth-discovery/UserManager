@@ -17,6 +17,7 @@ import {OrganisationModule} from "./organisation/organisation.module";
 import {D3DelegationModule} from "./d3-delegation/d3-delegation.module";
 import {ConfigurationModule} from "./configuration/configuration.module";
 import {AuditModule} from "./audit/audit.module";
+import {Ng4JsonEditorModule} from "angular4-jsoneditor";
 
 @NgModule({
   declarations: [],
@@ -33,7 +34,8 @@ import {AuditModule} from "./audit/audit.module";
     EntityViewComponentsModule,
     D3DelegationModule,
     ConfigurationModule,
-    AuditModule
+    AuditModule,
+    Ng4JsonEditorModule
   ],
   providers: [
     KeycloakService,

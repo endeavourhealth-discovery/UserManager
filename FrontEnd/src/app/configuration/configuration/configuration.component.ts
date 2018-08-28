@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {LoggerService, SecurityService} from "eds-angular4";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {LoggerService, SecurityService, UserManagerService} from "eds-angular4";
 import {ConfigurationService} from "../configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RoleType} from "../models/RoleType";
+import {JsonEditorComponent, JsonEditorOptions} from 'angular4-jsoneditor/jsoneditor/jsoneditor.component';
+import {Application} from "../models/Application";
+import {UserRole} from "../../user/models/UserRole";
 
 @Component({
   selector: 'app-configuration',
@@ -11,15 +14,50 @@ import {RoleType} from "../models/RoleType";
 })
 export class ConfigurationComponent implements OnInit {
   roleTypes: RoleType[];
+  applications: Application[];
+
+  public editorOptions: JsonEditorOptions;
+  public data: any;
+
+  public activeRole: UserRole;
+  superUser = false;
+  godMode = false;
 
   constructor(public log:LoggerService,
               private configurationService : ConfigurationService,
               private securityService : SecurityService,
-              private $modal : NgbModal) { }
+              private $modal : NgbModal,
+              private userManagerService: UserManagerService) { }
+
+  @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
 
   ngOnInit() {
     const vm = this;
-    vm.getRoleTypes()
+    vm.getRoleTypes();
+    vm.getApplications();
+    this.editorOptions = new JsonEditorOptions();
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
+    this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
+
+    this.userManagerService.activeRole.subscribe(active => {
+      this.activeRole = active;
+      this.roleChanged();
+    });
+
+  }
+
+  roleChanged() {
+    const vm = this;
+    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = false;
+    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+      vm.superUser = true;
+      vm.godMode = true;
+    } else {
+      vm.superUser = false;
+      vm.godMode = false;
+    }
   }
 
   getRoleTypes(){
@@ -29,8 +67,28 @@ export class ConfigurationComponent implements OnInit {
         (result) => {
           vm.roleTypes = result;
         },
-        (error) => vm.log.error('Error loading roles types', error, 'Error')
+        (error) => vm.log.error('Loading roles failed. Please try again', error, 'Error')
       );
+  }
+
+  getApplications(){
+    let vm = this;
+    vm.configurationService.getApplications()
+      .subscribe(
+        (result) => {
+          vm.applications = result;
+        },
+        (error) => vm.log.error('Loading applications failed. Please try again.', error, 'Error')
+      );
+  }
+
+  getJson() {
+    const changedJson = this.applicationEditor.get();
+    console.log(JSON.stringify(changedJson, null, 2));
+  }
+
+  addApplication() {
+
   }
 
 }
