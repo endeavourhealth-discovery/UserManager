@@ -53,7 +53,7 @@
                     </thead>
 
                     <tbody>
-                    <tr *ngFor="let app of applications" class="hover-box show-child-on-hover">
+                    <tr *ngFor="let app of applications" class="hover-box show-child-on-hover" (click)="editApp(app)">
 
                       <td>{{app.name}}</td>
                       <td>{{app.description}}</td>
@@ -65,18 +65,6 @@
               </div>
             </div>
           </div>
-          <!--<div class="card">
-            <div class="card-header text-white">
-              Application profiles
-            </div>
-            <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
-              <div class="scroll-box-500">
-                <json-editor [options]="editorOptions" [data]="data" #applicationEditor></json-editor>
-
-                <button class="btn btn-success" (click)="getJson()">Get Json</button>
-              </div>
-            </div>
-          </div>-->
         </div>
       </div>
     </div>

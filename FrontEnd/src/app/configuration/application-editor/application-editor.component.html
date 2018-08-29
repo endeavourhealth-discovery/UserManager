@@ -1,3 +1,54 @@
-<p>
-  application-editor works!
-</p>
+<div class="module">
+  <div class="container-fluid">
+    <div class="module-heading">{{dialogTitle}}
+      <div class="pull-right">
+        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-success" (click)="save(false);">Save</button>
+        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
+        <button type="button" class="btn btn-danger" (click)="close(true)">Close</button>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Details</div>
+            <div class="card-block">
+              <form class="form" #f="ngForm" novalidate>
+                <div class="form-group" #fgName="ngModelGroup" ngModelGroup="application" [class.has-error]="!fgName.valid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label required-field">Name</label>
+                        <input type="text" required class="form-control" placeholder="Username" [(ngModel)]="resultApp.name" name="name">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label required-field">Description</label>
+                        <input type="text" required class="form-control" placeholder="Description" [(ngModel)]="resultApp.description" name="description">
+                      </div>
+                    </div>
+                    <small class="required-field-note"></small>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">JSON</div>
+            <div class="card-block">
+              <div class="scroll-box-500">
+                <json-editor [options]="editorOptions" [data]="jsonData" #applicationEditor></json-editor>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

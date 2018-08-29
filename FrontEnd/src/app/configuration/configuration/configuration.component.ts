@@ -6,6 +6,8 @@ import {RoleType} from "../models/RoleType";
 import {JsonEditorComponent, JsonEditorOptions} from 'angular4-jsoneditor/jsoneditor/jsoneditor.component';
 import {Application} from "../models/Application";
 import {UserRole} from "../../user/models/UserRole";
+import {ModuleStateService} from "eds-angular4/dist/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-configuration',
@@ -27,9 +29,9 @@ export class ConfigurationComponent implements OnInit {
               private configurationService : ConfigurationService,
               private securityService : SecurityService,
               private $modal : NgbModal,
-              private userManagerService: UserManagerService) { }
-
-  @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
+              private userManagerService: UserManagerService,
+              private state: ModuleStateService,
+              private router: Router) { }
 
   ngOnInit() {
     const vm = this;
@@ -82,13 +84,14 @@ export class ConfigurationComponent implements OnInit {
       );
   }
 
-  getJson() {
-    const changedJson = this.applicationEditor.get();
-    console.log(JSON.stringify(changedJson, null, 2));
+  addApplication() {
+    this.state.setState('applicationEdit', {application: null, editMode: false});
+    this.router.navigate(['appEdit']);
   }
 
-  addApplication() {
-
+  editApp(app: Application) {
+    this.state.setState('applicationEdit', {application: app, editMode: true});
+    this.router.navigate(['appEdit']);
   }
 
 }

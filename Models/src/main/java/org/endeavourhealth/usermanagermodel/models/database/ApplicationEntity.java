@@ -124,6 +124,7 @@ public class ApplicationEntity {
         ApplicationEntity applicationEntity = new ApplicationEntity();
         applicationEntity.setId(application.getId());
         applicationEntity.setName(application.getName());
+        applicationEntity.setDescription(application.getDescription());
         applicationEntity.setApplicationTree(application.getApplicationTree());
         applicationEntity.setIsDeleted(application.getIsDeleted() ? (byte)1 : (byte)0);
         entityManager.getTransaction().begin();
