@@ -109,7 +109,7 @@ public class ApplicationEntity {
         return ret;
     }
 
-    public static void saveApplication(JsonApplication application, String userRoleId) throws Exception {
+    public static String saveApplication(JsonApplication application, String userRoleId) throws Exception {
 
         boolean added = false;
         String originalUuid = application.getId();
@@ -148,6 +148,8 @@ public class ApplicationEntity {
             AuditEntity.addToAuditTrail(userRoleId,
                     AuditAction.EDIT, ItemType.APPLICATION, originalUuid, application.getId(), null);
         }
+
+        return application.getId();
 
     }
 

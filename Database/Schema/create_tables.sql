@@ -87,11 +87,11 @@ CREATE TABLE role_type_access_profile
 )comment 'A Role Type’s default access profile which is presented as the default when a role is selected for assignment';
 
 
-
 CREATE TABLE application_access_profile
 (
 	id varchar(36) NOT NULL,
 	name varchar(100) NOT NULL,
+    description varchar(500) NOT NULL,
 	application_id varchar(36) NOT NULL,
 	profile_tree text NOT NULL,
     is_deleted boolean,

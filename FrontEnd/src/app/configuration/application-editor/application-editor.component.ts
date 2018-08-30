@@ -8,6 +8,7 @@ import {JsonEditorComponent, JsonEditorOptions} from "angular4-jsoneditor/jsoned
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Location} from "@angular/common";
 import {ConfigurationService} from "../configuration.service";
+import {ApplicationProfile} from "../models/ApplicationProfile";
 
 @Component({
   selector: 'app-application-editor',
@@ -21,6 +22,10 @@ export class ApplicationEditorComponent implements OnInit {
   dialogTitle: string = 'Edit application';
   public editorOptions: JsonEditorOptions;
   jsonData: any;
+  profileData: any;
+  applicationProfiles: ApplicationProfile[];
+  selectedProfile: ApplicationProfile;
+  editedProfiles: ApplicationProfile[] = [];
 
   public activeRole: UserRole;
   superUser = false;
@@ -55,7 +60,12 @@ export class ApplicationEditorComponent implements OnInit {
 
     vm.resultApp.isDeleted = false;
 
+    if (vm.editMode) {
+      vm.getApplicationProfiles();
+    }
+
     vm.jsonData = JSON.parse(vm.resultApp.applicationTree);
+    vm.profileData = '';
 
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
@@ -102,11 +112,81 @@ export class ApplicationEditorComponent implements OnInit {
     vm.configurationService.saveApplication(vm.resultApp, vm.activeRole.id)
       .subscribe(
         (response) => {
-          this.log.success('Application details successfully saved.', null, vm.dialogTitle);
-          vm.close(false);
+          vm.log.success('Application details successfully saved.', null, vm.dialogTitle);
+          vm.saveProfiles(response, close);
         },
         (error) => this.log.error('Application details could not be saved. Please try again.', error, 'Save application details')
       );
+  }
+
+  saveProfiles(newApplicationId : string, close: boolean) {
+    const vm = this;
+    if (vm.editedProfiles.length > 0) {
+      vm.editedProfiles.forEach(x => x.applicationId = newApplicationId);
+      this.configurationService.saveApplicationProfiles(vm.editedProfiles, vm.activeRole.id)
+        .subscribe(
+          (response) => {
+              vm.successfullySavedApplication(close);
+          },
+          (error) => this.log.error('Application could not be saved. Please try again.', error, 'Save application profiles')
+        );
+    } else {
+        vm.successfullySavedApplication(close);
+    }
+  }
+
+  successfullySavedApplication(close: boolean) {
+    const vm = this;
+    this.log.success('Application saved', null, vm.dialogTitle);
+    if (close)
+      this.close(false);
+  }
+
+  getApplicationProfiles(){
+    let vm = this;
+    vm.configurationService.getApplicationProfiles(vm.resultApp.id)
+      .subscribe(
+        (result) => {
+          vm.applicationProfiles = result;
+        },
+        (error) => vm.log.error('Loading application profiles failed. Please try again', error, 'Error')
+      );
+  }
+
+  loadJsonForProfile() {
+    const vm = this;
+    vm.profileData = JSON.parse(vm.selectedProfile.profileTree);
+  }
+
+  newProfile() {
+    const vm = this;
+    let newProfile: ApplicationProfile = new ApplicationProfile();
+    newProfile.name = '';
+    newProfile.description = '';
+    newProfile.applicationId = vm.resultApp.id;
+    newProfile.isDeleted = false;
+    newProfile.profileTree = '';
+    vm.profileData = '';
+
+    vm.applicationProfiles.push(newProfile);
+    vm.selectedProfile = newProfile;
+  }
+
+  saveProfile() {
+    const vm = this;
+    const changedJson = this.applicationEditor.get();
+    vm.selectedProfile.profileTree = JSON.stringify(changedJson);
+    vm.editedProfiles.push(vm.selectedProfile);
+  }
+
+  deleteProfile() {
+    const vm = this;
+    let i = this.applicationProfiles.indexOf(vm.selectedProfile);
+    if (i !== -1) {
+      this.applicationProfiles.splice(i, 1);
+    }
+    vm.selectedProfile.isDeleted = true;
+    vm.editedProfiles.push(vm.selectedProfile);
   }
 
 }

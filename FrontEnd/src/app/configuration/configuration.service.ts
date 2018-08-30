@@ -3,6 +3,8 @@ import {Http, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {RoleType} from "./models/RoleType";
 import {Application} from "./models/Application";
+import {ApplicationProfile} from "./models/ApplicationProfile";
+import {UserRole} from "../user/models/UserRole";
 
 @Injectable()
 export class ConfigurationService {
@@ -42,6 +44,22 @@ export class ConfigurationService {
     params.set('applicationId', applicationId);
     params.set('userRoleId', userRoleId);
     return vm.http.delete('api/application/deleteApplication', {search: params})
+      .map((response) => response.text());
+  }
+
+  getApplicationProfiles(applicationId: string): Observable<ApplicationProfile[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('applicationId', applicationId);
+    return vm.http.get('api/applicationProfile/getApplicationProfiles', {search: params})
+      .map((response) => response.json());
+  }
+
+  saveApplicationProfiles(profiles: ApplicationProfile[], userRoleId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/applicationProfile/saveApplicationProfiles', profiles, {search: params})
       .map((response) => response.text());
   }
 

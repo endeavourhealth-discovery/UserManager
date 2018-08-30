@@ -15,7 +15,9 @@ values
 (1, 'User'),
 (2, 'Delegation'),
 (3, 'Delegation relationship'),
-(4, 'Default role change');
+(4, 'Default role change'),
+(5, 'Application'),
+(6, 'Application profile');
 
 insert into user_manager.role_type (id, name, description, job_category_id, is_deleted)
 values 

@@ -21,6 +21,7 @@
                         <label class="form-control-label required-field">Name</label>
                         <input type="text" required class="form-control" placeholder="Username" [(ngModel)]="resultApp.name" name="name">
                       </div>
+                      <small class="required-field-note"></small>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
@@ -28,7 +29,6 @@
                         <input type="text" required class="form-control" placeholder="Description" [(ngModel)]="resultApp.description" name="description">
                       </div>
                     </div>
-                    <small class="required-field-note"></small>
                   </div>
                 </div>
               </form>
@@ -40,11 +40,68 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">JSON</div>
+            <div class="card-header">
+              Access profiles
+              <div class="pull-right">
+                <button *ngIf="superUser" type="button" class="btn btn-success" (click)="newProfile();">New profile</button>
+                <button *ngIf="superUser" type="button" class="btn btn-success" (click)="saveProfile();">Save profile</button>
+                <button *ngIf="superUser" type="button" class="btn btn-danger" (click)="deleteProfile();">Delete profile</button>
+              </div>
+
+            </div>
             <div class="card-block">
               <div class="scroll-box-500">
-                <json-editor [options]="editorOptions" [data]="jsonData" #applicationEditor></json-editor>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                      <select class="form-control" [(ngModel)]="selectedProfile" name="selectedProfile" (change)="loadJsonForProfile()">
+                        <option *ngFor="let profile of applicationProfiles" [ngValue]="profile">{{profile.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="selectedProfile">
+                  <form class="form" #f="ngForm" novalidate>
+                    <div class="form-group" #fgName="ngModelGroup" ngModelGroup="profile" [class.has-error]="!fgName.valid">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="form-control-label required-field">Name</label>
+                            <input type="text" required class="form-control" placeholder="Name" [(ngModel)]="selectedProfile.name" name="name">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="form-control-label required-field">Description</label>
+                            <input type="text" required class="form-control" placeholder="Description" [(ngModel)]="selectedProfile.description" name="description">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="scroll-box-500">
+                            <json-editor [options]="editorOptions" [data]="profileData" #applicationEditor></json-editor>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">JSON</div>
+            <div class="card-block">
+              <!--<div class="scroll-box-500">
+                <json-editor [options]="editorOptions" [data]="jsonData" #applicationEditor></json-editor>
+              </div>-->
             </div>
           </div>
         </div>
