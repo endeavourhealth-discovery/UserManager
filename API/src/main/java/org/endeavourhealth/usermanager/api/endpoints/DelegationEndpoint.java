@@ -103,7 +103,7 @@ public class DelegationEndpoint extends AbstractEndpoint {
     @Timed(absolute = true, name="UserManager.DelegationEndpoint.deleteDelegation")
     @Path("/deleteDelegation")
     @RequiresAdmin
-    @ApiOperation(value = "Deletes a user")
+    @ApiOperation(value = "Deletes a delegation")
     public Response deleteDelegation(@Context SecurityContext sc,
                                @ApiParam(value = "Delegation id to be deleted") @QueryParam("delegationId") String delegationId,
                                @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {

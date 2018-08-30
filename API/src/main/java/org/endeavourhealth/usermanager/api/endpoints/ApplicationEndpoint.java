@@ -25,6 +25,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
+import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
+
 @Path("/application")
 @Metrics(registry = "UserManagerRegistry")
 @Api(description = "API endpoint related to the applications.")
@@ -33,10 +35,11 @@ public class ApplicationEndpoint extends AbstractEndpoint {
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.getApplications")
+    @Timed(absolute = true, name="UserManager.ApplicationEndpoint.getApplications")
     @Path("/getApplications")
     @ApiOperation(value = "Returns a list of applications")
 
@@ -53,7 +56,7 @@ public class ApplicationEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveApplication")
+    @Timed(absolute = true, name="UserManager.ApplicationEndpoint.saveApplication")
     @Path("/saveApplication")
     @ApiOperation(value = "Save a new application or update an existing one.  Accepts a JSON representation " +
             "of an application.")
@@ -69,6 +72,28 @@ public class ApplicationEndpoint extends AbstractEndpoint {
         return saveApplication(application, userRoleId);
     }
 
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.ApplicationEndpoint.deleteApplication")
+    @Path("/deleteApplication")
+    @RequiresAdmin
+    @ApiOperation(value = "Deletes an application")
+    public Response deleteApplication(@Context SecurityContext sc,
+                                     @ApiParam(value = "Application id to be deleted") @QueryParam("applicationId") String applicationId,
+                                     @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
+                "User", "applicationId", applicationId, "userRoleId", userRoleId);
+
+        deleteApplication(applicationId, userRoleId);
+
+        return Response
+                .ok()
+                .build();
+    }
+
     private Response getAllApplications() throws Exception {
         List<ApplicationEntity> applications = ApplicationEntity.getAllApplications();
 
@@ -82,6 +107,16 @@ public class ApplicationEndpoint extends AbstractEndpoint {
     private Response saveApplication(JsonApplication application, String userRoleId) throws Exception {
 
         ApplicationEntity.saveApplication(application, userRoleId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
+    }
+
+    private Response deleteApplication(String applicationId, String userRoleId) throws Exception {
+
+        ApplicationEntity.deleteApplication(applicationId, userRoleId);
 
         clearLogbackMarkers();
         return Response

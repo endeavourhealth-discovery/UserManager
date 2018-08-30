@@ -22,6 +22,7 @@ export class AuditDetailComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.displayItems = vm.getDetailsToShow(vm.audit.itemType);
+    console.log(vm.displayItems);
     vm.getDetails();
   }
 
@@ -77,6 +78,7 @@ export class AuditDetailComponent implements OnInit {
       case "Delegation": return dd.getDelegationDisplayDetails();
       case "Delegation relationship": return dd.getDelegationRelationshipDisplayDetails();
       case "Default role change": return dd.getDefaultRoleChangeDisplayDetails();
+      case "Application": return dd.getApplicationDisplayDetails();
     }
   }
 

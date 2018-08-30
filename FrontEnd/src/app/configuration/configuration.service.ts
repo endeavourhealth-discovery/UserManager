@@ -36,4 +36,13 @@ export class ConfigurationService {
       .map((response) => response.text());
   }
 
+  deleteApplication(applicationId: string, userRoleId: string): Observable<any> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('applicationId', applicationId);
+    params.set('userRoleId', userRoleId);
+    return vm.http.delete('api/application/deleteApplication', {search: params})
+      .map((response) => response.text());
+  }
+
 }

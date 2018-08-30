@@ -53,12 +53,17 @@
                     </thead>
 
                     <tbody>
-                    <tr *ngFor="let app of applications" class="hover-box show-child-on-hover" (click)="editApp(app)">
+                      <tr *ngFor="let app of applications" class="hover-box show-child-on-hover">
 
-                      <td>{{app.name}}</td>
-                      <td>{{app.description}}</td>
+                        <td (click)="editApp(app)">{{app.name}}</td>
+                        <td (click)="editApp(app)">{{app.description}}</td>
+                        <td>
+                          <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="deleteApplication(app)">
+                            <span class="fa fa-sm fa-remove"></span>
+                          </button>
+                        </td>
 
-                    </tr>
+                      </tr>
                     </tbody>
                   </table>
                 </loadingIndicator>

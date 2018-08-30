@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {LoggerService, SecurityService, UserManagerService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} from "eds-angular4";
 import {ConfigurationService} from "../configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RoleType} from "../models/RoleType";
@@ -92,6 +92,25 @@ export class ConfigurationComponent implements OnInit {
   editApp(app: Application) {
     this.state.setState('applicationEdit', {application: app, editMode: true});
     this.router.navigate(['appEdit']);
+  }
+
+  deleteApplication(app: Application) {
+    const vm = this;
+    MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete application: " + app.name + "?", "Yes", "No")
+      .result.then(
+      (result) => {
+        vm.configurationService.deleteApplication(app.id, vm.activeRole.id)
+          .subscribe(
+            (result) => {
+              vm.log.success('Successfully deleted application', null, 'Success');
+              vm.getApplications();
+            },
+            (error) => vm.log.error('Failed to delete application. Please try again', error, 'Error')
+          );
+      },
+      (reason) => {
+      }
+    )
   }
 
 }

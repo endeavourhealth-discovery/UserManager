@@ -5,7 +5,7 @@ import {User} from "../models/User";
 import {UserService} from "../user.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {RoleType} from "../../configuration/models/RoleType";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {ModuleStateService} from "eds-angular4/dist/common";
 
 @Component({

@@ -47,4 +47,13 @@ export class DisplayDetails {
       { label: 'Organisation', property: 'organisation'}
     ]
   }
+
+  getApplicationDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Name', property: 'name'},
+      { label: 'Description', property: 'description'},
+      { label: 'Application Details', property: 'applicationTree'}
+    ]
+  }
 }

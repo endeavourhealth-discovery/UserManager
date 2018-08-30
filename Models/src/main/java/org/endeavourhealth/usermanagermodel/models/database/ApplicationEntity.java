@@ -8,6 +8,7 @@ import org.endeavourhealth.usermanagermodel.models.json.JsonApplication;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
@@ -96,6 +97,10 @@ public class ApplicationEntity {
         CriteriaQuery<ApplicationEntity> cq = cb.createQuery(ApplicationEntity.class);
         Root<ApplicationEntity> rootEntry = cq.from(ApplicationEntity.class);
 
+        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+
+        cq.where(predicate);
+
         TypedQuery<ApplicationEntity> query = entityManager.createQuery(cq);
         List<ApplicationEntity> ret = query.getResultList();
 
@@ -165,5 +170,27 @@ public class ApplicationEntity {
         } finally {
             entityManager.close();
         }
+    }
+
+    public static ApplicationEntity getApplication(String applicationId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        ApplicationEntity ret = entityManager.find(ApplicationEntity.class, applicationId);
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static void deleteApplication(String applicationId, String userRoleId) throws Exception {
+
+        // DelegationRelationshipEntity.deleteAllDelegationRelationships(applicationId, userRoleId);
+
+        JsonApplication application = new JsonApplication(getApplication(applicationId));
+
+        application.setDeleted(true);
+
+        saveApplication(application, userRoleId);
+
     }
 }

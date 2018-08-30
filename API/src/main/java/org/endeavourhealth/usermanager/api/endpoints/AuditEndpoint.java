@@ -196,6 +196,7 @@ public class AuditEndpoint extends AbstractEndpoint {
             case 2: return getJsonForDelegationAudit(auditEntity);
             case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
             case 4: return getJsonForDefaltRoleChangeAudit(auditEntity);
+            case 5: return getJsonForApplicationAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
@@ -324,6 +325,60 @@ public class AuditEndpoint extends AbstractEndpoint {
         ((ObjectNode)auditJson).put("id", delegation.getUuid());
         ((ObjectNode)auditJson).put("name", delegation.getName());
         ((ObjectNode)auditJson).put("rootOrganisation", rootOrg.getName() + " (" + rootOrg.getOdsCode() + ")");
+
+        return auditJson;
+    }
+
+    private Response getJsonForApplicationAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        ApplicationEntity applicationBefore;
+        ApplicationEntity applicationAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Application added";
+            applicationAfter = ApplicationEntity.getApplication(audit.getItemAfter());
+            afterJson = generateApplicationAuditJson(applicationAfter);
+        } else if (audit.getAuditType() == 1) {
+            title = "Application edited";
+            applicationBefore = ApplicationEntity.getApplication(audit.getItemBefore());
+            beforeJson = generateApplicationAuditJson(applicationBefore);
+            applicationAfter = ApplicationEntity.getApplication(audit.getItemAfter());
+            afterJson = generateApplicationAuditJson(applicationAfter);
+        } else {
+            title = "Application deleted";
+            applicationBefore = ApplicationEntity.getApplication(audit.getItemBefore());
+            beforeJson = generateApplicationAuditJson(applicationBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateApplicationAuditJson(ApplicationEntity application) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        ((ObjectNode)auditJson).put("id", application.getId());
+        ((ObjectNode)auditJson).put("name", application.getName());
+        ((ObjectNode)auditJson).put("description", application.getDescription());
+        ((ObjectNode)auditJson).put("applicationTree", application.getApplicationTree());
 
         return auditJson;
     }
