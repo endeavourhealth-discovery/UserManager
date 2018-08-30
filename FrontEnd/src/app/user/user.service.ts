@@ -53,4 +53,12 @@ export class UserService {
       .map((response) => response.json());
   }
 
+  getUser(userId: string): Observable<User> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/user/users/user', {search: params})
+      .map((response) => response.json());
+  }
+
 }

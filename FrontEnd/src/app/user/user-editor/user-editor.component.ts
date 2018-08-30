@@ -22,6 +22,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   @Input() resultData: User;
   @Input() editMode: boolean;
   @Input() existing: boolean;
+  @Input() selfEdit: boolean;
   dialogTitle: String;
   selectedOrg: DelegatedOrganisation;
   delegatedOrganisations: DelegatedOrganisation[];
@@ -69,6 +70,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     this.resultData = Object.assign( [], s.user);
     this.editMode = s.editMode;
     this.existing = s.existing;
+    this.selfEdit = s.selfEdit;
 
     let vm = this;
 

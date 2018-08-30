@@ -23,6 +23,7 @@ import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -263,6 +264,38 @@ public final class UserEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(success)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/users/user")
+    public Response getUser(@Context SecurityContext sc,
+                            @ApiParam(value = "User id to be retrieved") @QueryParam("userId") String userId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User", "User Id", userId);
+
+        LOG.trace("getUser");
+
+        UUID currentUserUuid = getCurrentUserId(sc);
+        if (!currentUserUuid.toString().equalsIgnoreCase(userId) )
+        {
+            throw new NotAllowedException("Get User not allowed with UserId mismatch");
+        }
+
+        //First up, get the user account representation
+        KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
+        UserRepresentation userRep = keycloakClient.realms().users().getUser(userId);
+
+        JsonUser user = new JsonUser(userRep);
+
+        AbstractEndpoint.clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(user)
                 .build();
     }
 

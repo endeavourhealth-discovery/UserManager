@@ -8,6 +8,7 @@ import {ConfigurationComponent} from "./configuration/configuration/configuratio
 import {AuditComponent} from "./audit/audit/audit.component";
 import {UserEditorComponent} from './user/user-editor/user-editor.component';
 import {ApplicationEditorComponent} from "./configuration/application-editor/application-editor.component";
+import {UserViewComponent} from "./user/user-view/user-view.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider  {
@@ -20,7 +21,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'd3delegation', component: D3DelegationComponent},
       { path: 'configuration', component: ConfigurationComponent},
       { path: 'appEdit', component: ApplicationEditorComponent},
-      { path: 'audit', component: AuditComponent}
+      { path: 'audit', component: AuditComponent},
+      { path: 'userView', component: UserViewComponent}
     ];
   }
 

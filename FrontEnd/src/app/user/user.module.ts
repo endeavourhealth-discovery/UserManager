@@ -9,6 +9,7 @@ import {UserService} from "./user.service";
 import { UserComponent } from './user/user.component';
 import { UserEditorComponent } from './user-editor/user-editor.component';
 import {ModuleStateService} from 'eds-angular4/dist/common';
+import { UserViewComponent } from './user-view/user-view.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {ModuleStateService} from 'eds-angular4/dist/common';
   ],
   declarations: [
     UserComponent,
-    UserEditorComponent
+    UserEditorComponent,
+    UserViewComponent
   ],
   entryComponents: [
     UserEditorComponent
