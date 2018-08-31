@@ -3,6 +3,7 @@ import {Http, URLSearchParams} from "@angular/http";
 import {User} from "./models/User";
 import {Observable} from "rxjs/Observable";
 import {UserRole} from "./models/UserRole";
+import {UserAccessProfile} from "./models/UserAccessProfile";
 
 @Injectable()
 export class UserService {
@@ -58,6 +59,14 @@ export class UserService {
     let params = new URLSearchParams();
     params.set('userId', userId);
     return vm.http.get('api/user/users/user', {search: params})
+      .map((response) => response.json());
+  }
+
+  getRoleAccessProfile(roleTypeId: string): Observable<UserAccessProfile[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('roleTypeId', roleTypeId);
+    return vm.http.get('api/userBio/getAccessProfile', {search: params})
       .map((response) => response.json());
   }
 

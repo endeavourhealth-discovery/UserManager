@@ -7,7 +7,10 @@ public class JsonRoleTypeAccessProfile {
     private String roleTypeId = null;
     private String name = null;
     private String application = null;
+    private String applicationId = null;
     private String applicationAccessProfileId = null;
+    private String applicationAccessProfileName = null;
+    private String applicationAccessProfileDescription = null;
     private String profileTree = null;
     private boolean isDeleted;
 
@@ -60,6 +63,30 @@ public class JsonRoleTypeAccessProfile {
 
     public void setApplication(String application) {
         this.application = application;
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getApplicationAccessProfileName() {
+        return applicationAccessProfileName;
+    }
+
+    public void setApplicationAccessProfileName(String applicationAccessProfileName) {
+        this.applicationAccessProfileName = applicationAccessProfileName;
+    }
+
+    public String getApplicationAccessProfileDescription() {
+        return applicationAccessProfileDescription;
+    }
+
+    public void setApplicationAccessProfileDescription(String applicationAccessProfileDescription) {
+        this.applicationAccessProfileDescription = applicationAccessProfileDescription;
     }
 
     public String getProfileTree() {

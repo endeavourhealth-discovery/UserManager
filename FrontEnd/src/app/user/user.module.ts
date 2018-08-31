@@ -10,6 +10,7 @@ import { UserComponent } from './user/user.component';
 import { UserEditorComponent } from './user-editor/user-editor.component';
 import {ModuleStateService} from 'eds-angular4/dist/common';
 import { UserViewComponent } from './user-view/user-view.component';
+import { UserBioComponent } from './user-bio/user-bio.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { UserViewComponent } from './user-view/user-view.component';
   declarations: [
     UserComponent,
     UserEditorComponent,
-    UserViewComponent
+    UserViewComponent,
+    UserBioComponent
   ],
   entryComponents: [
     UserEditorComponent

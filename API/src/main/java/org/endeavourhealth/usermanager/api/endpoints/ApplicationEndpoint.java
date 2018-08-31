@@ -42,7 +42,6 @@ public class ApplicationEndpoint extends AbstractEndpoint {
     @Timed(absolute = true, name="UserManager.ApplicationEndpoint.getApplications")
     @Path("/getApplications")
     @ApiOperation(value = "Returns a list of applications")
-
     public Response getApplications(@Context SecurityContext sc) throws Exception {
 
         super.setLogbackMarkers(sc);

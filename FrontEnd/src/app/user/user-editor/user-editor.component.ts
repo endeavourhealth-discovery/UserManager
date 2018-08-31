@@ -32,11 +32,11 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   userList: User[];
   loadingRolesCompleted: boolean = true;
   editedRoles: UserRole[] = [];
-  godMode = false;
   defaultRoleChange : UserRole;
 
   public activeRole: UserRole;
   superUser = false;
+  godMode = false;
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;

@@ -92,6 +92,7 @@
             <div class="card-header">
               User details
               <div class="pull-right">
+                <button *ngIf="selectedUser && superUser" class="btn btn-info" (click)="viewBio(selectedUser)">View Bio</button>
                 <button *ngIf="selectedUser && superUser" class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
                 <button *ngIf="selectedUser && superUser" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>
               </div>

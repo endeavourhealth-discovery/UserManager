@@ -194,6 +194,12 @@ export class UserComponent implements OnInit {
     this.router.navigate(['userEdit']);
   }
 
+  viewBio(user: User) {
+    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
+    this.state.setState('userBio', {user: user});
+    this.router.navigate(['userBio']);
+  }
+
   deleteUser(user:User) {
     let vm = this;
     let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;

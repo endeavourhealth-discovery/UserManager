@@ -4,6 +4,8 @@ export class RoleTypeAccessProfile {
   application: string;
   roleTypeId : string;
   applicationAccessProfileId : string;
+  applicationAccessProfileName : string;
+  applicationAccessProfileDescription : string;
   profileTree : string;
   isDeleted: boolean;
 }

@@ -24,7 +24,7 @@ public class RoleTypeAccessProfileEntity {
     private String profileTree;
     private Byte isDeleted;
 
-    @Basic
+    @Id
     @Column(name = "id")
     public String getId() {
         return id;
@@ -34,7 +34,7 @@ public class RoleTypeAccessProfileEntity {
         this.id = id;
     }
 
-    @Id
+    @Basic
     @Column(name = "role_type_id")
     public String getRoleTypeId() {
         return roleTypeId;
@@ -120,7 +120,11 @@ public class RoleTypeAccessProfileEntity {
                     " rp.roleTypeId," +
                     " rt.name as roleName," +
                     " a.name as applicationName," +
-                    " rp.profileTree," +
+                    " a.id as applicationId," +
+                    " aap.profileTree," +
+                    " rp.applicationAccessProfileId," +
+                    " aap.name as profileName," +
+                    " aap.description as profileDescription," +
                     " rp.isDeleted" +
                     " from RoleTypeAccessProfileEntity rp" +
                     " join RoleTypeEntity rt on rp.roleTypeId = rt.id" +
@@ -150,8 +154,12 @@ public class RoleTypeAccessProfileEntity {
             profile.setRoleTypeId(obj[1].toString());
             profile.setName(obj[2].toString());
             profile.setApplication(obj[3].toString());
-            profile.setProfileTree(obj[4].toString());
-            profile.setDeleted(obj[5].toString().equals("1"));
+            profile.setApplicationId(obj[4].toString());
+            profile.setProfileTree(obj[5].toString());
+            profile.setApplicationAccessProfileId(obj[6].toString());
+            profile.setApplicationAccessProfileName(obj[7].toString());
+            profile.setApplicationAccessProfileDescription(obj[8].toString());
+            profile.setDeleted(obj[9].toString().equals("1"));
 
             profiles.add(profile);
         }

@@ -83,7 +83,7 @@ CREATE TABLE role_type_access_profile
 	profile_tree text NOT NULL,
     is_deleted boolean,
 
-	CONSTRAINT pk_id PRIMARY KEY (role_type_id)
+	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'A Role Type’s default access profile which is presented as the default when a role is selected for assignment';
 
 
