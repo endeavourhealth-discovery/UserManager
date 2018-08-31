@@ -7,7 +7,8 @@ public enum ItemType {
     DELEGATION_RELATIONSHIP((short)3),
     DEFAULT_ROLE((short)4),
     APPLICATION((short)5),
-    APPLICATION_PROFILE((short)6);
+    APPLICATION_PROFILE((short)6),
+    ROLE_TYPE_APPLICATION_PROFILE((short)7);
 
     private Short itemType;
 

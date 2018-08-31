@@ -53,7 +53,26 @@ export class DisplayDetails {
       { label: 'Id', property: 'id'},
       { label: 'Name', property: 'name'},
       { label: 'Description', property: 'description'},
-      { label: 'Application Details', property: 'applicationTree'}
+      { label: 'Application details', property: 'applicationTree'}
+    ]
+  }
+
+  getApplicationProfileDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Name', property: 'name'},
+      { label: 'Description', property: 'description'},
+      { label: 'Application', property: 'applicationName'},
+      { label: 'Application profile details', property: 'profileTree'}
+    ]
+  }
+
+  getRoleTypeAccessProfileDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Role type name', property: 'roleTypeName'},
+      { label: 'Application profile name', property: 'applicationProfileName'},
+      { label: 'profileTree', property: 'profileTree'}
     ]
   }
 }

@@ -10,6 +10,7 @@
         <class>org.endeavourhealth.usermanagermodel.models.database.ItemTypeEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationAccessProfileEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfileEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

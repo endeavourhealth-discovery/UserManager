@@ -151,12 +151,30 @@ public class ApplicationAccessProfileEntity {
             added = true;
         }
 
+        // store the profile in the DB
+        saveApplicationProfileInDatabase(applicationProfile);
+
         if (!added && !applicationProfile.getIsDeleted()) {
-            // editing so set original to deleted and save new one
-            setExistingApplicationProfileToDeleted(applicationProfile.getId());
+            // editing so set store a copy with a new uuid and set to deleted
             applicationProfile.setId(UUID.randomUUID().toString());
+            applicationProfile.setDeleted(true);
+            saveApplicationProfileInDatabase(applicationProfile);
         }
 
+        if (applicationProfile.getIsDeleted()) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.DELETE, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), null, null);
+        } else if (added) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.ADD, ItemType.APPLICATION_PROFILE, null, applicationProfile.getId(), null);
+        } else {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.EDIT, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), originalUuid, null);
+        }
+
+    }
+
+    public static void saveApplicationProfileInDatabase(JsonApplicationAccessProfile applicationProfile) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         ApplicationAccessProfileEntity applicationEntity = new ApplicationAccessProfileEntity();
@@ -171,17 +189,6 @@ public class ApplicationAccessProfileEntity {
         entityManager.getTransaction().commit();
 
         entityManager.close();
-
-        if (applicationProfile.getIsDeleted()) {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), null, null);
-        } else if (added) {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION_PROFILE, null, applicationProfile.getId(), null);
-        } else {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION_PROFILE, originalUuid, applicationProfile.getId(), null);
-        }
 
     }
 

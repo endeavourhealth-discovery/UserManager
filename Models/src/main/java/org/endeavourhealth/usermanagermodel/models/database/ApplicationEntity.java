@@ -118,12 +118,31 @@ public class ApplicationEntity {
             added = true;
         }
 
+        saveApplicationInDatabase(application);
+
         if (!added && !application.getIsDeleted()) {
-            // editing so set original to deleted and save new one
-            setExistingApplicationToDeleted(application.getId());
+            // editing so set store a copy with a new uuid and set to deleted
             application.setId(UUID.randomUUID().toString());
+            application.setDeleted(true);
+            saveApplicationInDatabase(application);
         }
 
+        if (application.getIsDeleted()) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.DELETE, ItemType.APPLICATION, application.getId(), null, null);
+        } else if (added) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.ADD, ItemType.APPLICATION, null, application.getId(), null);
+        } else {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.EDIT, ItemType.APPLICATION, application.getId(), originalUuid, null);
+        }
+
+        return application.getId();
+
+    }
+
+    public static void saveApplicationInDatabase(JsonApplication application) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         ApplicationEntity applicationEntity = new ApplicationEntity();
@@ -137,19 +156,6 @@ public class ApplicationEntity {
         entityManager.getTransaction().commit();
 
         entityManager.close();
-
-        if (application.getIsDeleted()) {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION, application.getId(), null, null);
-        } else if (added) {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION, null, application.getId(), null);
-        } else {
-            AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION, originalUuid, application.getId(), null);
-        }
-
-        return application.getId();
 
     }
 

@@ -75,9 +75,9 @@ CREATE TABLE user_access_profile
 )comment 'A user access profile derived from application.application_access_profile.
 This may be the original profile structure chosen at assignment, or a modification specific to the user’s needs';
 
-
 CREATE TABLE role_type_access_profile
 (
+	id varchar(36) NOT NULL,
 	role_type_id varchar(36) NOT NULL,
 	application_access_profile_id varchar(36) NOT NULL,
 	profile_tree text NOT NULL,

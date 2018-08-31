@@ -16,10 +16,7 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.caching.DelegationCache;
-import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.usermanagermodel.models.caching.RoleTypeCache;
-import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
+import org.endeavourhealth.usermanagermodel.models.caching.*;
 import org.endeavourhealth.usermanagermodel.models.database.*;
 import org.endeavourhealth.usermanagermodel.models.json.JsonAuditSummary;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -197,6 +194,8 @@ public class AuditEndpoint extends AbstractEndpoint {
             case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
             case 4: return getJsonForDefaltRoleChangeAudit(auditEntity);
             case 5: return getJsonForApplicationAudit(auditEntity);
+            case 6: return getJsonForApplicationProfileAudit(auditEntity);
+            case 7: return getJsonForRoleTypeAccessProfileAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
@@ -379,6 +378,118 @@ public class AuditEndpoint extends AbstractEndpoint {
         ((ObjectNode)auditJson).put("name", application.getName());
         ((ObjectNode)auditJson).put("description", application.getDescription());
         ((ObjectNode)auditJson).put("applicationTree", application.getApplicationTree());
+
+        return auditJson;
+    }
+
+    private Response getJsonForApplicationProfileAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        ApplicationAccessProfileEntity applicationProfileBefore;
+        ApplicationAccessProfileEntity applicationProfileAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Application profile added";
+            applicationProfileAfter = ApplicationAccessProfileEntity.getApplicationProfile(audit.getItemAfter());
+            afterJson = generateApplicationProfileAuditJson(applicationProfileAfter);
+        } else if (audit.getAuditType() == 1) {
+            title = "Application profile edited";
+            applicationProfileBefore = ApplicationAccessProfileEntity.getApplicationProfile(audit.getItemBefore());
+            beforeJson = generateApplicationProfileAuditJson(applicationProfileBefore);
+            applicationProfileAfter = ApplicationAccessProfileEntity.getApplicationProfile(audit.getItemAfter());
+            afterJson = generateApplicationProfileAuditJson(applicationProfileAfter);
+        } else {
+            title = "Application profile deleted";
+            applicationProfileBefore = ApplicationAccessProfileEntity.getApplicationProfile(audit.getItemBefore());
+            beforeJson = generateApplicationProfileAuditJson(applicationProfileBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateApplicationProfileAuditJson(ApplicationAccessProfileEntity applicationProfile) throws Exception {
+
+        ApplicationEntity applicationEntity = ApplicationCache.getApplicationDetails(applicationProfile.getApplicationId());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        ((ObjectNode)auditJson).put("id", applicationProfile.getId());
+        ((ObjectNode)auditJson).put("name", applicationProfile.getName());
+        ((ObjectNode)auditJson).put("description", applicationProfile.getDescription());
+        ((ObjectNode)auditJson).put("applicationName", applicationEntity.getName());
+        ((ObjectNode)auditJson).put("profileTree", applicationProfile.getProfileTree());
+
+        return auditJson;
+    }
+
+    private Response getJsonForRoleTypeAccessProfileAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        RoleTypeAccessProfileEntity accessProfileBefore;
+        RoleTypeAccessProfileEntity accessProfileAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Role type access profile added";
+            accessProfileAfter = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemAfter());
+            afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
+        } else if (audit.getAuditType() == 1) {
+            title = "Role type access profile edited";
+            accessProfileBefore = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemBefore());
+            beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
+            accessProfileAfter = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemAfter());
+            afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
+        } else {
+            title = "Role type access profile deleted";
+            accessProfileBefore = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemBefore());
+            beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateRoleTypeAccessProfileAuditJson(RoleTypeAccessProfileEntity accessProfileEntity) throws Exception {
+
+        RoleTypeEntity roleTypeEntity = RoleTypeCache.getRoleDetails(accessProfileEntity.getRoleTypeId());
+        ApplicationAccessProfileEntity profileEntity = ApplicationProfileCache.getApplicationProfileDetails(accessProfileEntity.getApplicationAccessProfileId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        ((ObjectNode)auditJson).put("id", accessProfileEntity.getId());
+        ((ObjectNode)auditJson).put("roleTypeName", roleTypeEntity.getName());
+        ((ObjectNode)auditJson).put("applicationProfileName", profileEntity.getName());
+        ((ObjectNode)auditJson).put("profileTree", accessProfileEntity.getProfileTree());
 
         return auditJson;
     }
