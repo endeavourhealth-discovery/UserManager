@@ -1,0 +1,113 @@
+<div class="module">
+  <div class="container-fluid">
+    <div class="module-heading">{{dialogTitle}}
+      <div class="pull-right">
+        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-success" (click)="save(false);">Save</button>
+        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
+        <button type="button" class="btn btn-danger" (click)="close(true)">Close</button>
+      </div>
+    </div>
+    <div class="module-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Details</div>
+            <div class="card-block">
+              <form class="form" #f="ngForm" novalidate>
+                <div class="form-group" #fgName="ngModelGroup" ngModelGroup="application" [class.has-error]="!fgName.valid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label required-field">Name</label>
+                        <input type="text" required class="form-control" placeholder="Username" [(ngModel)]="resultRole.name" name="name">
+                      </div>
+                      <small class="required-field-note"></small>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label required-field">Description</label>
+                        <input type="text" required class="form-control" placeholder="Description" [(ngModel)]="resultRole.description" name="description">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              Application profiles
+            </div>
+            <div class="card-block">
+              <div class="scroll-box-500">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="scroll-box-150 form-control">
+                      <loadingIndicator [done]="roleProfiles">
+                        <div *ngFor="let rp of roleProfiles"
+                             class="hover-box show-child-on-hover striped">
+                          <div *ngIf="!rp.isDeleted">
+                            <div class="row">
+                              <div class="col-md-5">
+                                {{rp.name}}
+                              </div>
+                              <div class="col-md-5">
+                                {{rp.application}}
+                              </div>
+                              <div class="col-md-1 offset-1">
+                                <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="removeAccessProfiles(rp)">
+                                  <span class="fa fa-sm fa-minus"></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </loadingIndicator>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <select class="form-control" [(ngModel)]="selectedApp" name="selectedApp" (change)="getApplicationProfiles()">
+                          <option *ngFor="let app of applications" [ngValue]="app">{{app.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="scroll-box-150 form-control">
+                      <loadingIndicator [done]="appProfiles">
+                        <table class="table table-striped table-sm">
+                          <thead>
+                          <tr>
+                            <th class="w-25">Name</th>
+                          </tr>
+                          </thead>
+
+                          <tbody>
+                          <tr *ngFor="let appProf of appProfiles" class="hover-box show-child-on-hover">
+
+                            <td>{{appProf.name}}</td>
+                            <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="addAvailableProfile(appProf)" title="Add role">
+                              <i class="fa fa-sm fa-plus"></i>
+                            </button>
+
+                          </tr>
+                          </tbody>
+                        </table>
+                      </loadingIndicator>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>

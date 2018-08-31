@@ -39,7 +39,7 @@ public class JsonRoleType {
         this.jobCategoryId = jobCategoryId;
     }
 
-    public boolean isDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 

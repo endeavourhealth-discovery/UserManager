@@ -5,6 +5,7 @@ import {RoleType} from "./models/RoleType";
 import {Application} from "./models/Application";
 import {ApplicationProfile} from "./models/ApplicationProfile";
 import {UserRole} from "../user/models/UserRole";
+import {RoleTypeAccessProfile} from "./models/RoleTypeAccessProfile";
 
 @Injectable()
 export class ConfigurationService {
@@ -17,10 +18,10 @@ export class ConfigurationService {
       .map((response) => response.json());
   }
 
-  saveRoleType(roleType : RoleType): Observable<any> {
+  saveRoleType(roleType : RoleType, userRoleId: string): Observable<any> {
     const vm = this;
     return vm.http.post('api/roleType/saveRoleType', roleType)
-      .map((response) => response.json());
+      .map((response) => response.text());
   }
 
   getApplications(): Observable<Application[]> {
@@ -60,6 +61,22 @@ export class ConfigurationService {
     let params = new URLSearchParams();
     params.set('userRoleId', userRoleId);
     return vm.http.post('api/applicationProfile/saveApplicationProfiles', profiles, {search: params})
+      .map((response) => response.text());
+  }
+
+  getRoleTypeAccessProfiles(roleTypeId: string): Observable<RoleTypeAccessProfile[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('roleTypeId', roleTypeId);
+    return vm.http.get('api/roleTypeAccessProfile/getRoleTypeAccessProfiles', {search: params})
+      .map((response) => response.json());
+  }
+
+  saveRoleTypeAccessProfiles(roleProfiles: RoleTypeAccessProfile[], userRoleId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/roleTypeAccessProfile/saveRoleTypeAccessProfiles', roleProfiles, {search: params})
       .map((response) => response.text());
   }
 

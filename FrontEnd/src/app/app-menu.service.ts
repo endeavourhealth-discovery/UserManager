@@ -9,6 +9,7 @@ import {AuditComponent} from "./audit/audit/audit.component";
 import {UserEditorComponent} from './user/user-editor/user-editor.component';
 import {ApplicationEditorComponent} from "./configuration/application-editor/application-editor.component";
 import {UserViewComponent} from "./user/user-view/user-view.component";
+import {RoleTypeEditorComponent} from "./configuration/role-type-editor/role-type-editor.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider  {
@@ -22,7 +23,8 @@ export class AppMenuService implements  AbstractMenuProvider  {
       { path: 'configuration', component: ConfigurationComponent},
       { path: 'appEdit', component: ApplicationEditorComponent},
       { path: 'audit', component: AuditComponent},
-      { path: 'userView', component: UserViewComponent}
+      { path: 'userView', component: UserViewComponent},
+      { path: 'roleTypeEdit', component: RoleTypeEditorComponent},
     ];
   }
 

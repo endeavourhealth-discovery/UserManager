@@ -9,6 +9,7 @@ import {ControlsModule} from "eds-angular4/dist/controls";
 import {ConfigurationService} from "./configuration.service";
 import {Ng4JsonEditorModule} from "angular4-jsoneditor";
 import { ApplicationEditorComponent } from './application-editor/application-editor.component';
+import { RoleTypeEditorComponent } from './role-type-editor/role-type-editor.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import { ApplicationEditorComponent } from './application-editor/application-edi
     ControlsModule,
     Ng4JsonEditorModule
   ],
-  declarations: [ConfigurationComponent, ApplicationEditorComponent],
+  declarations: [ConfigurationComponent, ApplicationEditorComponent, RoleTypeEditorComponent],
   providers: [
     ConfigurationService
   ]

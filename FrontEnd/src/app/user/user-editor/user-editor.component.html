@@ -188,7 +188,9 @@
                                class="hover-box show-child-on-hover striped"
                                [ngClass]="{'selection': role == selectedAvailableRole}">
                             {{role.name}}
-                            <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="addAvailableRole(role)" title="Add role"><i class="fa fa-sm fa-plus"></i></button>
+                            <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="addAvailableRole(role)" title="Add role">
+                              <i class="fa fa-sm fa-plus"></i>
+                            </button>
                           </div>
                         </loadingIndicator>
                       </div>

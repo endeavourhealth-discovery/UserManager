@@ -5,6 +5,8 @@ import org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfil
 public class JsonRoleTypeAccessProfile {
     private String id = null;
     private String roleTypeId = null;
+    private String name = null;
+    private String application = null;
     private String applicationAccessProfileId = null;
     private String profileTree = null;
     private boolean isDeleted;
@@ -42,6 +44,22 @@ public class JsonRoleTypeAccessProfile {
 
     public void setApplicationAccessProfileId(String applicationAccessProfileId) {
         this.applicationAccessProfileId = applicationAccessProfileId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getApplication() {
+        return application;
+    }
+
+    public void setApplication(String application) {
+        this.application = application;
     }
 
     public String getProfileTree() {

@@ -23,7 +23,7 @@ export class ApplicationEditorComponent implements OnInit {
   public editorOptions: JsonEditorOptions;
   jsonData: any;
   profileData: any;
-  applicationProfiles: ApplicationProfile[];
+  applicationProfiles: ApplicationProfile[] = [];
   selectedProfile: ApplicationProfile;
   editedProfiles: ApplicationProfile[] = [];
 
@@ -70,8 +70,6 @@ export class ApplicationEditorComponent implements OnInit {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
 
-
-
     if (!vm.editMode) {
       vm.dialogTitle = "Add application";
     }
@@ -90,8 +88,6 @@ export class ApplicationEditorComponent implements OnInit {
       vm.godMode = false;
     }
   }
-
-
 
   close(withConfirm: boolean) {
     const vm = this;
@@ -113,16 +109,15 @@ export class ApplicationEditorComponent implements OnInit {
       .subscribe(
         (response) => {
           vm.log.success('Application details successfully saved.', null, vm.dialogTitle);
-          vm.saveProfiles(response, close);
+          vm.saveProfiles(close);
         },
         (error) => this.log.error('Application details could not be saved. Please try again.', error, 'Save application details')
       );
   }
 
-  saveProfiles(newApplicationId : string, close: boolean) {
+  saveProfiles(close: boolean) {
     const vm = this;
     if (vm.editedProfiles.length > 0) {
-      vm.editedProfiles.forEach(x => x.applicationId = newApplicationId);
       this.configurationService.saveApplicationProfiles(vm.editedProfiles, vm.activeRole.id)
         .subscribe(
           (response) => {

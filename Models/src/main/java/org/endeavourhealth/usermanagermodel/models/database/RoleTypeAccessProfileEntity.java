@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -110,24 +111,52 @@ public class RoleTypeAccessProfileEntity {
         return ret;
     }
 
-    public static List<RoleTypeAccessProfileEntity> getRoleAccessProfiles(String roleTypeId) throws Exception {
+    public static List<JsonRoleTypeAccessProfile> getRoleAccessProfiles(String roleTypeId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<RoleTypeAccessProfileEntity> cq = cb.createQuery(RoleTypeAccessProfileEntity.class);
-        Root<RoleTypeAccessProfileEntity> rootEntry = cq.from(RoleTypeAccessProfileEntity.class);
+        try {
+            String sql = "select " +
+                    " rp.id," +
+                    " rp.roleTypeId," +
+                    " rt.name as roleName," +
+                    " a.name as applicationName," +
+                    " rp.profileTree," +
+                    " rp.isDeleted" +
+                    " from RoleTypeAccessProfileEntity rp" +
+                    " join RoleTypeEntity rt on rp.roleTypeId = rt.id" +
+                    " join ApplicationAccessProfileEntity aap on aap.id = rp.applicationAccessProfileId" +
+                    " join ApplicationEntity a on a.id = aap.applicationId" +
+                    " where rp.roleTypeId = :roleTypeId" +
+                    " and rp.isDeleted = 0";
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("isDeleted"), 0),
-                (cb.equal(rootEntry.get("roleTypeId"), roleTypeId)));
+            Query query = entityManager.createQuery(sql);
 
-        cq.where(predicate);
+            query.setParameter("roleTypeId", roleTypeId);
 
-        TypedQuery<RoleTypeAccessProfileEntity> query = entityManager.createQuery(cq);
-        List<RoleTypeAccessProfileEntity> ret = query.getResultList();
+            List<Object[]> results = query.getResultList();
 
-        entityManager.close();
+            return convertRoleProfilesToJson(results);
+        } finally {
+            entityManager.close();
+        }
+    }
 
-        return ret;
+    private static List<JsonRoleTypeAccessProfile> convertRoleProfilesToJson(List<Object[]> results) throws Exception {
+        List<JsonRoleTypeAccessProfile> profiles = new ArrayList<>();
+
+        for (Object[] obj : results) {
+            JsonRoleTypeAccessProfile profile = new JsonRoleTypeAccessProfile();
+            profile.setId(obj[0].toString());
+            profile.setRoleTypeId(obj[1].toString());
+            profile.setName(obj[2].toString());
+            profile.setApplication(obj[3].toString());
+            profile.setProfileTree(obj[4].toString());
+            profile.setDeleted(obj[5].toString().equals("1"));
+
+            profiles.add(profile);
+        }
+
+        return profiles;
     }
 
     public static String saveRoleAccessProfile(JsonRoleTypeAccessProfile roleAccessProfile, String userRoleId) throws Exception {

@@ -22,8 +22,8 @@
                     <tbody>
                     <tr *ngFor="let roleType of roleTypes" class="hover-box show-child-on-hover">
 
-                      <td>{{roleType.name}}</td>
-                      <td>{{roleType.description}}</td>
+                      <td (click)="editRole(roleType)">{{roleType.name}}</td>
+                      <td (click)="editRole(roleType)">{{roleType.description}}</td>
 
                     </tr>
                     </tbody>

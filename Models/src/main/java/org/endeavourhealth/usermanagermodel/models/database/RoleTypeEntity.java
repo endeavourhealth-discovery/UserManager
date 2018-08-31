@@ -121,7 +121,7 @@ public class RoleTypeEntity {
         roleTypeEntity.setName(roleType.getName());
         roleTypeEntity.setDescription(roleType.getDescription());
         roleTypeEntity.setJobCategoryId(roleType.getJobCategoryId());
-        roleTypeEntity.setIsDeleted(roleType.isDeleted() ? (byte)1 : (byte)0);
+        roleTypeEntity.setIsDeleted(roleType.getIsDeleted() ? (byte)1 : (byte)0);
         entityManager.getTransaction().begin();
         entityManager.merge(roleTypeEntity);
         entityManager.getTransaction().commit();

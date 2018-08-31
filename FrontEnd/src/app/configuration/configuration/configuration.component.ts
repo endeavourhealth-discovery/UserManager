@@ -94,6 +94,11 @@ export class ConfigurationComponent implements OnInit {
     this.router.navigate(['appEdit']);
   }
 
+  editRole(role: RoleType) {
+    this.state.setState('roleTypeEdit', {role: role, editMode: true});
+    this.router.navigate(['roleTypeEdit']);
+  }
+
   deleteApplication(app: Application) {
     const vm = this;
     MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete application: " + app.name + "?", "Yes", "No")
