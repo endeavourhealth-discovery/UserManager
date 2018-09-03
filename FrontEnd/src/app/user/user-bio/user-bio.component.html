@@ -92,10 +92,20 @@
             <div class="card-block">
               <div class="row">
                 <div class="col-md-12">
-                  <div *ngFor="let agreement of selectedProfileTree.sharingAgreement" class="hover-box show-child-on-hover striped">
+                  <div *ngIf="!selectedProfileTree.sharingAgreementsHasAccess">
+                    <div class="row">
+                      <div class="col-md-6">
+                        Organisation is not part of any matching sharing agreements.
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngFor="let agreement of selectedProfileTree.sharingAgreementsHasAccess" class="hover-box show-child-on-hover striped">
                     <div class="row">
                       <div class="col-md-6" (click)="selectAgreement(agreement)">
                         {{agreement.sharingAgreementName}}
+                      </div>
+                      <div *ngIf="agreement.sharingAgreementName" class="col-md-6" (click)="selectAgreement(agreement)">
+                        <button type="button" class="btn btn-info" (click)="viewSharingAgreement(agreement)">View sharing agreement</button>
                       </div>
                     </div>
                   </div>

@@ -101,7 +101,11 @@ export class UserBioComponent implements OnInit {
 
   loadRoleProfile() {
     const vm = this;
-    console.log('here');
+    vm.selectedSharingAgreement = null;
+    vm.selectedApp = null;
+    vm.selectedProfileTree = null;
+    vm.selectedProfile = null;
+
     vm.userService.getRoleAccessProfile(vm.selectedRole.roleTypeId, vm.selectedRole.organisationId)
       .subscribe(
         (result) => {
@@ -135,5 +139,11 @@ export class UserBioComponent implements OnInit {
   selectAgreement(agreement: any) {
     const vm = this;
     vm.selectedSharingAgreement = agreement;
+  }
+
+  viewSharingAgreement(agreement: any) {
+    var url = window.location.protocol + "//" + window.location.host;
+    url = url + "/data-sharing-manager/#/dsa/" + agreement.sharingAgreementId + '/edit';
+    window.open(url, '_blank');
   }
 }

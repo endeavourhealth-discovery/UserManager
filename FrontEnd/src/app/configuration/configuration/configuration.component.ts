@@ -89,6 +89,11 @@ export class ConfigurationComponent implements OnInit {
     this.router.navigate(['appEdit']);
   }
 
+  addRole() {
+    this.state.setState('roleTypeEdit', {role: null, editMode: false});
+    this.router.navigate(['roleTypeEdit']);
+  }
+
   editApp(app: Application) {
     this.state.setState('applicationEdit', {application: app, editMode: true});
     this.router.navigate(['appEdit']);

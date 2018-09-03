@@ -81,8 +81,10 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
 
     private Response saveRoleType(JsonRoleType roleType) throws Exception {
 
-        if (roleType.getId() == null) {
-            roleType.setId(UUID.randomUUID().toString());
+        String roleId = roleType.getId();
+        if (roleId == null) {
+            roleId = UUID.randomUUID().toString();
+            roleType.setId(roleId);
         }
 
         RoleTypeEntity.saveRoleType(roleType);
@@ -90,6 +92,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
         clearLogbackMarkers();
         return Response
                 .ok()
+                .entity(roleId)
                 .build();
     }
 

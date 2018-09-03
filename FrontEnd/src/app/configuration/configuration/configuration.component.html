@@ -7,6 +7,9 @@
           <div class="card">
             <div class="card-header text-white">
               Role types
+              <div class="pull-right">
+                <button *ngIf="superUser" class="btn btn-success" (click)="addRole()">Add new role</button>
+              </div>
             </div>
             <div class="card-block" style="overflow:hidden;  min-height: 720px; max-height: 720px">
               <div class="scroll-box-500">

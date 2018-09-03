@@ -66,6 +66,7 @@ export class RoleTypeEditorComponent implements OnInit {
     }
 
     vm.resultRole.isDeleted = false;
+    vm.resultRole.jobCategoryId = '';
 
     if (!vm.editMode) {
       vm.dialogTitle = "Edit role type";
@@ -133,6 +134,7 @@ export class RoleTypeEditorComponent implements OnInit {
     newRoleTypeProfile.isDeleted = false;
     newRoleTypeProfile.roleTypeId = vm.resultRole.id;
     newRoleTypeProfile.applicationAccessProfileId = appProfile.id;
+    newRoleTypeProfile.applicationAccessProfileName = appProfile.name;
     newRoleTypeProfile.name = appProfile.name;
     newRoleTypeProfile.application = vm.selectedApp.name;
     newRoleTypeProfile.profileTree = '';
@@ -193,15 +195,19 @@ export class RoleTypeEditorComponent implements OnInit {
       .subscribe(
         (response) => {
           vm.log.success('Application details successfully saved.', null, vm.dialogTitle);
-          vm.saveProfiles(close);
+          vm.saveProfiles(close, response);
         },
         (error) => this.log.error('Application details could not be saved. Please try again.', error, 'Save application details')
       );
   }
 
-  saveProfiles(close: boolean) {
+  saveProfiles(close: boolean, roleTypeId: string) {
     const vm = this;
     if (vm.editedProfiles.length > 0) {
+      if (vm.resultRole.id != roleTypeId) {
+        vm.resultRole.id = roleTypeId;
+        vm.editedProfiles.forEach(x => x.roleTypeId = roleTypeId);
+      }
       this.configurationService.saveRoleTypeAccessProfiles(vm.editedProfiles, vm.activeRole.id)
         .subscribe(
           (response) => {

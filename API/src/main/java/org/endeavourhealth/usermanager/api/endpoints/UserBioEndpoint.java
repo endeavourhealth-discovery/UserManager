@@ -111,14 +111,14 @@ public class UserBioEndpoint extends AbstractEndpoint {
                 if (sharingAgreementLevel.equals("organisation")) {
                     JsonNode sharingAgreements = getSharingAgreementsForOrganisationLevel(profileTreeNode, organisationId);
                     if (sharingAgreements != null) {
-                        ((ObjectNode) profileTreeNode).set("sharingAgreement", sharingAgreements);
+                        ((ObjectNode) profileTreeNode).set("sharingAgreementsHasAccess", sharingAgreements);
                         profile.setProfileTree(prettyPrintJsonString(profileTreeNode));
                     }
                 } else if (sharingAgreementLevel.equals("agreement")) {
                     //sharing agreement specific
                     JsonNode sharingAgreements = getSpecificSharingAgreement(profileTreeNode, organisationId);
                     if (sharingAgreements != null) {
-                        ((ObjectNode) profileTreeNode).set("sharingAgreement", sharingAgreements);
+                        ((ObjectNode) profileTreeNode).set("sharingAgreementsHasAccess", sharingAgreements);
                         profile.setProfileTree(prettyPrintJsonString(profileTreeNode));
                     }
                 }
@@ -129,11 +129,11 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode getSpecificSharingAgreement(JsonNode profileTreeNode, String organisationId) throws Exception {
-        JsonNode agreements = profileTreeNode.get("sharingAgreement");
+        JsonNode agreements = profileTreeNode.get("sharingAgreementsCanAccess");
 
         ObjectMapper mapper = new ObjectMapper();
 
-        JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreements");
+        JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreementsHasAccess");
 
         if (agreements.isArray()) {
             for (JsonNode agreement : agreements) {
@@ -176,7 +176,7 @@ public class UserBioEndpoint extends AbstractEndpoint {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreements");
+            JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreementsHasAccess");
 
             for (DataSharingAgreementEntity dsa : ret) {
                 JsonNode sharingAgreement = getOrganisationsForSharingAgreement(dsa);
