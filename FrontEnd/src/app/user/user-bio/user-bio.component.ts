@@ -25,6 +25,7 @@ export class UserBioComponent implements OnInit {
   selectedApp: UserAccessProfile;
   selectedProfile: RoleTypeAccessProfile;
   selectedProfileTree: any;
+  selectedSharingAgreement: any;
 
   public activeRole: UserRole;
   superUser = false;
@@ -100,7 +101,8 @@ export class UserBioComponent implements OnInit {
 
   loadRoleProfile() {
     const vm = this;
-    vm.userService.getRoleAccessProfile(vm.selectedRole.roleTypeId)
+    console.log('here');
+    vm.userService.getRoleAccessProfile(vm.selectedRole.roleTypeId, vm.selectedRole.organisationId)
       .subscribe(
         (result) => {
           vm.accessProfiles = result;
@@ -128,5 +130,10 @@ export class UserBioComponent implements OnInit {
     vm.selectedProfile = profile;
     vm.selectedProfileTree = JSON.parse(profile.profileTree);
     console.log(vm.selectedProfileTree);
+  }
+
+  selectAgreement(agreement: any) {
+    const vm = this;
+    vm.selectedSharingAgreement = agreement;
   }
 }

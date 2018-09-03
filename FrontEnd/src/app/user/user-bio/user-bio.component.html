@@ -84,6 +84,48 @@
           </div>
         </div>
       </div>
+      <br>
+      <div class="row" *ngIf="selectedProfile">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">{{selectedApp.applicationName}} - {{selectedProfile.applicationAccessProfileName}} - Sharing Agreements</div>
+            <div class="card-block">
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngFor="let agreement of selectedProfileTree.sharingAgreement" class="hover-box show-child-on-hover striped">
+                    <div class="row">
+                      <div class="col-md-6" (click)="selectAgreement(agreement)">
+                        {{agreement.sharingAgreementName}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row" *ngIf="selectedSharingAgreement">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">{{selectedApp.applicationName}} - {{selectedSharingAgreement.sharingAgreementName}} - Organisations</div>
+            <div class="card-block">
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngFor="let org of selectedSharingAgreement.organisations" class="hover-box show-child-on-hover striped">
+                    <div class="row">
+                      <div class="col-md-6">
+                        {{org.name}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
