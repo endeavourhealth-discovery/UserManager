@@ -74,10 +74,10 @@ public class UserBioEndpoint extends AbstractEndpoint {
             if (applicationProfile.getApplicationId() == null) {
                 applicationProfile.setApplicationId(profile.getApplicationId());
                 applicationProfile.setApplicationName(profile.getApplication());
-                if (!applicationProfile.isCanAccessData()) {  //Only check if false...once we get a positive, move on
-                    applicationProfile.setCanAccessData(checkForDataAccess(profile.getProfileTree()));
-                }
                 userProfiles.add(applicationProfile);
+            }
+            if (!applicationProfile.isCanAccessData()) {  //Only check if false...once we get a positive, move on
+                applicationProfile.setCanAccessData(checkForDataAccess(profile.getProfileTree()));
             }
             applicationProfile.addRoleTypeAccessProfile(processAccessProfile(profile, organisationId));
 
