@@ -136,6 +136,7 @@ export class UserBioComponent implements OnInit {
     const vm = this;
     vm.selectedProfile = profile;
     vm.selectedProfileTree = JSON.parse(profile.profileTree);
+    vm.selectedSharingAgreement = null;
     console.log(vm.selectedProfileTree);
   }
 
