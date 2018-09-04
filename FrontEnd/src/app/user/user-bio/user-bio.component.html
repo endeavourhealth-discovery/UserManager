@@ -2,6 +2,7 @@
   <div class="container-fluid">
     <div class="module-heading">{{user.forename}} {{user.surname}} ({{user.username}}) - Access summary
       <div class="pull-right">
+        <button type="button" class="btn btn-info" (click)="refresh()">Refresh</button>
         <button type="button" class="btn btn-danger" (click)="close()">Close</button>
       </div>
     </div>

@@ -57,8 +57,7 @@ export class UserBioComponent implements OnInit {
       vm.roleChanged();
     });
 
-    vm.getRoles(false);
-    vm.loadRoleProfile();
+    vm.refresh(false);
   }
 
   getRoles(refresh: boolean) {
@@ -149,5 +148,11 @@ export class UserBioComponent implements OnInit {
     var url = window.location.protocol + "//" + window.location.host;
     url = url + "/data-sharing-manager/#/dsa/" + agreement.sharingAgreementId + '/edit';
     window.open(url, '_blank');
+  }
+
+  refresh(refresh : boolean = false) {
+    const vm = this;
+    vm.getRoles(refresh);
+    vm.loadRoleProfile();
   }
 }
