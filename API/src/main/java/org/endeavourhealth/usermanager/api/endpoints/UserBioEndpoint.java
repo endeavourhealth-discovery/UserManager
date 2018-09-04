@@ -139,8 +139,10 @@ public class UserBioEndpoint extends AbstractEndpoint {
             for (JsonNode agreement : agreements) {
                 JsonNode sharingAgreementNode = checkOrgCanAccessSharingAgreement(agreement.get("sharingAgreementId").asText(), organisationId);
 
-                ((ArrayNode) sharingAgreements).add(sharingAgreementNode);
-                return sharingAgreements;
+                if (sharingAgreementNode != null) {
+                    ((ArrayNode) sharingAgreements).add(sharingAgreementNode);
+                    return sharingAgreements;
+                }
             }
         }
 
