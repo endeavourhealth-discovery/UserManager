@@ -133,6 +133,7 @@ export class ApplicationEditorComponent implements OnInit {
   successfullySavedApplication(close: boolean) {
     const vm = this;
     this.log.success('Application saved', null, vm.dialogTitle);
+    vm.editedProfiles = [];
     if (close)
       this.close(false);
   }
