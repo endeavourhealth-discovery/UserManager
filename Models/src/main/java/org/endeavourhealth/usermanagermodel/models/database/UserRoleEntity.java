@@ -289,7 +289,8 @@ public class UserRoleEntity {
         Root<UserRoleEntity> rootEntry = cq.from(UserRoleEntity.class);
 
         Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
-                (cb.equal(rootEntry.get("isDefault"), 1)));
+                (cb.equal(rootEntry.get("isDefault"), 1)),
+                (cb.equal(rootEntry.get("isDeleted"), 0)));
 
         cq.where(predicate);
         TypedQuery<UserRoleEntity> query = entityManager.createQuery(cq);
