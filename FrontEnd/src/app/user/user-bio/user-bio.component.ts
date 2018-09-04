@@ -119,6 +119,9 @@ export class UserBioComponent implements OnInit {
   selectApp(app: UserAccessProfile) {
     const vm = this;
     vm.selectedApp = app;
+    vm.selectedSharingAgreement = null;
+    vm.selectedProfileTree = null;
+    vm.selectedProfile = null;
   }
 
   setButtonClass(canAccessData: boolean) {
