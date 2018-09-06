@@ -28,7 +28,7 @@ import java.util.UUID;
 
 @Path("/roleType")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the role types.")
+@Api(value = "Role type", description = "API endpoint related to the role types.")
 public class RoleTypeEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(RoleTypeEndpoint.class);
 

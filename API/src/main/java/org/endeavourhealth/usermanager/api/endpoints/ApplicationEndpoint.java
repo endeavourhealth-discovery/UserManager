@@ -29,7 +29,7 @@ import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId
 
 @Path("/application")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the applications.")
+@Api(value = "Application", description = "API endpoint related to the applications.")
 public class ApplicationEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationEndpoint.class);
 

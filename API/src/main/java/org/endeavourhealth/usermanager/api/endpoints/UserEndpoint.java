@@ -41,7 +41,7 @@ import static org.endeavourhealth.common.security.SecurityUtils.hasRole;
 
 @Path("/user")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the users.")
+@Api(value = "User", description = "API endpoint related to the users.")
 public final class UserEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(UserEndpoint.class);
 

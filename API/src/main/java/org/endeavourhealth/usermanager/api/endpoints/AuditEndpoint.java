@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Path("/audit")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the audits.")
+@Api(value = "Audit", description = "API endpoint related to the audits.")
 public class AuditEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AuditEndpoint.class);
 

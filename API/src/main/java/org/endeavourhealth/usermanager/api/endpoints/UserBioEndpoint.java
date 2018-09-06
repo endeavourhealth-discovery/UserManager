@@ -39,7 +39,7 @@ import java.util.List;
 
 @Path("/userBio")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the user bio.")
+@Api(value = "User bio", description = "API endpoint related to the user bio.")
 public class UserBioEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(UserBioEndpoint.class);
 

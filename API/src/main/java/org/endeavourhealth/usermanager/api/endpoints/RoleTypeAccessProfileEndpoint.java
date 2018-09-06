@@ -29,7 +29,7 @@ import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId
 
 @Path("/roleTypeAccessProfile")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the role type access profiles.")
+@Api(value = "Role type access profile", description = "API endpoint related to the role type access profiles.")
 public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(RoleTypeAccessProfileEndpoint.class);
 

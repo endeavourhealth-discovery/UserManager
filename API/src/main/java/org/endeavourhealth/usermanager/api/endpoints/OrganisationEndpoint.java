@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Path("/organisation")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the organisations.")
+@Api(value = "Organisation", description = "API endpoint related to the organisations.")
 public class OrganisationEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OrganisationEndpoint.class);
 

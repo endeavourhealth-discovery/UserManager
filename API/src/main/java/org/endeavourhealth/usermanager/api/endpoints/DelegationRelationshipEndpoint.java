@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Path("/delegationRelationship")
 @Metrics(registry = "UserManagerRegistry")
-@Api(description = "API endpoint related to the delegation relationships.")
+@Api(value = "Delegation relationship", description = "API endpoint related to the delegation relationships.")
 public class DelegationRelationshipEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(DelegationRelationshipEndpoint.class);
 
