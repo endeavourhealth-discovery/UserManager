@@ -4,13 +4,13 @@
         <class>org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.DelegationEntity</class>
-        <class>org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.AuditEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.AuditActionEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.ItemTypeEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationAccessProfileEntity</class>
-        <class>org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfileEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

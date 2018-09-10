@@ -3,7 +3,7 @@ package org.endeavourhealth.usermanagermodel.models.database;
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
 import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleTypeAccessProfile;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,10 +16,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "role_type_access_profile", schema = "user_manager")
-public class RoleTypeAccessProfileEntity {
+@Table(name = "application_policy_attribute", schema = "user_manager")
+public class ApplicationPolicyAttributeEntity {
     private String id;
-    private String roleTypeId;
+    private String applicationPolicyId;
     private String applicationAccessProfileId;
     private String profileTree;
     private Byte isDeleted;
@@ -35,13 +35,13 @@ public class RoleTypeAccessProfileEntity {
     }
 
     @Basic
-    @Column(name = "role_type_id")
-    public String getRoleTypeId() {
-        return roleTypeId;
+    @Column(name = "application_policy_id")
+    public String getApplicationPolicyId() {
+        return applicationPolicyId;
     }
 
-    public void setRoleTypeId(String roleTypeId) {
-        this.roleTypeId = roleTypeId;
+    public void setApplicationPolicyId(String roleTypeId) {
+        this.applicationPolicyId = roleTypeId;
     }
 
     @Basic
@@ -78,9 +78,9 @@ public class RoleTypeAccessProfileEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RoleTypeAccessProfileEntity that = (RoleTypeAccessProfileEntity) o;
+        ApplicationPolicyAttributeEntity that = (ApplicationPolicyAttributeEntity) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(roleTypeId, that.roleTypeId) &&
+                Objects.equals(applicationPolicyId, that.applicationPolicyId) &&
                 Objects.equals(applicationAccessProfileId, that.applicationAccessProfileId) &&
                 Objects.equals(profileTree, that.profileTree) &&
                 Objects.equals(isDeleted, that.isDeleted);
@@ -89,35 +89,35 @@ public class RoleTypeAccessProfileEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, roleTypeId, applicationAccessProfileId, profileTree, isDeleted);
+        return Objects.hash(id, applicationPolicyId, applicationAccessProfileId, profileTree, isDeleted);
     }
 
-    public static List<RoleTypeAccessProfileEntity> getAllRoleAccessProfiles() throws Exception {
+    public static List<ApplicationPolicyAttributeEntity> getAllRoleAccessProfiles() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<RoleTypeAccessProfileEntity> cq = cb.createQuery(RoleTypeAccessProfileEntity.class);
-        Root<RoleTypeAccessProfileEntity> rootEntry = cq.from(RoleTypeAccessProfileEntity.class);
+        CriteriaQuery<ApplicationPolicyAttributeEntity> cq = cb.createQuery(ApplicationPolicyAttributeEntity.class);
+        Root<ApplicationPolicyAttributeEntity> rootEntry = cq.from(ApplicationPolicyAttributeEntity.class);
 
         Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
         cq.where(predicate);
 
-        TypedQuery<RoleTypeAccessProfileEntity> query = entityManager.createQuery(cq);
-        List<RoleTypeAccessProfileEntity> ret = query.getResultList();
+        TypedQuery<ApplicationPolicyAttributeEntity> query = entityManager.createQuery(cq);
+        List<ApplicationPolicyAttributeEntity> ret = query.getResultList();
 
         entityManager.close();
 
         return ret;
     }
 
-    public static List<JsonRoleTypeAccessProfile> getRoleAccessProfiles(String roleTypeId) throws Exception {
+    public static List<JsonApplicationPolicyAttribute> getApplicationPolicyAttributes(String roleTypeId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         try {
             String sql = "select " +
                     " rp.id," +
-                    " rp.roleTypeId," +
+                    " rp.applicationPolicyId," +
                     " rt.name as roleName," +
                     " a.name as applicationName," +
                     " a.id as applicationId," +
@@ -126,11 +126,11 @@ public class RoleTypeAccessProfileEntity {
                     " aap.name as profileName," +
                     " aap.description as profileDescription," +
                     " rp.isDeleted" +
-                    " from RoleTypeAccessProfileEntity rp" +
-                    " join RoleTypeEntity rt on rp.roleTypeId = rt.id" +
+                    " from ApplicationPolicyAttributeEntity rp" +
+                    " join ApplicationPolicyEntity rt on rp.applicationPolicyId = rt.id" +
                     " join ApplicationAccessProfileEntity aap on aap.id = rp.applicationAccessProfileId" +
                     " join ApplicationEntity a on a.id = aap.applicationId" +
-                    " where rp.roleTypeId = :roleTypeId" +
+                    " where rp.applicationPolicyId = :roleTypeId" +
                     " and rp.isDeleted = 0";
 
             Query query = entityManager.createQuery(sql);
@@ -145,13 +145,13 @@ public class RoleTypeAccessProfileEntity {
         }
     }
 
-    private static List<JsonRoleTypeAccessProfile> convertRoleProfilesToJson(List<Object[]> results) throws Exception {
-        List<JsonRoleTypeAccessProfile> profiles = new ArrayList<>();
+    private static List<JsonApplicationPolicyAttribute> convertRoleProfilesToJson(List<Object[]> results) throws Exception {
+        List<JsonApplicationPolicyAttribute> profiles = new ArrayList<>();
 
         for (Object[] obj : results) {
-            JsonRoleTypeAccessProfile profile = new JsonRoleTypeAccessProfile();
+            JsonApplicationPolicyAttribute profile = new JsonApplicationPolicyAttribute();
             profile.setId(obj[0].toString());
-            profile.setRoleTypeId(obj[1].toString());
+            profile.setApplicationPolicyId(obj[1].toString());
             profile.setName(obj[2].toString());
             profile.setApplication(obj[3].toString());
             profile.setApplicationId(obj[4].toString());
@@ -167,7 +167,7 @@ public class RoleTypeAccessProfileEntity {
         return profiles;
     }
 
-    public static String saveRoleAccessProfile(JsonRoleTypeAccessProfile roleAccessProfile, String userRoleId) throws Exception {
+    public static String saveRoleAccessProfile(JsonApplicationPolicyAttribute roleAccessProfile, String userRoleId) throws Exception {
 
         boolean added = false;
         String originalUuid = roleAccessProfile.getId();
@@ -200,15 +200,15 @@ public class RoleTypeAccessProfileEntity {
 
     }
 
-    public static void saveRoleAccessProfileInDatabase(JsonRoleTypeAccessProfile jsonRoleTypeAccessProfile) throws Exception {
+    public static void saveRoleAccessProfileInDatabase(JsonApplicationPolicyAttribute jsonApplicationPolicyAttribute) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        RoleTypeAccessProfileEntity roleAccessEntity = new RoleTypeAccessProfileEntity();
-        roleAccessEntity.setId(jsonRoleTypeAccessProfile.getId());
-        roleAccessEntity.setRoleTypeId(jsonRoleTypeAccessProfile.getRoleTypeId());
-        roleAccessEntity.setApplicationAccessProfileId(jsonRoleTypeAccessProfile.getApplicationAccessProfileId());
-        roleAccessEntity.setProfileTree(jsonRoleTypeAccessProfile.getProfileTree());
-        roleAccessEntity.setIsDeleted(jsonRoleTypeAccessProfile.getIsDeleted() ? (byte)1 : (byte)0);
+        ApplicationPolicyAttributeEntity roleAccessEntity = new ApplicationPolicyAttributeEntity();
+        roleAccessEntity.setId(jsonApplicationPolicyAttribute.getId());
+        roleAccessEntity.setApplicationPolicyId(jsonApplicationPolicyAttribute.getApplicationPolicyId());
+        roleAccessEntity.setApplicationAccessProfileId(jsonApplicationPolicyAttribute.getApplicationAccessProfileId());
+        roleAccessEntity.setProfileTree(jsonApplicationPolicyAttribute.getProfileTree());
+        roleAccessEntity.setIsDeleted(jsonApplicationPolicyAttribute.getIsDeleted() ? (byte)1 : (byte)0);
         entityManager.getTransaction().begin();
         entityManager.merge(roleAccessEntity);
         entityManager.getTransaction().commit();
@@ -222,7 +222,7 @@ public class RoleTypeAccessProfileEntity {
 
         try {
             entityManager.getTransaction().begin();
-            String sql = "update RoleTypeAccessProfileEntity a" +
+            String sql = "update ApplicationPolicyAttributeEntity a" +
                     " set a.isDeleted = 1 " +
                     " where a.id = :accessId";
 
@@ -238,10 +238,10 @@ public class RoleTypeAccessProfileEntity {
         }
     }
 
-    public static RoleTypeAccessProfileEntity getRoleTypeAccessProfile(String profileId) throws Exception {
+    public static ApplicationPolicyAttributeEntity getRoleTypeAccessProfile(String profileId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        RoleTypeAccessProfileEntity ret = entityManager.find(RoleTypeAccessProfileEntity.class, profileId);
+        ApplicationPolicyAttributeEntity ret = entityManager.find(ApplicationPolicyAttributeEntity.class, profileId);
 
         entityManager.close();
 
@@ -250,7 +250,7 @@ public class RoleTypeAccessProfileEntity {
 
     public static void deleteRoleAccessProfile(String profileId, String userRoleId) throws Exception {
 
-        JsonRoleTypeAccessProfile accessProfile = new JsonRoleTypeAccessProfile(getRoleTypeAccessProfile(profileId));
+        JsonApplicationPolicyAttribute accessProfile = new JsonApplicationPolicyAttribute(getRoleTypeAccessProfile(profileId));
 
         accessProfile.setDeleted(true);
 

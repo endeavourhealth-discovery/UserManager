@@ -13,8 +13,8 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfileEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleTypeAccessProfile;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,13 +43,13 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
     @Path("/getRoleTypeAccessProfiles")
     @ApiOperation(value = "Returns a list of role type access profiles")
     public Response getRoleTypeAccessProfiles(@Context SecurityContext sc,
-                                    @ApiParam(value = "Role type id") @QueryParam("roleTypeId") String roleTypeId) throws Exception {
+                                    @ApiParam(value = "Application policy id") @QueryParam("applicationPolicyId") String applicationPolicyId) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "application(s)");
 
-        return getRoleTypeAccessProfiles(roleTypeId);
+        return getRoleTypeAccessProfiles(applicationPolicyId);
 
     }
 
@@ -62,7 +62,7 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
             "of an role type access profile.")
     @RequiresAdmin
     public Response saveRoleTypeAccessProfiles(@Context SecurityContext sc,
-                                            @ApiParam(value = "Json representation of the role type access profiles to save or update") List<JsonRoleTypeAccessProfile> roleTypeProfiles,
+                                            @ApiParam(value = "Json representation of the role type access profiles to save or update") List<JsonApplicationPolicyAttribute> roleTypeProfiles,
                                             @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
@@ -94,8 +94,8 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getRoleTypeAccessProfiles(String roleTypeId) throws Exception {
-        List<JsonRoleTypeAccessProfile> profiles = RoleTypeAccessProfileEntity.getRoleAccessProfiles(roleTypeId);
+    private Response getRoleTypeAccessProfiles(String applicationPolicyId) throws Exception {
+        List<JsonApplicationPolicyAttribute> profiles = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(applicationPolicyId);
 
         clearLogbackMarkers();
         return Response
@@ -104,10 +104,10 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response saveRoleTypeAccessProfiles(List<JsonRoleTypeAccessProfile> roleTypeProfiles, String userRoleId) throws Exception {
+    private Response saveRoleTypeAccessProfiles(List<JsonApplicationPolicyAttribute> roleTypeProfiles, String userRoleId) throws Exception {
 
-        for (JsonRoleTypeAccessProfile roleProfile : roleTypeProfiles) {
-            RoleTypeAccessProfileEntity.saveRoleAccessProfile(roleProfile, userRoleId);
+        for (JsonApplicationPolicyAttribute roleProfile : roleTypeProfiles) {
+            ApplicationPolicyAttributeEntity.saveRoleAccessProfile(roleProfile, userRoleId);
         }
 
         clearLogbackMarkers();
@@ -118,7 +118,7 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
 
     private Response deleteRoleTypeAccessProfile(String roleTypeProfileId, String userRoleId) throws Exception {
 
-        RoleTypeAccessProfileEntity.deleteRoleAccessProfile(roleTypeProfileId, userRoleId);
+        ApplicationPolicyAttributeEntity.deleteRoleAccessProfile(roleTypeProfileId, userRoleId);
 
         clearLogbackMarkers();
         return Response

@@ -22,9 +22,8 @@ import org.endeavourhealth.datasharingmanagermodel.models.database.MasterMapping
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfileEntity;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleTypeAccessProfile;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserAccessProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,9 +66,9 @@ public class UserBioEndpoint extends AbstractEndpoint {
     private Response getAccessProfile(String roleTypeId, String organisationId) throws Exception {
 
         List<JsonUserAccessProfile> userProfiles = new ArrayList<>();
-        List<JsonRoleTypeAccessProfile> roleProfiles = RoleTypeAccessProfileEntity.getRoleAccessProfiles(roleTypeId);
+        List<JsonApplicationPolicyAttribute> roleProfiles = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(roleTypeId);
 
-        for (JsonRoleTypeAccessProfile profile : roleProfiles) {
+        for (JsonApplicationPolicyAttribute profile : roleProfiles) {
             JsonUserAccessProfile applicationProfile = userProfiles.stream().filter(app -> app.getApplicationId().equals(profile.getApplicationId())).findFirst().orElse(new JsonUserAccessProfile());
             if (applicationProfile.getApplicationId() == null) {
                 applicationProfile.setApplicationId(profile.getApplicationId());
@@ -102,7 +101,7 @@ public class UserBioEndpoint extends AbstractEndpoint {
         }
     }
 
-    private JsonRoleTypeAccessProfile processAccessProfile(JsonRoleTypeAccessProfile profile, String organisationId) throws Exception {
+    private JsonApplicationPolicyAttribute processAccessProfile(JsonApplicationPolicyAttribute profile, String organisationId) throws Exception {
         if (!StringUtils.isNullOrEmpty(profile.getProfileTree())) {
             JsonNode profileTreeNode = ObjectMapperPool.getInstance().readTree(profile.getProfileTree());
             if (profileTreeNode.get("accessToData").asBoolean()) {

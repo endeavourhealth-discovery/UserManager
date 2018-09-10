@@ -6,7 +6,7 @@ import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4"
 import {UserService} from "../user.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
-import {RoleType} from "../../configuration/models/RoleType";
+import {ApplicationPolicy} from "../../configuration/models/ApplicationPolicy";
 import {UserRole} from "../models/UserRole";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {Router} from "@angular/router";
@@ -26,7 +26,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   dialogTitle: String;
   selectedOrg: DelegatedOrganisation;
   delegatedOrganisations: DelegatedOrganisation[];
-  roleTypes: RoleType[];
+  roleTypes: ApplicationPolicy[];
   searchTerm: string;
   searched: boolean = true;
   userList: User[];
@@ -303,7 +303,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     this.editedRoles.push(currentRole);
 
     if (currentRole.organisationId == this.selectedOrg.uuid) {
-      var newRoleType: RoleType = new RoleType();
+      var newRoleType: ApplicationPolicy = new ApplicationPolicy();
       newRoleType.id = currentRole.roleTypeId;
       newRoleType.name = currentRole.roleTypeName;
 
@@ -312,7 +312,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   }
 
   //remove from available and add into current, i.e. add into resultData
-  addAvailableRole(availableRole: RoleType) {
+  addAvailableRole(availableRole: ApplicationPolicy) {
     const vm = this;
     var newRole = new UserRole();
     newRole.roleTypeName = availableRole.name;

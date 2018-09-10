@@ -7,13 +7,13 @@ public class JsonUserAccessProfile {
     private String applicationName = null;
     private String applicationId = null;
     private boolean canAccessData;
-    private List<JsonRoleTypeAccessProfile> roleTypeAccessProfiles = null;
+    private List<JsonApplicationPolicyAttribute> roleTypeAccessProfiles = null;
 
-    public List<JsonRoleTypeAccessProfile> getRoleTypeAccessProfiles() {
+    public List<JsonApplicationPolicyAttribute> getRoleTypeAccessProfiles() {
         return roleTypeAccessProfiles;
     }
 
-    public void setRoleTypeAccessProfiles(List<JsonRoleTypeAccessProfile> roleTypeAccessProfiles) {
+    public void setRoleTypeAccessProfiles(List<JsonApplicationPolicyAttribute> roleTypeAccessProfiles) {
         this.roleTypeAccessProfiles = roleTypeAccessProfiles;
     }
 
@@ -33,7 +33,7 @@ public class JsonUserAccessProfile {
         this.applicationId = applicationId;
     }
 
-    public void addRoleTypeAccessProfile(JsonRoleTypeAccessProfile profile) {
+    public void addRoleTypeAccessProfile(JsonApplicationPolicyAttribute profile) {
         if (this.roleTypeAccessProfiles == null) {
             this.roleTypeAccessProfiles = new ArrayList<>();
         }

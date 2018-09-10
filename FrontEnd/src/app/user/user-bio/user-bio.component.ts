@@ -10,7 +10,7 @@ import {Location} from "@angular/common";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UserAccessProfile} from "../models/UserAccessProfile";
-import {RoleTypeAccessProfile} from "../../configuration/models/RoleTypeAccessProfile";
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
 
 @Component({
   selector: 'app-user-bio',
@@ -23,7 +23,7 @@ export class UserBioComponent implements OnInit {
   selectedRole: UserRole;
   accessProfiles: UserAccessProfile[];
   selectedApp: UserAccessProfile;
-  selectedProfile: RoleTypeAccessProfile;
+  selectedProfile: ApplicationPolicyAttribute;
   selectedProfileTree: any;
   selectedSharingAgreement: any;
 
@@ -131,7 +131,7 @@ export class UserBioComponent implements OnInit {
     }
   }
 
-  selectProfile(profile: RoleTypeAccessProfile) {
+  selectProfile(profile: ApplicationPolicyAttribute) {
     const vm = this;
     vm.selectedProfile = profile;
     vm.selectedProfileTree = JSON.parse(profile.profileTree);

@@ -1,8 +1,8 @@
-export class RoleTypeAccessProfile {
+export class ApplicationPolicyAttribute {
   id : string;
   name: string;
   application: string;
-  roleTypeId : string;
+  applicationPolicyId : string;
   applicationAccessProfileId : string;
   applicationAccessProfileName : string;
   applicationAccessProfileDescription : string;

@@ -6,19 +6,19 @@ import {Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {ConfigurationService} from "../configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {RoleType} from "../models/RoleType";
-import {RoleTypeAccessProfile} from "../models/RoleTypeAccessProfile";
+import {ApplicationPolicy} from "../models/ApplicationPolicy";
+import {ApplicationPolicyAttribute} from "../models/ApplicationPolicyAttribute";
 import {Application} from "../models/Application";
 import {ApplicationProfile} from "../models/ApplicationProfile";
 
 @Component({
   selector: 'app-role-type-editor',
-  templateUrl: './role-type-editor.component.html',
-  styleUrls: ['./role-type-editor.component.css']
+  templateUrl: './application-policy-editor.component.html',
+  styleUrls: ['./application-policy-editor.component.css']
 })
-export class RoleTypeEditorComponent implements OnInit {
+export class ApplicationPolicyEditorComponent implements OnInit {
 
-  @Input() resultRole: RoleType;
+  @Input() resultRole: ApplicationPolicy;
   @Input() editMode: boolean;
   dialogTitle: string = 'Edit role type';
 
@@ -26,8 +26,8 @@ export class RoleTypeEditorComponent implements OnInit {
   superUser = false;
   godMode = false;
 
-  roleProfiles: RoleTypeAccessProfile[];
-  editedProfiles: RoleTypeAccessProfile[] = [];
+  roleProfiles: ApplicationPolicyAttribute[];
+  editedProfiles: ApplicationPolicyAttribute[] = [];
   applications: Application[];
   appProfiles: ApplicationProfile[];
   selectedApp: Application;
@@ -52,12 +52,13 @@ export class RoleTypeEditorComponent implements OnInit {
 
     let s = vm.state.getState('roleTypeEdit');
     if (s == null) {
-      vm.resultRole = {} as RoleType;
+      vm.resultRole = {} as ApplicationPolicy;
       vm.router.navigate(['configuration']);
       return;
     }
     vm.resultRole = Object.assign({}, s.role);
     vm.editMode = s.editMode;
+    console.log(vm.resultRole);
 
     if (vm.editMode) {
       vm.getRoleTypeProfiles();
@@ -122,6 +123,7 @@ export class RoleTypeEditorComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.appProfiles = result;
+          console.log(result);
           vm.checkAvailableAppProfiles();
         },
         (error) => vm.log.error('Loading application profiles failed. Please try again', error, 'Error')
@@ -130,9 +132,9 @@ export class RoleTypeEditorComponent implements OnInit {
 
   addAvailableProfile(appProfile: ApplicationProfile) {
     const vm = this;
-    var newRoleTypeProfile = new RoleTypeAccessProfile();
+    var newRoleTypeProfile = new ApplicationPolicyAttribute();
     newRoleTypeProfile.isDeleted = false;
-    newRoleTypeProfile.roleTypeId = vm.resultRole.id;
+    newRoleTypeProfile.applicationPolicyId = vm.resultRole.id;
     newRoleTypeProfile.applicationAccessProfileId = appProfile.id;
     newRoleTypeProfile.applicationAccessProfileName = appProfile.name;
     newRoleTypeProfile.name = appProfile.name;
@@ -149,7 +151,7 @@ export class RoleTypeEditorComponent implements OnInit {
 
   }
 
-  removeAccessProfiles(roleProfile: RoleTypeAccessProfile) {
+  removeAccessProfiles(roleProfile: ApplicationPolicyAttribute) {
     const vm = this;
     roleProfile.isDeleted = true;
     vm.editedProfiles.push(roleProfile);
@@ -206,7 +208,7 @@ export class RoleTypeEditorComponent implements OnInit {
     if (vm.editedProfiles.length > 0) {
       if (vm.resultRole.id != roleTypeId) {
         vm.resultRole.id = roleTypeId;
-        vm.editedProfiles.forEach(x => x.roleTypeId = roleTypeId);
+        vm.editedProfiles.forEach(x => x.applicationPolicyId = roleTypeId);
       }
       this.configurationService.saveRoleTypeAccessProfiles(vm.editedProfiles, vm.activeRole.id)
         .subscribe(

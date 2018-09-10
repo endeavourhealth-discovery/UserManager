@@ -1,8 +1,8 @@
-import {RoleTypeAccessProfile} from "../../configuration/models/RoleTypeAccessProfile";
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
 
 export class UserAccessProfile {
   applicationName: string;
   applicationId: string;
   canAccessData: boolean;
-  roleTypeAccessProfiles: RoleTypeAccessProfile[];
+  roleTypeAccessProfiles: ApplicationPolicyAttribute[];
 }

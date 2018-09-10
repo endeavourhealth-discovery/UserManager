@@ -13,8 +13,8 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleType;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
             "of a role type.")
     @RequiresAdmin
     public Response saveRoleType(@Context SecurityContext sc,
-                            @ApiParam(value = "Json representation of role type to save or update") JsonRoleType roleType) throws Exception {
+                            @ApiParam(value = "Json representation of role type to save or update") JsonApplicationPolicy roleType) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",
@@ -70,7 +70,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
     }
 
     private Response getAllRoleTypes() throws Exception {
-        List<RoleTypeEntity> roleTypes = RoleTypeEntity.getAllRoleTypes();
+        List<ApplicationPolicyEntity> roleTypes = ApplicationPolicyEntity.getAllRoleTypes();
 
         clearLogbackMarkers();
         return Response
@@ -79,7 +79,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response saveRoleType(JsonRoleType roleType) throws Exception {
+    private Response saveRoleType(JsonApplicationPolicy roleType) throws Exception {
 
         String roleId = roleType.getId();
         if (roleId == null) {
@@ -87,7 +87,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
             roleType.setId(roleId);
         }
 
-        RoleTypeEntity.saveRoleType(roleType);
+        ApplicationPolicyEntity.saveRoleType(roleType);
 
         clearLogbackMarkers();
         return Response

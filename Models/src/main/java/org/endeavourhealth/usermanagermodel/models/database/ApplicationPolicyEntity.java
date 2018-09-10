@@ -1,19 +1,18 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
-import org.endeavourhealth.usermanagermodel.models.json.JsonRoleType;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicy;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "role_type", schema = "user_manager")
-public class RoleTypeEntity {
+@Table(name = "application_policy", schema = "user_manager")
+public class ApplicationPolicyEntity {
     private String id;
     private String name;
     private String description;
@@ -74,7 +73,7 @@ public class RoleTypeEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RoleTypeEntity that = (RoleTypeEntity) o;
+        ApplicationPolicyEntity that = (ApplicationPolicyEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
@@ -88,42 +87,42 @@ public class RoleTypeEntity {
         return Objects.hash(id, name, description, jobCategoryId, isDeleted);
     }
 
-    public static List<RoleTypeEntity> getAllRoleTypes() throws Exception {
+    public static List<ApplicationPolicyEntity> getAllRoleTypes() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<RoleTypeEntity> cq = cb.createQuery(RoleTypeEntity.class);
-        Root<RoleTypeEntity> rootEntry = cq.from(RoleTypeEntity.class);
+        CriteriaQuery<ApplicationPolicyEntity> cq = cb.createQuery(ApplicationPolicyEntity.class);
+        Root<ApplicationPolicyEntity> rootEntry = cq.from(ApplicationPolicyEntity.class);
 
-        TypedQuery<RoleTypeEntity> query = entityManager.createQuery(cq);
-        List<RoleTypeEntity> ret = query.getResultList();
-
-        entityManager.close();
-
-        return ret;
-    }
-
-    public static RoleTypeEntity getRoleType(String roleId) throws Exception {
-        EntityManager entityManager = PersistenceManager.getEntityManager();
-
-        RoleTypeEntity ret = entityManager.find(RoleTypeEntity.class, roleId);
+        TypedQuery<ApplicationPolicyEntity> query = entityManager.createQuery(cq);
+        List<ApplicationPolicyEntity> ret = query.getResultList();
 
         entityManager.close();
 
         return ret;
     }
 
-    public static void saveRoleType(JsonRoleType roleType) throws Exception {
+    public static ApplicationPolicyEntity getRoleType(String roleId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
-        RoleTypeEntity roleTypeEntity = new RoleTypeEntity();
-        roleTypeEntity.setId(roleType.getId());
-        roleTypeEntity.setName(roleType.getName());
-        roleTypeEntity.setDescription(roleType.getDescription());
-        roleTypeEntity.setJobCategoryId(roleType.getJobCategoryId());
-        roleTypeEntity.setIsDeleted(roleType.getIsDeleted() ? (byte)1 : (byte)0);
+        ApplicationPolicyEntity ret = entityManager.find(ApplicationPolicyEntity.class, roleId);
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public static void saveRoleType(JsonApplicationPolicy roleType) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        ApplicationPolicyEntity applicationPolicyEntity = new ApplicationPolicyEntity();
+        applicationPolicyEntity.setId(roleType.getId());
+        applicationPolicyEntity.setName(roleType.getName());
+        applicationPolicyEntity.setDescription(roleType.getDescription());
+        applicationPolicyEntity.setJobCategoryId(roleType.getJobCategoryId());
+        applicationPolicyEntity.setIsDeleted(roleType.getIsDeleted() ? (byte)1 : (byte)0);
         entityManager.getTransaction().begin();
-        entityManager.merge(roleTypeEntity);
+        entityManager.merge(applicationPolicyEntity);
         entityManager.getTransaction().commit();
 
         entityManager.close();

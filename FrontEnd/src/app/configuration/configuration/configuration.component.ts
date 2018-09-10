@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} from "eds-angular4";
 import {ConfigurationService} from "../configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {RoleType} from "../models/RoleType";
+import {ApplicationPolicy} from "../models/ApplicationPolicy";
 import {JsonEditorComponent, JsonEditorOptions} from 'angular4-jsoneditor/jsoneditor/jsoneditor.component';
 import {Application} from "../models/Application";
 import {UserRole} from "../../user/models/UserRole";
@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./configuration.component.css']
 })
 export class ConfigurationComponent implements OnInit {
-  roleTypes: RoleType[];
+  roleTypes: ApplicationPolicy[];
   applications: Application[];
 
   public editorOptions: JsonEditorOptions;
@@ -89,7 +89,7 @@ export class ConfigurationComponent implements OnInit {
     this.router.navigate(['appEdit']);
   }
 
-  addRole() {
+  addApplicationPolicy() {
     this.state.setState('roleTypeEdit', {role: null, editMode: false});
     this.router.navigate(['roleTypeEdit']);
   }
@@ -99,7 +99,7 @@ export class ConfigurationComponent implements OnInit {
     this.router.navigate(['appEdit']);
   }
 
-  editRole(role: RoleType) {
+  editApplicationPolicy(role: ApplicationPolicy) {
     this.state.setState('roleTypeEdit', {role: role, editMode: true});
     this.router.navigate(['roleTypeEdit']);
   }

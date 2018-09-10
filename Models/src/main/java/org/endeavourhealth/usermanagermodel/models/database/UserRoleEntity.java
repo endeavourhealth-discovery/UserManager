@@ -19,7 +19,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -138,7 +137,7 @@ public class UserRoleEntity {
                     " ur.isDeleted," +
                     " ur.isDefault" +
                     " from UserRoleEntity ur" +
-                    " join RoleTypeEntity rt on ur.roleTypeId = rt.id" +
+                    " join ApplicationPolicyEntity rt on ur.roleTypeId = rt.id" +
                     " where ur.userId = :userId" +
                     " and ur.isDeleted = 0";
 
@@ -340,7 +339,7 @@ public class UserRoleEntity {
     private static JsonNode generateDefaultRoleJson(UserRoleEntity role) throws Exception {
         UserRepresentation user = UserCache.getUserDetails(role.getUserId());
         OrganisationEntity organisation = OrganisationCache.getOrganisationDetails(role.getOrganisationId());
-        RoleTypeEntity roleType = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
+        ApplicationPolicyEntity roleType = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();

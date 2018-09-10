@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import {Http, URLSearchParams} from "@angular/http";
 import {Observable} from "rxjs/Observable";
-import {RoleType} from "./models/RoleType";
+import {ApplicationPolicy} from "./models/ApplicationPolicy";
 import {Application} from "./models/Application";
 import {ApplicationProfile} from "./models/ApplicationProfile";
 import {UserRole} from "../user/models/UserRole";
-import {RoleTypeAccessProfile} from "./models/RoleTypeAccessProfile";
+import {ApplicationPolicyAttribute} from "./models/ApplicationPolicyAttribute";
 
 @Injectable()
 export class ConfigurationService {
 
   constructor(private http: Http) { }
 
-  getRoleTypes(): Observable<RoleType[]> {
+  getRoleTypes(): Observable<ApplicationPolicy[]> {
     const vm = this;
     return vm.http.get('api/roleType/getRoles')
       .map((response) => response.json());
   }
 
-  saveRoleType(roleType : RoleType, userRoleId: string): Observable<any> {
+  saveRoleType(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
     const vm = this;
     return vm.http.post('api/roleType/saveRoleType', roleType)
       .map((response) => response.text());
@@ -64,15 +64,15 @@ export class ConfigurationService {
       .map((response) => response.text());
   }
 
-  getRoleTypeAccessProfiles(roleTypeId: string): Observable<RoleTypeAccessProfile[]> {
+  getRoleTypeAccessProfiles(applicationPolicyId: string): Observable<ApplicationPolicyAttribute[]> {
     const vm = this;
     let params = new URLSearchParams();
-    params.set('roleTypeId', roleTypeId);
+    params.set('applicationPolicyId', applicationPolicyId);
     return vm.http.get('api/roleTypeAccessProfile/getRoleTypeAccessProfiles', {search: params})
       .map((response) => response.json());
   }
 
-  saveRoleTypeAccessProfiles(roleProfiles: RoleTypeAccessProfile[], userRoleId: string): Observable<string> {
+  saveRoleTypeAccessProfiles(roleProfiles: ApplicationPolicyAttribute[], userRoleId: string): Observable<string> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userRoleId', userRoleId);

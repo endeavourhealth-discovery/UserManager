@@ -4,7 +4,7 @@ import {UserService} from "../user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
 import {UserRole} from "../models/UserRole";
-import {RoleType} from "../../configuration/models/RoleType";
+import {ApplicationPolicy} from "../../configuration/models/ApplicationPolicy";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   private paramSubscriber: any;
 
   userList: User[];
-  roleTypes: RoleType[];
+  roleTypes: ApplicationPolicy[];
   selectedUser : User = null;
   selectedOrg: DelegatedOrganisation;
   filteredUserList : User[];

@@ -1,6 +1,6 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
-public class JsonRoleType {
+public class JsonApplicationPolicy {
     private String id = null;
     private String name = null;
     private String description = null;

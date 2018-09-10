@@ -255,7 +255,7 @@ public class AuditEndpoint extends AbstractEndpoint {
     private JsonNode generateRoleAuditJson(UserRoleEntity role) throws Exception {
         UserRepresentation user = UserCache.getUserDetails(role.getUserId());
         OrganisationEntity org = OrganisationCache.getOrganisationDetails(role.getOrganisationId());
-        RoleTypeEntity roleEntity = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
+        ApplicationPolicyEntity roleEntity = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
@@ -440,23 +440,23 @@ public class AuditEndpoint extends AbstractEndpoint {
 
     private Response getJsonForRoleTypeAccessProfileAudit(AuditEntity audit) throws Exception {
         String title = "";
-        RoleTypeAccessProfileEntity accessProfileBefore;
-        RoleTypeAccessProfileEntity accessProfileAfter;
+        ApplicationPolicyAttributeEntity accessProfileBefore;
+        ApplicationPolicyAttributeEntity accessProfileAfter;
         JsonNode beforeJson = null;
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
             title = "Role type access profile added";
-            accessProfileAfter = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemAfter());
+            accessProfileAfter = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemAfter());
             afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
         } else if (audit.getAuditType() == 1) {
             title = "Role type access profile edited";
-            accessProfileBefore = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemBefore());
+            accessProfileBefore = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemBefore());
             beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
-            accessProfileAfter = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemAfter());
+            accessProfileAfter = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemAfter());
             afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
         } else {
             title = "Role type access profile deleted";
-            accessProfileBefore = RoleTypeAccessProfileEntity.getRoleTypeAccessProfile(audit.getItemBefore());
+            accessProfileBefore = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemBefore());
             beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
         }
 
@@ -479,15 +479,15 @@ public class AuditEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private JsonNode generateRoleTypeAccessProfileAuditJson(RoleTypeAccessProfileEntity accessProfileEntity) throws Exception {
+    private JsonNode generateRoleTypeAccessProfileAuditJson(ApplicationPolicyAttributeEntity accessProfileEntity) throws Exception {
 
-        RoleTypeEntity roleTypeEntity = RoleTypeCache.getRoleDetails(accessProfileEntity.getRoleTypeId());
+        ApplicationPolicyEntity applicationPolicyEntity = RoleTypeCache.getRoleDetails(accessProfileEntity.getApplicationPolicyId());
         ApplicationAccessProfileEntity profileEntity = ApplicationProfileCache.getApplicationProfileDetails(accessProfileEntity.getApplicationAccessProfileId());
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
         ((ObjectNode)auditJson).put("id", accessProfileEntity.getId());
-        ((ObjectNode)auditJson).put("roleTypeName", roleTypeEntity.getName());
+        ((ObjectNode)auditJson).put("roleTypeName", applicationPolicyEntity.getName());
         ((ObjectNode)auditJson).put("applicationProfileName", profileEntity.getName());
         ((ObjectNode)auditJson).put("profileTree", accessProfileEntity.getProfileTree());
 

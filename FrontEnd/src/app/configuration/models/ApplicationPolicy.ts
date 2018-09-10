@@ -1,4 +1,4 @@
-export class RoleType {
+export class ApplicationPolicy {
   id: string;
   name: string;
   description: string;

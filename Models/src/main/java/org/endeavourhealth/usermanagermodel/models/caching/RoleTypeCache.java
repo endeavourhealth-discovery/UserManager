@@ -1,21 +1,21 @@
 package org.endeavourhealth.usermanagermodel.models.caching;
 
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeEntity;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RoleTypeCache {
 
-    private static Map<String, RoleTypeEntity> roleTypeMap = new HashMap<>();
+    private static Map<String, ApplicationPolicyEntity> roleTypeMap = new HashMap<>();
 
-    public static RoleTypeEntity getRoleDetails(String roleId) throws Exception {
-        RoleTypeEntity foundRole = null;
+    public static ApplicationPolicyEntity getRoleDetails(String roleId) throws Exception {
+        ApplicationPolicyEntity foundRole = null;
 
         if (roleTypeMap.containsKey(roleId)) {
             foundRole = roleTypeMap.get(roleId);
         } else {
-            foundRole = RoleTypeEntity.getRoleType(roleId);
+            foundRole = ApplicationPolicyEntity.getRoleType(roleId);
             roleTypeMap.put(foundRole.getId(), foundRole);
 
         }

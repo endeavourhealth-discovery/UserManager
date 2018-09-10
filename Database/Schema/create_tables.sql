@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS job_category;
 DROP TABLE IF EXISTS user_role_project;
 DROP TABLE IF EXISTS user_access_profile;
 DROP TABLE IF EXISTS role_type_access_profile;
+DROP TABLE IF EXISTS application_policy;
+DROP TABLE IF EXISTS application_policy_attribute;
 DROP TABLE IF EXISTS application_access_profile;
 DROP TABLE IF EXISTS application;
 DROP TABLE IF EXISTS project;
@@ -30,8 +32,11 @@ CREATE TABLE user_role
 
 CREATE INDEX ix_user_id
 	ON user_role (user_id);
+    
+    
+-- RENAME TABLE role_type to application_policy;
 
-CREATE TABLE role_type
+CREATE TABLE application_policy
 (
 	id varchar(36) NOT NULL,
 	name varchar(100) NOT NULL,
@@ -40,7 +45,7 @@ CREATE TABLE role_type
     is_deleted boolean,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
-)comment 'A type of role that can be assigned to and performed by an individual user';
+)comment 'A policy that contains groupings of application access attributes';
 
 
 CREATE TABLE job_category
@@ -75,16 +80,19 @@ CREATE TABLE user_access_profile
 )comment 'A user access profile derived from application.application_access_profile.
 This may be the original profile structure chosen at assignment, or a modification specific to the user’s needs';
 
-CREATE TABLE role_type_access_profile
+-- RENAME TABLE role_type_access_profile to application_policy_attribute;
+
+-- ALTER TABLE application_policy_attribute CHANGE role_type_id application_policy_id varchar(36) NOT NULL;
+CREATE TABLE application_policy_attribute
 (
 	id varchar(36) NOT NULL,
-	role_type_id varchar(36) NOT NULL,
+	application_policy_id varchar(36) NOT NULL,
 	application_access_profile_id varchar(36) NOT NULL,
 	profile_tree text NOT NULL,
     is_deleted boolean,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
-)comment 'A Role Type’s default access profile which is presented as the default when a role is selected for assignment';
+)comment 'A mapping table between application policy and application attributes';
 
 
 CREATE TABLE application_access_profile

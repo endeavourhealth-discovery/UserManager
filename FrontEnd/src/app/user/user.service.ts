@@ -65,7 +65,7 @@ export class UserService {
   getRoleAccessProfile(roleTypeId: string, organisationId: string): Observable<UserAccessProfile[]> {
     const vm = this;
     let params = new URLSearchParams();
-    params.set('roleTypeId', roleTypeId);
+    params.set('applicationPolicyId', roleTypeId);
     params.set('organisationId', organisationId);
     return vm.http.get('api/userBio/getAccessProfile', {search: params})
       .map((response) => response.json());

@@ -1,10 +1,10 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
-import org.endeavourhealth.usermanagermodel.models.database.RoleTypeAccessProfileEntity;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
 
-public class JsonRoleTypeAccessProfile {
+public class JsonApplicationPolicyAttribute {
     private String id = null;
-    private String roleTypeId = null;
+    private String applicationPolicyId = null;
     private String name = null;
     private String application = null;
     private String applicationId = null;
@@ -14,15 +14,15 @@ public class JsonRoleTypeAccessProfile {
     private String profileTree = null;
     private boolean isDeleted;
 
-    public JsonRoleTypeAccessProfile() {
+    public JsonApplicationPolicyAttribute() {
     }
 
-    public JsonRoleTypeAccessProfile(RoleTypeAccessProfileEntity roleTypeAccessProfileEntity) {
-        this.id = roleTypeAccessProfileEntity.getId();
-        this.roleTypeId = roleTypeAccessProfileEntity.getRoleTypeId();
-        this.applicationAccessProfileId = roleTypeAccessProfileEntity.getApplicationAccessProfileId();
-        this.profileTree = roleTypeAccessProfileEntity.getProfileTree();
-        this.isDeleted = roleTypeAccessProfileEntity.getIsDeleted() == 1;
+    public JsonApplicationPolicyAttribute(ApplicationPolicyAttributeEntity applicationPolicyAttributeEntity) {
+        this.id = applicationPolicyAttributeEntity.getId();
+        this.applicationPolicyId = applicationPolicyAttributeEntity.getApplicationPolicyId();
+        this.applicationAccessProfileId = applicationPolicyAttributeEntity.getApplicationAccessProfileId();
+        this.profileTree = applicationPolicyAttributeEntity.getProfileTree();
+        this.isDeleted = applicationPolicyAttributeEntity.getIsDeleted() == 1;
     }
 
     public String getId() {
@@ -33,12 +33,12 @@ public class JsonRoleTypeAccessProfile {
         this.id = id;
     }
 
-    public String getRoleTypeId() {
-        return roleTypeId;
+    public String getApplicationPolicyId() {
+        return applicationPolicyId;
     }
 
-    public void setRoleTypeId(String roleTypeId) {
-        this.roleTypeId = roleTypeId;
+    public void setApplicationPolicyId(String applicationPolicyId) {
+        this.applicationPolicyId = applicationPolicyId;
     }
 
     public String getApplicationAccessProfileId() {

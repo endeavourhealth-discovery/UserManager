@@ -157,7 +157,7 @@ public class AuditEntity {
                     " it.itemType" +
                     " from AuditEntity a" +
                     " join UserRoleEntity ur on ur.id = a.userRoleId" +
-                    " join RoleTypeEntity rt on rt.id = ur.roleTypeId" +
+                    " join ApplicationPolicyEntity rt on rt.id = ur.roleTypeId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
                     " join ItemTypeEntity it on it.id = a.itemType ";
 
