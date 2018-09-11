@@ -23,11 +23,11 @@ public class AuditEntityPK implements Serializable {
 
     @Column(name = "user_role_id")
     @Id
-    public String getUserRoleId() {
+    public String getUserProjectId() {
         return userRoleId;
     }
 
-    public void setUserRoleId(String userRoleId) {
+    public void setUserProjectId(String userRoleId) {
         this.userRoleId = userRoleId;
     }
 

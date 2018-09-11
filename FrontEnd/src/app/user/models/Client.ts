@@ -1,4 +1,4 @@
-import {UserRole} from "./UserRole";
+import {UserProject} from "./UserProject";
 export class Client {
 
 			constructor() {
@@ -8,5 +8,5 @@ export class Client {
 	name: string;
 	clientId: string;
 	description: string;
-	clientRoles: UserRole[];
+	clientRoles: UserProject[];
 }

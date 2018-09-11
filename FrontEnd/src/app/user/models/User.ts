@@ -1,4 +1,4 @@
-import {UserRole} from "./UserRole";
+import {UserProject} from "./UserProject";
 export class User {
 
 			constructor() {
@@ -13,7 +13,7 @@ export class User {
 	mobile:string;
 	photo:string;
 	defaultOrgId: string;
-	userRoles: UserRole[];
+	userProjects: UserProject[];
 
 	isSuperUser:boolean;
 	permissions:string[];

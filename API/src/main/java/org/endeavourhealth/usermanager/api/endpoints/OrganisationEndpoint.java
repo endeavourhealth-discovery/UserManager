@@ -13,7 +13,6 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +21,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Path("/organisation")
 @Metrics(registry = "UserManagerRegistry")
@@ -83,28 +80,4 @@ public class OrganisationEndpoint extends AbstractEndpoint {
                 .entity(organisations)
                 .build();
     }
-
-
-
-   /* private static Response getOrganisationsForUser(String userId) throws Exception {
-        List<OrganisationEntity> orgList = new ArrayList<>();
-
-        List<UserRoleEntity> userRoles = UserRoleEntity.getUserRoles(userId);
-
-        if (userRoles.size() > 0) {
-
-            List<String> organisations = userRoles.stream()
-                    .map(UserRoleEntity::getOrganisationId)
-                    .collect(Collectors.toList());
-
-            orgList = OrganisationEntity.getOrganisationsFromList(organisations);
-
-        }
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(orgList)
-                .build();
-    }*/
 }

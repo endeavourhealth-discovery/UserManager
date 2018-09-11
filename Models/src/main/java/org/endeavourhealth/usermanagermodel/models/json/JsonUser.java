@@ -24,7 +24,7 @@ public class JsonUser {
     private Boolean admin = null;
     private Integer permissions = null;
     private Boolean mustChangePassword = null;
-    private List<JsonUserRole> userRoles = null;
+    private List<JsonUserProject> userProjects = null;
 
     public JsonUser() {
     }
@@ -149,12 +149,12 @@ public class JsonUser {
         this.email = email;
     }
 
-    public List<JsonUserRole> getUserRoles() {
-        return userRoles;
+    public List<JsonUserProject> getUserProjects() {
+        return userProjects;
     }
 
-    public void setUserRoles(List<JsonUserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setUserProjects(List<JsonUserProject> userProjects) {
+        this.userProjects = userProjects;
     }
 
     public String getMobile() {

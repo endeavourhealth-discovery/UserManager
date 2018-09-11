@@ -1,12 +1,10 @@
-export class UserRole {
-
+export class UserProject {
 	id: string;
 	userId: string;
-	roleTypeId :string;
-	roleTypeName: string;
+	projectId :string;
+	projectName: string;
 	organisationId: string;
 	organisationName: string;
-	userAccessProfileId: string;
 	deleted: boolean;
   default: boolean;
 }

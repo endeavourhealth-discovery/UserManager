@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LoggerService, UserManagerService} from "eds-angular4";
-import {UserRole} from "../models/UserRole";
+import {UserProject} from "../models/UserProject";
 import {User} from "../models/User";
 import {UserService} from "../user.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
   selectedUser : User = null;
   roleTypes: ApplicationPolicy[];
 
-  public activeRole: UserRole;
+  public activeRole: UserProject;
   superUser = false;
 
   constructor(private log: LoggerService,
@@ -39,9 +39,9 @@ export class UserViewComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.projectId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
-    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
     } else {
       vm.superUser = false;
@@ -73,28 +73,28 @@ export class UserViewComponent implements OnInit {
   getUserRoles(userId: string){
     let vm = this;
     vm.loadingRolesCompleted = false;
-    if (vm.selectedUser.userRoles) {
+    if (vm.selectedUser.userProjects) {
       vm.loadingRolesCompleted = true;
       return;
     }
     vm.userService.getUserRoles(userId)
       .subscribe(
         (result) => {
-          vm.selectedUser.userRoles = vm.addRoleNameToRole(result);
+          vm.selectedUser.userProjects = vm.addRoleNameToRole(result);
           vm.loadingRolesCompleted = true;
         },
         (error) => vm.log.error('Error loading user roles', error, 'Error')
       );
   }
 
-  addRoleNameToRole(userRoles : UserRole[]): UserRole[] {
+  addRoleNameToRole(userRoles : UserProject[]): UserProject[] {
     const vm = this;
     for (let role of userRoles) {
       var result = vm.roleTypes.find(r => {
-        return r.id === role.roleTypeId;
+        return r.id === role.projectId;
       });
 
-      role.roleTypeName = result.name;
+      role.projectName = result.name;
     }
     return userRoles;
   }

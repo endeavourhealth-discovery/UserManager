@@ -11,7 +11,7 @@ values
 delete from user_manager.item_type;
 insert into user_manager.item_type (id, item_type)
 values 
-(0, 'Role'),
+(0, 'User project'),
 (1, 'User'),
 (2, 'Delegation'),
 (3, 'Delegation relationship'),

@@ -15,6 +15,7 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.caching.*;
 import org.endeavourhealth.usermanagermodel.models.database.*;
@@ -188,7 +189,7 @@ public class AuditEndpoint extends AbstractEndpoint {
         AuditEntity auditEntity = AuditEntity.getAuditDetail(auditId);
 
         switch (auditEntity.getItemType()) {
-            case 0: return getJsonForRoleAudit(auditEntity); // Role
+            case 0: return getJsonForUserProjectAudit(auditEntity); // Role
             case 1: return getJsonForUserAudit(auditEntity);
             case 2: return getJsonForDelegationAudit(auditEntity);
             case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
@@ -217,19 +218,19 @@ public class AuditEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response getJsonForRoleAudit(AuditEntity audit) throws Exception {
+    private Response getJsonForUserProjectAudit(AuditEntity audit) throws Exception {
         String title = "";
-        UserRoleEntity role;
+        UserProjectEntity userProject;
         JsonNode beforeJson = null;
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
             title = "Role added";
-            role = UserRoleEntity.getUserRole(audit.getItemAfter());
-            afterJson = generateRoleAuditJson(role);
+            userProject = UserProjectEntity.getUserProject(audit.getItemAfter());
+            afterJson = generateProjectAuditJson(userProject);
         } else {
             title = "Role deleted";
-            role = UserRoleEntity.getUserRole(audit.getItemBefore());
-            beforeJson = generateRoleAuditJson(role);
+            userProject = UserProjectEntity.getUserProject(audit.getItemBefore());
+            beforeJson = generateProjectAuditJson(userProject);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -245,30 +246,28 @@ public class AuditEndpoint extends AbstractEndpoint {
             ((ObjectNode) rootNode).set("before", beforeJson);
         }
 
-
         return Response
                 .ok()
                 .entity(rootNode)
                 .build();
     }
 
-    private JsonNode generateRoleAuditJson(UserRoleEntity role) throws Exception {
-        UserRepresentation user = UserCache.getUserDetails(role.getUserId());
-        OrganisationEntity org = OrganisationCache.getOrganisationDetails(role.getOrganisationId());
-        ApplicationPolicyEntity roleEntity = RoleTypeCache.getRoleDetails(role.getRoleTypeId());
+    private JsonNode generateProjectAuditJson(UserProjectEntity userProject) throws Exception {
+        UserRepresentation user = UserCache.getUserDetails(userProject.getUserId());
+        OrganisationEntity org = OrganisationCache.getOrganisationDetails(userProject.getOrganisationId());
+        ProjectEntity project = ProjectCache.getProjectDetails(userProject.getProjectId());
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
-        // https://stackoverflow.com/questions/40967921/create-json-object-using-jackson-in-java
-        ((ObjectNode)auditJson).put("id", role.getId());
+
+        ((ObjectNode)auditJson).put("id", userProject.getId());
         if (user != null) {
             ((ObjectNode)auditJson).put("userId", user.getUsername());
         } else {
             ((ObjectNode)auditJson).put("userId","Unknown user");
         }
-        ((ObjectNode)auditJson).put("roleType", roleEntity.getName());
+        ((ObjectNode)auditJson).put("project", project.getName());
         ((ObjectNode)auditJson).put("organisation", org.getName() + " (" + org.getOdsCode() + ")");
-        ((ObjectNode)auditJson).put("accessProfile", role.getUserAccessProfileId());
 
         return auditJson;
     }

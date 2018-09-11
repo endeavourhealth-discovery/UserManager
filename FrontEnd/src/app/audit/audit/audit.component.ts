@@ -8,7 +8,7 @@ import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganis
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {User} from "../../user/models/User";
 import {UserService} from "../../user/user.service";
-import {UserRole} from "../../user/models/UserRole";
+import {UserProject} from "../../user/models/UserProject";
 
 @Component({
   selector: 'app-audit',
@@ -29,7 +29,7 @@ export class AuditComponent implements OnInit {
   dateFrom: Date = new Date();
   dateTo: Date = new Date();
 
-  public activeRole: UserRole;
+  public activeRole: UserProject;
   superUser = false;
   godMode = false;
 
@@ -58,10 +58,10 @@ export class AuditComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.projectId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = true;
     } else {

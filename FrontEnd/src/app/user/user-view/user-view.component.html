@@ -59,11 +59,11 @@
             <div class="card-header">
               Roles
             </div>
-            <div class="card-block" *ngIf="selectedUser && selectedUser.userRoles">
+            <div class="card-block" *ngIf="selectedUser && selectedUser.userProjects">
               <div class="col-md-12">
                 <loadingIndicator [done]="loadingRolesCompleted">
-                  <div class="col-md-12" *ngIf="selectedUser.userRoles!=null && selectedUser.userRoles.length == 0">No roles assigned</div>
-                  <div class="col-md-12" *ngIf="selectedUser.userRoles!=null && selectedUser.userRoles.length > 0">
+                  <div class="col-md-12" *ngIf="selectedUser.userProjects!=null && selectedUser.userProjects.length == 0">No roles assigned</div>
+                  <div class="col-md-12" *ngIf="selectedUser.userProjects!=null && selectedUser.userProjects.length > 0">
                     <div class="scroll-box-150">
                       <table class="table table-striped table-sm">
                         <thead>
@@ -71,7 +71,7 @@
                         <th class="w-50">Role</th>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let role of selectedUser.userRoles" class="hover-box show-child-on-hover">
+                        <tr *ngFor="let role of selectedUser.userProjects" class="hover-box show-child-on-hover">
                           <td>{{role.organisationName}}</td>
                           <td>{{role.roleTypeName}}</td>
                         </tr>

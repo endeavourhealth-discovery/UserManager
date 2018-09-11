@@ -15,6 +15,19 @@ DROP TABLE IF EXISTS audit;
 DROP TABLE IF EXISTS active_item;
 DROP TABLE IF EXISTS delegation_relationship;
 DROP TABLE IF EXISTS delegation;
+DROP TABLE IF EXISTS user_project;
+
+CREATE TABLE user_project
+(
+	id varchar(36) NOT NULL,
+	user_id varchar(36) NOT NULL,
+	organisation_id varchar(36) NOT NULL,
+	project_id varchar(36) NULL,
+    is_default boolean null default 0,
+    is_deleted boolean null,
+
+	CONSTRAINT pk_id PRIMARY KEY (id)
+)comment 'A project which is assigned to a user which is linked to an organisation';
 
 
 CREATE TABLE user_role

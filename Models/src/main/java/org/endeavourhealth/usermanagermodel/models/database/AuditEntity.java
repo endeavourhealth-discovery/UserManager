@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @IdClass(AuditEntityPK.class)
 public class AuditEntity {
     private String id;
-    private String userRoleId;
+    private String userProjectId;
     private Timestamp timestamp;
     private Byte auditType;
     private String itemBefore;
@@ -33,13 +33,13 @@ public class AuditEntity {
     }
 
     @Id
-    @Column(name = "user_role_id")
-    public String getUserRoleId() {
-        return userRoleId;
+    @Column(name = "user_project_id")
+    public String getUserProjectId() {
+        return userProjectId;
     }
 
-    public void setUserRoleId(String userRoleId) {
-        this.userRoleId = userRoleId;
+    public void setUserProjectId(String userRoleId) {
+        this.userProjectId = userRoleId;
     }
 
     @Id
@@ -108,7 +108,7 @@ public class AuditEntity {
         if (o == null || getClass() != o.getClass()) return false;
         AuditEntity that = (AuditEntity) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(userRoleId, that.userRoleId) &&
+                Objects.equals(userProjectId, that.userProjectId) &&
                 Objects.equals(timestamp, that.timestamp) &&
                 Objects.equals(auditType, that.auditType) &&
                 Objects.equals(itemBefore, that.itemBefore) &&
@@ -120,7 +120,7 @@ public class AuditEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userRoleId, timestamp, auditType, itemBefore, itemAfter, itemType, auditJson);
+        return Objects.hash(id, userProjectId, timestamp, auditType, itemBefore, itemAfter, itemType, auditJson);
     }
 
     public static List<Object[]> getAudit(String userOrganisationId, Integer pageNumber, Integer pageSize,
@@ -148,16 +148,15 @@ public class AuditEntity {
             String whereAnd = " where ";
             String sql = "select distinct" +
                     " a.id," +
-                    " rt.name," +
+                    " up.projectId," +
                     " a.timestamp," +
                     " a.auditType," +
-                    " ur.organisationId," +
-                    " ur.userId," +
+                    " up.organisationId," +
+                    " up.userId," +
                     " aa.actionType," +
                     " it.itemType" +
                     " from AuditEntity a" +
-                    " join UserRoleEntity ur on ur.id = a.userRoleId" +
-                    " join ApplicationPolicyEntity rt on rt.id = ur.roleTypeId" +
+                    " join UserProjectEntity up on up.id = a.userProjectId" +
                     " join AuditActionEntity aa on aa.id = a.auditType" +
                     " join ItemTypeEntity it on it.id = a.itemType ";
 
@@ -167,11 +166,11 @@ public class AuditEntity {
             }
 
             if (organisationId != null) {
-                sql +=  whereAnd + " ur.organisationId = :orgId";
+                sql +=  whereAnd + " up.organisationId = :orgId";
                 whereAnd = " and ";
 
                 if (userId != null) {
-                    sql += " and ur.userId = :userId";
+                    sql += " and up.userId = :userId";
                 }
             }
 
@@ -231,11 +230,11 @@ public class AuditEntity {
             if (organisationId != null) {
                 sql = "select count (a.id)" +
                         " from AuditEntity a " +
-                        " join UserRoleEntity ur on ur.id = a.userRoleId" +
-                        " where ur.organisationId = :orgId";
+                        " join UserProjectEntity up on up.id = a.userProjectId" +
+                        " where up.organisationId = :orgId";
 
                 if (userId != null) {
-                    sql += " and ur.userId = :userId";
+                    sql += " and up.userId = :userId";
                 }
             }
 
@@ -289,7 +288,7 @@ public class AuditEntity {
         auditEntity.setTimestamp(new Timestamp(System.currentTimeMillis()));
         auditEntity.setAuditType(auditAction.getAuditAction().byteValue());
         auditEntity.setItemType(itemType.getItemType().byteValue());
-        auditEntity.setUserRoleId(userRoleId);
+        auditEntity.setUserProjectId(userRoleId);
         if (itemBefore != null) {
             auditEntity.setItemBefore(itemBefore);
         }

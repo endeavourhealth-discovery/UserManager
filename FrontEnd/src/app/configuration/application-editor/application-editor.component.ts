@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UserRole} from "../../user/models/UserRole";
+import {UserProject} from "../../user/models/UserProject";
 import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {Application} from "../models/Application";
@@ -27,7 +27,7 @@ export class ApplicationEditorComponent implements OnInit {
   selectedProfile: ApplicationProfile;
   editedProfiles: ApplicationProfile[] = [];
 
-  public activeRole: UserRole;
+  public activeRole: UserProject;
   superUser = false;
   godMode = false;
 
@@ -77,10 +77,10 @@ export class ApplicationEditorComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.projectId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = true;
     } else {

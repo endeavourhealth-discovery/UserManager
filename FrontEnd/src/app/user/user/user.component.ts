@@ -3,7 +3,7 @@ import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} fr
 import {UserService} from "../user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
-import {UserRole} from "../models/UserRole";
+import {UserProject} from "../models/UserProject";
 import {ApplicationPolicy} from "../../configuration/models/ApplicationPolicy";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
@@ -20,7 +20,6 @@ export class UserComponent implements OnInit {
   private paramSubscriber: any;
 
   userList: User[];
-  roleTypes: ApplicationPolicy[];
   selectedUser : User = null;
   selectedOrg: DelegatedOrganisation;
   filteredUserList : User[];
@@ -31,7 +30,7 @@ export class UserComponent implements OnInit {
   loadingRolesCompleted: boolean;
   paramOrganisation: string;
 
-  public activeRole: UserRole;
+  public activeRole: UserProject;
   superUser = false;
   godMode = false;
 
@@ -49,7 +48,6 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getRoleTypes();
 
     this.paramSubscriber = this.route.params.subscribe(
       params => {
@@ -64,10 +62,10 @@ export class UserComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.projectId== 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = true;
     } else {
@@ -97,19 +95,9 @@ export class UserComponent implements OnInit {
       );
   }
 
-  getRoleTypes(){
-    let vm = this;
-    vm.configurationService.getRoleTypes()
-      .subscribe(
-        (result) => {
-          vm.roleTypes = result;
-        },
-        (error) => vm.log.error('Error loading users and roles', error, 'Error')
-      );
-  }
-
   getDelegatedOrganisations() {
     let vm = this;
+    console.log('here');
     let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
     vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
       .subscribe(
@@ -239,29 +227,17 @@ export class UserComponent implements OnInit {
   getUserRoles(userId: string){
     let vm = this;
     vm.loadingRolesCompleted = false;
-    if (vm.selectedUser.userRoles) {
+    if (vm.selectedUser.userProjects) {
       vm.loadingRolesCompleted = true;
       return;
     }
-    vm.userService.getUserRoles(userId)
+    vm.userManagerService.getUserProjects(userId)
       .subscribe(
         (result) => {
-          vm.selectedUser.userRoles = vm.addRoleNameToRole(result);
+          vm.selectedUser.userProjects = result;
           vm.loadingRolesCompleted = true;
         },
-        (error) => vm.log.error('Error loading user roles', error, 'Error')
+        (error) => vm.log.error('Error loading user projects', error, 'Error')
       );
-  }
-
-  addRoleNameToRole(userRoles : UserRole[]): UserRole[] {
-    const vm = this;
-    for (let role of userRoles) {
-      var result = vm.roleTypes.find(r => {
-        return r.id === role.roleTypeId;
-      });
-
-      role.roleTypeName = result.name;
-    }
-    return userRoles;
   }
 }

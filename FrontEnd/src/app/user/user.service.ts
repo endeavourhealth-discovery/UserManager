@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http, URLSearchParams} from "@angular/http";
 import {User} from "./models/User";
 import {Observable} from "rxjs/Observable";
-import {UserRole} from "./models/UserRole";
+import {UserProject} from "./models/UserProject";
 import {UserAccessProfile} from "./models/UserAccessProfile";
 
 @Injectable()
@@ -28,12 +28,12 @@ export class UserService {
       .map((response) => response.json());
   }
 
-  saveUserRoles(userRoles: UserRole[], userRoleId: string): Observable<string> {
+  saveUserProjects(userRoles: UserProject[], userRoleId: string): Observable<string> {
     const vm = this;
     let params = new URLSearchParams();
     console.log(userRoles);
     params.set('userRoleId', userRoleId);
-    return vm.http.post('api/user/users/saveRoles', userRoles, {search: params})
+    return vm.http.post('api/user/users/saveProjects', userRoles, {search: params})
       .map((response) => response.text());
   }
 
@@ -46,7 +46,7 @@ export class UserService {
       .map((response) => response.text());;
   }
 
-  getUserRoles(userId: string): Observable<UserRole[]> {
+  getUserRoles(userId: string): Observable<UserProject[]> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userId', userId);

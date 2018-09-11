@@ -18,12 +18,11 @@ import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
-import org.endeavourhealth.usermanagermodel.models.database.UserRoleEntity;
+import org.endeavourhealth.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
-import org.endeavourhealth.usermanagermodel.models.json.JsonUserRole;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUserProject;
 import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,9 +67,9 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         if (organisationId != null) {
 
-            List<UserRoleEntity> userRoleEntities = UserRoleEntity.getUsersAtOrganisation(organisationId);
+            List<UserProjectEntity> userRoleEntities = UserProjectEntity.getUsersAtOrganisation(organisationId);
             usersAtOrg = userRoleEntities.stream()
-                    .map(UserRoleEntity::getUserId)
+                    .map(UserProjectEntity::getUserId)
                     .collect(Collectors.toList());
         }
 
@@ -213,24 +212,24 @@ public final class UserEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.UserEndpoint.saveRoles")
-    @Path("/users/saveRoles")
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveProjects")
+    @Path("/users/saveProjects")
     @RequiresAdmin
-    @ApiOperation(value = "Saves roles associated with a user")
-    public Response saveRoles(@Context SecurityContext sc, List<JsonUserRole> userRoles,
+    @ApiOperation(value = "Saves projects associated with a user")
+    public Response saveProjects(@Context SecurityContext sc, List<JsonUserProject> userProjects,
                              @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
-        if (userRoles.size() > 0) {
-            for (JsonUserRole role : userRoles) {
-                if (role.getId() == null && role.isDeleted()) {
+        if (userProjects.size() > 0) {
+            for (JsonUserProject project : userProjects) {
+                if (project.getId() == null && project.isDeleted()) {
                     continue;  // role was never saved in the DB so no need to add it
                 }
 
-                if (role.getId() == null) {
-                    role.setId(UUID.randomUUID().toString());
+                if (project.getId() == null) {
+                    project.setId(UUID.randomUUID().toString());
                 }
-                UserRoleEntity.saveUserRole(role, userRoleId);
+                UserProjectEntity.saveUserProject(project, userRoleId);
             }
         }
 

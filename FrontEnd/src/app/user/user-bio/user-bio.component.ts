@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../models/User";
-import {UserRole} from "../models/UserRole";
+import {UserProject} from "../models/UserProject";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
 import {Router} from "@angular/router";
@@ -20,14 +20,14 @@ import {ApplicationPolicyAttribute} from "../../configuration/models/Application
 export class UserBioComponent implements OnInit {
 
   @Input() user: User;
-  selectedRole: UserRole;
+  selectedRole: UserProject;
   accessProfiles: UserAccessProfile[];
   selectedApp: UserAccessProfile;
   selectedProfile: ApplicationPolicyAttribute;
   selectedProfileTree: any;
   selectedSharingAgreement: any;
 
-  public activeRole: UserRole;
+  public activeRole: UserProject;
   superUser = false;
   godMode = false;
 
@@ -62,30 +62,30 @@ export class UserBioComponent implements OnInit {
 
   getRoles(refresh: boolean) {
     const vm = this;
-    if (!vm.user.userRoles || refresh) {
+    if (!vm.user.userProjects || refresh) {
       vm.userService.getUserRoles(vm.user.uuid)
         .subscribe(
           (result) => {
-            vm.user.userRoles = result;
-            if (vm.user.userRoles && vm.user.userRoles.length > 0) {
-              vm.selectedRole = vm.user.userRoles[0];
+            vm.user.userProjects = result;
+            if (vm.user.userProjects && vm.user.userProjects.length > 0) {
+              vm.selectedRole = vm.user.userProjects[0];
             }
           },
           (error) => vm.log.error('Error loading user roles', error, 'Error')
         );
     } else {
-      if (vm.user.userRoles && vm.user.userRoles.length > 0) {
-        vm.selectedRole = vm.user.userRoles[0];
+      if (vm.user.userProjects && vm.user.userProjects.length > 0) {
+        vm.selectedRole = vm.user.userProjects[0];
       }
     }
   }
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.roleTypeId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.projectId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.roleTypeId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       vm.superUser = true;
       vm.godMode = true;
     } else {
@@ -105,7 +105,7 @@ export class UserBioComponent implements OnInit {
     vm.selectedProfileTree = null;
     vm.selectedProfile = null;
 
-    vm.userService.getRoleAccessProfile(vm.selectedRole.roleTypeId, vm.selectedRole.organisationId)
+    vm.userService.getRoleAccessProfile(vm.selectedRole.projectId, vm.selectedRole.organisationId)
       .subscribe(
         (result) => {
           vm.accessProfiles = result;
