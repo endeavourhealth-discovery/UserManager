@@ -75,4 +75,11 @@ export class DisplayDetails {
       { label: 'profileTree', property: 'profileTree'}
     ]
   }
+
+  getUserRegionDisplayDetails(): any[] {
+    return [
+      { label: 'User', property: 'user'},
+      { label: 'Region', property: 'region'}
+    ]
+  }
 }

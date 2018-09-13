@@ -13,6 +13,8 @@ import {Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
 import {OrganisationService} from "../../organisation/organisation.service";
 import {Project} from "../../configuration/models/Project";
+import {UserRegion} from "../models/UserRegion";
+import {Region} from "../models/Region";
 
 @Component({
   selector: 'app-user-editor',
@@ -36,6 +38,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   editedRoles: UserProject[] = [];
   defaultRoleChange : UserProject;
   organisationProjects: Project[];
+  userRegion: UserRegion;
+  availableRegions: Region[];
+  selectedRegion: Region;
 
   public activeRole: UserProject;
   superUser = false;
@@ -71,12 +76,14 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       this.router.navigate(['user']);
       return;
     }
+
     this.resultData = Object.assign( [], s.user);
     this.editMode = s.editMode;
     this.existing = s.existing;
     this.selfEdit = s.selfEdit;
 
     let vm = this;
+    vm.getAvailableRegions();
 
     vm.userManagerService.activeRole.subscribe(active => {
       vm.activeRole = active;
@@ -158,11 +165,23 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         .subscribe(
           (response) => {
             vm.resultData = response;
-            this.saveRoles(close);
+            vm.saveRegion();
+            vm.saveRoles(close);
           },
           (error) => this.log.error('User details could not be saved. Please try again.', error, 'Save user details')
         );
     }
+  }
+
+  saveRegion() {
+    const vm = this;
+    vm.userService.saveUserRegion(vm.userRegion, vm.activeRole.id)
+      .subscribe(
+        (response) => {
+
+        },
+        (error) => vm.log.error('User region could not be saved. Please try again.', error, 'Save user region')
+      );
   }
 
   saveRoles(close: boolean) {
@@ -173,7 +192,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       }
     }
     if (vm.editedRoles.length > 0) {
-      this.userService.saveUserProjects(vm.editedRoles, vm.activeRole.id)
+      vm.userService.saveUserProjects(vm.editedRoles, vm.activeRole.id)
         .subscribe(
           (response) => {
             if (vm.defaultRoleChange) {
@@ -183,7 +202,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
             }
 
           },
-          (error) => this.log.error('User details could not be saved. Please try again.', error, 'Save user roles')
+          (error) => vm.log.error('User details could not be saved. Please try again.', error, 'Save user roles')
         );
     } else {
       if (vm.defaultRoleChange) {
@@ -204,6 +223,39 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         },
         (error) => {
           vm.log.error('User details could not be saved. Please try again.', error, 'Save default role');
+        }
+      );
+  }
+
+  getAvailableRegions() {
+    const vm = this;
+    vm.userService.getAvailableRegions()
+      .subscribe(
+        (result) => {
+          vm.availableRegions = result;
+          if (vm.editMode) {
+            vm.getUserRegion();
+          }
+        },
+        (error) => {
+          vm.log.error('Available regions could not be loaded. Please try again.', error, 'Load available regions');
+        }
+      );
+  }
+
+  getUserRegion() {
+    const vm = this;
+    vm.userService.getUserRegion(vm.resultData.uuid)
+      .subscribe(
+        (result) => {
+          console.log('getting region');
+          vm.userRegion = result;
+          vm.selectedRegion = vm.availableRegions.find(r => {
+            return r.uuid === vm.userRegion.regionId;
+          });
+        },
+        (error) => {
+          vm.log.error('User region could not be loaded. Please try again.', error, 'Load user region');
         }
       );
   }
@@ -458,6 +510,14 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     const vm = this;
     vm.resultData.userProjects.forEach(x => x.default = (x.id === role.id));
     vm.defaultRoleChange = role;
+  }
+
+  changeUserRegion(regionUuid: string) {
+    const vm = this;
+    let changedRegion = new UserRegion();
+    changedRegion.userId = vm.resultData.uuid;
+    changedRegion.regionId = regionUuid;
+    vm.userRegion = changedRegion;
   }
 
 }

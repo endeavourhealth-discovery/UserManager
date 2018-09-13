@@ -134,11 +134,11 @@
           </div>
         </div>
         <br>
+        <!------------------------------------------------------------------------------------------------->
+        <!-- ROLES -->
+        <!------------------------------------------------------------------------------------------------->
         <div class="row">
           <div class="col-md-12">
-            <!------------------------------------------------------------------------------------------------->
-            <!-- ROLES -->
-            <!------------------------------------------------------------------------------------------------->
             <div class="card">
               <div class="card-header">Projects</div>
               <div class="card-block">
@@ -193,6 +193,31 @@
                             </button>
                           </div>
                         </loadingIndicator>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <!------------------------------------------------------------------------------------------------->
+        <!-- Region -->
+        <!------------------------------------------------------------------------------------------------->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">Data sharing manager region</div>
+              <div class="card-block">
+                <form UserDetails2="form" class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Region</label>
+                        <select class="form-control" [(ngModel)]="selectedRegion" name="selectedRegion" (change)="changeUserRegion(selectedRegion.uuid)">
+                          <option *ngFor="let reg of availableRegions" [ngValue]="reg">{{reg.name}}</option>
+                        </select>
                       </div>
                     </div>
                   </div>

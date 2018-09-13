@@ -8,7 +8,8 @@ public enum ItemType {
     DEFAULT_PROJECT((short)4),
     APPLICATION((short)5),
     APPLICATION_PROFILE((short)6),
-    ROLE_TYPE_APPLICATION_PROFILE((short)7);
+    ROLE_TYPE_APPLICATION_PROFILE((short)7),
+    USER_REGION((short)8);
 
     private Short itemType;
 

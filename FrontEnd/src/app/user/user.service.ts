@@ -4,6 +4,8 @@ import {User} from "./models/User";
 import {Observable} from "rxjs/Observable";
 import {UserProject} from "./models/UserProject";
 import {UserAccessProfile} from "./models/UserAccessProfile";
+import {UserRegion} from "./models/UserRegion";
+import {Region} from "./models/Region";
 
 @Injectable()
 export class UserService {
@@ -68,6 +70,28 @@ export class UserService {
     params.set('applicationPolicyId', roleTypeId);
     params.set('organisationId', organisationId);
     return vm.http.get('api/userBio/getAccessProfile', {search: params})
+      .map((response) => response.json());
+  }
+
+  getUserRegion(userId: string): Observable<UserRegion> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/user/userRegion', {search: params})
+      .map((response) => response.json());
+  }
+
+  saveUserRegion(userRegion: UserRegion, userProjectId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userProjectId', userProjectId);
+    return vm.http.post('api/user/setUserRegion', userRegion, {search: params})
+      .map((response) => response.text());
+  }
+
+  getAvailableRegions(): Observable<Region[]> {
+    const vm = this;
+    return vm.http.get('api/user/availableRegions')
       .map((response) => response.json());
   }
 

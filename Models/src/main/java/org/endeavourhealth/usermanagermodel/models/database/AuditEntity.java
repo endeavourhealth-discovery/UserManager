@@ -161,7 +161,7 @@ public class AuditEntity {
                     " join ItemTypeEntity it on it.id = a.itemType ";
 
             if (userOrganisationId != null) {
-                sql += " where ur.organisationId in :filterOrgIds";
+                sql += " where up.organisationId in :filterOrgIds";
                 whereAnd = " and ";
             }
 

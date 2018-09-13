@@ -81,6 +81,7 @@ export class AuditDetailComponent implements OnInit {
       case "Application": return dd.getApplicationDisplayDetails();
       case "Application profile": return dd.getApplicationProfileDisplayDetails();
       case "Role Type access profile": return dd.getRoleTypeAccessProfileDisplayDetails();
+      case "User region": return dd.getUserRegionDisplayDetails();
     }
   }
 

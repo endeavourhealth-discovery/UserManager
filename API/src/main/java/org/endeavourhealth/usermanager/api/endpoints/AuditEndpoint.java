@@ -197,6 +197,7 @@ public class AuditEndpoint extends AbstractEndpoint {
             case 5: return getJsonForApplicationAudit(auditEntity);
             case 6: return getJsonForApplicationProfileAudit(auditEntity);
             case 7: return getJsonForRoleTypeAccessProfileAudit(auditEntity);
+            case 8: return getJsonForUserRegionAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
@@ -211,6 +212,14 @@ public class AuditEndpoint extends AbstractEndpoint {
     }
 
     private Response getJsonForDefaltRoleChangeAudit(AuditEntity audit) throws Exception {
+
+        return Response
+                .ok()
+                .entity(audit.getAuditJson())
+                .build();
+    }
+
+    private Response getJsonForUserRegionAudit(AuditEntity audit) throws Exception {
 
         return Response
                 .ok()

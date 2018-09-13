@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS active_item;
 DROP TABLE IF EXISTS delegation_relationship;
 DROP TABLE IF EXISTS delegation;
 DROP TABLE IF EXISTS user_project;
+DROP TABLE IF EXISTS user_region;
 
 CREATE TABLE user_project
 (
@@ -29,6 +30,13 @@ CREATE TABLE user_project
 	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'A project which is assigned to a user which is linked to an organisation';
 
+CREATE TABLE user_region
+(
+	user_id varchar(36) NOT NULL,
+	region_id varchar(36) NOT NULL,
+
+	CONSTRAINT pk_id PRIMARY KEY (user_id)
+)comment 'A region which is assigned to a user for data sharing manager purposes';
 
 CREATE TABLE user_role
 (

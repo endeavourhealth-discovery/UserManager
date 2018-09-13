@@ -15,13 +15,16 @@ import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.datasharingmanagermodel.models.database.RegionEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserProjectEntity;
+import org.endeavourhealth.usermanagermodel.models.database.UserRegionEntity;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserProject;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUserRegion;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -269,7 +272,10 @@ public final class UserEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getUser")
     @Path("/users/user")
+    @RequiresAdmin
+    @ApiOperation(value = "Gets the details for a user")
     public Response getUser(@Context SecurityContext sc,
                             @ApiParam(value = "User id to be retrieved") @QueryParam("userId") String userId) throws Exception {
         super.setLogbackMarkers(sc);
@@ -295,6 +301,85 @@ public final class UserEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(user)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getUserRegion")
+    @Path("/userRegion")
+    @ApiOperation(value = "Returns the data sharing manager region associated with the user")
+    public Response getUserRegion(@Context SecurityContext sc,
+                            @ApiParam(value = "User id to get the region for") @QueryParam("userId") String userId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User Region", "User Id", userId);
+
+        LOG.trace("getUser");
+
+        UserRegionEntity userRegion = UserRegionEntity.getUserRegion(userId);
+        if (userRegion == null) {
+            userRegion = new UserRegionEntity();
+        }
+
+        AbstractEndpoint.clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(userRegion)
+                .build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.setUserRegion")
+    @Path("/setUserRegion")
+    @RequiresAdmin
+    @ApiOperation(value = "Saves region associated with a user")
+    public Response setUserRegion(@Context SecurityContext sc, JsonUserRegion userRegion,
+                                  @ApiParam(value = "userProjectId of the user making the change") @QueryParam("userProjectId") String userProjectId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User Region", "User region", userRegion);
+
+        LOG.trace("getUser");
+
+        UserRegionEntity.saveUserRegion(userRegion, userProjectId);
+
+        AbstractEndpoint.clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(userRegion)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getAvailableRegions")
+    @Path("/availableRegions")
+    @ApiOperation(value = "Returns the available regions")
+    public Response getAvailableRegions(@Context SecurityContext sc) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Get available regions");
+
+        LOG.trace("getUser");
+
+        return getAvailableRegions();
+    }
+
+    private Response getAvailableRegions() throws Exception {
+
+        List<RegionEntity> regions = RegionEntity.getAllRegions();
+
+        return Response
+                .ok()
+                .entity(regions)
                 .build();
     }
 
