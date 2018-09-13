@@ -97,7 +97,6 @@ export class UserComponent implements OnInit {
 
   getDelegatedOrganisations() {
     let vm = this;
-    console.log('here');
     let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
     vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
       .subscribe(

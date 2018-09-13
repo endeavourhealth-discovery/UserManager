@@ -178,10 +178,12 @@ CREATE TABLE delegation_relationship
 CREATE INDEX ix_delegation_relationship_delegation_child_parent
 ON delegation_relationship (delegation, child_uuid, child_type, parent_uuid, parent_type);
 
+
+-- ALTER TABLE audit CHANGE user_role_id user_project_id varchar(36) NOT NULL;
 CREATE TABLE audit
 (
     id varchar(36),
-    user_role_id varchar(36),
+    user_project_id varchar(36),
     timestamp datetime,
     audit_type tinyint,
     item_before varchar(36),

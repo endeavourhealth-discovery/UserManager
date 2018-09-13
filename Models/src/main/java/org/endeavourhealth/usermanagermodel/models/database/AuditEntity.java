@@ -38,8 +38,8 @@ public class AuditEntity {
         return userProjectId;
     }
 
-    public void setUserProjectId(String userRoleId) {
-        this.userProjectId = userRoleId;
+    public void setUserProjectId(String userProjectId) {
+        this.userProjectId = userProjectId;
     }
 
     @Id

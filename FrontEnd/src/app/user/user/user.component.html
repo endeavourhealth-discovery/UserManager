@@ -132,7 +132,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <label>Roles</label>
+                  <label>Projects</label>
                   <loadingIndicator [done]="loadingRolesCompleted">
                     <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length==0">No roles assigned</div>
                     <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length>0">
@@ -140,12 +140,12 @@
                         <table class="table table-striped table-sm">
                         <thead>
                           <th class="w-50">Organisation</th>
-                          <th class="w-50">Role</th>
+                          <th class="w-50">Project</th>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let role of selectedUser.userProjects" class="hover-box show-child-on-hover">
-                            <td>{{role.organisationName}}</td>
-                            <td>{{role.roleTypeName}}</td>
+                          <tr *ngFor="let proj of selectedUser.userProjects" class="hover-box show-child-on-hover">
+                            <td>{{proj.organisationName}}</td>
+                            <td>{{proj.projectName}}</td>
                           </tr>
                         </tbody>
                       </table>

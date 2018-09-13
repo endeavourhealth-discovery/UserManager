@@ -11,6 +11,8 @@ import {UserProject} from "../models/UserProject";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
+import {OrganisationService} from "../../organisation/organisation.service";
+import {Project} from "../../configuration/models/Project";
 
 @Component({
   selector: 'app-user-editor',
@@ -33,6 +35,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   loadingRolesCompleted: boolean = true;
   editedRoles: UserProject[] = [];
   defaultRoleChange : UserProject;
+  organisationProjects: Project[];
 
   public activeRole: UserProject;
   superUser = false;
@@ -56,7 +59,8 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
               private state: ModuleStateService,
-              private userManagerService: UserManagerService) {
+              private userManagerService: UserManagerService,
+              private organisationService: OrganisationService) {
 
   }
 
@@ -173,7 +177,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         .subscribe(
           (response) => {
             if (vm.defaultRoleChange) {
-              vm.changeDefaultUser(close);
+              vm.changeDefaultProject(close);
             } else {
               vm.successfullySavedUser(close);
             }
@@ -183,7 +187,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         );
     } else {
       if (vm.defaultRoleChange) {
-        vm.changeDefaultUser(close);
+        vm.changeDefaultProject(close);
       } else {
         vm.successfullySavedUser(close);
       }
@@ -191,7 +195,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   }
 
-  changeDefaultUser(close: boolean) {
+  changeDefaultProject(close: boolean) {
     const vm = this;
     vm.userManagerService.changeDefaultProject(vm.resultData.uuid, vm.defaultRoleChange.id, vm.activeRole.id)
       .subscribe(
@@ -299,32 +303,35 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       this.resultData.userProjects.splice(i, 1);
     }
     */
+    const vm = this;
     currentRole.deleted = true;
-    this.editedRoles.push(currentRole);
+    vm.editedRoles.push(currentRole);
 
-    if (currentRole.organisationId == this.selectedOrg.uuid) {
+    vm.getOrganisationProjects(vm.selectedOrg.uuid);
+
+    /*if (currentRole.organisationId == this.selectedOrg.uuid) {
       var newRoleType: ApplicationPolicy = new ApplicationPolicy();
       newRoleType.id = currentRole.projectId;
       newRoleType.name = currentRole.projectName;
 
       this.roleTypes.push(newRoleType);
-    }
+    }*/
   }
 
   //remove from available and add into current, i.e. add into resultData
-  addAvailableRole(availableRole: ApplicationPolicy) {
+  addAvailableRole(availableRole: Project) {
     const vm = this;
     var newRole = new UserProject();
     newRole.projectName = availableRole.name;
     newRole.userId = vm.resultData.uuid;
     newRole.organisationName = vm.selectedOrg.name;
-    newRole.projectId = availableRole.id;
+    newRole.projectId = availableRole.uuid;
     newRole.organisationId = vm.selectedOrg.uuid;
     newRole.deleted = false;
     newRole.default = false;
-    let i = vm.roleTypes.indexOf(availableRole);
+    let i = vm.organisationProjects.indexOf(availableRole);
     if (i !== -1) {
-      vm.roleTypes.splice(i, 1);
+      vm.organisationProjects.splice(i, 1);
     }
 
     vm.resultData.userProjects.push(newRole);
@@ -340,7 +347,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
             return r.uuid === vm.delegationService.getSelectedOrganisation();
           });
-          vm.getRoleTypes();
+          vm.getOrganisationProjects(vm.selectedOrg.uuid);
 
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
@@ -356,29 +363,30 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
           vm.selectedOrg = vm.delegatedOrganisations.find(r => {
             return r.uuid === vm.delegationService.getSelectedOrganisation();
           });
-          vm.getRoleTypes();
+          vm.getOrganisationProjects(vm.selectedOrg.uuid);
 
         },
         (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
       );
   }
 
-  getRoleTypes(){
+  getOrganisationProjects(organisationId: string){
     let vm = this;
-    vm.configurationService.getRoleTypes()
+    vm.organisationService.getProjectsForOrganisation(organisationId)
       .subscribe(
         (result) => {
-          vm.roleTypes = result;
-          vm.checkAvailableRoles()
+          vm.organisationProjects = result;
+          console.log(result);
+          vm.checkAvailableProjects()
         },
-        (error) => vm.log.error('Error loading users and roles', error, 'Error')
+        (error) => vm.log.error('Error loading organisation projects', error, 'Load organisation projects')
       );
   }
 
-  checkAvailableRoles() {
+  checkAvailableProjects() {
     const vm = this;
 
-    if (vm.selectedOrg.uuid != vm.activeRole.organisationId && vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    /*if (vm.selectedOrg.uuid != vm.activeRole.organisationId && vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       // my organisation is based on my roles but delegated organisations are based on the permissions given to us
 
       if (!vm.selectedOrg.createSuperUsers) {
@@ -390,21 +398,21 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         var user = vm.roleTypes.findIndex(e => e.id === '00972413-8f50-11e8-839e-80fa5b320513');
         vm.roleTypes.splice(user, 1);
       }
-    }
+    }*/
 
-    if (vm.selectedOrg.uuid != '439e9f06-d54c-3eb6-b800-010863bf1399' || vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    /*if (vm.selectedOrg.uuid != '439e9f06-d54c-3eb6-b800-010863bf1399' || vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       var god = vm.roleTypes.findIndex(e => e.id === '3517dd59-9ecb-11e8-9245-80fa5b320513');
       vm.roleTypes.splice(god, 1);
-    }
+    }*/
 
     if (vm.resultData.userProjects) {
       for (let role of vm.resultData.userProjects) {
         if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
-          var roleToDelete = vm.roleTypes.find(e => e.id === role.projectId);
+          var roleToDelete = vm.organisationProjects.find(e => e.uuid === role.projectId);
           if (roleToDelete != null) {
-            let i = vm.roleTypes.indexOf(roleToDelete);
+            let i = vm.organisationProjects.indexOf(roleToDelete);
             if (i !== -1) {
-              vm.roleTypes.splice(i, 1);
+              vm.organisationProjects.splice(i, 1);
             }
           }
         }
@@ -444,36 +452,6 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     vm.resultData.userProjects = [];
     vm.resultData.password = '';
     vm.existing = false;
-  }
-
-  getUserRoles(userId: string){
-    let vm = this;
-    vm.getRoleTypes();
-    vm.loadingRolesCompleted = false;
-    if (vm.resultData.userProjects) {
-      vm.loadingRolesCompleted = true;
-      return;
-    }
-    vm.userService.getUserRoles(userId)
-      .subscribe(
-        (result) => {
-          vm.resultData.userProjects = vm.addRoleNameToRole(result);
-          vm.loadingRolesCompleted = true;
-        },
-        (error) => vm.log.error('Error loading user roles', error, 'Error')
-      );
-  }
-
-  addRoleNameToRole(userRoles : UserProject[]): UserProject[] {
-    const vm = this;
-    for (let role of userRoles) {
-      var result = vm.roleTypes.find(r => {
-        return r.id === role.projectId;
-      });
-
-      role.projectName = result.name;
-    }
-    return userRoles;
   }
 
   setAsDefaultRole(role: UserProject) {

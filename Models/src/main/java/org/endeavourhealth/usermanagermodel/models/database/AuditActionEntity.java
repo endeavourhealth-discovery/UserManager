@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "audit_action", schema = "user_manager", catalog = "")
+@Table(name = "audit_action", schema = "user_manager")
 public class AuditActionEntity {
     private byte id;
     private String actionType;

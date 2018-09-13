@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class AuditEntityPK implements Serializable {
     private String id;
-    private String userRoleId;
+    private String userProjectId;
     private Timestamp timestamp;
 
     @Column(name = "id")
@@ -21,14 +21,16 @@ public class AuditEntityPK implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "user_role_id")
+
+
+    @Column(name = "user_project_id")
     @Id
     public String getUserProjectId() {
-        return userRoleId;
+        return userProjectId;
     }
 
-    public void setUserProjectId(String userRoleId) {
-        this.userRoleId = userRoleId;
+    public void setUserProjectId(String userProjectId) {
+        this.userProjectId = userProjectId;
     }
 
     @Column(name = "timestamp")
@@ -47,13 +49,13 @@ public class AuditEntityPK implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         AuditEntityPK that = (AuditEntityPK) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(userRoleId, that.userRoleId) &&
+                Objects.equals(userProjectId, that.userProjectId) &&
                 Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userRoleId, timestamp);
+        return Objects.hash(id, userProjectId, timestamp);
     }
 }

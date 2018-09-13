@@ -12,6 +12,7 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,23 +52,23 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     }
 
-   /* @GET
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.OrganisationEndpoint.organisationsForUser")
-    @Path("/organisationsForUser")
-    @ApiOperation(value = "Returns a list of organisations a user is assigned to")
+    @Timed(absolute = true, name="UserManager.OrganisationEndpoint.organisationProjects")
+    @Path("/organisationProjects")
+    @ApiOperation(value = "Returns a list of projects assigned to an organisation")
     public Response organisationsForUser(@Context SecurityContext sc,
-                                    @ApiParam(value = "User Id") @QueryParam("userId") String userId) throws Exception {
+                                    @ApiParam(value = "Organisation id") @QueryParam("organisationId") String organisationId) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
-                "Organisation(s)",
-                "UserId", userId);
+                "Projects(s)",
+                "organisationId", organisationId);
 
-        return getOrganisationsForUser(userId);
+        return getProjectsForOrganisation(organisationId);
 
-    }*/
+    }
 
     private Response searchOrganisations(String searchData, UUID userId) throws Exception {
 
@@ -78,6 +79,17 @@ public class OrganisationEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(organisations)
+                .build();
+    }
+
+    private Response getProjectsForOrganisation(String organisationId) throws Exception {
+
+        List<ProjectEntity> projects = ProjectEntity.getProjectsForOrganisation(organisationId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(projects)
                 .build();
     }
 }
