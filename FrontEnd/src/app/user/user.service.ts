@@ -6,6 +6,7 @@ import {UserProject} from "./models/UserProject";
 import {UserAccessProfile} from "./models/UserAccessProfile";
 import {UserRegion} from "./models/UserRegion";
 import {Region} from "./models/Region";
+import {UserProfile} from "./models/UserProfile";
 
 @Injectable()
 export class UserService {
@@ -92,6 +93,14 @@ export class UserService {
   getAvailableRegions(): Observable<Region[]> {
     const vm = this;
     return vm.http.get('api/user/availableRegions')
+      .map((response) => response.json());
+  }
+
+  getUserProfile(userId: string): Observable<UserProfile[]> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/userProfile/getUserProfile', {search: params})
       .map((response) => response.json());
   }
 

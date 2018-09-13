@@ -22,7 +22,7 @@
 
         <eds-api.version>1.19-SNAPSHOT</eds-api.version>
         <eds-security.version>1.8-SNAPSHOT</eds-security.version>
-        <data-sharing-manager.version>0.0.7-SNAPSHOT</data-sharing-manager.version>
+        <data-sharing-manager.version>0.0.8-SNAPSHOT</data-sharing-manager.version>
         <user-manager.version>0.0.6-SNAPSHOT</user-manager.version>
 
         <aspectj.version>1.8.9</aspectj.version>

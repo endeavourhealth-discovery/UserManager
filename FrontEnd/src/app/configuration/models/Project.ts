@@ -13,4 +13,9 @@ export class Project {
   objectives: string;
   securityArchitectureId: number;
   storageProtocolId: number;
+  publishers: { [key: string]: string; };
+  subscribers: { [key: string]: string; };
+  basePopulation: { [key: string]: string; };
+  dataSet: { [key: string]: string; };
+  dsas: { [key: string]: string; };
 }

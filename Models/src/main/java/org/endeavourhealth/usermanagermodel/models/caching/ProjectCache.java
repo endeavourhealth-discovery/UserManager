@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanagermodel.models.caching;
 
 import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.json.JsonProject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 public class ProjectCache {
 
     private static Map<String, ProjectEntity> projectMap = new HashMap<>();
+    private static Map<String, JsonProject> jsonProjectMap = new HashMap<>();
 
     public static List<ProjectEntity> getProjectDetails(List<String> projects) throws Exception {
         List<ProjectEntity> projectEntities = new ArrayList<>();
@@ -47,6 +49,20 @@ public class ProjectCache {
         }
 
         return projectEntity;
+
+    }
+
+    public static JsonProject getJsonProjectDetails(String projectId) throws Exception {
+        JsonProject project = null;
+
+        if (jsonProjectMap.containsKey(projectId)) {
+            project = jsonProjectMap.get(projectId);
+        } else {
+            project = ProjectEntity.getFullProjectJson(projectId);
+            jsonProjectMap.put(project.getUuid(), project);
+        }
+
+        return project;
 
     }
 }

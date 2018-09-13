@@ -1,0 +1,26 @@
+<div class="module">
+  <div class="container-fluid">
+    <div class="module-heading">{{user.forename}} {{user.surname}} ({{user.username}}) - Profile
+      <div class="pull-right">
+        <button type="button" class="btn btn-info" (click)="refresh()">Refresh</button>
+        <button type="button" class="btn btn-danger" (click)="close()">Close</button>
+      </div>
+    </div>
+    <div class="module-body">
+      <ngb-tabset>
+        <ngb-tab *ngFor="let profile of userProfiles" title="{{profile.organisation.name}}">
+          <ng-template ngbTabContent>
+            <div *ngFor="let project of profile.projects" class="scroll-box-500">
+              <b>Project Name: </b> {{project.name}} <br>
+              <b>Subscribers: </b> {{getStringListFromArray(project.subscribers)}}<br>
+              <b>Publishers: </b> {{getStringListFromArray(project.publishers)}}<br>
+              <b>Base population: </b> {{getStringListFromArray(project.basePopulation)}}<br>
+              <b>Data set: </b> {{getStringListFromArray(project.dataSet)}}<br>
+              <b>Data sharing agreement: </b> {{getStringListFromArray(project.dsas)}}
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+  </div>
+</div>
