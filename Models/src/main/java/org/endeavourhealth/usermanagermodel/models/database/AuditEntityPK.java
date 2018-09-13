@@ -21,8 +21,6 @@ public class AuditEntityPK implements Serializable {
         this.id = id;
     }
 
-
-
     @Column(name = "user_project_id")
     @Id
     public String getUserProjectId() {
