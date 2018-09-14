@@ -18,7 +18,7 @@
         <gson.version>2.3</gson.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <jersey.version>2.22.1</jersey.version>
-        <data-sharing-manager.version>0.0.8-SNAPSHOT</data-sharing-manager.version>
+        <data-sharing-manager.version>0.0.9-SNAPSHOT</data-sharing-manager.version>
         <keycloak.version>3.2.1.Final</keycloak.version>
 
     </properties>

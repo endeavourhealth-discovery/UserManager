@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UserProfile} from "../models/UserProfile";
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
 
 @Component({
   selector: 'app-user-profile',
@@ -98,9 +99,29 @@ export class UserProfileComponent implements OnInit {
       stringArray.push(dataArray[idx]);
     }
 
-
     return stringArray.toString();
 
+  }
+
+  getApplicationAccess(attributes: ApplicationPolicyAttribute[]) {
+    let appAttributeMap : Map<string, string[]> = new Map<string, string[]>();
+
+    for (let attribute of attributes) {
+      let appAtt : string[] = [];
+      if (appAttributeMap.has(attribute.application)) {
+        appAtt = appAttributeMap.get(attribute.application);
+      }
+      appAtt.push(attribute.applicationAccessProfileName);
+      appAttributeMap.set(attribute.application, appAtt);
+    }
+
+    let appString: string = '';
+    appAttributeMap.forEach((value, key) => {
+      appString += key;
+      appString += ' (' + value.toString() + ') '
+    });
+
+    return appString;
   }
 
 }

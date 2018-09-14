@@ -271,7 +271,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
           }
         },
         (error) => {
-          vm.log.error('Available regions could not be loaded. Please try again.', error, 'Load available regions');
+          vm.log.error('Available application policies could not be loaded. Please try again.', error, 'Load available application policies');
         }
       );
   }

@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS delegation_relationship;
 DROP TABLE IF EXISTS delegation;
 DROP TABLE IF EXISTS user_project;
 DROP TABLE IF EXISTS user_region;
+DROP TABLE IF EXISTS user_application_policy;
 
 CREATE TABLE user_project
 (

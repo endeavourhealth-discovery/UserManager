@@ -15,7 +15,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_application_policy", schema = "user_manager", catalog = "")
+@Table(name = "user_application_policy", schema = "user_manager")
 public class UserApplicationPolicyEntity {
     private String userId;
     private String applicationPolicyId;
@@ -80,7 +80,7 @@ public class UserApplicationPolicyEntity {
 
         if (oldPolicy != null) {
             if (oldPolicy.applicationPolicyId.equals(userApplicationPolicy.getApplicationPolicyId())) {
-                // region hasnt changed so don't save
+                // application policy hasnt changed so don't save
                 return;
             }
         }

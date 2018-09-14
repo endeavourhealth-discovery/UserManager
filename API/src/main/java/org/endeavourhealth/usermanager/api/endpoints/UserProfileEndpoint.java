@@ -14,9 +14,14 @@ import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonProject;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.ApplicationPolicyCache;
 import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.usermanagermodel.models.caching.ProjectCache;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity;
+import org.endeavourhealth.usermanagermodel.models.database.UserApplicationPolicyEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserProjectEntity;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +61,8 @@ public class UserProfileEndpoint extends AbstractEndpoint {
     }
 
     private Response getUserProfile(String userId) throws Exception {
+        UserApplicationPolicyEntity userApplicationPolicyEntity = UserApplicationPolicyEntity.getUserApplicationPolicyId(userId);
+        ApplicationPolicyEntity userAppPolicyEntity = ApplicationPolicyCache.getApplicationPolicyDetails(userApplicationPolicyEntity.getApplicationPolicyId());
 
         List<UserProjectEntity> projectEntities = UserProjectEntity.getUserProjectEntities(userId);
 
@@ -71,6 +78,12 @@ public class UserProfileEndpoint extends AbstractEndpoint {
             }
 
             JsonProject project = ProjectCache.getJsonProjectDetails(profile.getProjectId());
+            ApplicationPolicyEntity projectAppPolicyEntity = ApplicationPolicyCache.getApplicationPolicyDetails(project.getApplicationPolicy());
+
+
+            List<JsonApplicationPolicyAttribute> projectPolicyAttributes = processProjectPolicyAttributes(userAppPolicyEntity.getId(), projectAppPolicyEntity.getId());
+            project.setApplicationPolicyAttributes(projectPolicyAttributes);
+
             userProfile.addProject(project);
         }
 
@@ -78,6 +91,28 @@ public class UserProfileEndpoint extends AbstractEndpoint {
                 .ok()
                 .entity(userProfiles)
                 .build();
+    }
+
+    private List<JsonApplicationPolicyAttribute> processProjectPolicyAttributes(String userPolicyId, String projectPolicyId) throws Exception {
+        List<JsonApplicationPolicyAttribute> mergedAttributes = new ArrayList<>();
+
+        List<JsonApplicationPolicyAttribute> projectPolicyAttributes = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(projectPolicyId);
+
+        if (userPolicyId.equals(projectPolicyId)) {
+            // both user and project have the same policy so just return the project attributes
+            return projectPolicyAttributes;
+        }
+
+        List<JsonApplicationPolicyAttribute> userPolicyAttributes = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(userPolicyId);
+
+        for (JsonApplicationPolicyAttribute attribute : projectPolicyAttributes) {
+            if (userPolicyAttributes.stream().filter(a -> a.getId().equals(attribute.getId())).findFirst().isPresent()) {
+                //user policy has the project attribute so add it to the list
+                mergedAttributes.add(attribute);
+            }
+        }
+
+        return mergedAttributes;
     }
 
 }

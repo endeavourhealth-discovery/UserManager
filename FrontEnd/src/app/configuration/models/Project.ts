@@ -1,3 +1,5 @@
+import {ApplicationPolicyAttribute} from "./ApplicationPolicyAttribute";
+
 export class Project {
   uuid: string;
   name: string;
@@ -18,4 +20,5 @@ export class Project {
   basePopulation: { [key: string]: string; };
   dataSet: { [key: string]: string; };
   dsas: { [key: string]: string; };
+  applicationPolicyAttributes: ApplicationPolicyAttribute[];
 }

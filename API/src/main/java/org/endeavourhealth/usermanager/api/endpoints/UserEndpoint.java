@@ -407,7 +407,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Timed(absolute = true, name="UserManager.UserEndpoint.setUserApplicationPolicy")
     @Path("/setUserApplicationPolicy")
     @RequiresAdmin
-    @ApiOperation(value = "Saves region associated with a user")
+    @ApiOperation(value = "Saves application policy associated with a user")
     public Response setUserApplicationPolicy(@Context SecurityContext sc, JsonUserApplicationPolicy userApplicationPolicy,
                                   @ApiParam(value = "userProjectId of the user making the change") @QueryParam("userProjectId") String userProjectId) throws Exception {
         super.setLogbackMarkers(sc);

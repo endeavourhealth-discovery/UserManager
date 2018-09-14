@@ -12,11 +12,13 @@
           <ng-template ngbTabContent>
             <div *ngFor="let project of profile.projects" class="scroll-box-500">
               <b>Project Name: </b> {{project.name}} <br>
+              <b>Applications: </b> {{getApplicationAccess(project.applicationPolicyAttributes)}} <br>
               <b>Subscribers: </b> {{getStringListFromArray(project.subscribers)}}<br>
               <b>Publishers: </b> {{getStringListFromArray(project.publishers)}}<br>
               <b>Base population: </b> {{getStringListFromArray(project.basePopulation)}}<br>
               <b>Data set: </b> {{getStringListFromArray(project.dataSet)}}<br>
               <b>Data sharing agreement: </b> {{getStringListFromArray(project.dsas)}}
+
             </div>
           </ng-template>
         </ngb-tab>

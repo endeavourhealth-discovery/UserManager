@@ -40,12 +40,12 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.getApplicationPolicies")
     @Path("/getApplicationPolicies")
-    @ApiOperation(value = "Returns a list of delegations")
+    @ApiOperation(value = "Returns a list of application policies")
     public Response getApplicationPolicies(@Context SecurityContext sc) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
-                "Organisation(s)");
+                "application policy(s)");
 
         return getAllApplicationPolicies();
 
@@ -70,12 +70,12 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
     }
 
     private Response getAllApplicationPolicies() throws Exception {
-        List<ApplicationPolicyEntity> roleTypes = ApplicationPolicyEntity.getAllApplicationPolicies();
+        List<ApplicationPolicyEntity> applicationPolicies = ApplicationPolicyEntity.getAllApplicationPolicies();
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(roleTypes)
+                .entity(applicationPolicies)
                 .build();
     }
 
