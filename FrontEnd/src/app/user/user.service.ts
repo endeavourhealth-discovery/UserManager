@@ -7,6 +7,7 @@ import {UserAccessProfile} from "./models/UserAccessProfile";
 import {UserRegion} from "./models/UserRegion";
 import {Region} from "./models/Region";
 import {UserProfile} from "./models/UserProfile";
+import {UserApplicationPolicy} from "./models/UserApplicationPolicy";
 
 @Injectable()
 export class UserService {
@@ -94,6 +95,22 @@ export class UserService {
     const vm = this;
     return vm.http.get('api/user/availableRegions')
       .map((response) => response.json());
+  }
+
+  getUserApplicationPolicy(userId: string): Observable<UserApplicationPolicy> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/user/userApplicationPolicy', {search: params})
+      .map((response) => response.json());
+  }
+
+  saveUserApplicationPolicy(userApplicationPolicy: UserApplicationPolicy, userProjectId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userProjectId', userProjectId);
+    return vm.http.post('api/user/setUserApplicationPolicy', userApplicationPolicy, {search: params})
+      .map((response) => response.text());
   }
 
   getUserProfile(userId: string): Observable<UserProfile[]> {

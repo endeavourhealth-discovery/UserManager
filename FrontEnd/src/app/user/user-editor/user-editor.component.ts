@@ -15,6 +15,7 @@ import {OrganisationService} from "../../organisation/organisation.service";
 import {Project} from "../../configuration/models/Project";
 import {UserRegion} from "../models/UserRegion";
 import {Region} from "../models/Region";
+import {UserApplicationPolicy} from "../models/UserApplicationPolicy";
 
 @Component({
   selector: 'app-user-editor',
@@ -41,6 +42,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   userRegion: UserRegion;
   availableRegions: Region[];
   selectedRegion: Region;
+  userApplicationPolicy: UserApplicationPolicy;
+  availablePolicies: ApplicationPolicy[];
+  selectedApplicationPolicy: ApplicationPolicy;
 
   public activeRole: UserProject;
   superUser = false;
@@ -84,6 +88,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
     let vm = this;
     vm.getAvailableRegions();
+    vm.getAvailableApplicationPolicies();
 
     vm.userManagerService.activeRole.subscribe(active => {
       vm.activeRole = active;
@@ -166,6 +171,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
           (response) => {
             vm.resultData = response;
             vm.saveRegion();
+            vm.saveApplicationPolicy();
             vm.saveRoles(close);
           },
           (error) => this.log.error('User details could not be saved. Please try again.', error, 'Save user details')
@@ -181,6 +187,17 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
         },
         (error) => vm.log.error('User region could not be saved. Please try again.', error, 'Save user region')
+      );
+  }
+
+  saveApplicationPolicy() {
+    const vm = this;
+    vm.userService.saveUserApplicationPolicy(vm.userApplicationPolicy, vm.activeRole.id)
+      .subscribe(
+        (response) => {
+
+        },
+        (error) => vm.log.error('User application policy could not be saved. Please try again.', error, 'Save user application policy')
       );
   }
 
@@ -243,12 +260,27 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       );
   }
 
+  getAvailableApplicationPolicies() {
+    const vm = this;
+    vm.configurationService.getApplicationPolicies()
+      .subscribe(
+        (result) => {
+          vm.availablePolicies = result;
+          if (vm.editMode) {
+            vm.getUserApplicationPolicy();
+          }
+        },
+        (error) => {
+          vm.log.error('Available regions could not be loaded. Please try again.', error, 'Load available regions');
+        }
+      );
+  }
+
   getUserRegion() {
     const vm = this;
     vm.userService.getUserRegion(vm.resultData.uuid)
       .subscribe(
         (result) => {
-          console.log('getting region');
           vm.userRegion = result;
           vm.selectedRegion = vm.availableRegions.find(r => {
             return r.uuid === vm.userRegion.regionId;
@@ -256,6 +288,22 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
         },
         (error) => {
           vm.log.error('User region could not be loaded. Please try again.', error, 'Load user region');
+        }
+      );
+  }
+
+  getUserApplicationPolicy() {
+    const vm = this;
+    vm.userService.getUserApplicationPolicy(vm.resultData.uuid)
+      .subscribe(
+        (result) => {
+          vm.userApplicationPolicy = result;
+          vm.selectedApplicationPolicy = vm.availablePolicies.find(r => {
+            return r.id === vm.userApplicationPolicy.applicationPolicyId;
+          });
+        },
+        (error) => {
+          vm.log.error('User application policy could not be loaded. Please try again.', error, 'Load user application policy');
         }
       );
   }
@@ -518,6 +566,14 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     changedRegion.userId = vm.resultData.uuid;
     changedRegion.regionId = regionUuid;
     vm.userRegion = changedRegion;
+  }
+
+  changeUserApplicationPolicy(policyId: string) {
+    const vm = this;
+    let changedPolicy = new UserApplicationPolicy();
+    changedPolicy.userId = vm.resultData.uuid;
+    changedPolicy.applicationPolicyId = policyId;
+    vm.userApplicationPolicy = changedPolicy;
   }
 
 }

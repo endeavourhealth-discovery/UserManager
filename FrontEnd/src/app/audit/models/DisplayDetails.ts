@@ -82,4 +82,11 @@ export class DisplayDetails {
       { label: 'Region', property: 'region'}
     ]
   }
+
+  getUserApplicationPolicyDisplayDetails(): any[] {
+    return [
+      { label: 'User', property: 'user'},
+      { label: 'Application policy', property: 'applicationPolicy'}
+    ]
+  }
 }

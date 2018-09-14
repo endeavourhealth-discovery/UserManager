@@ -4,7 +4,6 @@ import {Observable} from "rxjs/Observable";
 import {ApplicationPolicy} from "./models/ApplicationPolicy";
 import {Application} from "./models/Application";
 import {ApplicationProfile} from "./models/ApplicationProfile";
-import {UserProject} from "../user/models/UserProject";
 import {ApplicationPolicyAttribute} from "./models/ApplicationPolicyAttribute";
 
 @Injectable()
@@ -12,15 +11,15 @@ export class ConfigurationService {
 
   constructor(private http: Http) { }
 
-  getRoleTypes(): Observable<ApplicationPolicy[]> {
+  getApplicationPolicies(): Observable<ApplicationPolicy[]> {
     const vm = this;
-    return vm.http.get('api/roleType/getRoles')
+    return vm.http.get('api/applicationPolicy/getApplicationPolicies')
       .map((response) => response.json());
   }
 
-  saveRoleType(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
+  saveApplicationPolicy(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
     const vm = this;
-    return vm.http.post('api/roleType/saveRoleType', roleType)
+    return vm.http.post('api/applicationPolicy/saveApplicationPolicy', roleType)
       .map((response) => response.text());
   }
 

@@ -38,6 +38,14 @@ CREATE TABLE user_region
 	CONSTRAINT pk_id PRIMARY KEY (user_id)
 )comment 'A region which is assigned to a user for data sharing manager purposes';
 
+CREATE TABLE user_application_policy
+(
+	user_id varchar(36) NOT NULL,
+	application_policy_id varchar(36) NOT NULL,
+
+	CONSTRAINT pk_id PRIMARY KEY (user_id)
+)comment 'An application policy which is assigned to a user to determine access to applications';
+
 CREATE TABLE user_role
 (
 	id varchar(36) NOT NULL,

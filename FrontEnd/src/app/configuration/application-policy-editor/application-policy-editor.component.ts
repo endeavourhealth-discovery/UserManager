@@ -193,7 +193,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   save(close: boolean) {
     const vm = this;
     console.log(vm.resultRole);
-    vm.configurationService.saveRoleType(vm.resultRole, vm.activeRole.id)
+    vm.configurationService.saveApplicationPolicy(vm.resultRole, vm.activeRole.id)
       .subscribe(
         (response) => {
           vm.log.success('Application details successfully saved.', null, vm.dialogTitle);

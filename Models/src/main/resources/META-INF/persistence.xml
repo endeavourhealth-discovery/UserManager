@@ -12,6 +12,7 @@
         <class>org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.UserProjectEntity</class>
         <class>org.endeavourhealth.usermanagermodel.models.database.UserRegionEntity</class>
+        <class>org.endeavourhealth.usermanagermodel.models.database.UserApplicationPolicyEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

@@ -19,10 +19,12 @@ import org.endeavourhealth.datasharingmanagermodel.models.database.RegionEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.database.AuditEntity;
+import org.endeavourhealth.usermanagermodel.models.database.UserApplicationPolicyEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.usermanagermodel.models.database.UserRegionEntity;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUser;
+import org.endeavourhealth.usermanagermodel.models.json.JsonUserApplicationPolicy;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserProject;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserRegion;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -352,7 +354,6 @@ public final class UserEndpoint extends AbstractEndpoint {
         AbstractEndpoint.clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(userRegion)
                 .build();
     }
 
@@ -371,6 +372,57 @@ public final class UserEndpoint extends AbstractEndpoint {
         LOG.trace("getUser");
 
         return getAvailableRegions();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getUserApplicationPolicy")
+    @Path("/userApplicationPolicy")
+    @ApiOperation(value = "Returns the application policy associated with the user")
+    public Response getUserApplicationPolicy(@Context SecurityContext sc,
+                                  @ApiParam(value = "User id to get the application policy for") @QueryParam("userId") String userId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User application policy", "User Id", userId);
+
+        LOG.trace("getUser");
+
+        UserApplicationPolicyEntity userPolicy = UserApplicationPolicyEntity.getUserApplicationPolicyId(userId);
+        if (userPolicy == null) {
+            userPolicy = new UserApplicationPolicyEntity();
+        }
+
+        AbstractEndpoint.clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(userPolicy)
+                .build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.setUserApplicationPolicy")
+    @Path("/setUserApplicationPolicy")
+    @RequiresAdmin
+    @ApiOperation(value = "Saves region associated with a user")
+    public Response setUserApplicationPolicy(@Context SecurityContext sc, JsonUserApplicationPolicy userApplicationPolicy,
+                                  @ApiParam(value = "userProjectId of the user making the change") @QueryParam("userProjectId") String userProjectId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User application policy", "User application policy", userApplicationPolicy);
+
+        LOG.trace("getUser");
+
+        UserApplicationPolicyEntity.saveUserApplicationPolicyId(userApplicationPolicy, userProjectId);
+
+        AbstractEndpoint.clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
     }
 
     private Response getAvailableRegions() throws Exception {

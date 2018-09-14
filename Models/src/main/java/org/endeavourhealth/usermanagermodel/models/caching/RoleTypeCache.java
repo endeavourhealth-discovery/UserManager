@@ -15,7 +15,7 @@ public class RoleTypeCache {
         if (roleTypeMap.containsKey(roleId)) {
             foundRole = roleTypeMap.get(roleId);
         } else {
-            foundRole = ApplicationPolicyEntity.getRoleType(roleId);
+            foundRole = ApplicationPolicyEntity.getApplicationPolicy(roleId);
             roleTypeMap.put(foundRole.getId(), foundRole);
 
         }

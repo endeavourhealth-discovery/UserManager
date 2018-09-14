@@ -203,20 +203,28 @@
         </div>
         <br>
         <!------------------------------------------------------------------------------------------------->
-        <!-- Region -->
+        <!-- Region abd application policy-->
         <!------------------------------------------------------------------------------------------------->
         <div class="row">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-header">Data sharing manager region</div>
+              <div class="card-header">Application access</div>
               <div class="card-block">
                 <form UserDetails2="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label">Region</label>
+                        <label class="form-control-label">Data sharing manager region</label>
                         <select class="form-control" [(ngModel)]="selectedRegion" name="selectedRegion" (change)="changeUserRegion(selectedRegion.uuid)">
                           <option *ngFor="let reg of availableRegions" [ngValue]="reg">{{reg.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Application policy</label>
+                        <select class="form-control" [(ngModel)]="selectedApplicationPolicy" name="selectedApplicationPolicy" (change)="changeUserApplicationPolicy(selectedApplicationPolicy.id)">
+                          <option *ngFor="let pol of availablePolicies" [ngValue]="pol">{{pol.name}}</option>
                         </select>
                       </div>
                     </div>
@@ -226,6 +234,8 @@
             </div>
           </div>
         </div>
+        <br>
+        <br>
       </div>
     </div>
   </div>

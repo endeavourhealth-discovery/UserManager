@@ -26,11 +26,11 @@ import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.UUID;
 
-@Path("/roleType")
+@Path("/applicationPolicy")
 @Metrics(registry = "UserManagerRegistry")
-@Api(value = "Role type", description = "API endpoint related to the role types.")
-public class RoleTypeEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(RoleTypeEndpoint.class);
+@Api(value = "Application policy", description = "API endpoint related to the application policies.")
+public class ApplicationPolicyEndpoint extends AbstractEndpoint {
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationPolicyEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;
@@ -38,39 +38,39 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.getRoles")
-    @Path("/getRoles")
+    @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.getApplicationPolicies")
+    @Path("/getApplicationPolicies")
     @ApiOperation(value = "Returns a list of delegations")
-    public Response getRoles(@Context SecurityContext sc) throws Exception {
+    public Response getApplicationPolicies(@Context SecurityContext sc) throws Exception {
 
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
-        return getAllRoleTypes();
+        return getAllApplicationPolicies();
 
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.RoleTypeEndpoint.saveRoleType")
-    @Path("/saveRoleType")
+    @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.saveApplicationPolicy")
+    @Path("/saveApplicationPolicy")
     @ApiOperation(value = "Save a new role type or update an existing one.  Accepts a JSON representation " +
             "of a role type.")
     @RequiresAdmin
-    public Response saveRoleType(@Context SecurityContext sc,
+    public Response saveApplicationPolicy(@Context SecurityContext sc,
                             @ApiParam(value = "Json representation of role type to save or update") JsonApplicationPolicy roleType) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",
                 "roleType", roleType);
 
-        return saveRoleType(roleType);
+        return saveApplicationPolicy(roleType);
     }
 
-    private Response getAllRoleTypes() throws Exception {
-        List<ApplicationPolicyEntity> roleTypes = ApplicationPolicyEntity.getAllRoleTypes();
+    private Response getAllApplicationPolicies() throws Exception {
+        List<ApplicationPolicyEntity> roleTypes = ApplicationPolicyEntity.getAllApplicationPolicies();
 
         clearLogbackMarkers();
         return Response
@@ -79,7 +79,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response saveRoleType(JsonApplicationPolicy roleType) throws Exception {
+    private Response saveApplicationPolicy(JsonApplicationPolicy roleType) throws Exception {
 
         String roleId = roleType.getId();
         if (roleId == null) {
@@ -87,7 +87,7 @@ public class RoleTypeEndpoint extends AbstractEndpoint {
             roleType.setId(roleId);
         }
 
-        ApplicationPolicyEntity.saveRoleType(roleType);
+        ApplicationPolicyEntity.saveApplicationPolicy(roleType);
 
         clearLogbackMarkers();
         return Response

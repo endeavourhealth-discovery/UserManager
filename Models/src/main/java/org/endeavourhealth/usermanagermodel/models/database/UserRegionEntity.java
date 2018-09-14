@@ -112,7 +112,7 @@ public class UserRegionEntity {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.createObjectNode();
 
-        ((ObjectNode)rootNode).put("title", "Default project changed");
+        ((ObjectNode)rootNode).put("title", "User region changed");
 
         if (afterJson != null) {
             ((ObjectNode) rootNode).set("after", afterJson);

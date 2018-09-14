@@ -19,7 +19,8 @@ values
 (5, 'Application'),
 (6, 'Application profile'),
 (7, 'Role Type access profile'),
-(8, 'User region');
+(8, 'User region'),
+(9, 'User application policy');
 
 insert into user_manager.role_type (id, name, description, job_category_id, is_deleted)
 values 

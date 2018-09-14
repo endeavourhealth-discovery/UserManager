@@ -87,7 +87,7 @@ public class ApplicationPolicyEntity {
         return Objects.hash(id, name, description, jobCategoryId, isDeleted);
     }
 
-    public static List<ApplicationPolicyEntity> getAllRoleTypes() throws Exception {
+    public static List<ApplicationPolicyEntity> getAllApplicationPolicies() throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -102,7 +102,7 @@ public class ApplicationPolicyEntity {
         return ret;
     }
 
-    public static ApplicationPolicyEntity getRoleType(String roleId) throws Exception {
+    public static ApplicationPolicyEntity getApplicationPolicy(String roleId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         ApplicationPolicyEntity ret = entityManager.find(ApplicationPolicyEntity.class, roleId);
@@ -112,7 +112,7 @@ public class ApplicationPolicyEntity {
         return ret;
     }
 
-    public static void saveRoleType(JsonApplicationPolicy roleType) throws Exception {
+    public static void saveApplicationPolicy(JsonApplicationPolicy roleType) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         ApplicationPolicyEntity applicationPolicyEntity = new ApplicationPolicyEntity();

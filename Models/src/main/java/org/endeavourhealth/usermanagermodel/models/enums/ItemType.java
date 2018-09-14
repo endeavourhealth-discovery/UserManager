@@ -9,7 +9,8 @@ public enum ItemType {
     APPLICATION((short)5),
     APPLICATION_PROFILE((short)6),
     ROLE_TYPE_APPLICATION_PROFILE((short)7),
-    USER_REGION((short)8);
+    USER_REGION((short)8),
+    USER_APPLICATION_POLICY((short)9);
 
     private Short itemType;
 

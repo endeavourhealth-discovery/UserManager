@@ -101,7 +101,7 @@ export class UserViewComponent implements OnInit {
 
   getRoleTypes(){
     let vm = this;
-    vm.configurationService.getRoleTypes()
+    vm.configurationService.getApplicationPolicies()
       .subscribe(
         (result) => {
           vm.roleTypes = result;
