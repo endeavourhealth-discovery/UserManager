@@ -250,7 +250,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       .subscribe(
         (result) => {
           vm.availableRegions = result;
-          if (vm.editMode) {
+          if (vm.editMode && !vm.existing) {
             vm.getUserRegion();
           }
         },
@@ -266,7 +266,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       .subscribe(
         (result) => {
           vm.availablePolicies = result;
-          if (vm.editMode) {
+          if (vm.editMode && !vm.existing) {
             vm.getUserApplicationPolicy();
           }
         },

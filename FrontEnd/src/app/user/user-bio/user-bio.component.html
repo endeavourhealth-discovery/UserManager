@@ -11,12 +11,12 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">User access</div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
                   <label class="control-label">Select role</label>
                   <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>
+                    <span class="input-group-append"><i class="fa fa-th-large input-group-text"></i></span>
                     <select class="form-control" [(ngModel)]="selectedRole" name="selectedRole" (change)="loadRoleProfile()">
                       <option *ngFor="let role of user.userProjects" [ngValue]="role">{{role.roleTypeName}} ({{role.organisationName}})</option>
                     </select>
@@ -42,7 +42,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">{{selectedApp.applicationName}} - Application profiles</div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
                   <div *ngFor="let profile of selectedApp.roleTypeAccessProfiles" class="hover-box show-child-on-hover striped">
@@ -66,7 +66,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">{{selectedApp.applicationName}} - {{selectedProfile.applicationAccessProfileName}} - Client Access</div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
                   <div *ngFor="let client of selectedProfileTree.accessProfile" class="hover-box show-child-on-hover striped">
@@ -90,7 +90,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">{{selectedApp.applicationName}} - {{selectedProfile.applicationAccessProfileName}} - Sharing Agreements</div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
                   <div *ngIf="!selectedProfileTree.sharingAgreementsHasAccess">
@@ -127,7 +127,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">{{selectedApp.applicationName}} - {{selectedSharingAgreement.sharingAgreementName}} - Organisations</div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
                   <div *ngFor="let org of selectedSharingAgreement.organisations" class="hover-box show-child-on-hover striped">

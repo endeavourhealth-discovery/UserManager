@@ -11,7 +11,7 @@
       <div *ngIf="existing">
         <div class="card">
           <div class="card-header">Add exising user</div>
-          <div class="card-block">
+          <div class="card-body">
             <form existingUserForm="form" class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
@@ -19,11 +19,11 @@
                     <label class="label">Search existing users</label>
                     <div class="input-group">
                       <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
-                      <span class="btn input-group-addon" (click)="searchUsers()">
-                        <i class="fa fa-search" title="Search"></i>
+                      <span class="input-group-append" (click)="searchUsers()">
+                        <i class="fa fa-search input-group-text" title="Search"></i>
                       </span>
-                      <span class="btn input-group-addon" (click)="clearSearch()">
-                        <i class="fa fa-remove" title="Clear search"></i>
+                      <span class="input-group-append" (click)="clearSearch()">
+                        <i class="fa fa-remove input-group-text" title="Clear search"></i>
                        </span>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">Profile</div>
-              <div class="card-block">
+              <div class="card-body">
                 <form UserDetails="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">
@@ -108,7 +108,7 @@
             <!------------------------------------------------------------------------------------------------->
             <div class="card">
               <div class="card-header">Credentials</div>
-              <div class="card-block">
+              <div class="card-body">
                 <form UserDetails2="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">
@@ -141,7 +141,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">Projects</div>
-              <div class="card-block">
+              <div class="card-body">
                 <form UserDetails2="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">
@@ -175,12 +175,9 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label class="form-control-label">Available at</label>
-                        <!--<div class="input-group">-->
-                          <!--<span class="input-group-addon"><i class="fa fa-th-large fa-lg fa-fw"></i></span>-->
                           <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getOrganisationProjects(selectedOrg.uuid)">
                             <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
                           </select>
-                        <!--</div>-->
                       </div>
                       <div class="scroll-box-150 form-control">
                         <loadingIndicator [done]="organisationProjects">
@@ -209,7 +206,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">Application access</div>
-              <div class="card-block">
+              <div class="card-body">
                 <form UserDetails2="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">

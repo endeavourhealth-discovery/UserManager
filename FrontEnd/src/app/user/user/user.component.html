@@ -12,7 +12,7 @@
                 <button *ngIf="superUser" class="btn btn-success" (click)="addExisting()">Add existing user</button>
               </div>
             </div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -20,26 +20,6 @@
                     <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
                       <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
                     </select>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <!--<div class="col-md-7">
-                      <select class="form-control" [(ngModel)]="selectedOrganisation" (ngModelChange)="setOrganisation($event)" name="Organisation" #organisation>
-                        <option *ngFor="let item of userOrganisations" [ngValue]="item">{{item.name}}</option>
-                      </select>
-                    </div>-->
-                    <!--<div class="col-md-5">
-                      <div class="input-group">
-                        <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term...">
-                        <span *ngIf="searched" class="btn input-group-addon" (click)="clearSearch(); ">
-												<i class="fa fa-remove" title="Clear search"></i>
-											</span>
-                        <span class="btn input-group-addon" (click)="searchUsers()">
-												<i class="fa fa-search" title="Search"></i>
-											</span>
-                      </div>
-                    </div>-->
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -97,7 +77,7 @@
                 <button *ngIf="selectedUser && superUser" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>
               </div>
             </div>
-            <div class="card-block">
+            <div class="card-body">
               <div class="row">
                 <div class="col-md-12" *ngIf="selectedUser==null">No user selected</div>
               </div>

@@ -11,7 +11,7 @@
                 <button class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
               </div>
             </div>
-            <div class="card-block">
+            <div class="card-body">
               <loadingIndicator [done]="selectedUser">
                 <div class="table" *ngIf="selectedUser">
                   <div class="row">
@@ -59,7 +59,7 @@
             <div class="card-header">
               Roles
             </div>
-            <div class="card-block" *ngIf="selectedUser && selectedUser.userProjects">
+            <div class="card-body" *ngIf="selectedUser && selectedUser.userProjects">
               <div class="col-md-12">
                 <loadingIndicator [done]="loadingRolesCompleted">
                   <div class="col-md-12" *ngIf="selectedUser.userProjects!=null && selectedUser.userProjects.length == 0">No roles assigned</div>
