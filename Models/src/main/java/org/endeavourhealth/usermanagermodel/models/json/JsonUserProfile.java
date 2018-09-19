@@ -1,36 +1,94 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.datasharingmanagermodel.models.database.RegionEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonProject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class JsonUserProfile {
-    private OrganisationEntity organisation = null;
-    private List<JsonProject> projects = new ArrayList<>();
+    private String uuid = null;
+    private String username = null;
+    private String forename = null;
+    private String surname = null;
+    private String email = null;
+    private String mobile = null;
+    private String photo = null;
+    private RegionEntity region = null;
+    private List<JsonUserOrganisationProject> organisationProjects = null;
 
-    public OrganisationEntity getOrganisation() {
-        return organisation;
+
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setOrganisation(OrganisationEntity organisation) {
-        this.organisation = organisation;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
-    public List<JsonProject> getProjects() {
-        return projects;
+    public String getUsername() {
+        return username;
     }
 
-    public void setProjects(List<JsonProject> projects) {
-        this.projects = projects;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void addProject(JsonProject project) {
-        if (this.projects == null) {
-            this.projects = new ArrayList<>();
-        }
+    public String getForename() {
+        return forename;
+    }
 
-        this.projects.add(project);
+    public void setForename(String forename) {
+        this.forename = forename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public RegionEntity getRegion() {
+        return region;
+    }
+
+    public void setRegion(RegionEntity region) {
+        this.region = region;
+    }
+
+    public List<JsonUserOrganisationProject> getOrganisationProjects() {
+        return organisationProjects;
+    }
+
+    public void setOrganisationProjects(List<JsonUserOrganisationProject> organisationProjects) {
+        this.organisationProjects = organisationProjects;
     }
 }

@@ -113,11 +113,11 @@ export class UserService {
       .map((response) => response.text());
   }
 
-  getUserProfile(userId: string): Observable<UserProfile[]> {
+  getUserProfile(userId: string): Observable<UserProfile> {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userId', userId);
-    return vm.http.get('api/userProfile/getUserProfile', {search: params})
+    return vm.http.get('api/userManager/getUserProfile', {search: params})
       .map((response) => response.json());
   }
 

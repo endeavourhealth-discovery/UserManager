@@ -43,7 +43,7 @@ public class UserProfileEndpoint extends AbstractEndpoint {
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
     private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;
 
-    @GET
+    /*@GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.UserBioEndpoint.getUserProfile")
@@ -58,9 +58,9 @@ public class UserProfileEndpoint extends AbstractEndpoint {
 
         return getUserProfile(userId);
 
-    }
+    }*/
 
-    private Response getUserProfile(String userId) throws Exception {
+    /*private Response getUserProfile(String userId) throws Exception {
         UserApplicationPolicyEntity userApplicationPolicyEntity = UserApplicationPolicyEntity.getUserApplicationPolicyId(userId);
         ApplicationPolicyEntity userAppPolicyEntity = ApplicationPolicyCache.getApplicationPolicyDetails(userApplicationPolicyEntity.getApplicationPolicyId());
 
@@ -113,6 +113,6 @@ public class UserProfileEndpoint extends AbstractEndpoint {
         }
 
         return mergedAttributes;
-    }
+    }*/
 
 }

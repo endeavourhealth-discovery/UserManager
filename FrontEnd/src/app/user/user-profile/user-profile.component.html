@@ -1,14 +1,43 @@
 <div class="module">
   <div class="container-fluid">
-    <div class="module-heading">{{user.forename}} {{user.surname}} ({{user.username}}) - Profile
+    <div class="module-heading">User Profile
       <div class="pull-right">
         <button type="button" class="btn btn-info" (click)="refresh()">Refresh</button>
         <button type="button" class="btn btn-danger" (click)="close()">Close</button>
       </div>
     </div>
     <div class="module-body">
-      <ngb-tabset>
-        <ngb-tab *ngFor="let profile of userProfiles" title="{{profile.organisation.name}}">
+      <div *ngIf="userProfile">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                {{userProfile.forename}} {{userProfile.surname}} ({{userProfile.username}})
+                <div class="pull-right">
+                  <span class="input-group-append" (click)="precisCollapsed = !precisCollapsed">
+                    <i class="fa fa-chevron-down input-group-text" title="Search"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="card-body" [ngbCollapse]="precisCollapsed">
+                <div class="row">
+                  <div class="col-md-4">
+                    <b>mobile: </b>{{userProfile.mobile}}
+                  </div>
+                  <div class="col-md-4">
+                    <b>email: </b>{{userProfile.email}}
+                  </div>
+                  <div class="col=md-4">
+                    <img src="{{userProfile.photo}}" class="img-rounded" height="156px" width="156px">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <ngb-tabset>
+        <ngb-tab *ngFor="let profile of userProfile.organisationProjects" title="{{profile.organisation.name}}">
           <ng-template ngbTabContent>
             <div *ngFor="let project of profile.projects" class="scroll-box-500">
               <b>Project Name: </b> {{project.name}} <br>

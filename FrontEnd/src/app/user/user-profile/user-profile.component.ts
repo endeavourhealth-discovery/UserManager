@@ -20,7 +20,8 @@ import {ApplicationPolicyAttribute} from "../../configuration/models/Application
 export class UserProfileComponent implements OnInit {
 
   @Input() user: User;
-  userProfiles: UserProfile[];
+  userProfile: UserProfile;
+  precisCollapsed = true;
 
   public activeRole: UserProject;
   superUser = false;
@@ -79,7 +80,7 @@ export class UserProfileComponent implements OnInit {
     vm.userService.getUserProfile(vm.user.uuid)
       .subscribe(
         (result) => {
-          vm.userProfiles = result;
+          vm.userProfile = result;
           console.log(result);
         },
         (error) => vm.log.error('Error loading user profiles', error, 'Error')
