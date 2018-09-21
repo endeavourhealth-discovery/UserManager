@@ -49,4 +49,8 @@ public class OrganisationCache {
         return organisationEntity;
 
     }
+
+    public static void flushCache() throws Exception {
+        organisationMap.clear();
+    }
 }

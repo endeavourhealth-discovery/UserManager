@@ -22,4 +22,8 @@ public class ApplicationPolicyCache {
         return foundPolicy;
 
     }
+
+    public static void flushCache() throws Exception {
+        applicationPolicyMap.clear();
+    }
 }

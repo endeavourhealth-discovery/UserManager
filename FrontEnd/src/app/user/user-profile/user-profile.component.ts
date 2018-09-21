@@ -89,7 +89,18 @@ export class UserProfileComponent implements OnInit {
 
   refresh(refresh : boolean = false) {
     const vm = this;
-    vm.loadRoleProfile();
+    vm.flushCache();
+  }
+
+  flushCache(){
+    let vm = this;
+    vm.configurationService.flushCache()
+      .subscribe(
+        (result) => {
+          vm.loadRoleProfile();
+        },
+        (error) => vm.log.error('Flushing cache failed. Please try again.', error, 'Flush cache')
+      );
   }
 
   getStringListFromArray(dataArray: any) {

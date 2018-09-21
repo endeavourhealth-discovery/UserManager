@@ -21,14 +21,26 @@
               </div>
               <div class="card-body" [ngbCollapse]="precisCollapsed">
                 <div class="row">
-                  <div class="col-md-4">
-                    <b>mobile: </b>{{userProfile.mobile}}
-                  </div>
-                  <div class="col-md-4">
-                    <b>email: </b>{{userProfile.email}}
+                  <div class="col-md-8">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class="text-left"><b>name: </b>{{userProfile.forename}} {{userProfile.surname}}</p>
+                      </div>
+                      <div class="col-md-4">
+                        <p class="text-left"><b>username: </b>{{userProfile.username}}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <b>mobile: </b>{{userProfile.mobile}}
+                      </div>
+                      <div class="col-md-4">
+                        <b>email: </b>{{userProfile.email}}
+                      </div>
+                    </div>
                   </div>
                   <div class="col=md-4">
-                    <img src="{{userProfile.photo}}" class="img-rounded" height="156px" width="156px">
+                    <img src="{{userProfile.photo}}" class="img-rounded responsive pull-right" height="156px" width="156px">
                   </div>
                 </div>
               </div>
@@ -39,15 +51,20 @@
         <ngb-tabset>
         <ngb-tab *ngFor="let profile of userProfile.organisationProjects" title="{{profile.organisation.name}}">
           <ng-template ngbTabContent>
-            <div *ngFor="let project of profile.projects" class="scroll-box-500">
-              <b>Project Name: </b> {{project.name}} <br>
-              <b>Applications: </b> {{getApplicationAccess(project.applicationPolicyAttributes)}} <br>
-              <b>Subscribers: </b> {{getStringListFromArray(project.subscribers)}}<br>
-              <b>Publishers: </b> {{getStringListFromArray(project.publishers)}}<br>
-              <b>Base population: </b> {{getStringListFromArray(project.basePopulation)}}<br>
-              <b>Data set: </b> {{getStringListFromArray(project.dataSet)}}<br>
-              <b>Data sharing agreement: </b> {{getStringListFromArray(project.dsas)}}
-
+            <div *ngFor="let project of profile.projects">
+              <div class="card">
+                <div class="card-header">
+                  <b>Project Name: </b> {{project.name}} <br>
+                </div>
+                <div class="card-body">
+                  <b>Applications: </b> {{getApplicationAccess(project.applicationPolicyAttributes)}} <br>
+                  <b>Subscribers: </b> {{getStringListFromArray(project.subscribers)}}<br>
+                  <b>Publishers: </b> {{getStringListFromArray(project.publishers)}}<br>
+                  <b>Base population: </b> {{getStringListFromArray(project.basePopulation)}}<br>
+                  <b>Data set: </b> {{getStringListFromArray(project.dataSet)}}<br>
+                  <b>Data sharing agreement: </b> {{getStringListFromArray(project.dsas)}}
+                </div>
+              </div>
             </div>
           </ng-template>
         </ngb-tab>

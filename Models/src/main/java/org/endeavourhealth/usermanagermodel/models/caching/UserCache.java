@@ -34,4 +34,8 @@ public class UserCache {
         return foundUser;
 
     }
+
+    public static void flushCache() throws Exception {
+        userMap.clear();
+    }
 }

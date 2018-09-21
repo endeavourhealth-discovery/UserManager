@@ -22,4 +22,8 @@ public class ApplicationProfileCache {
         return foundRole;
 
     }
+
+    public static void flushCache() throws Exception {
+        applicationProfileMap.clear();
+    }
 }

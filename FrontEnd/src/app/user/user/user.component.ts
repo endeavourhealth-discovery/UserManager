@@ -10,6 +10,7 @@ import {DelegationService} from "../../d3-delegation/delegation.service";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
 
 @Component({
   selector: 'app-user',
@@ -62,10 +63,13 @@ export class UserComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.projectId== 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    console.log(vm.activeRole);
+    //let policies : ApplicationPolicyAttribute[] = vm.activeRole.applicationPolicyAttributes.filter(x => x.application == 'User Manager');
+
+    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
       vm.superUser = true;
       vm.godMode = true;
     } else {

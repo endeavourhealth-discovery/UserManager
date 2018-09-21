@@ -31,7 +31,7 @@ export class ApplicationEditorComponent implements OnInit {
   superUser = false;
   godMode = false;
 
-  @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
+  // @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
 
   constructor(private log: LoggerService,
               private userManagerService: UserManagerService,
@@ -103,8 +103,8 @@ export class ApplicationEditorComponent implements OnInit {
 
   save(close: boolean) {
     const vm = this;
-    const changedJson = this.applicationEditor.get();
-    vm.resultApp.applicationTree = JSON.stringify(changedJson);
+    // const changedJson = this.applicationEditor.get();
+    vm.resultApp.applicationTree = ''; // JSON.stringify(changedJson);
     vm.configurationService.saveApplication(vm.resultApp, vm.activeRole.id)
       .subscribe(
         (response) => {
@@ -150,13 +150,13 @@ export class ApplicationEditorComponent implements OnInit {
       );
   }
 
-  loadJsonForProfile() {
+  /*loadJsonForProfile() {
     const vm = this;
     vm.profileData = '';
     console.log(vm.selectedProfile.profileTree);
     vm.profileData = JSON.parse(vm.selectedProfile.profileTree);
     this.applicationEditor.set(JSON.parse(vm.selectedProfile.profileTree));
-  }
+  }*/
 
   newProfile() {
     const vm = this;
@@ -174,8 +174,8 @@ export class ApplicationEditorComponent implements OnInit {
 
   saveProfile() {
     const vm = this;
-    const changedJson = this.applicationEditor.get();
-    vm.selectedProfile.profileTree = JSON.stringify(changedJson);
+    // const changedJson = this.applicationEditor.get();
+    vm.selectedProfile.profileTree = ''; // JSON.stringify(changedJson);
     vm.editedProfiles.push(vm.selectedProfile);
   }
 

@@ -65,4 +65,9 @@ public class ProjectCache {
         return project;
 
     }
+
+    public static void flushCache() throws Exception {
+        projectMap.clear();
+        jsonProjectMap.clear();
+    }
 }

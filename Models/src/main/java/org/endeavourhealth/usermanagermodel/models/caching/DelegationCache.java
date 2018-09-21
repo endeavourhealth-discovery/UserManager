@@ -23,4 +23,8 @@ public class DelegationCache {
         return foundDelegation;
 
     }
+
+    public static void flushCache() throws Exception {
+        delegationMap.clear();
+    }
 }

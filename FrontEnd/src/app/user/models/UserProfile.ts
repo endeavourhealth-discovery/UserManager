@@ -1,5 +1,3 @@
-import {Organisation} from "../../organisation/models/Organisation";
-import {Project} from "../../configuration/models/Project";
 import {Region} from "./Region";
 import {UserOrganisationProject} from "./UserOrganisationProject";
 

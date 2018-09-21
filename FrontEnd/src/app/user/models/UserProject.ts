@@ -1,3 +1,5 @@
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
+
 export class UserProject {
 	id: string;
 	userId: string;
@@ -7,4 +9,5 @@ export class UserProject {
 	organisationName: string;
 	deleted: boolean;
   default: boolean;
+  applicationPolicyAttributes: ApplicationPolicyAttribute[];
 }

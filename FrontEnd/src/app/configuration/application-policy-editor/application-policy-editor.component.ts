@@ -20,7 +20,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   @Input() resultRole: ApplicationPolicy;
   @Input() editMode: boolean;
-  dialogTitle: string = 'Edit role type';
+  dialogTitle: string = 'Add application policy';
 
   public activeRole: UserProject;
   superUser = false;
@@ -70,7 +70,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     vm.resultRole.jobCategoryId = '';
 
     if (!vm.editMode) {
-      vm.dialogTitle = "Edit role type";
+      vm.dialogTitle = "Edit application policy";
     }
   }
 

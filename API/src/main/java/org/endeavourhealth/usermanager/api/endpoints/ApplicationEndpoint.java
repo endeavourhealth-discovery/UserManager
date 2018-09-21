@@ -13,6 +13,7 @@ import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
+import org.endeavourhealth.usermanagermodel.models.caching.*;
 import org.endeavourhealth.usermanagermodel.models.database.ApplicationEntity;
 import org.endeavourhealth.usermanagermodel.models.json.JsonApplication;
 import org.slf4j.Logger;
@@ -88,6 +89,39 @@ public class ApplicationEndpoint extends AbstractEndpoint {
 
         deleteApplication(applicationId, userRoleId);
 
+        return Response
+                .ok()
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.ApplicationEndpoint.flushCache")
+    @Path("/flushCache")
+    @ApiOperation(value = "Returns a list of applications")
+    public Response flushCache(@Context SecurityContext sc) throws Exception {
+
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "application(s)");
+
+        return flushCache();
+
+    }
+
+    private Response flushCache() throws Exception {
+        ApplicationCache.flushCache();
+        ApplicationPolicyCache.flushCache();
+        ApplicationProfileCache.flushCache();
+        DelegationCache.flushCache();
+        OrganisationCache.flushCache();
+        ProjectCache.flushCache();
+        RegionCache.flushCache();
+        RoleTypeCache.flushCache();
+        UserCache.flushCache();
+
+        clearLogbackMarkers();
         return Response
                 .ok()
                 .build();

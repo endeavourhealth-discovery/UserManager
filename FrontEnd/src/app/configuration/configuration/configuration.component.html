@@ -1,6 +1,11 @@
 <div class="module">
   <div class="container-fluid">
-    <div class="module-heading">Configuration</div>
+    <div class="module-heading">
+      Configuration
+      <div class="pull-right">
+        <button *ngIf="superUser" class="btn btn-success" (click)="flushCache()">Flush Cache</button>
+      </div>
+    </div>
     <div class="module-body">
       <div class="row">
         <div class="col-md-6">

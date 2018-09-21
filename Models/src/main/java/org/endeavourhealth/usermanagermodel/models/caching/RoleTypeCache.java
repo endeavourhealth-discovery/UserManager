@@ -23,4 +23,8 @@ public class RoleTypeCache {
         return foundRole;
 
     }
+
+    public static void flushCache() throws Exception {
+        roleTypeMap.clear();
+    }
 }

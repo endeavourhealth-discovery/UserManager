@@ -123,4 +123,15 @@ export class ConfigurationComponent implements OnInit {
     )
   }
 
+  flushCache(){
+    let vm = this;
+    vm.configurationService.flushCache()
+      .subscribe(
+        (result) => {
+          vm.log.success('Successfully flushed cache', 'Flush cache')
+        },
+        (error) => vm.log.error('Flushing cache failed. Please try again.', error, 'Flush cache')
+      );
+  }
+
 }

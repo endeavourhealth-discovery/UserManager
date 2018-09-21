@@ -22,4 +22,8 @@ public class ApplicationCache {
         return foundRole;
 
     }
+
+    public static void flushCache() throws Exception {
+        applicationMap.clear();
+    }
 }
