@@ -131,10 +131,10 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.projectId == 'f0bc6f4a-8f18-11e8-839e-80fa5b320513') {
+    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.superUser = true;
       vm.godMode = false;
-    } else if (vm.activeRole.projectId == '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
       vm.superUser = true;
       vm.godMode = true;
     } else {

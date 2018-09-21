@@ -63,8 +63,6 @@ export class UserComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    console.log(vm.activeRole);
-    //let policies : ApplicationPolicyAttribute[] = vm.activeRole.applicationPolicyAttributes.filter(x => x.application == 'User Manager');
 
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.superUser = true;
