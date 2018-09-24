@@ -8,6 +8,7 @@ import {Application} from "../models/Application";
 import {UserProject} from "../../user/models/UserProject";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {Router} from "@angular/router";
+import {ApplicationProfile} from "../models/ApplicationProfile";
 
 @Component({
   selector: 'app-configuration',
@@ -15,7 +16,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./configuration.component.css']
 })
 export class ConfigurationComponent implements OnInit {
-  roleTypes: ApplicationPolicy[];
+  appProfiles: ApplicationPolicy[];
   applications: Application[];
 
   public editorOptions: JsonEditorOptions;
@@ -35,7 +36,7 @@ export class ConfigurationComponent implements OnInit {
 
   ngOnInit() {
     const vm = this;
-    vm.getRoleTypes();
+    vm.getApplicationPolicies();
     vm.getApplications();
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
@@ -62,14 +63,14 @@ export class ConfigurationComponent implements OnInit {
     }
   }
 
-  getRoleTypes(){
+  getApplicationPolicies(){
     let vm = this;
     vm.configurationService.getApplicationPolicies()
       .subscribe(
         (result) => {
-          vm.roleTypes = result;
+          vm.appProfiles = result;
         },
-        (error) => vm.log.error('Loading roles failed. Please try again', error, 'Error')
+        (error) => vm.log.error('Loading application policies failed. Please try again', error, 'Load application policies')
       );
   }
 
@@ -116,6 +117,25 @@ export class ConfigurationComponent implements OnInit {
               vm.getApplications();
             },
             (error) => vm.log.error('Failed to delete application. Please try again', error, 'Error')
+          );
+      },
+      (reason) => {
+      }
+    )
+  }
+
+  deleteApplicationPolicy(appProfile: ApplicationProfile) {
+    const vm = this;
+    MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete application policy: " + appProfile.name + "?", "Yes", "No")
+      .result.then(
+      (result) => {
+        vm.configurationService.deleteApplicationPolicy(appProfile.id, vm.activeRole.id)
+          .subscribe(
+            (result) => {
+              vm.log.success('Successfully deleted application policy', null, 'Delete application policy');
+              vm.getApplicationPolicies();
+            },
+            (error) => vm.log.error('Failed to delete application policy. Please try again', error, 'Delete application policy')
           );
       },
       (reason) => {

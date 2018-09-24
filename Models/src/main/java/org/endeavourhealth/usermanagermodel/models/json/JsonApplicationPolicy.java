@@ -1,11 +1,24 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
+import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity;
+
 public class JsonApplicationPolicy {
     private String id = null;
     private String name = null;
     private String description = null;
     private String jobCategoryId = null;
     private boolean isDeleted;
+
+    public JsonApplicationPolicy() {
+    }
+
+    public JsonApplicationPolicy(ApplicationPolicyEntity applicationPolicyEntity) {
+        this.id = applicationPolicyEntity.getId();
+        this.name = applicationPolicyEntity.getName();
+        this.description = applicationPolicyEntity.getDescription();
+        this.jobCategoryId = applicationPolicyEntity.getJobCategoryId();
+        this.isDeleted = applicationPolicyEntity.getIsDeleted() == 1;
+    }
 
     public String getId() {
         return id;

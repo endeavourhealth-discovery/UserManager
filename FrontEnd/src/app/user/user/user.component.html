@@ -22,6 +22,24 @@
                     </select>
                   </div>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Search users</label>
+                    <div class="input-group">
+                      <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
+                      <span class="input-group-append" (click)="searchUsers()">
+                          <i class="fa fa-search input-group-text" title="Search"></i>
+                        </span>
+                      <span class="input-group-append" (click)="clearSearch()">
+                          <i class="fa fa-remove input-group-text" title="Clear search"></i>
+                         </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-12">
                   <div class="scroll-box-500">
                     <loadingIndicator [done]="filteredUserList">
@@ -34,7 +52,7 @@
                                   [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
 
                           </th>
-                          <th class="col-4" (click)="sort('surname'); sortReverse=!sortReverse">Surname
+                          <th class="col-4" (click)="sort('surname');">Surname
                             <span *ngIf="sortField == 'surname'"
                                   class="fa fa-sm"
                                   [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>

@@ -181,12 +181,20 @@ export class ApplicationEditorComponent implements OnInit {
 
   deleteProfile() {
     const vm = this;
-    let i = this.applicationProfiles.indexOf(vm.selectedProfile);
-    if (i !== -1) {
-      this.applicationProfiles.splice(i, 1);
-    }
-    vm.selectedProfile.isDeleted = true;
-    vm.editedProfiles.push(vm.selectedProfile);
+    console.log('deleting profile');
+    MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete profile: " + vm.selectedProfile.name + "?", "Yes", "No")
+      .result.then(
+      (result) => {
+        let i = this.applicationProfiles.indexOf(vm.selectedProfile);
+        if (i !== -1) {
+          this.applicationProfiles.splice(i, 1);
+        }
+        vm.selectedProfile.isDeleted = true;
+        vm.editedProfiles.push(vm.selectedProfile);
+      },
+      (reason) => {
+      }
+    )
   }
 
 }

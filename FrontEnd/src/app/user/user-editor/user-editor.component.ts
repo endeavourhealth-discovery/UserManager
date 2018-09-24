@@ -354,6 +354,12 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       vm.log.warning('Email address must not be blank');
       this.emailBox.nativeElement.focus();
       result = false;
+    } else if (!this.selectedRegion) {
+      vm.log.warning('User region must be selected');
+      result = false;
+    } else if (!this.selectedApplicationPolicy) {
+      vm.log.warning('User application policy must be selected');
+      result = false;
     } else
     if (this.resultData.photo != null && this.resultData.photo.length>100) {
       vm.log.warning('Length of image URL is too long. Consider using bitly or similar to shorten it');

@@ -30,6 +30,7 @@ export class UserComponent implements OnInit {
   searched : boolean;
   loadingRolesCompleted: boolean;
   paramOrganisation: string;
+  searchTerm: string;
 
   public activeRole: UserProject;
   superUser = false;
@@ -95,6 +96,20 @@ export class UserComponent implements OnInit {
         },
         (error) => vm.log.error('Error loading users and roles', error, 'Error')
       );
+  }
+
+  searchUsers() {
+    const vm = this;
+    vm.filteredUserList = vm.userList;
+    vm.filteredUserList = vm.filteredUserList.filter(
+      user => user.username.includes(vm.searchTerm) || user.forename.includes(vm.searchTerm) || user.surname.includes(vm.searchTerm)
+    );
+  }
+
+  clearSearch() {
+    const vm = this;
+    vm.searchTerm = '';
+    vm.filteredUserList = vm.userList;
   }
 
   getDelegatedOrganisations() {

@@ -1,6 +1,8 @@
 package org.endeavourhealth.usermanagermodel.models.database;
 
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
+import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicy;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "application_policy", schema = "user_manager")
@@ -112,7 +115,39 @@ public class ApplicationPolicyEntity {
         return ret;
     }
 
-    public static void saveApplicationPolicy(JsonApplicationPolicy roleType) throws Exception {
+    public static void saveApplicationPolicy(JsonApplicationPolicy applicationPolicy, String userRoleId) throws Exception {
+
+        boolean added = false;
+        String originalUuid = applicationPolicy.getId();
+        if (applicationPolicy.getId() == null) {
+            applicationPolicy.setId(UUID.randomUUID().toString());
+            added = true;
+        }
+
+        // store the profile in the DB
+        saveApplicationPolicyInDatabase(applicationPolicy);
+
+        if (!added && !applicationPolicy.getIsDeleted()) {
+            // editing so set store a copy with a new uuid and set to deleted
+            applicationPolicy.setId(UUID.randomUUID().toString());
+            applicationPolicy.setDeleted(true);
+            saveApplicationPolicyInDatabase(applicationPolicy);
+        }
+
+        if (applicationPolicy.getIsDeleted()) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.DELETE, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), null, null);
+        } else if (added) {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.ADD, ItemType.APPLICATION_POLICY, null, applicationPolicy.getId(), null);
+        } else {
+            AuditEntity.addToAuditTrail(userRoleId,
+                    AuditAction.EDIT, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), originalUuid, null);
+        }
+
+    }
+
+    public static void saveApplicationPolicyInDatabase(JsonApplicationPolicy roleType) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
         ApplicationPolicyEntity applicationPolicyEntity = new ApplicationPolicyEntity();
@@ -126,6 +161,16 @@ public class ApplicationPolicyEntity {
         entityManager.getTransaction().commit();
 
         entityManager.close();
+    }
+
+    public static void deleteApplicationPolicy(String applicationPolicyId, String userRoleId) throws Exception {
+
+        JsonApplicationPolicy applicationPolicy = new JsonApplicationPolicy(getApplicationPolicy(applicationPolicyId));
+
+        applicationPolicy.setDeleted(true);
+
+        saveApplicationPolicy(applicationPolicy, userRoleId);
+
     }
 
 }

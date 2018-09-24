@@ -187,13 +187,13 @@ public class ApplicationPolicyAttributeEntity {
 
         if (roleAccessProfile.getIsDeleted()) {
             AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.ROLE_TYPE_APPLICATION_PROFILE, roleAccessProfile.getId(), null, null);
+                    AuditAction.DELETE, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), null, null);
         } else if (added) {
             AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.ROLE_TYPE_APPLICATION_PROFILE, null, roleAccessProfile.getId(), null);
+                    AuditAction.ADD, ItemType.APPLICATION_POLICY_ATTRIBUTE, null, roleAccessProfile.getId(), null);
         } else {
             AuditEntity.addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.ROLE_TYPE_APPLICATION_PROFILE, roleAccessProfile.getId(), originalUuid, null);
+                    AuditAction.EDIT, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), originalUuid, null);
         }
 
         return roleAccessProfile.getId();

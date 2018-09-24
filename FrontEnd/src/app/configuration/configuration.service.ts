@@ -17,9 +17,20 @@ export class ConfigurationService {
       .map((response) => response.json());
   }
 
+  deleteApplicationPolicy(applicationPolicyId: string, userRoleId: string): Observable<any> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('applicationPolicyId', applicationPolicyId);
+    params.set('userRoleId', userRoleId);
+    return vm.http.delete('api/applicationPolicy/deleteApplicationPolicy', {search: params})
+      .map((response) => response.text());
+  }
+
   saveApplicationPolicy(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
     const vm = this;
-    return vm.http.post('api/applicationPolicy/saveApplicationPolicy', roleType)
+    let params = new URLSearchParams();
+    params.set('userRoleId', userRoleId);
+    return vm.http.post('api/applicationPolicy/saveApplicationPolicy', roleType, {search: params})
       .map((response) => response.text());
   }
 

@@ -24,7 +24,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
-import java.util.UUID;
+
+import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
 
 @Path("/applicationPolicy")
 @Metrics(registry = "UserManagerRegistry")
@@ -56,17 +57,40 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.saveApplicationPolicy")
     @Path("/saveApplicationPolicy")
-    @ApiOperation(value = "Save a new role type or update an existing one.  Accepts a JSON representation " +
-            "of a role type.")
+    @ApiOperation(value = "Save a new application policy or update an existing one.  Accepts a JSON representation " +
+            "of a application policy.")
     @RequiresAdmin
     public Response saveApplicationPolicy(@Context SecurityContext sc,
-                            @ApiParam(value = "Json representation of role type to save or update") JsonApplicationPolicy roleType) throws Exception {
+                            @ApiParam(value = "Json representation of application policy to save or update") JsonApplicationPolicy applicationPolicy,
+                                          @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
                 "Role Type",
-                "roleType", roleType);
+                "roleType", applicationPolicy);
 
-        return saveApplicationPolicy(roleType);
+        return saveApplicationPolicy(applicationPolicy, userRoleId);
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.deleteApplicationPolicy")
+    @Path("/deleteApplicationPolicy")
+    @RequiresAdmin
+    @ApiOperation(value = "Deletes an application")
+    public Response deleteApplicationPolicy(@Context SecurityContext sc,
+                                      @ApiParam(value = "Application policy id to be deleted") @QueryParam("applicationPolicyId") String applicationPolicyId,
+                                      @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
+                "User", "applicationId", applicationPolicyId, "userRoleId", userRoleId);
+
+        deleteApplicationPolicy(applicationPolicyId, userRoleId);
+
+        return Response
+                .ok()
+                .build();
     }
 
     private Response getAllApplicationPolicies() throws Exception {
@@ -79,20 +103,23 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private Response saveApplicationPolicy(JsonApplicationPolicy roleType) throws Exception {
+    private Response saveApplicationPolicy(JsonApplicationPolicy applicationPolicy, String userInRoleId) throws Exception {
 
-        String roleId = roleType.getId();
-        if (roleId == null) {
-            roleId = UUID.randomUUID().toString();
-            roleType.setId(roleId);
-        }
-
-        ApplicationPolicyEntity.saveApplicationPolicy(roleType);
+        ApplicationPolicyEntity.saveApplicationPolicy(applicationPolicy, userInRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(roleId)
+                .build();
+    }
+
+    private Response deleteApplicationPolicy(String applicationPolicyId, String userRoleId) throws Exception {
+
+        ApplicationPolicyEntity.deleteApplicationPolicy(applicationPolicyId, userRoleId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
                 .build();
     }
 

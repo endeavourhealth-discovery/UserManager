@@ -151,12 +151,14 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   }
 
-  removeAccessProfiles(roleProfile: ApplicationPolicyAttribute) {
+  removeAccessProfiles(applicationProfile: ApplicationPolicyAttribute) {
     const vm = this;
-    roleProfile.isDeleted = true;
-    vm.editedProfiles.push(roleProfile);
+
+    applicationProfile.isDeleted = true;
+    vm.editedProfiles.push(applicationProfile);
 
     vm.getApplicationProfiles();
+
 
   }
 
