@@ -181,6 +181,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   saveRegion() {
     const vm = this;
+    if (vm.userRegion.userId == null) {
+      vm.userRegion.userId = vm.resultData.uuid;
+    }
     vm.userService.saveUserRegion(vm.userRegion, vm.activeRole.id)
       .subscribe(
         (response) => {
@@ -192,6 +195,9 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   saveApplicationPolicy() {
     const vm = this;
+    if (vm.userApplicationPolicy.userId == null) {
+      vm.userApplicationPolicy.userId = vm.resultData.uuid;
+    }
     vm.userService.saveUserApplicationPolicy(vm.userApplicationPolicy, vm.activeRole.id)
       .subscribe(
         (response) => {
