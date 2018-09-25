@@ -140,6 +140,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     newRoleTypeProfile.name = appProfile.name;
     newRoleTypeProfile.application = vm.selectedApp.name;
     newRoleTypeProfile.profileTree = '';
+    newRoleTypeProfile.applicationId = appProfile.applicationId;
 
     let i = vm.appProfiles.indexOf(appProfile);
     if (i !== 1) {
@@ -208,10 +209,10 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   saveProfiles(close: boolean, roleTypeId: string) {
     const vm = this;
     if (vm.editedProfiles.length > 0) {
-      if (vm.resultRole.id != roleTypeId) {
+      /*if (vm.resultRole.id != roleTypeId) {
         vm.resultRole.id = roleTypeId;
         vm.editedProfiles.forEach(x => x.applicationPolicyId = roleTypeId);
-      }
+      }*/
       this.configurationService.saveRoleTypeAccessProfiles(vm.editedProfiles, vm.activeRole.id)
         .subscribe(
           (response) => {
