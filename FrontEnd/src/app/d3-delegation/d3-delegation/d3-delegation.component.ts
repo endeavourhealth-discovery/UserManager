@@ -32,8 +32,8 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   newDelegation: Delegation;
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
 
   @ViewChild("d3tree") d3Tree: D3TreeGraphComponent;
@@ -57,14 +57,14 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
     this.getDelegations();
   }
@@ -218,7 +218,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   getDelegations() {
     let vm = this;
-    vm.delegationService.getDelegations(vm.godMode ? null :  vm.activeRole.organisationId)
+    vm.delegationService.getDelegations(vm.superUser ? null :  vm.activeRole.organisationId)
       .subscribe(
         (result) => {
           vm.delegations = result;

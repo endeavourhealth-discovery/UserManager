@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <div class="module-heading">{{dialogTitle}}
       <div class="pull-right">
-        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-success" (click)="save(false);">Save</button>
-        <button *ngIf="superUser" [disabled]="!f.valid" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
+        <button *ngIf="admin" [disabled]="!f.valid" type="button" class="btn btn-success" (click)="save(false);">Save</button>
+        <button *ngIf="admin" [disabled]="!f.valid" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
         <button type="button" class="btn btn-danger" (click)="close(true)">Close</button>
       </div>
     </div>
@@ -43,9 +43,9 @@
             <div class="card-header">
               Attributes
               <div class="pull-right">
-                <button *ngIf="superUser" type="button" class="btn btn-success" (click)="newProfile();">New profile</button>
-                <button *ngIf="superUser" type="button" class="btn btn-success" (click)="saveProfile();">Save profile</button>
-                <button *ngIf="superUser" type="button" class="btn btn-danger" (click)="deleteProfile();">Delete profile</button>
+                <button *ngIf="admin" type="button" class="btn btn-success" (click)="newProfile();">New profile</button>
+                <button *ngIf="admin" type="button" class="btn btn-success" (click)="saveProfile();">Save profile</button>
+                <button *ngIf="admin" type="button" class="btn btn-danger" (click)="deleteProfile();">Delete profile</button>
               </div>
 
             </div>

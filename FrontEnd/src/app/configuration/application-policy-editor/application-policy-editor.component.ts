@@ -23,8 +23,8 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   dialogTitle: string = 'Add application policy';
 
   public activeRole: UserProject;
-  superUser = false;
-  godMode = false;
+  admin = false;
+  superUsers = false;
 
   roleProfiles: ApplicationPolicyAttribute[];
   editedProfiles: ApplicationPolicyAttribute[] = [];
@@ -77,14 +77,14 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
-      vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
+      vm.admin = true;
+      vm.superUsers = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
+      vm.superUsers = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUsers = false;
     }
   }
 

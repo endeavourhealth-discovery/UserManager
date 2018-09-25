@@ -30,8 +30,8 @@ export class AuditComponent implements OnInit {
   dateTo: Date = new Date();
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
   settings = {
     bigBanner: true,
@@ -59,19 +59,19 @@ export class AuditComponent implements OnInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
 
     vm.getAudit();
     vm.getAuditCount();
-    if (vm.godMode) {
+    if (vm.superUser) {
       vm.getGodModeOrganisations();
     } else {
       vm.getDelegatedOrganisations();
@@ -95,7 +95,7 @@ export class AuditComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
-    vm.auditService.getAuditSummary(vm.godMode ? null : vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
+    vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;

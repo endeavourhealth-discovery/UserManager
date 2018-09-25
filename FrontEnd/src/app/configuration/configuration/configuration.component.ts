@@ -23,8 +23,8 @@ export class ConfigurationComponent implements OnInit {
   public data: any;
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
   constructor(public log:LoggerService,
               private configurationService : ConfigurationService,
@@ -52,14 +52,14 @@ export class ConfigurationComponent implements OnInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
   }
 

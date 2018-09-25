@@ -7,8 +7,8 @@
           <label class="control-label">Delegation</label>
 
           <div class="pull-right">
-            <button *ngIf="superUser" type="button" class="btn btn-sm btn-success" (click)="createDelegation()">Add</button>
-            <button *ngIf="superUser" type="button" class="btn btn-sm btn-danger" (click)="deleteDelegation()">Delete</button>
+            <button *ngIf="admin" type="button" class="btn btn-sm btn-success" (click)="createDelegation()">Add</button>
+            <button *ngIf="admin" type="button" class="btn btn-sm btn-danger" (click)="deleteDelegation()">Delete</button>
           </div>
           <div class="input-group">
             <span class="input-group-prepend"><i class="fa fa-th-large input-group-text"></i></span>
@@ -26,17 +26,17 @@
                   <p>{{selectedOrganisation.name}}</p>
                   <div *ngIf="!selectedIsRoot">
                     <label>
-                      <input [disabled]="!superUser" type="checkbox" [(ngModel)]="selectedRelationship.createSuperUsers" name="createSuperUser">Create Super Users
+                      <input [disabled]="!admin" type="checkbox" [(ngModel)]="selectedRelationship.createSuperUsers" name="createSuperUser">Create Super Users
                     </label>
                     <label>
-                      <input [disabled]="!superUser" type="checkbox" [(ngModel)]="selectedRelationship.createUsers" name="createSuperUser">Create Users
+                      <input [disabled]="!admin" type="checkbox" [(ngModel)]="selectedRelationship.createUsers" name="createSuperUser">Create Users
                     </label>
                   </div>
                   <div class="pull-left">
-                    <button *ngIf="superUser && !selectedIsRoot" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
+                    <button *ngIf="admin && !selectedIsRoot" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
                     <button type="button" class="btn btn-sm btn-info" (click)="goToOrganisation()">View users at organisation</button>
-                    <button *ngIf="superUser" type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
-                    <button *ngIf="superUser && !selectedOrganisation.children" type="button" class="btn btn-sm btn-danger" (click)="deleteChildOrganisation()">Delete</button>
+                    <button *ngIf="admin" type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
+                    <button *ngIf="admin && !selectedOrganisation.children" type="button" class="btn btn-sm btn-danger" (click)="deleteChildOrganisation()">Delete</button>
                   </div>
 
                 </div>

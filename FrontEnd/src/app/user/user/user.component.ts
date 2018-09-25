@@ -33,8 +33,8 @@ export class UserComponent implements OnInit {
   searchTerm: string;
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
   constructor(public log:LoggerService,
               private userService: UserService,
@@ -66,17 +66,17 @@ export class UserComponent implements OnInit {
     const vm = this;
 
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
 
-    if (vm.godMode) {
+    if (vm.superUser) {
       vm.getGodModeOrganisations();
     } else {
       vm.getDelegatedOrganisations();

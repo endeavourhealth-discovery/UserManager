@@ -8,8 +8,8 @@
             <div class="card-header">
               Organisation users
               <div class="pull-right">
-                <button *ngIf="superUser" class="btn btn-success" (click)="addUser()">Add new user</button>
-                <button *ngIf="superUser" class="btn btn-success" (click)="addExisting()">Add existing user</button>
+                <button *ngIf="admin" class="btn btn-success" (click)="addUser()">Add new user</button>
+                <button *ngIf="admin" class="btn btn-success" (click)="addExisting()">Add existing user</button>
               </div>
             </div>
             <div class="card-body">
@@ -90,9 +90,9 @@
             <div class="card-header">
               User details
               <div class="pull-right">
-                <button *ngIf="selectedUser && superUser" class="btn btn-info" (click)="viewProfile(selectedUser)">View profile</button>
-                <button *ngIf="selectedUser && superUser" class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
-                <button *ngIf="selectedUser && superUser" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>
+                <button *ngIf="selectedUser && admin" class="btn btn-info" (click)="viewProfile(selectedUser)">View profile</button>
+                <button *ngIf="selectedUser && admin" class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
+                <button *ngIf="selectedUser && admin" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>
               </div>
             </div>
             <div class="card-body">

@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <div class="module-heading">{{dialogTitle}}
       <div class="pull-right">
-        <button *ngIf="superUser || selfEdit" type="button" class="btn btn-success" (click)="save(false);">Save</button>
-        <button *ngIf="superUser || selfEdit" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
+        <button *ngIf="admin || selfEdit" type="button" class="btn btn-success" (click)="save(false);">Save</button>
+        <button *ngIf="admin || selfEdit" type="button" class="btn btn-warning" (click)="save(true);">Save & close</button>
         <button type="button" class="btn btn-danger" (click)="close(true)">Close</button>
       </div>
     </div>

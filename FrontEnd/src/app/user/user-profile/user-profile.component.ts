@@ -24,8 +24,8 @@ export class UserProfileComponent implements OnInit {
   precisCollapsed = true;
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
   constructor(private log: LoggerService,
               private $modal: NgbModal,
@@ -59,14 +59,14 @@ export class UserProfileComponent implements OnInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
   }
 

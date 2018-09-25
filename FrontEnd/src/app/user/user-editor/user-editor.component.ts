@@ -47,8 +47,8 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   selectedApplicationPolicy: ApplicationPolicy;
 
   public activeRole: UserProject;
+  admin = false;
   superUser = false;
-  godMode = false;
 
   @ViewChild('username') usernameBox;
   @ViewChild('forename') forenameBox;
@@ -132,17 +132,17 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   roleChanged() {
     const vm = this;
     if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      vm.admin = true;
+      vm.superUser = false;
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      vm.admin = true;
       vm.superUser = true;
-      vm.godMode = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'God Mode') != null) {
-      vm.superUser = true;
-      vm.godMode = true;
     } else {
-      vm.superUser = true;
-      vm.godMode = false;
+      vm.admin = true;
+      vm.superUser = false;
     }
 
-    if (vm.godMode) {
+    if (vm.superUser) {
       vm.getGodModeOrganisations();
     } else {
       vm.getDelegatedOrganisations();
@@ -496,8 +496,8 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       // my organisation is based on my roles but delegated organisations are based on the permissions given to us
 
       if (!vm.selectedOrg.createSuperUsers) {
-        var superUser = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
-        vm.roleTypes.splice(superUser, 1);
+        var admin = vm.roleTypes.findIndex(e => e.id === 'f0bc6f4a-8f18-11e8-839e-80fa5b320513');
+        vm.roleTypes.splice(admin, 1);
       }
 
       if (!vm.selectedOrg.createUsers) {

@@ -3,7 +3,7 @@
     <div class="module-heading">
       Configuration
       <div class="pull-right">
-        <button *ngIf="superUser" class="btn btn-success" (click)="flushCache()">Flush Cache</button>
+        <button *ngIf="admin" class="btn btn-success" (click)="flushCache()">Flush Cache</button>
       </div>
     </div>
     <div class="module-body">
@@ -13,7 +13,7 @@
             <div class="card-header text-white">
               Applications
               <div class="pull-right">
-                <button *ngIf="superUser" class="btn btn-success" (click)="addApplication()">Add new application</button>
+                <button *ngIf="admin" class="btn btn-success" (click)="addApplication()">Add new application</button>
               </div>
             </div>
             <div class="card-body" style="overflow:hidden;  min-height: 720px; max-height: 720px">
@@ -51,7 +51,7 @@
             <div class="card-header text-white">
               Application Policies
               <div class="pull-right">
-                <button *ngIf="superUser" class="btn btn-success" (click)="addApplicationPolicy()">Add new application policy</button>
+                <button *ngIf="admin" class="btn btn-success" (click)="addApplicationPolicy()">Add new application policy</button>
               </div>
             </div>
             <div class="card-body" style="overflow:hidden;  min-height: 720px; max-height: 720px">
