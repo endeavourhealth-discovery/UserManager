@@ -65,7 +65,7 @@ export class UserProfileComponent implements OnInit {
       vm.superUser = true;
       vm.godMode = true;
     } else {
-      vm.superUser = false;
+      vm.superUser = true;
       vm.godMode = false;
     }
   }

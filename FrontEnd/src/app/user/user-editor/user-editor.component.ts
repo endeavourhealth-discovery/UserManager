@@ -138,7 +138,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       vm.superUser = true;
       vm.godMode = true;
     } else {
-      vm.superUser = false;
+      vm.superUser = true;
       vm.godMode = false;
     }
 

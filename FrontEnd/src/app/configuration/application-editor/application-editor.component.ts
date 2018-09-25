@@ -84,7 +84,7 @@ export class ApplicationEditorComponent implements OnInit {
       vm.superUser = true;
       vm.godMode = true;
     } else {
-      vm.superUser = false;
+      vm.superUser = true;
       vm.godMode = false;
     }
   }
@@ -181,7 +181,6 @@ export class ApplicationEditorComponent implements OnInit {
 
   deleteProfile() {
     const vm = this;
-    console.log('deleting profile');
     MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete profile: " + vm.selectedProfile.name + "?", "Yes", "No")
       .result.then(
       (result) => {

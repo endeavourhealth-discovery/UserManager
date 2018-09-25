@@ -72,7 +72,7 @@ export class UserComponent implements OnInit {
       vm.superUser = true;
       vm.godMode = true;
     } else {
-      vm.superUser = false;
+      vm.superUser = true;
       vm.godMode = false;
     }
 
