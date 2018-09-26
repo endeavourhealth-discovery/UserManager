@@ -1,11 +1,9 @@
 package org.endeavourhealth.usermanagermodel.models.json;
 
-import java.util.Date;
-
 public class JsonAuditSummary {
     private String id = null;
     private String userName = null;
-    private String userRole = null;
+    private String userProject = null;
     private String organisation = null;
     private String timestamp = null;
     private String auditAction = null;
@@ -27,12 +25,12 @@ public class JsonAuditSummary {
         this.userName = userName;
     }
 
-    public String getUserRole() {
-        return userRole;
+    public String getUserProject() {
+        return userProject;
     }
 
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
+    public void setUserProject(String userProject) {
+        this.userProject = userProject;
     }
 
     public String getTimestamp() {

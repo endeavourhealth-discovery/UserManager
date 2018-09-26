@@ -76,14 +76,14 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
-      vm.admin = true;
-      vm.superUsers = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUsers = true;
-    } else {
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
+      vm.superUsers = false;
+    } else {
+      vm.admin = false;
       vm.superUsers = false;
     }
   }

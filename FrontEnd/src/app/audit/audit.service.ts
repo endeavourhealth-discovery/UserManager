@@ -38,9 +38,14 @@ export class AuditService {
       .map((response) => response.json());
   }
 
-  getAuditCount(organisationId: string = null, userId: string = null): Observable<number> {
+  getAuditCount(userOrganisationId: string, organisationId: string = null, userId: string = null): Observable<number> {
     const vm = this;
     let params = new URLSearchParams();
+
+    console.log(userOrganisationId);
+    if (userOrganisationId != null) {
+      params.set('userOrganisationId', userOrganisationId);
+    }
     if (organisationId != null) {
       params.set('organisationId', organisationId);
     }
@@ -48,7 +53,7 @@ export class AuditService {
       params.set('userId', userId);
     }
 
-    return vm.http.get('api/audit/auditCount')
+    return vm.http.get('api/audit/auditCount', {search: params})
       .map((response) => response.json());
   }
 

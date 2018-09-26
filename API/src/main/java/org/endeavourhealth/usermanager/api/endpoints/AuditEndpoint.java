@@ -117,14 +117,15 @@ public class AuditEndpoint extends AbstractEndpoint {
     @Path("/auditCount")
     @ApiOperation(value = "When using server side pagination, this returns the total count of the results of the query")
     public Response getAuditCount(@Context SecurityContext sc,
+                                  @ApiParam(value = "Organisation id of user role (used to limit the audit results)") @QueryParam("userOrganisationId") String userOrganisationId,
                                   @ApiParam(value = "Optional organisation id")@QueryParam("organisationId") String organisationId,
                                   @ApiParam(value = "Optional user id ")@QueryParam("userId") String userId) throws Exception {
 
-        return getAuditCount(organisationId, userId);
+        return getAuditCount(userOrganisationId, organisationId, userId);
     }
 
-    private Response getAuditCount(String organisationId, String userId) throws Exception {
-        Long count = AuditEntity.getAuditCount(organisationId, userId);
+    private Response getAuditCount(String userOrganisationId, String organisationId, String userId) throws Exception {
+        Long count = AuditEntity.getAuditCount(userOrganisationId, organisationId, userId);
 
         return Response
                 .ok()
@@ -146,7 +147,7 @@ public class AuditEndpoint extends AbstractEndpoint {
             Date auditTime = (Date)obj[2];
             DateFormat df = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
             detail.setTimestamp(df.format(auditTime));
-            detail.setUserRole(obj[1].toString());
+            detail.setUserProject(obj[1].toString());
             detail.setUserName(obj[5].toString());
             detail.setOrganisation(obj[4].toString());
             detail.setAuditAction(obj[6].toString());
@@ -161,12 +162,23 @@ public class AuditEndpoint extends AbstractEndpoint {
                     .map(JsonAuditSummary::getOrganisation)
                     .collect(Collectors.toList());
 
+            List<String> projects = auditDetails.stream()
+                    .map(JsonAuditSummary::getUserProject)
+                    .collect(Collectors.toList());
+
             List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(orgs);
+
+            List<ProjectEntity> projectList = ProjectCache.getProjectDetails(projects);
 
             for (JsonAuditSummary sum : auditDetails) {
                 OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
                 if (org != null) {
                     sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
+                }
+
+                ProjectEntity proj = projectList.stream().filter(p -> p.getUuid().equals(sum.getUserProject())).findFirst().orElse(null);
+                if (proj != null) {
+                    sum.setUserProject(proj.getName());
                 }
 
                 UserRepresentation user = UserCache.getUserDetails(sum.getUserName());

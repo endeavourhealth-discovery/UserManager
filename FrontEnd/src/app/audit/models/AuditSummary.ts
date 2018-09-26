@@ -1,7 +1,7 @@
 export class AuditSummary {
   id: string;
   userName: string;
-  userRole: string;
+  userProject: string;
   organisation: string;
   timestamp: string;
   auditAction: string;

@@ -58,14 +58,15 @@ export class AuditComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
-      vm.admin = true;
-      vm.superUser = false;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    console.log(vm.activeRole.applicationPolicyAttributes);
+    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else {
+    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
+      vm.superUser = false;
+    } else {
+      vm.admin = false;
       vm.superUser = false;
     }
 
@@ -95,6 +96,7 @@ export class AuditComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
+    console.log(vm.superUser);
     vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
@@ -109,13 +111,15 @@ export class AuditComponent implements OnInit {
   }
 
   getAuditCount() {
-    const vm = this; let orgId = null;
+    const vm = this;
+    let orgId = null;
     let usrId = null;
     if (vm.filtered) {
       orgId = vm.selectedOrg.uuid;
       usrId = vm.selectedUser.uuid;
     }
-    vm.auditService.getAuditCount(orgId, usrId)
+    console.log(vm.superUser);
+    vm.auditService.getAuditCount(vm.superUser ? null : vm.activeRole.organisationId, orgId, usrId)
       .subscribe(
         (result) => {
           vm.totalItems = result;

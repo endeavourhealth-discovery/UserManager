@@ -45,7 +45,7 @@
                   <thead>
                   <tr>
                     <th class="w-20">User</th>
-                    <th class="w-20">Role</th>
+                    <th class="w-20">Project</th>
                     <th class="w-20">Organisation</th>
                     <th class="w-10">Timestamp</th>
                     <th class="w-15">Action</th>
@@ -57,7 +57,7 @@
                   <tr *ngFor="let audit of auditSummaries" class="hover-box show-child-on-hover" (click)="showDetails(audit)">
 
                     <td>{{audit.userName}}</td>
-                    <td>{{audit.userRole}}</td>
+                    <td>{{audit.userProject}}</td>
                     <td>{{audit.organisation}}</td>
                     <td>{{audit.timestamp}}</td>
                     <td>{{audit.auditAction}}</td>

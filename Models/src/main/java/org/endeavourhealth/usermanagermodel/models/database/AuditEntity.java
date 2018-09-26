@@ -220,32 +220,62 @@ public class AuditEntity {
         }
     }
 
-    public static long getAuditCount(String organisationId, String userId) throws Exception {
+    public static long getAuditCount(String userOrganisationId, String organisationId, String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
+        List<String> filterOrgs = new ArrayList<>();
+
+        // get a list of all delegated orgs that this user has access to view audit trail for
+        // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
+        if (userOrganisationId != null) {
+            List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getDelegatedOrganisations(userOrganisationId);
+
+            filterOrgs = relationships.stream()
+                    .map(DelegationRelationshipEntity::getChildUuid)
+                    .collect(Collectors.toList());
+
+            filterOrgs.add(userOrganisationId);
+        }
+
         try {
+            String whereAnd = " where ";
             String sql = "select count (a.id)" +
                     " from AuditEntity a";
 
-            if (organisationId != null) {
+            if (organisationId != null || userOrganisationId != null || userId != null) {
                 sql = "select count (a.id)" +
                         " from AuditEntity a " +
-                        " join UserProjectEntity up on up.id = a.userProjectId" +
-                        " where up.organisationId = :orgId";
+                        " join UserProjectEntity up on up.id = a.userProjectId";
 
                 if (userId != null) {
-                    sql += " and up.userId = :userId";
+                    sql += whereAnd + " up.userId = :userId";
+                    whereAnd = " and ";
+                }
+
+                if (userOrganisationId != null) {
+                    sql += whereAnd + " up.organisationId in :filterOrgIds";
+                    whereAnd = " and ";
+                }
+
+                if (organisationId != null) {
+                    sql += whereAnd + " up.organisationId = :orgId";
                 }
             }
+
+
 
             Query query = entityManager.createQuery(sql);
 
             if (organisationId != null) {
                 query.setParameter("orgId", organisationId);
+            }
 
-                if (userId != null) {
-                    query.setParameter("userId", userId);
-                }
+            if (userId != null) {
+                query.setParameter("userId", userId);
+            }
+
+            if (userOrganisationId != null) {
+                query.setParameter("filterOrgIds", filterOrgs);
             }
 
             long count = (long)query.getSingleResult();
