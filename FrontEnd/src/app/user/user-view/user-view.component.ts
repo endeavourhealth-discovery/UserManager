@@ -32,7 +32,7 @@ export class UserViewComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.getRoleTypes();
-    vm.userManagerService.activeRole.subscribe(active => {
+    vm.userManagerService.activeUserProject.subscribe(active => {
       vm.activeRole = active;
       vm.roleChanged();
     });

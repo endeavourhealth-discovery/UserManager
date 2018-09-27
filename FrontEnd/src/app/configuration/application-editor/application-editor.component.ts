@@ -44,7 +44,7 @@ export class ApplicationEditorComponent implements OnInit {
   ngOnInit() {
     const vm = this;
 
-    vm.userManagerService.activeRole.subscribe(active => {
+    vm.userManagerService.activeUserProject.subscribe(active => {
       vm.activeRole = active;
       vm.roleChanged();
     });

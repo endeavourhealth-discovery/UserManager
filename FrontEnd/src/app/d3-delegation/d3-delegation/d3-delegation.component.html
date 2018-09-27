@@ -25,12 +25,18 @@
                 <div class="card-body">
                   <p>{{selectedOrganisation.name}}</p>
                   <div *ngIf="!selectedIsRoot">
-                    <label>
-                      <input [disabled]="!admin" type="checkbox" [(ngModel)]="selectedRelationship.createSuperUsers" name="createSuperUser">Create Super Users
-                    </label>
-                    <label>
-                      <input [disabled]="!admin" type="checkbox" [(ngModel)]="selectedRelationship.createUsers" name="createSuperUser">Create Users
-                    </label>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="custom-control custom-checkbox form-control-plaintext">
+                          <input [disabled]="!admin" type="checkbox" class="custom-control-input" [(ngModel)]="selectedRelationship.createSuperUsers" id="chkCreateSuperUsers" name="createSuperUsers">
+                          <label class="custom-control-label" for="chkCreateSuperUsers">Create Super Users</label>
+                        </div>
+                        <div class="custom-control custom-checkbox form-control-plaintext">
+                          <input [disabled]="!admin" type="checkbox" class="custom-control-input" [(ngModel)]="selectedRelationship.createUsers" id="chkCreateUsers" name="createUsers">
+                          <label class="custom-control-label" for="chkCreateUsers">Create Users</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="pull-left">
                     <button *ngIf="admin && !selectedIsRoot" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>

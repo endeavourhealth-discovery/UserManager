@@ -48,7 +48,7 @@ export class UserProfileComponent implements OnInit {
     }
     this.user = Object.assign( {}, s.user);
 
-    vm.userManagerService.activeRole.subscribe(active => {
+    vm.userManagerService.activeUserProject.subscribe(active => {
       vm.activeRole = active;
       vm.roleChanged();
     });

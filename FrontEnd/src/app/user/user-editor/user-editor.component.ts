@@ -90,7 +90,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     vm.getAvailableRegions();
     vm.getAvailableApplicationPolicies();
 
-    vm.userManagerService.activeRole.subscribe(active => {
+    vm.userManagerService.activeUserProject.subscribe(active => {
       vm.activeRole = active;
       vm.roleChanged();
     });

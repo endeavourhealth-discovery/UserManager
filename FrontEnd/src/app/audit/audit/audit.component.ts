@@ -49,7 +49,7 @@ export class AuditComponent implements OnInit {
 
   ngOnInit() {
     const vm = this;
-    this.userManagerService.activeRole.subscribe(active => {
+    this.userManagerService.activeUserProject.subscribe(active => {
         this.activeRole = active;
         this.roleChanged();
     });

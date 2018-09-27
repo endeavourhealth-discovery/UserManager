@@ -3,14 +3,12 @@ import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} fr
 import {UserService} from "../user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
-import {UserProject} from "../models/UserProject";
-import {ApplicationPolicy} from "../../configuration/models/ApplicationPolicy";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ModuleStateService} from 'eds-angular4/dist/common';
-import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
+import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
 
 @Component({
   selector: 'app-user',
@@ -56,7 +54,7 @@ export class UserComponent implements OnInit {
         this.paramOrganisation = params['organisationId'];
       });
 
-    this.userManagerService.activeRole.subscribe(active => {
+    this.userManagerService.activeUserProject.subscribe(active => {
       this.activeRole = active;
       this.roleChanged();
     });
@@ -130,7 +128,6 @@ export class UserComponent implements OnInit {
 
   getGodModeOrganisations() {
     let vm = this;
-    console.log('param', vm.paramOrganisation);
     let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
     vm.delegationService.getGodModeOrganisations()
       .subscribe(

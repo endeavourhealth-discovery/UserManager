@@ -48,7 +48,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.userManagerService.activeRole.subscribe(active => {
+    this.userManagerService.activeUserProject.subscribe(active => {
       this.activeRole = active;
       this.roleChanged();
     });

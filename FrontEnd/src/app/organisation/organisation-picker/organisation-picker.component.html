@@ -38,16 +38,16 @@
           <tr class="d-flex">
             <th class="w-50">Organisation name</th>
             <th class="w-25">
-              <label>
-                <input type="checkbox" (change)="checkAllUsers($event)">
-              </label>
-              Create users
+              <div class="custom-control custom-checkbox form-control-plaintext">
+                <input type="checkbox" class="custom-control-input" (change)="checkAllUsers($event)" id="chkCreateUsers" name="chkCreateUsers">
+                <label class="custom-control-label" for="chkCreateUsers">Create users</label>
+              </div>
             </th>
             <th class="w-25">
-              <label>
-                <input type="checkbox" (change)="checkAllSuperUsers($event)">
-              </label>
-              Create super users
+              <div class="custom-control custom-checkbox form-control-plaintext">
+                <input type="checkbox" class="custom-control-input" (change)="checkAllSuperUsers($event)" id="chkCreateSuperUsers" name="chkCreateSuperUsers">
+                <label class="custom-control-label" for="chkCreateSuperUsers">Create super users</label>
+              </div>
             </th>
           </tr>
           </thead>
@@ -55,14 +55,16 @@
           <tr *ngFor="let item of resultData" class="hover-box show-child-on-hover d-flex">
             <td class="w-50">{{item.name}}</td>
             <td class="w-25">
-              <label>
-                <input type="checkbox" [(ngModel)]="item.createUsers" name="createUser">
-              </label>
+              <div class="custom-control custom-checkbox form-control-plaintext">
+                <input type="checkbox" class="custom-control-input" [(ngModel)]="item.createUsers" id="chkOrgCreateUsers" name="createUsers">
+                <label class="custom-control-label" for="chkOrgCreateUsers">Create users</label>
+              </div>
             </td>
             <td class="w-25">
-              <label>
-                <input type="checkbox" [(ngModel)]="item.createSuperUsers" name="createSuperUser">
-              </label>
+              <div class="custom-control custom-checkbox form-control-plaintext">
+                <input type="checkbox" class="custom-control-input" [(ngModel)]="item.createSuperUsers" id="chkOrgCreateSuperUsers" name="createSuperUsers">
+                <label class="custom-control-label" for="chkOrgCreateSuperUsers">Create users</label>
+              </div>
             </td>
             <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="removeFromSelection(item)">
               <span class="fa fa-sm fa-remove"></span>

@@ -45,10 +45,10 @@ export class AppMenuService implements  AbstractMenuProvider  {
   }
   getMenuOptions(): MenuOption[] {
     return [
-      {caption: 'Users', state: 'user', icon: 'fa fa-user', role: 'eds-user-manager:user-manager'},
-      {caption: 'Configuration', state: 'configuration', icon: 'fa fa-cogs', role: 'eds-user-manager:user-manager'},
-      {caption: 'Delegation', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'eds-user-manager:user-manager'},
-      {caption: 'Audit', state: 'audit', icon: 'fa fa-list-ul', role: 'eds-user-manager:user-manager'}
+      {caption: 'Users', state: 'user', icon: 'fa fa-user', role: 'User'},
+      {caption: 'Configuration', state: 'configuration', icon: 'fa fa-cogs', role: 'User'},
+      {caption: 'Delegation', state: 'd3delegation', icon: 'fa fa-sitemap', role: 'User'},
+      {caption: 'Audit', state: 'audit', icon: 'fa fa-list-ul', role: 'User'}
       /*{caption: 'Delegation Data', state: 'delegation', icon: 'fa fa-sitemap', role: 'eds-dsa-manager:viewer'},*/
     ];
   }

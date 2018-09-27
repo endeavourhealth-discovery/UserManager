@@ -42,7 +42,7 @@ export class ConfigurationComponent implements OnInit {
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
 
-    this.userManagerService.activeRole.subscribe(active => {
+    this.userManagerService.activeUserProject.subscribe(active => {
       this.activeRole = active;
       this.roleChanged();
     });
