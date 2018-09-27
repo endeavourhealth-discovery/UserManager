@@ -27,7 +27,7 @@ export class ApplicationEditorComponent implements OnInit {
   selectedProfile: ApplicationProfile;
   editedProfiles: ApplicationProfile[] = [];
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -45,7 +45,7 @@ export class ApplicationEditorComponent implements OnInit {
     const vm = this;
 
     vm.userManagerService.activeUserProject.subscribe(active => {
-      vm.activeRole = active;
+      vm.activeProject = active;
       vm.roleChanged();
     });
 
@@ -77,10 +77,10 @@ export class ApplicationEditorComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -105,7 +105,7 @@ export class ApplicationEditorComponent implements OnInit {
     const vm = this;
     // const changedJson = this.applicationEditor.get();
     vm.resultApp.applicationTree = ''; // JSON.stringify(changedJson);
-    vm.configurationService.saveApplication(vm.resultApp, vm.activeRole.id)
+    vm.configurationService.saveApplication(vm.resultApp, vm.activeProject.id)
       .subscribe(
         (response) => {
           vm.log.success('Application details successfully saved.', null, vm.dialogTitle);
@@ -118,7 +118,7 @@ export class ApplicationEditorComponent implements OnInit {
   saveProfiles(close: boolean) {
     const vm = this;
     if (vm.editedProfiles.length > 0) {
-      this.configurationService.saveApplicationProfiles(vm.editedProfiles, vm.activeRole.id)
+      this.configurationService.saveApplicationProfiles(vm.editedProfiles, vm.activeProject.id)
         .subscribe(
           (response) => {
               vm.successfullySavedApplication(close);

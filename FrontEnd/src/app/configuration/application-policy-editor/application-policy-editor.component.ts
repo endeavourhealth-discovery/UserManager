@@ -22,7 +22,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   @Input() editMode: boolean;
   dialogTitle: string = 'Add application policy';
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUsers = false;
 
@@ -44,7 +44,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     const vm = this;
 
     vm.userManagerService.activeUserProject.subscribe(active => {
-      vm.activeRole = active;
+      vm.activeProject = active;
       vm.roleChanged();
     });
 
@@ -76,10 +76,10 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUsers = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUsers = false;
     } else {
@@ -196,7 +196,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
   save(close: boolean) {
     const vm = this;
     console.log(vm.resultRole);
-    vm.configurationService.saveApplicationPolicy(vm.resultRole, vm.activeRole.id)
+    vm.configurationService.saveApplicationPolicy(vm.resultRole, vm.activeProject.id)
       .subscribe(
         (response) => {
           vm.log.success('Application details successfully saved.', null, vm.dialogTitle);
@@ -213,7 +213,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
         vm.resultRole.id = roleTypeId;
         vm.editedProfiles.forEach(x => x.applicationPolicyId = roleTypeId);
       }*/
-      this.configurationService.saveRoleTypeAccessProfiles(vm.editedProfiles, vm.activeRole.id)
+      this.configurationService.saveRoleTypeAccessProfiles(vm.editedProfiles, vm.activeProject.id)
         .subscribe(
           (response) => {
             vm.successfullySavedApplication(close);

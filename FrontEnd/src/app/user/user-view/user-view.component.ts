@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
   selectedUser : User = null;
   roleTypes: ApplicationPolicy[];
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -33,17 +33,17 @@ export class UserViewComponent implements OnInit {
     const vm = this;
     vm.getRoleTypes();
     vm.userManagerService.activeUserProject.subscribe(active => {
-      vm.activeRole = active;
+      vm.activeProject = active;
       vm.roleChanged();
     });
   }
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -57,7 +57,7 @@ export class UserViewComponent implements OnInit {
   {
     var vm = this;
     vm.selectedUser = null;
-    let userId = vm.activeRole.userId;
+    let userId = vm.activeProject.userId;
 
     vm.userService.getUser(userId)
       .subscribe(

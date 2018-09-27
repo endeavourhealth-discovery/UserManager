@@ -29,7 +29,7 @@ export class AuditComponent implements OnInit {
   dateFrom: Date = new Date();
   dateTo: Date = new Date();
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -50,7 +50,7 @@ export class AuditComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     this.userManagerService.activeUserProject.subscribe(active => {
-        this.activeRole = active;
+        this.activeProject = active;
         this.roleChanged();
     });
 
@@ -58,11 +58,11 @@ export class AuditComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    console.log(vm.activeRole.applicationPolicyAttributes);
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    console.log(vm.activeProject.applicationPolicyAttributes);
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -97,7 +97,7 @@ export class AuditComponent implements OnInit {
       toDate = vm.dateTo;
     }
     console.log(vm.superUser);
-    vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeRole.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
+    vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeProject.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;
@@ -119,7 +119,7 @@ export class AuditComponent implements OnInit {
       usrId = vm.selectedUser.uuid;
     }
     console.log(vm.superUser);
-    vm.auditService.getAuditCount(vm.superUser ? null : vm.activeRole.organisationId, orgId, usrId)
+    vm.auditService.getAuditCount(vm.superUser ? null : vm.activeProject.organisationId, orgId, usrId)
       .subscribe(
         (result) => {
           vm.totalItems = result;
@@ -154,7 +154,7 @@ export class AuditComponent implements OnInit {
 
   getDelegatedOrganisations(){
     let vm = this;
-    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
+    vm.delegationService.getDelegatedOrganisations(vm.activeProject.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;

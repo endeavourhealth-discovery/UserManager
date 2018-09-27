@@ -27,7 +27,7 @@ export class UserBioComponent implements OnInit {
   selectedProfileTree: any;
   selectedSharingAgreement: any;
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -53,7 +53,7 @@ export class UserBioComponent implements OnInit {
     this.user = Object.assign( {}, s.user);
 
     vm.userManagerService.activeUserProject.subscribe(active => {
-      vm.activeRole = active;
+      vm.activeProject = active;
       vm.roleChanged();
     });
 
@@ -82,10 +82,10 @@ export class UserBioComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {

@@ -22,7 +22,7 @@ export class ConfigurationComponent implements OnInit {
   public editorOptions: JsonEditorOptions;
   public data: any;
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -43,7 +43,7 @@ export class ConfigurationComponent implements OnInit {
     this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
 
     this.userManagerService.activeUserProject.subscribe(active => {
-      this.activeRole = active;
+      this.activeProject = active;
       this.roleChanged();
     });
 
@@ -51,10 +51,10 @@ export class ConfigurationComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -110,7 +110,7 @@ export class ConfigurationComponent implements OnInit {
     MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete application: " + app.name + "?", "Yes", "No")
       .result.then(
       (result) => {
-        vm.configurationService.deleteApplication(app.id, vm.activeRole.id)
+        vm.configurationService.deleteApplication(app.id, vm.activeProject.id)
           .subscribe(
             (result) => {
               vm.log.success('Successfully deleted application', null, 'Success');
@@ -129,7 +129,7 @@ export class ConfigurationComponent implements OnInit {
     MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete application policy: " + appProfile.name + "?", "Yes", "No")
       .result.then(
       (result) => {
-        vm.configurationService.deleteApplicationPolicy(appProfile.id, vm.activeRole.id)
+        vm.configurationService.deleteApplicationPolicy(appProfile.id, vm.activeProject.id)
           .subscribe(
             (result) => {
               vm.log.success('Successfully deleted application policy', null, 'Delete application policy');

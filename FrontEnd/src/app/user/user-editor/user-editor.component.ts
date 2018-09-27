@@ -46,7 +46,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -91,7 +91,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     vm.getAvailableApplicationPolicies();
 
     vm.userManagerService.activeUserProject.subscribe(active => {
-      vm.activeRole = active;
+      vm.activeProject = active;
       vm.roleChanged();
     });
 
@@ -131,10 +131,10 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -166,7 +166,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   save(close: boolean) {
     const vm = this;
     if (vm.validateFormInput() == true) {
-      vm.userService.saveUser(vm.resultData, vm.editMode, vm.activeRole.id)
+      vm.userService.saveUser(vm.resultData, vm.editMode, vm.activeProject.id)
         .subscribe(
           (response) => {
             vm.resultData = response;
@@ -184,7 +184,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     if (vm.userRegion.userId == null) {
       vm.userRegion.userId = vm.resultData.uuid;
     }
-    vm.userService.saveUserRegion(vm.userRegion, vm.activeRole.id)
+    vm.userService.saveUserRegion(vm.userRegion, vm.activeProject.id)
       .subscribe(
         (response) => {
 
@@ -198,7 +198,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     if (vm.userApplicationPolicy.userId == null) {
       vm.userApplicationPolicy.userId = vm.resultData.uuid;
     }
-    vm.userService.saveUserApplicationPolicy(vm.userApplicationPolicy, vm.activeRole.id)
+    vm.userService.saveUserApplicationPolicy(vm.userApplicationPolicy, vm.activeProject.id)
       .subscribe(
         (response) => {
 
@@ -215,7 +215,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       }
     }
     if (vm.editedRoles.length > 0) {
-      vm.userService.saveUserProjects(vm.editedRoles, vm.activeRole.id)
+      vm.userService.saveUserProjects(vm.editedRoles, vm.activeProject.id)
         .subscribe(
           (response) => {
             if (vm.defaultRoleChange) {
@@ -239,7 +239,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   changeDefaultProject(close: boolean) {
     const vm = this;
-    vm.userManagerService.changeDefaultProject(vm.resultData.uuid, vm.defaultRoleChange.id, vm.activeRole.id)
+    vm.userManagerService.changeDefaultProject(vm.resultData.uuid, vm.defaultRoleChange.id, vm.activeProject.id)
       .subscribe(
         (result) => {
           vm.successfullySavedUser(close);
@@ -452,7 +452,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
 
   getDelegatedOrganisations() {
     let vm = this;
-    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
+    vm.delegationService.getDelegatedOrganisations(vm.activeProject.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
@@ -498,7 +498,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   checkAvailableProjects() {
     const vm = this;
 
-    /*if (vm.selectedOrg.uuid != vm.activeRole.organisationId && vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    /*if (vm.selectedOrg.uuid != vm.activeProject.organisationId && vm.activeProject.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       // my organisation is based on my roles but delegated organisations are based on the permissions given to us
 
       if (!vm.selectedOrg.createSuperUsers) {
@@ -512,7 +512,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       }
     }*/
 
-    /*if (vm.selectedOrg.uuid != '439e9f06-d54c-3eb6-b800-010863bf1399' || vm.activeRole.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
+    /*if (vm.selectedOrg.uuid != '439e9f06-d54c-3eb6-b800-010863bf1399' || vm.activeProject.projectId != '3517dd59-9ecb-11e8-9245-80fa5b320513') {
       var god = vm.roleTypes.findIndex(e => e.id === '3517dd59-9ecb-11e8-9245-80fa5b320513');
       vm.roleTypes.splice(god, 1);
     }*/

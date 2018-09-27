@@ -30,7 +30,7 @@ export class UserComponent implements OnInit {
   paramOrganisation: string;
   searchTerm: string;
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -55,7 +55,7 @@ export class UserComponent implements OnInit {
       });
 
     this.userManagerService.activeUserProject.subscribe(active => {
-      this.activeRole = active;
+      this.activeProject = active;
       this.roleChanged();
     });
   }
@@ -63,10 +63,10 @@ export class UserComponent implements OnInit {
   roleChanged() {
     const vm = this;
 
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -112,8 +112,8 @@ export class UserComponent implements OnInit {
 
   getDelegatedOrganisations() {
     let vm = this;
-    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
-    vm.delegationService.getDelegatedOrganisations(vm.activeRole.organisationId)
+    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeProject.organisationId;
+    vm.delegationService.getDelegatedOrganisations(vm.activeProject.organisationId)
       .subscribe(
         (result) => {
           vm.delegatedOrganisations = result;
@@ -128,7 +128,7 @@ export class UserComponent implements OnInit {
 
   getGodModeOrganisations() {
     let vm = this;
-    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeRole.organisationId;
+    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeProject.organisationId;
     vm.delegationService.getGodModeOrganisations()
       .subscribe(
         (result) => {
@@ -221,7 +221,7 @@ export class UserComponent implements OnInit {
         .result.then(
         (result) => {
           let userId = user.uuid;
-          vm.userService.deleteUser(userId, vm.activeRole.id)
+          vm.userService.deleteUser(userId, vm.activeProject.id)
             .subscribe(
               (result) => {
                 vm.getUsers();

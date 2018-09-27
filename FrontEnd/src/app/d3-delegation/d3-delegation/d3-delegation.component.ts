@@ -31,7 +31,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   selectedIsRoot: boolean;
   newDelegation: Delegation;
 
-  public activeRole: UserProject;
+  public activeProject: UserProject;
   admin = false;
   superUser = false;
 
@@ -49,17 +49,17 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.userManagerService.activeUserProject.subscribe(active => {
-      this.activeRole = active;
+      this.activeProject = active;
       this.roleChanged();
     });
   }
 
   roleChanged() {
     const vm = this;
-    if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
-    } else if (vm.activeRole.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
       vm.admin = true;
       vm.superUser = false;
     } else {
@@ -163,7 +163,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   saveDelegation() {
     const vm = this;
-    vm.delegationService.saveDelegation(vm.newDelegation, vm.activeRole.id)
+    vm.delegationService.saveDelegation(vm.newDelegation, vm.activeProject.id)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success');
@@ -218,7 +218,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
 
   getDelegations() {
     let vm = this;
-    vm.delegationService.getDelegations(vm.superUser ? null :  vm.activeRole.organisationId)
+    vm.delegationService.getDelegations(vm.superUser ? null :  vm.activeProject.organisationId)
       .subscribe(
         (result) => {
           vm.delegations = result;
@@ -254,7 +254,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
       title = 'Delete organisation';
       errorMessage = 'The organisation could not be deleted. Please try again.';
     }
-    vm.delegationService.saveRelationship(vm.selectedRelationship, vm.activeRole.id)
+    vm.delegationService.saveRelationship(vm.selectedRelationship, vm.activeProject.id)
       .subscribe(
         (result) => {
           vm.log.success(message, null, title);
@@ -276,7 +276,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     childRel.createUsers = org.createUsers;
     childRel.createSuperUsers = org.createSuperUsers;
 
-    vm.delegationService.saveRelationship(childRel, vm.activeRole.id)
+    vm.delegationService.saveRelationship(childRel, vm.activeProject.id)
       .subscribe(
         (result) => {
           vm.log.success('Successfully saved changes', null, 'Success')
@@ -290,7 +290,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete delegation: " + vm.selectedDelegation.name + "?", "Yes", "No")
       .result.then(
       (result) => {
-        vm.delegationService.deleteDelegation(vm.selectedDelegation.uuid, vm.activeRole.id)
+        vm.delegationService.deleteDelegation(vm.selectedDelegation.uuid, vm.activeProject.id)
           .subscribe(
             (result) => {
               vm.log.success('Successfully deleted delegation', null, 'Success');
