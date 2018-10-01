@@ -1,5 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} from "eds-angular4";
+import {
+  LoggerService,
+  MessageBoxDialog,
+  SecurityService,
+  UserManagerNotificationService,
+  UserManagerService
+} from "eds-angular4";
 import {ConfigurationService} from "../configuration.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ApplicationPolicy} from "../models/ApplicationPolicy";
@@ -30,7 +36,7 @@ export class ConfigurationComponent implements OnInit {
               private configurationService : ConfigurationService,
               private securityService : SecurityService,
               private $modal : NgbModal,
-              private userManagerService: UserManagerService,
+              private userManagerNotificationService: UserManagerNotificationService,
               private state: ModuleStateService,
               private router: Router) { }
 
@@ -42,7 +48,7 @@ export class ConfigurationComponent implements OnInit {
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
 
-    this.userManagerService.activeUserProject.subscribe(active => {
+    this.userManagerNotificationService.activeUserProject.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });

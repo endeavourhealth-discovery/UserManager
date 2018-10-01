@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../models/User";
 import {UserProject} from "../models/UserProject";
 import {ModuleStateService} from "eds-angular4/dist/common";
-import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {Router} from "@angular/router";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {UserService} from "../user.service";
@@ -39,7 +39,7 @@ export class UserBioComponent implements OnInit {
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
               private state: ModuleStateService,
-              private userManagerService: UserManagerService) { }
+              private userManagerNotificationService: UserManagerNotificationService) { }
 
   ngOnInit() {
     let vm = this;
@@ -52,7 +52,7 @@ export class UserBioComponent implements OnInit {
     }
     this.user = Object.assign( {}, s.user);
 
-    vm.userManagerService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
       vm.roleChanged();
     });

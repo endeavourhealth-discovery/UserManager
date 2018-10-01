@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DelegationData} from "../models/DelegationData";
 import {DelegationService} from "../delegation.service";
-import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Delegation} from "../models/Delegation";
 import {D3TreeGraphComponent} from "../../d3-tree-graph/d3-tree-graph/d3-tree-graph.component";
@@ -44,11 +44,11 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
               private $modal: NgbModal,
               private delegationService: DelegationService,
               private router: Router,
-              private userManagerService: UserManagerService) { }
+              private userManagerNotificationService: UserManagerNotificationService) { }
 
   ngOnInit() {
 
-    this.userManagerService.activeUserProject.subscribe(active => {
+    this.userManagerNotificationService.activeUserProject.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });

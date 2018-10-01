@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {UserProject} from "../../user/models/UserProject";
-import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {Application} from "../models/Application";
 import {Router} from "@angular/router";
@@ -34,7 +34,7 @@ export class ApplicationEditorComponent implements OnInit {
   // @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
 
   constructor(private log: LoggerService,
-              private userManagerService: UserManagerService,
+              private userManagerNotificationService: UserManagerNotificationService,
               private state: ModuleStateService,
               private router: Router,
               private $modal: NgbModal,
@@ -44,7 +44,7 @@ export class ApplicationEditorComponent implements OnInit {
   ngOnInit() {
     const vm = this;
 
-    vm.userManagerService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
       vm.roleChanged();
     });

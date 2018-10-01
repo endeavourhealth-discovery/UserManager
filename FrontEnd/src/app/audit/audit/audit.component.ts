@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuditSummary} from "../models/AuditSummary";
-import {LoggerService, UserManagerService} from "eds-angular4";
+import {LoggerService, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {AuditService} from "../audit.service";
 import {AuditDetailComponent} from "../audit-detail/audit-detail.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -45,11 +45,11 @@ export class AuditComponent implements OnInit {
               private auditService: AuditService,
               private delegationService: DelegationService,
               private userService: UserService,
-              private userManagerService: UserManagerService) { }
+              private userManagerNotificationService: UserManagerNotificationService) { }
 
   ngOnInit() {
     const vm = this;
-    this.userManagerService.activeUserProject.subscribe(active => {
+    this.userManagerNotificationService.activeUserProject.subscribe(active => {
         this.activeProject = active;
         this.roleChanged();
     });

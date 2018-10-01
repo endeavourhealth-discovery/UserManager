@@ -2,7 +2,7 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewChildren} from '
 import {Location} from '@angular/common';
 import {User} from "../models/User";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {LoggerService, MessageBoxDialog, UserManagerService} from "eds-angular4";
+import {LoggerService, MessageBoxDialog, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {UserService} from "../user.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
@@ -68,6 +68,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
               private state: ModuleStateService,
+              private userManagerNotificationService: UserManagerNotificationService,
               private userManagerService: UserManagerService,
               private organisationService: OrganisationService) {
 
@@ -90,7 +91,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     vm.getAvailableRegions();
     vm.getAvailableApplicationPolicies();
 
-    vm.userManagerService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
       vm.roleChanged();
     });

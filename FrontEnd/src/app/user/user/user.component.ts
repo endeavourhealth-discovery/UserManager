@@ -1,5 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {LoggerService, MessageBoxDialog, SecurityService, UserManagerService} from "eds-angular4";
+import {
+  LoggerService,
+  MessageBoxDialog,
+  SecurityService,
+  UserManagerNotificationService,
+  UserManagerService
+} from "eds-angular4";
 import {UserService} from "../user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {User} from "../models/User";
@@ -44,7 +50,8 @@ export class UserComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private state: ModuleStateService,
-              private userManagerService: UserManagerService) {
+              private userManagerNotificationService: UserManagerNotificationService,
+              private userManagerService: UserManagerService,) {
 
   }
 
@@ -55,7 +62,7 @@ export class UserComponent implements OnInit {
         this.paramOrganisation = params['organisationId'];
       });
 
-    this.userManagerService.activeUserProject.subscribe(active => {
+    this.userManagerNotificationService.activeUserProject.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });

@@ -4,7 +4,7 @@ import {UserProject} from "../models/UserProject";
 import {Location} from "@angular/common";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
-import {LoggerService, UserManagerService} from "eds-angular4";
+import {LoggerService, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {UserService} from "../user.service";
 import {Router} from "@angular/router";
 import {ModuleStateService} from "eds-angular4/dist/common";
@@ -36,7 +36,7 @@ export class UserProfileComponent implements OnInit {
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
               private state: ModuleStateService,
-              private userManagerService: UserManagerService) { }
+              private userManagerNotificationService: UserManagerNotificationService) { }
 
   ngOnInit() {
     let vm = this;
@@ -49,7 +49,7 @@ export class UserProfileComponent implements OnInit {
     }
     this.user = Object.assign( {}, s.user);
 
-    vm.userManagerService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
       vm.roleChanged();
     });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {LoggerService, UserManagerService} from "eds-angular4";
+import {LoggerService, UserManagerNotificationService, UserManagerService} from "eds-angular4";
 import {UserProject} from "../models/UserProject";
 import {User} from "../models/User";
 import {UserService} from "../user.service";
@@ -23,7 +23,7 @@ export class UserViewComponent implements OnInit {
   superUser = false;
 
   constructor(private log: LoggerService,
-              private userManagerService: UserManagerService,
+              private userManagerNotificationService: UserManagerNotificationService,
               private userService: UserService,
               private configurationService: ConfigurationService,
               private router: Router,
@@ -32,7 +32,7 @@ export class UserViewComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.getRoleTypes();
-    vm.userManagerService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
       vm.roleChanged();
     });
