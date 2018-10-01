@@ -22,6 +22,7 @@ export class UserProfileComponent implements OnInit {
   @Input() user: User;
   userProfile: UserProfile;
   precisCollapsed = true;
+  profileLoadingComplete = false;
 
   public activeProject: UserProject;
   admin = false;
@@ -76,11 +77,12 @@ export class UserProfileComponent implements OnInit {
 
   loadRoleProfile() {
     const vm = this;
-
+    vm.profileLoadingComplete = false;
     vm.userService.getUserProfile(vm.user.uuid)
       .subscribe(
         (result) => {
           vm.userProfile = result;
+          vm.profileLoadingComplete = true;
           console.log(result);
         },
         (error) => vm.log.error('Error loading user profiles', error, 'Error')

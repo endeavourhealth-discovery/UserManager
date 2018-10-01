@@ -25,6 +25,7 @@ public class JsonUser {
     private Integer permissions = null;
     private Boolean mustChangePassword = null;
     private List<JsonUserProject> userProjects = null;
+    private Long createdTimeStamp = null;
 
     public JsonUser() {
     }
@@ -35,6 +36,7 @@ public class JsonUser {
         this.forename = keycloakUser.getFirstName();
         this.surname = keycloakUser.getLastName();
         this.email = keycloakUser.getEmail();
+        this.createdTimeStamp = keycloakUser.getCreatedTimestamp();
         Map<String, List<String>> userAttributes = keycloakUser.getAttributes();
         if (userAttributes != null) {
             Iterator var3 = userAttributes.keySet().iterator();
@@ -179,5 +181,13 @@ public class JsonUser {
 
     public void setDefaultOrgId(String defaultOrgId) {
         this.defaultOrgId = defaultOrgId;
+    }
+
+    public Long getCreatedTimeStamp() {
+        return createdTimeStamp;
+    }
+
+    public void setCreatedTimeStamp(Long createdTimeStamp) {
+        this.createdTimeStamp = createdTimeStamp;
     }
 }

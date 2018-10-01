@@ -13,6 +13,7 @@ export class User {
 	mobile:string;
 	photo:string;
 	defaultOrgId: string;
+  createdTimeStamp: number;
 	userProjects: UserProject[];
 
 	isSuperUser:boolean;

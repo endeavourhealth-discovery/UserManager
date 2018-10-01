@@ -29,6 +29,7 @@ export class UserComponent implements OnInit {
   loadingRolesCompleted: boolean;
   paramOrganisation: string;
   searchTerm: string;
+  selectedUserCreatedDate: string;
 
   public activeProject: UserProject;
   admin = false;
@@ -167,6 +168,7 @@ export class UserComponent implements OnInit {
       let topUserInList = vm.filteredUserList[0];
       vm.selectedUser = topUserInList;
       vm.getUserRoles(vm.selectedUser.uuid);
+      vm.convertDateForSelectedUser();
     }
     else {
       vm.selectedUser = null;
@@ -241,6 +243,14 @@ export class UserComponent implements OnInit {
     const vm = this;
     vm.selectedUser = user;
     vm.getUserRoles(user.uuid)
+    vm.convertDateForSelectedUser();
+  }
+
+  convertDateForSelectedUser() {
+    const vm = this;
+    var d = new Date(vm.selectedUser.createdTimeStamp);
+    vm.selectedUserCreatedDate = d.toLocaleString();
+
   }
 
   getUserRoles(userId: string){
