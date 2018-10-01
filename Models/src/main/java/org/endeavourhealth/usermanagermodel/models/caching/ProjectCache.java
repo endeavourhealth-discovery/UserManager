@@ -34,6 +34,8 @@ public class ProjectCache {
             }
         }
 
+        CacheManager.startScheduler();
+
         return projectEntities;
 
     }
@@ -48,6 +50,8 @@ public class ProjectCache {
             projectMap.put(projectEntity.getUuid(), projectEntity);
         }
 
+        CacheManager.startScheduler();
+
         return projectEntity;
 
     }
@@ -61,6 +65,8 @@ public class ProjectCache {
             project = ProjectEntity.getFullProjectJson(projectId);
             jsonProjectMap.put(project.getUuid(), project);
         }
+
+        CacheManager.startScheduler();
 
         return project;
 

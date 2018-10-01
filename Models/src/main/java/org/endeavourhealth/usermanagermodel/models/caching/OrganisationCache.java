@@ -32,6 +32,8 @@ public class OrganisationCache {
             }
         }
 
+        CacheManager.startScheduler();
+
         return organisationEntities;
 
     }
@@ -45,6 +47,8 @@ public class OrganisationCache {
             organisationEntity = OrganisationEntity.getOrganisation(organisationId);
             organisationMap.put(organisationEntity.getUuid(), organisationEntity);
         }
+
+        CacheManager.startScheduler();
 
         return organisationEntity;
 

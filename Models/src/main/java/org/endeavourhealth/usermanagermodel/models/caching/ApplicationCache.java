@@ -19,6 +19,7 @@ public class ApplicationCache {
 
         }
 
+        CacheManager.startScheduler();
         return foundRole;
 
     }

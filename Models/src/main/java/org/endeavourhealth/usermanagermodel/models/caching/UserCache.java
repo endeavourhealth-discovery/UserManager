@@ -34,6 +34,8 @@ public class UserCache {
             }
         }
 
+        CacheManager.startScheduler();
+
         return foundUser;
 
     }
@@ -56,6 +58,7 @@ public class UserCache {
 
         }
 
+        CacheManager.startScheduler();
 
         return userList;
 

@@ -19,6 +19,8 @@ public class RegionCache {
 
         }
 
+        CacheManager.startScheduler();
+
         return foundRegion;
 
     }

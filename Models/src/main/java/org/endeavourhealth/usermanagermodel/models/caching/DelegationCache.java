@@ -20,6 +20,8 @@ public class DelegationCache {
 
         }
 
+        CacheManager.startScheduler();
+
         return foundDelegation;
 
     }

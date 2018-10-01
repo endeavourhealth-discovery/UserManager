@@ -20,6 +20,8 @@ public class RoleTypeCache {
 
         }
 
+        CacheManager.startScheduler();
+
         return foundRole;
 
     }

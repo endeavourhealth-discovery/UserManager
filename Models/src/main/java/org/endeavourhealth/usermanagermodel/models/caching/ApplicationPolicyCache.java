@@ -19,6 +19,7 @@ public class ApplicationPolicyCache {
 
         }
 
+        CacheManager.startScheduler();
         return foundPolicy;
 
     }

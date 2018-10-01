@@ -19,6 +19,8 @@ public class ApplicationProfileCache {
 
         }
 
+        CacheManager.startScheduler();
+
         return foundRole;
 
     }
