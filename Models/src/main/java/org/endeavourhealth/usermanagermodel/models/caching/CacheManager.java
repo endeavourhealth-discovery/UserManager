@@ -6,13 +6,24 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class CacheManager {
-    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);
     private static ScheduledFuture<?> future;
 
     public static void startScheduler() {
-
         if (future == null || future.isDone()) {
             future = scheduler.scheduleAtFixedRate(flushAllCaches, 1, 1, TimeUnit.MINUTES);
+        }
+    }
+
+    public static void stopScheduler() {
+        if (future != null && !future.isDone()) {
+            try {
+                future.cancel(true);
+                scheduler.shutdownNow();
+                scheduler.awaitTermination(10, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                scheduler.shutdownNow();
+            }
         }
     }
 
