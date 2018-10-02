@@ -133,6 +133,28 @@ public class UserProjectEntity {
 
     }
 
+    public static List<UserProjectEntity> getUserProjectEntitiesForProject(String projectId) throws Exception {
+        EntityManager entityManager = PersistenceManager.getEntityManager();
+
+        try {
+            String sql = "select up" +
+                    " from UserProjectEntity up" +
+                    " where up.projectId = :projectId" +
+                    " and up.isDeleted = 0";
+
+            Query query = entityManager.createQuery(sql);
+
+            query.setParameter("projectId", projectId);
+
+            List<UserProjectEntity> results = query.getResultList();
+
+            return results;
+        } finally {
+            entityManager.close();
+        }
+
+    }
+
     public static List<Object[]> getUserProjects(String userId) throws Exception {
         EntityManager entityManager = PersistenceManager.getEntityManager();
 
