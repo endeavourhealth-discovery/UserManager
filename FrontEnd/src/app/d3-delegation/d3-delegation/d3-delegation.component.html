@@ -21,7 +21,7 @@
           <div class="row" *ngIf="selectedOrganisation">
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header text-white">Selected Organisation</div>
+                <div class="card-header text-white">Selected organisation</div>
                 <div class="card-body">
                   <p>{{selectedOrganisation.name}}</p>
                   <div *ngIf="!selectedIsRoot">
@@ -40,8 +40,8 @@
                   </div>
                   <div class="pull-left">
                     <button *ngIf="admin && !selectedIsRoot" type="button" class="btn btn-sm btn-success" (click)="saveRelationship()">Save</button>
-                    <button type="button" class="btn btn-sm btn-info" (click)="goToOrganisation()">View users at organisation</button>
-                    <button *ngIf="admin" type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add Child</button>
+                    <button type="button" class="btn btn-sm btn-info" (click)="goToOrganisation()">View users at this organisation</button>
+                    <button *ngIf="admin" type="button" class="btn btn-sm btn-success" (click)="addChildOrganisation()">Add child</button>
                     <button *ngIf="admin && !selectedOrganisation.children" type="button" class="btn btn-sm btn-danger" (click)="deleteChildOrganisation()">Delete</button>
                   </div>
 

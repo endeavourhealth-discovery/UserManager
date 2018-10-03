@@ -26,7 +26,7 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="label">Search users</label>
+                    <label class="control-label">Search users</label>
                     <div class="input-group">
                       <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
                       <span class="input-group-append" (click)="searchUsers()">
@@ -47,20 +47,13 @@
                         <thead>
                         <tr class="d-flex">
                           <th class="col-4"  (click)="sort('username');">Username
-                            <span *ngIf="sortField == 'username'"
-                                  class="fa fa-sm"
-                                  [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
-
+                            <span class="fa fa-sort" style="cursor: pointer"></span>
                           </th>
                           <th class="col-4" (click)="sort('surname');">Surname
-                            <span *ngIf="sortField == 'surname'"
-                                  class="fa fa-sm"
-                                  [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
+                            <span class="fa fa-sort" style="cursor: pointer"></span>
                           </th>
                           <th class="col-4" (click)="sort('forename')">Forename
-                            <span *ngIf="sortField == 'forename'"
-                                  class="fa fa-sm"
-                                  [ngClass]="{'fa-chevron-down':!sortReverse, 'fa-chevron-up':sortReverse}"></span>
+                            <span class="fa fa-sort" style="cursor: pointer"></span>
                           </th>
                         </tr>
                         </thead>
@@ -124,7 +117,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label class="control-box">Photo</label>
+                    <label class="control-label">Photo</label>
                     <input type="text" readonly class="form-control" placeholder="Photo URL" [(ngModel)]="selectedUser.photo" name="photo">
                     <img src="{{selectedUser.photo}}" class="img-rounded" height="156px" width="156px">
                   </div>
@@ -134,7 +127,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <label>Projects</label>
+                  <label class="control-label">Projects</label>
                   <loadingIndicator [done]="loadingRolesCompleted">
                     <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length==0">No roles assigned</div>
                     <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length>0">

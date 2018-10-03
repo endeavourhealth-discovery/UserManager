@@ -16,7 +16,7 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="label">Search existing users</label>
+                    <label class="control-label">Search existing users</label>
                     <div class="input-group">
                       <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
                       <span class="input-group-append" (click)="searchUsers()">
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="form-group col-md-12">
-                  <label class="label">Search results</label>
+                  <label class="control-label">Search results</label>
                   <div class="scroll-box-150 form-control">
                     <loadingIndicator [done]="searched">
                       <div *ngFor="let user of userList"
@@ -64,33 +64,33 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label required-field">Username</label>
+                        <label class="control-label required-field">Username</label>
                         <input type="text" *ngIf="isEditMode()" disabled class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
                         <input type="text" *ngIf="!isEditMode()" class="form-control" placeholder="Username" [(ngModel)]="resultData.username" name="username" #username>
                       </div>
                       <div class="form-group">
-                        <label class="form-control-label required-field">Forename</label>
+                        <label class="control-label required-field">Forename</label>
                         <input type="text" class="form-control" placeholder="Forename" [(ngModel)]="resultData.forename" name="forename" #forename>
                       </div>
                       <div class="form-group">
-                        <label class="form-control-label required-field">Surname</label>
+                        <label class="control-label required-field">Surname</label>
                         <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="resultData.surname" name="surname" #surname>
                       </div>
                       <div class="form-group">
-                        <label class="form-control-label required-field">Email</label>
+                        <label class="control-label required-field">Email</label>
                         <input type="text" class="form-control" placeholder="Email" [(ngModel)]="resultData.email" name="email" #email>
                       </div>
                       <small class="required-field-note"></small>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="control-box">Photo</label>
+                        <label class="control-label">Photo</label>
                         <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
                         <br>
                         <img src="{{resultData.photo}}" class="img-rounded" height="136px" width="136px">
                       </div>
                       <div class="form-group">
-                        <label class="form-control-label">Mobile</label>
+                        <label class="control-label">Mobile</label>
                         <input type="text" class="form-control" placeholder="Mobile" [(ngModel)]="resultData.mobile" name="mobile">
                       </div>
                     </div>
@@ -107,13 +107,13 @@
             <!-- USER CREDENTIALS -->
             <!------------------------------------------------------------------------------------------------->
             <div class="card">
-              <div class="card-header">Credentials</div>
+              <div class="card-header">Password</div>
               <div class="card-body">
                 <form UserDetails2="form" class="container-fluid">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label required-field">New password</label>
+                        <label class="control-label required-field">New password</label>
                         <span class="info-icon" [ngbTooltip]="tipContentPassword"></span>
                         <ng-template #tipContentPassword>
                           <div class="text-left">The password must be at least eight characters long, include at least one digit and one Uppercase letter.</div>
@@ -123,7 +123,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label required-field">Password confirmation</label>
+                        <label class="control-label required-field">Password confirmation</label>
                         <input type="password" class="form-control" placeholder="Password" [(ngModel)]="resultData.password" name="passwordConf" #password2>
                       </div>
                     </div>
@@ -146,7 +146,7 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label">Assigned</label>
+                        <label class="control-label">Assigned</label>
                         <div class="scroll-box-250 form-control">
                           <div *ngFor="let role of resultData.userProjects"
                                class="hover-box show-child-on-hover striped">
@@ -174,7 +174,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label">Available at</label>
+                        <label class="control-label">Available at</label>
                           <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getOrganisationProjects(selectedOrg.uuid)">
                             <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
                           </select>
@@ -211,7 +211,7 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label">Data sharing manager region</label>
+                        <label class="control-label">Data sharing manager region</label>
                         <select class="form-control" [(ngModel)]="selectedRegion" name="selectedRegion" (change)="changeUserRegion(selectedRegion.uuid)">
                           <option *ngFor="let reg of availableRegions" [ngValue]="reg">{{reg.name}}</option>
                         </select>
@@ -219,7 +219,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="form-control-label">Application policy</label>
+                        <label class="control-label">Application policy</label>
                         <select class="form-control" [(ngModel)]="selectedApplicationPolicy" name="selectedApplicationPolicy" (change)="changeUserApplicationPolicy(selectedApplicationPolicy.id)">
                           <option *ngFor="let pol of availablePolicies" [ngValue]="pol">{{pol.name}}</option>
                         </select>

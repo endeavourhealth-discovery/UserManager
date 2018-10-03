@@ -37,7 +37,8 @@ export class AuditComponent implements OnInit {
     bigBanner: true,
     timePicker: true,
     format: 'dd-MMM-yyyy hh:mm:00',
-    defaultOpen: false
+    defaultOpen: false,
+
   };
 
   constructor(private $modal: NgbModal,

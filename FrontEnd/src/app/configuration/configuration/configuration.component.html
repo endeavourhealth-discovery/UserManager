@@ -2,9 +2,6 @@
   <div class="container-fluid">
     <div class="module-heading">
       Configuration
-      <div class="pull-right">
-        <button *ngIf="admin" class="btn btn-success" (click)="flushCache()">Flush Cache</button>
-      </div>
     </div>
     <div class="module-body">
       <div class="row">
@@ -49,7 +46,7 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header text-white">
-              Application Policies
+              Application policies
               <div class="pull-right">
                 <button *ngIf="admin" class="btn btn-success" (click)="addApplicationPolicy()">Add new application policy</button>
               </div>
