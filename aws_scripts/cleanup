@@ -1,1 +1,1 @@
-rm -rf /opt/tomcat/webapps/new-user-manager
+rm -rf /opt/tomcat/webapps/user-manager

@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.usermanagermodel.PersistenceManager;
+import org.endeavourhealth.usermanagermodel.models.caching.ApplicationPolicyCache;
 import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.usermanagermodel.models.caching.ProjectCache;
 import org.endeavourhealth.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.usermanagermodel.models.enums.AuditAction;
 import org.endeavourhealth.usermanagermodel.models.enums.ItemType;
+import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.usermanagermodel.models.json.JsonUserProject;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -19,6 +21,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -369,5 +372,36 @@ public class UserProjectEntity {
         entityManager.close();
 
         return ret;
+    }
+
+    public static Boolean checkUserProjectApplicationAccess(String userId,
+                                                         String projectId,
+                                                         String applicationName) throws Exception {
+
+        List<JsonApplicationPolicyAttribute> mergedAttributes = new ArrayList<>();
+
+        String userAppPolicy = UserCache.getUserApplicationPolicy(userId);
+        String projectAppPolicy = ProjectCache.getProjectApplicationPolicy(projectId);
+
+        if (userAppPolicy.equals(projectAppPolicy)) {
+            // policies are the same so just look through one of them
+            mergedAttributes = ApplicationPolicyCache.getApplicationPolicyAttributes(userAppPolicy);
+        } else {
+            List<JsonApplicationPolicyAttribute> userAttributes = ApplicationPolicyCache.getApplicationPolicyAttributes(userAppPolicy);
+            List<JsonApplicationPolicyAttribute> projectAttributes = ApplicationPolicyCache.getApplicationPolicyAttributes(userAppPolicy);
+
+            for (JsonApplicationPolicyAttribute attribute : projectAttributes) {
+                if (userAttributes.stream().filter(a -> a.getApplicationAccessProfileId().equals(attribute.getApplicationAccessProfileId())).findFirst().isPresent()) {
+                    //user policy has the project attribute so add it to the list
+                    mergedAttributes.add(attribute);
+                }
+            }
+        }
+
+        if (mergedAttributes.stream().anyMatch(a -> a.getApplication().equals(applicationName))) {
+            return true;
+        }
+
+        return false;
     }
 }

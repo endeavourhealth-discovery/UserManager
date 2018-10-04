@@ -64,7 +64,6 @@ export class ApplicationEditorComponent implements OnInit {
       vm.getApplicationProfiles();
     }
 
-    vm.jsonData = JSON.parse(vm.resultApp.applicationTree);
     vm.profileData = '';
 
     this.editorOptions = new JsonEditorOptions();

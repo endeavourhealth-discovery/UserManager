@@ -1,5 +1,6 @@
 package org.endeavourhealth.usermanagermodel.models.caching;
 
+import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectApplicationPolicyEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.datasharingmanagermodel.models.json.JsonProject;
 
@@ -12,6 +13,7 @@ public class ProjectCache {
 
     private static Map<String, ProjectEntity> projectMap = new HashMap<>();
     private static Map<String, JsonProject> jsonProjectMap = new HashMap<>();
+    private static Map<String, String> projectApplicationPolicyMap = new HashMap<>();
 
     public static List<ProjectEntity> getProjectDetails(List<String> projects) throws Exception {
         List<ProjectEntity> projectEntities = new ArrayList<>();
@@ -72,8 +74,25 @@ public class ProjectCache {
 
     }
 
+    public static String getProjectApplicationPolicy(String projectId) throws Exception {
+        String foundPolicy = null;
+
+        if (projectApplicationPolicyMap.containsKey(projectId)) {
+            foundPolicy = projectApplicationPolicyMap.get(projectId);
+        } else {
+            ProjectApplicationPolicyEntity policyApp = ProjectApplicationPolicyEntity.getProjectApplicationPolicyId(projectId);
+            foundPolicy = policyApp.getApplicationPolicyId();
+            projectApplicationPolicyMap.put(projectId, foundPolicy);
+        }
+
+        CacheManager.startScheduler();
+
+        return foundPolicy;
+    }
+
     public static void flushCache() throws Exception {
         projectMap.clear();
         jsonProjectMap.clear();
+        projectApplicationPolicyMap.clear();
     }
 }
