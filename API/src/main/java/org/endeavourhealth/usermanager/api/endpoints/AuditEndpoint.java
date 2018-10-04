@@ -208,9 +208,10 @@ public class AuditEndpoint extends AbstractEndpoint {
             case 4: return getJsonForDefaltRoleChangeAudit(auditEntity);
             case 5: return getJsonForApplicationAudit(auditEntity);
             case 6: return getJsonForApplicationProfileAudit(auditEntity);
-            case 7: return getJsonForRoleTypeAccessProfileAudit(auditEntity);
+            case 7: return getJsonForApplicationPolicyAttributeAudit(auditEntity);
             case 8: return getJsonForUserRegionAudit(auditEntity);
             case 9: return getJsonForUserApplicationPolicyAudit(auditEntity);
+            case 10: return getJsonForApplicationPolicyAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
@@ -467,26 +468,26 @@ public class AuditEndpoint extends AbstractEndpoint {
         return auditJson;
     }
 
-    private Response getJsonForRoleTypeAccessProfileAudit(AuditEntity audit) throws Exception {
+    private Response getJsonForApplicationPolicyAttributeAudit(AuditEntity audit) throws Exception {
         String title = "";
         ApplicationPolicyAttributeEntity accessProfileBefore;
         ApplicationPolicyAttributeEntity accessProfileAfter;
         JsonNode beforeJson = null;
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
-            title = "Role type access profile added";
+            title = "Application policy attribute added";
             accessProfileAfter = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemAfter());
-            afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
+            afterJson = generateApplicationPolicyAttributeAuditJson(accessProfileAfter);
         } else if (audit.getAuditType() == 1) {
-            title = "Role type access profile edited";
+            title = "Application policy attribute edited";
             accessProfileBefore = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemBefore());
-            beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
+            beforeJson = generateApplicationPolicyAttributeAuditJson(accessProfileBefore);
             accessProfileAfter = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemAfter());
-            afterJson = generateRoleTypeAccessProfileAuditJson(accessProfileAfter);
+            afterJson = generateApplicationPolicyAttributeAuditJson(accessProfileAfter);
         } else {
-            title = "Role type access profile deleted";
+            title = "Application policy attribute deleted";
             accessProfileBefore = ApplicationPolicyAttributeEntity.getRoleTypeAccessProfile(audit.getItemBefore());
-            beforeJson = generateRoleTypeAccessProfileAuditJson(accessProfileBefore);
+            beforeJson = generateApplicationPolicyAttributeAuditJson(accessProfileBefore);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -508,7 +509,7 @@ public class AuditEndpoint extends AbstractEndpoint {
                 .build();
     }
 
-    private JsonNode generateRoleTypeAccessProfileAuditJson(ApplicationPolicyAttributeEntity accessProfileEntity) throws Exception {
+    private JsonNode generateApplicationPolicyAttributeAuditJson(ApplicationPolicyAttributeEntity accessProfileEntity) throws Exception {
 
         ApplicationPolicyEntity applicationPolicyEntity = RoleTypeCache.getRoleDetails(accessProfileEntity.getApplicationPolicyId());
         ApplicationAccessProfileEntity profileEntity = ApplicationProfileCache.getApplicationProfileDetails(accessProfileEntity.getApplicationAccessProfileId());
@@ -516,9 +517,60 @@ public class AuditEndpoint extends AbstractEndpoint {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode auditJson = mapper.createObjectNode();
         ((ObjectNode)auditJson).put("id", accessProfileEntity.getId());
-        ((ObjectNode)auditJson).put("roleTypeName", applicationPolicyEntity.getName());
-        ((ObjectNode)auditJson).put("applicationProfileName", profileEntity.getName());
-        ((ObjectNode)auditJson).put("profileTree", accessProfileEntity.getProfileTree());
+        ((ObjectNode)auditJson).put("applicationPolicyName", applicationPolicyEntity.getName());
+        ((ObjectNode)auditJson).put("attributeName", profileEntity.getName());
+
+        return auditJson;
+    }
+
+    private Response getJsonForApplicationPolicyAudit(AuditEntity audit) throws Exception {
+        String title = "";
+        ApplicationPolicyEntity accessPolicyBefore;
+        ApplicationPolicyEntity accessPolicyAfter;
+        JsonNode beforeJson = null;
+        JsonNode afterJson = null;
+        if (audit.getAuditType() == 0) {
+            title = "Application policy added";
+            accessPolicyAfter = ApplicationPolicyEntity.getApplicationPolicy(audit.getItemAfter());
+            afterJson = generateApplicationPolicyAuditJson(accessPolicyAfter);
+        } else if (audit.getAuditType() == 1) {
+            title = "Application policy edited";
+            accessPolicyBefore = ApplicationPolicyEntity.getApplicationPolicy(audit.getItemBefore());
+            beforeJson = generateApplicationPolicyAuditJson(accessPolicyBefore);
+            accessPolicyAfter = ApplicationPolicyEntity.getApplicationPolicy(audit.getItemAfter());
+            afterJson = generateApplicationPolicyAuditJson(accessPolicyAfter);
+        } else {
+            title = "Application policy deleted";
+            accessPolicyBefore = ApplicationPolicyEntity.getApplicationPolicy(audit.getItemBefore());
+            beforeJson = generateApplicationPolicyAuditJson(accessPolicyBefore);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", title);
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        if (beforeJson != null) {
+            ((ObjectNode) rootNode).set("before", beforeJson);
+        }
+
+        return Response
+                .ok()
+                .entity(rootNode)
+                .build();
+    }
+
+    private JsonNode generateApplicationPolicyAuditJson(ApplicationPolicyEntity policyEntity) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode auditJson = mapper.createObjectNode();
+        ((ObjectNode)auditJson).put("id", policyEntity.getId());
+        ((ObjectNode)auditJson).put("applicationPolicyName", policyEntity.getName());
+        ((ObjectNode)auditJson).put("applicationPolicyDescription", policyEntity.getDescription());
 
         return auditJson;
     }

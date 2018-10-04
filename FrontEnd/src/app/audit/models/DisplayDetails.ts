@@ -67,12 +67,19 @@ export class DisplayDetails {
     ]
   }
 
-  getRoleTypeAccessProfileDisplayDetails(): any[] {
+  getApplicationPolicyAttributeDisplayDetails(): any[] {
     return [
       { label: 'Id', property: 'id'},
-      { label: 'Role type name', property: 'roleTypeName'},
-      { label: 'Application profile name', property: 'applicationProfileName'},
-      { label: 'profileTree', property: 'profileTree'}
+      { label: 'Application policy name', property: 'applicationPolicyName'},
+      { label: 'Attribute name', property: 'attributeName'}
+    ]
+  }
+
+  getApplicationPolicyDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'id'},
+      { label: 'Application policy name', property: 'applicationPolicyName'},
+      { label: 'Application policy description', property: 'applicationPolicyDescription'}
     ]
   }
 

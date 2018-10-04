@@ -125,6 +125,7 @@ public class ApplicationEntity {
             application.setId(UUID.randomUUID().toString());
             application.setDeleted(true);
             saveApplicationInDatabase(application);
+            application.setDeleted(false);
         }
 
         if (application.getIsDeleted()) {

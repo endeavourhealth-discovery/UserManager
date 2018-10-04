@@ -183,6 +183,7 @@ public class ApplicationPolicyAttributeEntity {
             roleAccessProfile.setId(UUID.randomUUID().toString());
             roleAccessProfile.setDeleted(true);
             saveRoleAccessProfileInDatabase(roleAccessProfile);
+            roleAccessProfile.setDeleted(false);
         }
 
         if (roleAccessProfile.getIsDeleted()) {

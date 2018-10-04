@@ -159,6 +159,7 @@ public class ApplicationAccessProfileEntity {
             applicationProfile.setId(UUID.randomUUID().toString());
             applicationProfile.setDeleted(true);
             saveApplicationProfileInDatabase(applicationProfile);
+            applicationProfile.setDeleted(false);
         }
 
         if (applicationProfile.getIsDeleted()) {

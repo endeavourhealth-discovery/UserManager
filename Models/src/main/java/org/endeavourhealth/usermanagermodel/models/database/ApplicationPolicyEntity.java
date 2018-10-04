@@ -137,6 +137,7 @@ public class ApplicationPolicyEntity {
             applicationPolicy.setId(UUID.randomUUID().toString());
             applicationPolicy.setDeleted(true);
             saveApplicationPolicyInDatabase(applicationPolicy);
+            applicationPolicy.setDeleted(false);
         }
 
         if (applicationPolicy.getIsDeleted()) {

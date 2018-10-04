@@ -80,9 +80,10 @@ export class AuditDetailComponent implements OnInit {
       case "Default role change": return dd.getDefaultRoleChangeDisplayDetails();
       case "Application": return dd.getApplicationDisplayDetails();
       case "Application profile": return dd.getApplicationProfileDisplayDetails();
-      case "Role Type access profile": return dd.getRoleTypeAccessProfileDisplayDetails();
+      case "Application policy attribute": return dd.getApplicationPolicyAttributeDisplayDetails();
       case "User region": return dd.getUserRegionDisplayDetails();
       case "User application policy": return dd.getUserApplicationPolicyDisplayDetails();
+      case "Application policy": return dd.getApplicationPolicyDisplayDetails();
     }
   }
 
