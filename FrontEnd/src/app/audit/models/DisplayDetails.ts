@@ -1,9 +1,9 @@
 export class DisplayDetails {
 
-  getRoleDisplayDetails(): any[] {
+  getUserProjectDisplayDetails(): any[] {
     return [
-      { label: 'User id', property: 'userId'},
-      { label: 'Role Type', property: 'roleType'},
+      { label: 'User', property: 'userId'},
+      { label: 'Project', property: 'project'},
       { label: 'Organisation', property: 'organisation'}
     ]
   }

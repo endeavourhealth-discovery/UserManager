@@ -255,11 +255,11 @@ public class AuditEndpoint extends AbstractEndpoint {
         JsonNode beforeJson = null;
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
-            title = "Role added";
+            title = "Project added";
             userProject = UserProjectEntity.getUserProject(audit.getItemAfter());
             afterJson = generateProjectAuditJson(userProject);
         } else {
-            title = "Role deleted";
+            title = "Project deleted";
             userProject = UserProjectEntity.getUserProject(audit.getItemBefore());
             beforeJson = generateProjectAuditJson(userProject);
         }

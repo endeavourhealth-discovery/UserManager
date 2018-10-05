@@ -73,7 +73,7 @@ export class AuditDetailComponent implements OnInit {
   getDetailsToShow(itemType: string) {
     const dd = new DisplayDetails();
     switch (itemType) {
-      case "Role": return dd.getRoleDisplayDetails();
+      case "User project": return dd.getUserProjectDisplayDetails();
       case "User": return dd.getUserDisplayDetails();
       case "Delegation": return dd.getDelegationDisplayDetails();
       case "Delegation relationship": return dd.getDelegationRelationshipDisplayDetails();
