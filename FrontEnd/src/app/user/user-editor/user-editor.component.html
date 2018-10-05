@@ -10,7 +10,7 @@
     <div class="module-body">
       <div *ngIf="existing">
         <div class="card">
-          <div class="card-header">Add exising user</div>
+          <div class="card-header">Add existing user</div>
           <div class="card-body">
             <form existingUserForm="form" class="container-fluid">
               <div class="row">
@@ -34,8 +34,7 @@
                   <div class="scroll-box-150 form-control">
                     <loadingIndicator [done]="searched">
                       <div *ngFor="let user of userList"
-                           class="hover-box show-child-on-hover striped"
-                           [ngClass]="{'selection': role == selectedAvailableRole}">
+                           class="hover-box show-child-on-hover striped">
 
                         {{user.forename}} {{user.surname}} ({{user.email}})
 

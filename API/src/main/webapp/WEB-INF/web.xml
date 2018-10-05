@@ -61,6 +61,10 @@
         <param-name>app_id</param-name>
         <param-value>user-manager</param-value>
     </context-param>
+    <context-param>
+        <param-name>app_name</param-name>
+        <param-value>User Manager</param-value>
+    </context-param>
     <listener>
         <listener-class>
             org.endeavourhealth.coreui.framework.StartupConfig
