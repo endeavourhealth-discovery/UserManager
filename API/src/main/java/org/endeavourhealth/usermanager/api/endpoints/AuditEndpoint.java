@@ -30,8 +30,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneRules;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,8 +149,19 @@ public class AuditEndpoint extends AbstractEndpoint {
             JsonAuditSummary detail = new JsonAuditSummary();
             detail.setId(obj[0].toString());
             Date auditTime = (Date)obj[2];
-            DateFormat df = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
-            detail.setTimestamp(df.format(auditTime));
+
+            ZoneId zone = ZoneId.systemDefault();
+            ZoneRules rules = zone.getRules();
+
+            LocalDateTime date = auditTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            ZonedDateTime inDST = ZonedDateTime.of(date, zone);
+
+            if (rules.isDaylightSavings(inDST.toInstant())) {
+                date = date.plusHours(1);
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss");
+            detail.setTimestamp(date.format(formatter));
             detail.setUserProject(obj[1].toString());
             detail.setUserName(obj[5].toString());
             detail.setOrganisation(obj[4].toString());
