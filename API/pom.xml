@@ -12,7 +12,9 @@
     </parent>
 
     <properties>
-        <sonar.projectKey>endeavourhealth-discovery_UserManager::API</sonar.projectKey>
+      <maven.deploy.skip>true</maven.deploy.skip>
+
+      <sonar.projectKey>endeavourhealth-discovery_UserManager::API</sonar.projectKey>
         <sonar.exclusions>**/docs/**/*</sonar.exclusions>
     </properties>
 
