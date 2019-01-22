@@ -8,8 +8,6 @@ phases:
   build:
     commands:
       - chmod +x aws_scripts/build.sh
-      - echo Common build started on `date`
-      - aws_scripts/build.sh mvn -f Models/pom.xml -B deploy
       - echo Main build started on `date`
       - aws_scripts/build.sh mvn -B package
   post_build:
