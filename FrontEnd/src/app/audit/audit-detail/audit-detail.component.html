@@ -25,7 +25,7 @@
               <tbody>
               <tr *ngFor="let display of displayItems" class="hover-box show-child-on-hover">
 
-                <td><b>{{display.label}}</b></td>
+                <td><strong>{{display.label}}</strong></td>
                 <td *ngIf="auditDetails.before">{{auditDetails.before[display.property]}}</td>
                 <td *ngIf="auditDetails.after">{{auditDetails.after[display.property]}}</td>
 

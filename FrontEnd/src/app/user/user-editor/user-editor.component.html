@@ -20,10 +20,10 @@
                     <div class="input-group">
                       <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
                       <span class="input-group-append" (click)="searchUsers()">
-                        <i class="fa fa-search input-group-text" title="Search"></i>
+                        <em class="fa fa-search input-group-text" title="Search"></em>
                       </span>
                       <span class="input-group-append" (click)="clearSearch()">
-                        <i class="fa fa-remove input-group-text" title="Clear search"></i>
+                        <em class="fa fa-remove input-group-text" title="Clear search"></em>
                        </span>
                     </div>
                   </div>
@@ -86,7 +86,7 @@
                         <label class="control-label">Photo</label>
                         <input type="text" class="form-control" placeholder="Photo URL" [(ngModel)]="resultData.photo" name="photo" #photo>
                         <br>
-                        <img src="{{resultData.photo}}" class="img-rounded" height="136px" width="136px">
+                        <img src="{{resultData.photo}}" class="img-rounded" height="136px" width="136px" alt="User photo">
                       </div>
                       <div class="form-group">
                         <label class="control-label">Mobile</label>
@@ -156,10 +156,10 @@
                                 {{role.organisationName}} ({{role.projectName}})
                                 </div>
                                 <div *ngIf="role.default" class="col-md-2">
-                                  <i class="fa fa-star" (click)="setAsDefaultRole(role)"></i>
+                                  <em class="fa fa-star" (click)="setAsDefaultRole(role)"></em>
                                 </div>
                                 <div *ngIf="!role.default" class="col-md-2">
-                                  <i class="fa fa-star-o" (click)="setAsDefaultRole(role)"></i>
+                                  <em class="fa fa-star-o" (click)="setAsDefaultRole(role)"></em>
                                 </div>
                                 <div class="col-md-1 offset-1">
                                   <button type="button" class="btn btn-sm btn-danger pull-right child-to-show" (click)="removeCurrentRole(role)" title="Remove role">
@@ -186,7 +186,7 @@
                                [ngClass]="{'selection': orgProj == selectedAvailableRole}">
                             {{orgProj.name}}
                             <button type="button" class="btn btn-sm btn-success pull-right child-to-show" (click)="addAvailableRole(orgProj)" title="Add project">
-                              <i class="fa fa-sm fa-plus"></i>
+                              <em class="fa fa-sm fa-plus"></em>
                             </button>
                           </div>
                         </loadingIndicator>

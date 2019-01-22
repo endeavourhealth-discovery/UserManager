@@ -203,18 +203,22 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
 
             if (parentOrgDelegation == null) {
                 parentOrgDelegation = new JsonOrganisationDelegation();
-                parentOrgDelegation.setUuid(parentOrg.getUuid());
-                parentOrgDelegation.setName(parentOrg.getName() + "(" + parentOrg.getOdsCode() + ")");
-                delegationMap.put(parentOrg.getUuid(), parentOrgDelegation);
+                if (parentOrg != null) {
+                    parentOrgDelegation.setUuid(parentOrg.getUuid());
+                    parentOrgDelegation.setName(parentOrg.getName() + "(" + parentOrg.getOdsCode() + ")");
+                    delegationMap.put(parentOrg.getUuid(), parentOrgDelegation);
+                }
             }
 
             if (childOrgDelegation == null) {
                 childOrgDelegation = new JsonOrganisationDelegation();
-                childOrgDelegation.setUuid(childOrg.getUuid());
-                childOrgDelegation.setName(childOrg.getName() + "(" + childOrg.getOdsCode() + ")");
-                childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte)0 ? false : true);
-                childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte)0 ? false : true);
-                delegationMap.put(childOrg.getUuid(), childOrgDelegation);
+                if (childOrg != null) {
+                    childOrgDelegation.setUuid(childOrg.getUuid());
+                    childOrgDelegation.setName(childOrg.getName() + "(" + childOrg.getOdsCode() + ")");
+                    childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte) 0 ? false : true);
+                    childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte) 0 ? false : true);
+                    delegationMap.put(childOrg.getUuid(), childOrgDelegation);
+                }
             } else { // If previously added as a parent...add the options here
                 childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte)0 ? false : true);
                 childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte)0 ? false : true);

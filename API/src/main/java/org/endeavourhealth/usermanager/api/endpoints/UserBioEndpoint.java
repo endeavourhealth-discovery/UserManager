@@ -183,8 +183,8 @@ public class UserBioEndpoint extends AbstractEndpoint {
                 JsonNode sharingAgreement = getOrganisationsForSharingAgreement(dsa);
                 ((ArrayNode) sharingAgreements).add(sharingAgreement);
                 System.out.println(prettyPrintJsonString(sharingAgreements));
-                return sharingAgreements;
             }
+            return sharingAgreements;
         }
 
         return null;

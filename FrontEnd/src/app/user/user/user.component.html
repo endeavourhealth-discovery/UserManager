@@ -30,10 +30,10 @@
                     <div class="input-group">
                       <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
                       <span class="input-group-append" (click)="searchUsers()">
-                          <i class="fa fa-search input-group-text" title="Search"></i>
+                          <em class="fa fa-search input-group-text" title="Search"></em>
                         </span>
                       <span class="input-group-append" (click)="clearSearch()">
-                          <i class="fa fa-remove input-group-text" title="Clear search"></i>
+                          <em class="fa fa-remove input-group-text" title="Clear search"></em>
                          </span>
                     </div>
                   </div>
@@ -119,7 +119,7 @@
                   <div class="form-group">
                     <label class="control-label">Photo</label>
                     <input type="text" readonly class="form-control" placeholder="Photo URL" [(ngModel)]="selectedUser.photo" name="photo">
-                    <img src="{{selectedUser.photo}}" class="img-rounded" height="156px" width="156px">
+                    <img src="{{selectedUser.photo}}" class="img-rounded" height="156px" width="156px" alt="User photo">
                   </div>
                   <div class="form-group">
                     <label class="control-label">Mobile</label>

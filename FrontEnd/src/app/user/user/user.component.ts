@@ -158,7 +158,7 @@ export class UserComponent implements OnInit {
     vm.sortField = property;
     vm.sortReverse = !vm.sortReverse;
 
-    vm.filteredUserList = vm.filteredUserList.sort(function(a, b) {
+    vm.filteredUserList.sort(function(a, b) {
       var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
       if (vm.sortReverse) {
         return result * -1;

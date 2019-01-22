@@ -108,11 +108,7 @@ public class JsonUser {
     }
 
     public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail() {
-        this.email = this.email;
+        return email;
     }
 
     public Boolean getAdmin() {
