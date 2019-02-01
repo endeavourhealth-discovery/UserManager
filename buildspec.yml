@@ -16,18 +16,16 @@ phases:
     commands:
       - IP=$(curl http://checkip.amazonaws.com)/32
       - echo $IP of CodeBuild Instance
+      - echo Packaging application
+      - cd FrontEnd
+      - zip -r frontend.zip appspec.yml dist/
+      - echo Packaging core
+      - cd ../API
+      - zip -r api.zip appspec.yml cleanup target/API-0.0.1/
       - echo Build completed on `date`
 artifacts:
-  secondary-artifacts:
-    artifact1:
-      base-directory: FrontEnd
-      files:
-        - appspec.yml
-        - dist/**/*
-    artifact2:
-      base-directory: API
-      files:
-        - appspec.yml
-        - cleanup
-        - target/API-0.0.1/**/*
+  files:
+    - FrontEnd/frontend.zip
+    - API/api.zip
+  discard-paths: yes
 
