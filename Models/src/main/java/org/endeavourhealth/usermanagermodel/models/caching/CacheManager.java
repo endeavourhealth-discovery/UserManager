@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class CacheManager {
-    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);
+    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> future;
 
     public static void startScheduler() {
