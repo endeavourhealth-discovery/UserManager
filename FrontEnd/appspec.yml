@@ -3,3 +3,8 @@ os: linux
 files:
   - source: /dist
     destination: //var/www/html/user-manager
+hooks:
+  BeforeInstall:
+    - location: cleanup
+      timeout: 300
+      runas: root
