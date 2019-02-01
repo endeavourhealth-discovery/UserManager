@@ -18,10 +18,12 @@ phases:
       - echo $IP of CodeBuild Instance
       - echo Packaging application
       - cd FrontEnd
-      - zip -r frontend appspec.yml dist/
+      - zip -r frontend.zip appspec.yml dist/
+      - mv frontend.zip frontend
       - echo Packaging core
       - cd ../API
-      - zip -r api appspec.yml cleanup target/API-0.0.1/
+      - zip -r api.zip appspec.yml cleanup target/API-0.0.1/
+      - mv api.zip api
       - echo Build completed on `date`
 artifacts:
   files:
