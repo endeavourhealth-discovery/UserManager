@@ -23,4 +23,7 @@ artifacts:
     - appspec.yml
     - aws_scripts/**/*
     - API/target/API-0.0.1/**/*
+    - API/appspec.yml
+    - API/cleanup
     - FrontEnd/dist/**/*
+    - FrontEnd/appspec.yml

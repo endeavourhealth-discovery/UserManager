@@ -1,5 +1,5 @@
 version: 0.0
 os: linux
 files:
-  - source: /FrontEnd/dist
+  - source: /dist
     destination: //var/www/html/user-manager

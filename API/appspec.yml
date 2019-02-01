@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: /API/target/API-0.0.1
+  - source: /target/API-0.0.1
     destination: //opt/tomcat/webapps/user-manager
 hooks:
   BeforeInstall:
-    - location: aws_scripts/cleanup
+    - location: cleanup
       timeout: 300
       runas: root
