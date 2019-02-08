@@ -31,7 +31,6 @@ public class CacheManager {
         @Override
         public void run() {
             try {
-                System.out.println("flushing caches...");
                 ApplicationCache.flushCache();
                 ApplicationPolicyCache.flushCache();
                 ApplicationProfileCache.flushCache();

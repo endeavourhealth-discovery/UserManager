@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>UserModels</artifactId>
-    <version>0.0.15-SNAPSHOT</version>
+    <version>0.0.16-SNAPSHOT</version>
 
     <properties>
         <sonar.projectKey>endeavourhealth-discovery_UserManager::UserModels</sonar.projectKey>
