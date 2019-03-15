@@ -45,13 +45,13 @@
     <dependency>
       <groupId>org.endeavourhealth.userManager</groupId>
       <artifactId>UserModels</artifactId>
-      <version>${user-manager.version}</version>
+      <version>${user-models.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.endeavourhealth.dataSharingManager</groupId>
       <artifactId>Models</artifactId>
-      <version>${data-sharing-manager.version}</version>
+      <version>${data-sharing-model.version}</version>
     </dependency>
 
     <!-- End Common -->
