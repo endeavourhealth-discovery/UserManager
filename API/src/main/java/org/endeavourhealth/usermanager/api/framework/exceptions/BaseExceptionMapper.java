@@ -1,8 +1,8 @@
 package org.endeavourhealth.usermanager.api.framework.exceptions;
 
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonServerException;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.coreui.framework.exceptions.MappedException;
-import org.endeavourhealth.usermanagermodel.models.json.JsonServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

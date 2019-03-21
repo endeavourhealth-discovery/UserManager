@@ -8,14 +8,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplication;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.usermanager.api.DAL.ApplicationDAL;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.caching.*;
-import org.endeavourhealth.usermanagermodel.models.database.ApplicationEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,13 @@ public class ApplicationEndpoint extends AbstractEndpoint {
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "application(s)");
 
-        return getAllApplications();
+        List<ApplicationEntity> applications = new ApplicationDAL().getAllApplications();
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(applications)
+                .build();
 
     }
 
@@ -69,7 +76,13 @@ public class ApplicationEndpoint extends AbstractEndpoint {
                 "save application",
                 "application", application);
 
-        return saveApplication(application, userRoleId);
+        String newId = new ApplicationDAL().saveApplication(application, userRoleId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(newId)
+                .build();
     }
 
     @DELETE
@@ -87,7 +100,9 @@ public class ApplicationEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "User", "applicationId", applicationId, "userRoleId", userRoleId);
 
-        deleteApplication(applicationId, userRoleId);
+        new ApplicationDAL().deleteApplication(applicationId, userRoleId);
+
+        clearLogbackMarkers();
 
         return Response
                 .ok()
@@ -118,39 +133,7 @@ public class ApplicationEndpoint extends AbstractEndpoint {
         OrganisationCache.flushCache();
         ProjectCache.flushCache();
         RegionCache.flushCache();
-        RoleTypeCache.flushCache();
         UserCache.flushCache();
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response getAllApplications() throws Exception {
-        List<ApplicationEntity> applications = ApplicationEntity.getAllApplications();
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(applications)
-                .build();
-    }
-
-    private Response saveApplication(JsonApplication application, String userRoleId) throws Exception {
-
-        String newId = ApplicationEntity.saveApplication(application, userRoleId);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(newId)
-                .build();
-    }
-
-    private Response deleteApplication(String applicationId, String userRoleId) throws Exception {
-
-        ApplicationEntity.deleteApplication(applicationId, userRoleId);
 
         clearLogbackMarkers();
         return Response

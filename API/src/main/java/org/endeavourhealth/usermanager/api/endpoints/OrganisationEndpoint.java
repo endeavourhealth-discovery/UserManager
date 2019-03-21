@@ -7,12 +7,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityOrganisationDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityProjectDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +74,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     private Response searchOrganisations(String searchData, UUID userId) throws Exception {
 
-        List<OrganisationEntity> organisations = OrganisationEntity.searchOrganisations(searchData, false,
+        List<OrganisationEntity> organisations = new SecurityOrganisationDAL().searchOrganisations(searchData, false,
                 (byte)0, 1, 50, "name", false, userId);
 
         clearLogbackMarkers();
@@ -84,7 +86,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     private Response getProjectsForOrganisation(String organisationId) throws Exception {
 
-        List<ProjectEntity> projects = ProjectEntity.getProjectsForOrganisation(organisationId);
+        List<ProjectEntity> projects = new SecurityProjectDAL().getProjectsForOrganisation(organisationId);
 
         clearLogbackMarkers();
         return Response

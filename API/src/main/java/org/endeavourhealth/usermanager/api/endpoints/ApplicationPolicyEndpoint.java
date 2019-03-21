@@ -8,13 +8,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicy;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.usermanager.api.DAL.ApplicationPolicyDAL;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,13 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "application policy(s)");
 
-        return getAllApplicationPolicies();
+        List<ApplicationPolicyEntity> applicationPolicies = ApplicationPolicyCache.getAllApplicationPolicies();
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(applicationPolicies)
+                .build();
 
     }
 
@@ -68,7 +76,12 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
                 "Role Type",
                 "roleType", applicationPolicy);
 
-        return saveApplicationPolicy(applicationPolicy, userRoleId);
+        new ApplicationPolicyDAL().saveApplicationPolicy(applicationPolicy, userRoleId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
     }
 
     @DELETE
@@ -86,36 +99,7 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "User", "applicationId", applicationPolicyId, "userRoleId", userRoleId);
 
-        deleteApplicationPolicy(applicationPolicyId, userRoleId);
-
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response getAllApplicationPolicies() throws Exception {
-        List<ApplicationPolicyEntity> applicationPolicies = ApplicationPolicyEntity.getAllApplicationPolicies();
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(applicationPolicies)
-                .build();
-    }
-
-    private Response saveApplicationPolicy(JsonApplicationPolicy applicationPolicy, String userInRoleId) throws Exception {
-
-        ApplicationPolicyEntity.saveApplicationPolicy(applicationPolicy, userInRoleId);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response deleteApplicationPolicy(String applicationPolicyId, String userRoleId) throws Exception {
-
-        ApplicationPolicyEntity.deleteApplicationPolicy(applicationPolicyId, userRoleId);
+        new ApplicationPolicyDAL().deleteApplicationPolicy(applicationPolicyId, userRoleId);
 
         clearLogbackMarkers();
         return Response

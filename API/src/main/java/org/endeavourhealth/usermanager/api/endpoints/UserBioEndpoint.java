@@ -13,18 +13,21 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.cache.ObjectMapperPool;
 import org.endeavourhealth.common.security.SecurityUtils;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataSharingAgreementEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.MasterMappingEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataSharingAgreementCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserAccessProfile;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanagermodel.models.database.DataSharingAgreementEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.MasterMappingEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
-import org.endeavourhealth.usermanagermodel.models.json.JsonUserAccessProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +69,7 @@ public class UserBioEndpoint extends AbstractEndpoint {
     private Response getAccessProfile(String roleTypeId, String organisationId) throws Exception {
 
         List<JsonUserAccessProfile> userProfiles = new ArrayList<>();
-        List<JsonApplicationPolicyAttribute> roleProfiles = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(roleTypeId);
+        List<JsonApplicationPolicyAttribute> roleProfiles = ApplicationPolicyCache.getApplicationPolicyAttributes(roleTypeId);
 
         for (JsonApplicationPolicyAttribute profile : roleProfiles) {
             JsonUserAccessProfile applicationProfile = userProfiles.stream().filter(app -> app.getApplicationId().equals(profile.getApplicationId())).findFirst().orElse(new JsonUserAccessProfile());
@@ -149,17 +152,17 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode checkOrgCanAccessSharingAgreement(String agreementId, String organisationId) throws Exception {
-        List<String> publisherUuids = MasterMappingEntity.getChildMappings(agreementId, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
+        List<String> publisherUuids = new SecurityMasterMappingDAL().getChildMappings(agreementId, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
 
         List<OrganisationEntity> ret = new ArrayList<>();
 
         if (publisherUuids.size() > 0) {
-            ret = OrganisationEntity.getOrganisationsFromList(publisherUuids);
+            ret = OrganisationCache.getOrganisationDetails(publisherUuids);
 
             OrganisationEntity matchingOrg = ret.stream().filter(org -> org.getUuid().equals(organisationId)).findFirst().orElse(null);
             if (matchingOrg != null) {
 
-                DataSharingAgreementEntity dsa = DataSharingAgreementEntity.getDSA(agreementId);
+                DataSharingAgreementEntity dsa = DataSharingAgreementCache.getDSADetails(agreementId);
 
                 return getOrganisationsForSharingAgreement(dsa);
             }
@@ -169,11 +172,11 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode getSharingAgreementsForOrganisationLevel(JsonNode profileTreeNode, String organisationId) throws Exception {
-        List<String> dsaUuids = MasterMappingEntity.getParentMappings(organisationId, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
+        List<String> dsaUuids = new SecurityMasterMappingDAL().getParentMappings(organisationId, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
         List<DataSharingAgreementEntity> ret = new ArrayList<>();
 
         if (dsaUuids.size() > 0) {
-            ret = DataSharingAgreementEntity.getDSAsFromList(dsaUuids);
+            ret = DataSharingAgreementCache.getDSADetails(dsaUuids);
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -191,12 +194,12 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode getOrganisationsForSharingAgreement(DataSharingAgreementEntity dsa) throws Exception {
-        List<String> publisherUuids = MasterMappingEntity.getChildMappings(dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
+        List<String> publisherUuids = new SecurityMasterMappingDAL().getChildMappings(dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
 
         List<OrganisationEntity> ret = new ArrayList<>();
 
         if (publisherUuids.size() > 0)
-            ret = OrganisationEntity.getOrganisationsFromList(publisherUuids);
+            ret = OrganisationCache.getOrganisationDetails(publisherUuids);
 
         ObjectMapper mapper = new ObjectMapper();
 

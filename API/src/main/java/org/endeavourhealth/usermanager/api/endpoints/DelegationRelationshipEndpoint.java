@@ -9,17 +9,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegationRelationship;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonOrganisationDelegation;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
-import org.endeavourhealth.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.usermanager.api.DAL.DelegationRelationshipDAL;
+import org.endeavourhealth.usermanager.api.logic.DelegationRelationshipLogic;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.usermanagermodel.models.database.DelegationEntity;
-import org.endeavourhealth.usermanagermodel.models.database.DelegationRelationshipEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonDelegationRelationship;
-import org.endeavourhealth.usermanagermodel.models.json.JsonOrganisationDelegation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Path("/delegationRelationship")
 @Metrics(registry = "UserManagerRegistry")
@@ -55,8 +53,13 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 "Organisation(s)",
                 "delegationId", delegationId);
 
-        return getDelegationRelationships(delegationId);
+        List<DelegationRelationshipEntity> delegations = new DelegationRelationshipDAL().getAllRelationshipsForDelegation(delegationId);
 
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(delegations)
+                .build();
     }
 
     @GET
@@ -73,7 +76,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 "Organisation(s)",
                 "delegationId", delegationId);
 
-        return getDelegationTreeData(delegationId);
+        return new DelegationRelationshipLogic().getDelegationTreeData(delegationId);
 
     }
 
@@ -93,7 +96,12 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
                 "Role Type",
                 "roleType", delegationRelationship);
 
-        return saveDelegationRelationship(delegationRelationship, userRoleId);
+        new DelegationRelationshipDAL().saveDelegationRelationship(delegationRelationship, userRoleId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
     }
 
     @GET
@@ -108,175 +116,7 @@ public class DelegationRelationshipEndpoint extends AbstractEndpoint {
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "Organisation(s)");
 
-        return getGodModeOrganisations();
-
-    }
-
-    private Response getDelegationRelationships(String delegationId) throws Exception {
-
-        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getAllRelationshipsForDelegation(delegationId);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(delegations)
-                .build();
-    }
-
-    private Response getDelegationTreeData(String delegationId) throws Exception {
-
-        List<DelegationRelationshipEntity> delegations = DelegationRelationshipEntity.getAllRelationshipsForDelegation(delegationId);
-
-        JsonOrganisationDelegation organisationDelegation = null;
-
-        if (delegations.isEmpty()) {
-            organisationDelegation = processEmptyDelegation(delegationId);
-        } else {
-            organisationDelegation = processDelegationOrganisations(delegations);
-        }
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(organisationDelegation)
-                .build();
-    }
-
-    private JsonOrganisationDelegation processEmptyDelegation(String delegationId) throws Exception {
-        String rootOrganisation = DelegationEntity.getRootOrganisation(delegationId);
-
-        OrganisationEntity organisation = OrganisationCache.getOrganisationDetails(rootOrganisation);
-
-        if (organisation != null) {
-            JsonOrganisationDelegation orgDelegation = new JsonOrganisationDelegation();
-            orgDelegation.setUuid(organisation.getUuid());
-            orgDelegation.setName(organisation.getName() + "(" + organisation.getOdsCode() + ")");
-            orgDelegation.setCreateSuperUsers(false);
-            orgDelegation.setCreateUsers(false);
-            orgDelegation.setChildren(new ArrayList<>());
-
-            return orgDelegation;
-        }
-
-        return null;
-    }
-
-    private JsonOrganisationDelegation processDelegationOrganisations(List<DelegationRelationshipEntity> delegations) throws Exception {
-
-        JsonOrganisationDelegation delegation = new JsonOrganisationDelegation();
-
-        if (delegations.size() > 0) {
-            List<String> organisations = delegations.stream()
-                    .map(DelegationRelationshipEntity::getParentUuid)
-                    .collect(Collectors.toList());
-
-            delegations.stream()
-                    .map(DelegationRelationshipEntity::getChildUuid)
-                    .forEachOrdered(organisations::add);
-
-            if (organisations.size() > 0) {
-                List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(organisations);
-
-                return replaceUuidsWithOrganisation(delegations, orgList);
-            }
-        }
-
-        return delegation;
-    }
-
-    private JsonOrganisationDelegation replaceUuidsWithOrganisation(List<DelegationRelationshipEntity> delegations,
-                                                                          List<OrganisationEntity> organisations) throws Exception {
-        delegationMap.clear();
-
-        JsonOrganisationDelegation orgDelegation = new JsonOrganisationDelegation();
-
-
-        for (DelegationRelationshipEntity delegation : delegations) {
-
-            OrganisationEntity parentOrg = organisations.stream().filter(org -> org.getUuid().equals(delegation.getParentUuid())).findFirst().orElse(null);
-
-            OrganisationEntity childOrg = organisations.stream().filter(org -> org.getUuid().equals(delegation.getChildUuid())).findFirst().orElse(null);
-
-            JsonOrganisationDelegation parentOrgDelegation = delegationMap.get(delegation.getParentUuid());
-
-            JsonOrganisationDelegation childOrgDelegation = delegationMap.get(delegation.getChildUuid());
-
-            if (parentOrgDelegation == null) {
-                parentOrgDelegation = new JsonOrganisationDelegation();
-                if (parentOrg != null) {
-                    parentOrgDelegation.setUuid(parentOrg.getUuid());
-                    parentOrgDelegation.setName(parentOrg.getName() + "(" + parentOrg.getOdsCode() + ")");
-                    delegationMap.put(parentOrg.getUuid(), parentOrgDelegation);
-                }
-            }
-
-            if (childOrgDelegation == null) {
-                childOrgDelegation = new JsonOrganisationDelegation();
-                if (childOrg != null) {
-                    childOrgDelegation.setUuid(childOrg.getUuid());
-                    childOrgDelegation.setName(childOrg.getName() + "(" + childOrg.getOdsCode() + ")");
-                    childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte) 0 ? false : true);
-                    childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte) 0 ? false : true);
-                    delegationMap.put(childOrg.getUuid(), childOrgDelegation);
-                }
-            } else { // If previously added as a parent...add the options here
-                childOrgDelegation.setCreateSuperUsers(delegation.getCreateSuperUsers() == (byte)0 ? false : true);
-                childOrgDelegation.setCreateUsers(delegation.getCreateUsers() == (byte)0 ? false : true);
-            }
-        }
-
-        orgDelegation = delegationMap.get(DelegationEntity.getRootOrganisation(delegations.get(0).getDelegation()));
-
-        addChildren(orgDelegation, delegations, orgDelegation.getUuid());
-
-        return orgDelegation;
-    }
-
-    private void addChildren(JsonOrganisationDelegation delegation, List<DelegationRelationshipEntity> relationships, String parentUuid) throws Exception {
-        List<DelegationRelationshipEntity> parents = relationships.stream().filter(rel -> rel.getParentUuid().equals(parentUuid)).collect(Collectors.toList());
-        for (DelegationRelationshipEntity parent : parents) {
-            delegation.addChild(delegationMap.get(parent.getChildUuid()));
-            addChildren(delegationMap.get(parent.getChildUuid()), relationships, parent.getChildUuid());
-        }
-    }
-
-    private Response saveDelegationRelationship(JsonDelegationRelationship delegationRelationship, String userRoleId) throws Exception {
-
-        DelegationRelationshipEntity.saveDelegationRelationship(delegationRelationship, userRoleId);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response getGodModeOrganisations() throws Exception {
-        List<DelegationRelationshipEntity> relationships = DelegationRelationshipEntity.getAllRelationshipsOrganisationsForGodMode();
-
-        List<OrganisationEntity> orgList = new ArrayList<>();
-        if (relationships.size() > 0) {
-            List<String> organisations = relationships.stream()
-                    .map(DelegationRelationshipEntity::getParentUuid)
-                    .collect(Collectors.toList());
-
-            relationships.stream()
-                    .map(DelegationRelationshipEntity::getChildUuid)
-                    .forEachOrdered(organisations::add);
-
-            organisations.add("439e9f06-d54c-3eb6-b800-010863bf1399");
-
-            organisations = organisations.stream().distinct().collect(Collectors.toList());
-
-            if (organisations.size() > 0) {
-                orgList = OrganisationCache.getOrganisationDetails(organisations);
-                orgList.sort(Comparator.comparing(OrganisationEntity::getName));
-            }
-        }
-
-        return Response
-                .ok()
-                .entity(orgList)
-                .build();
+        return new DelegationRelationshipLogic().getGodModeOrganisations();
 
     }
 

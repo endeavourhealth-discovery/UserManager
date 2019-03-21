@@ -8,13 +8,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
+import org.endeavourhealth.usermanager.api.DAL.ApplicationPolicyAttributeDAL;
 import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
-import org.endeavourhealth.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
-import org.endeavourhealth.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,13 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "application(s)");
 
-        return getRoleTypeAccessProfiles(applicationPolicyId);
+        List<JsonApplicationPolicyAttribute> profiles = ApplicationPolicyCache.getApplicationPolicyAttributes(applicationPolicyId);
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(profiles)
+                .build();
 
     }
 
@@ -69,7 +76,14 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
                 "save application",
                 "roleTypeProfiles", roleTypeProfiles);
 
-        return saveRoleTypeAccessProfiles(roleTypeProfiles, userRoleId);
+        for (JsonApplicationPolicyAttribute roleProfile : roleTypeProfiles) {
+            new ApplicationPolicyAttributeDAL().saveRoleAccessProfile(roleProfile, userRoleId);
+        }
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .build();
     }
 
     @DELETE
@@ -87,38 +101,7 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
                 "User", "roleTypeProfileId", roleTypeProfileId, "userRoleId", userRoleId);
 
-        deleteRoleTypeAccessProfile(roleTypeProfileId, userRoleId);
-
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response getRoleTypeAccessProfiles(String applicationPolicyId) throws Exception {
-        List<JsonApplicationPolicyAttribute> profiles = ApplicationPolicyAttributeEntity.getApplicationPolicyAttributes(applicationPolicyId);
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .entity(profiles)
-                .build();
-    }
-
-    private Response saveRoleTypeAccessProfiles(List<JsonApplicationPolicyAttribute> roleTypeProfiles, String userRoleId) throws Exception {
-
-        for (JsonApplicationPolicyAttribute roleProfile : roleTypeProfiles) {
-            ApplicationPolicyAttributeEntity.saveRoleAccessProfile(roleProfile, userRoleId);
-        }
-
-        clearLogbackMarkers();
-        return Response
-                .ok()
-                .build();
-    }
-
-    private Response deleteRoleTypeAccessProfile(String roleTypeProfileId, String userRoleId) throws Exception {
-
-        ApplicationPolicyAttributeEntity.deleteRoleAccessProfile(roleTypeProfileId, userRoleId);
+        new ApplicationPolicyAttributeDAL().deleteRoleAccessProfile(roleTypeProfileId, userRoleId);
 
         clearLogbackMarkers();
         return Response
