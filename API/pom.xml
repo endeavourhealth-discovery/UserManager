@@ -23,38 +23,32 @@
     <dependency>
       <groupId>org.endeavourhealth.common</groupId>
       <artifactId>api</artifactId>
-      <version>${eds-api.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.endeavourhealth.common</groupId>
       <artifactId>cache</artifactId>
-      <version>${eds-cache.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.endeavourhealth.common</groupId>
       <artifactId>security</artifactId>
-      <version>${eds-security.version}</version>
     </dependency>
 
     <!-- Java servlet -->
     <dependency>
       <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>${servlet.version}</version>
+      <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-servlet</artifactId>
-      <version>${jersey.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
-      <version>${jersey.version}</version>
     </dependency>
     <!-- End Java servlet -->
 
@@ -62,7 +56,6 @@
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-core</artifactId>
-      <version>${keycloak.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- End Keycloak -->
@@ -70,93 +63,67 @@
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-models</artifactId>
-      <version>${swagger.version}</version>
     </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-annotations</artifactId>
-      <version>${swagger.version}</version>
     </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-jaxrs</artifactId>
-      <version>${swagger.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-core</artifactId>
-      <version>${aws-jdk.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>${javax-ws-rs.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>jsr311-api</artifactId>
-      <version>${javax-jsr.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-base</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>
 
     <!-- DropWizard -->
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-core</artifactId>
-      <version>${dropwizard-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-servlets</artifactId>
-      <version>${dropwizard-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-servlet</artifactId>
-      <version>${dropwizard-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-annotation</artifactId>
-      <version>${dropwizard-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>io.dropwizard.metrics</groupId>
       <artifactId>metrics-jvm</artifactId>
-      <version>${dropwizard-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>io.astefanutti.metrics.aspectj</groupId>
       <artifactId>metrics-aspectj</artifactId>
-      <version>${aspectj-metrics.version}</version>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectj.version}</version>
     </dependency>
     <!-- End DropWizard -->
   </dependencies>
