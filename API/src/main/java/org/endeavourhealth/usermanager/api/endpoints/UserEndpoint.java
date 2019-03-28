@@ -62,7 +62,26 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         LOG.trace("getUsers");
 
-        return new UserLogic().getUsers(organisationId, searchData);
+        return new UserLogic().getUsers(organisationId, searchData, false);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.machineUsers")
+    @Path("/machineUsers")
+    @ApiOperation(value = "Returns a list of all machine users")
+    public Response getMachineUsers(@Context SecurityContext sc,
+                             @ApiParam(value = "Organisation Id") @QueryParam("organisationId") String organisationId,
+                             @ApiParam(value = "Optional search term") @QueryParam("searchData") String searchData) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "Users", "Search Data", searchData, "Organisation Id", organisationId);
+
+        LOG.trace("getUsers");
+
+        return new UserLogic().getUsers(organisationId, searchData, true);
     }
 
     @POST
@@ -132,7 +151,27 @@ public final class UserEndpoint extends AbstractEndpoint {
 
         AbstractEndpoint.clearLogbackMarkers();
 
-        return new UserLogic().getUser(sc, userId);
+        return new UserLogic().getUser(sc, userId, false);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getMachineUser")
+    @Path("/users/machineUser")
+    @RequiresAdmin
+    @ApiOperation(value = "Gets the details for a machine user")
+    public Response getMachineUser(@Context SecurityContext sc,
+                            @ApiParam(value = "User id to be retrieved") @QueryParam("userId") String userId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "User", "User Id", userId);
+
+
+        AbstractEndpoint.clearLogbackMarkers();
+
+        return new UserLogic().getUser(sc, userId, true);
     }
 
     @GET

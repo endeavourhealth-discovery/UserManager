@@ -14,12 +14,16 @@ export class UserService {
 
   constructor(private http: Http) { }
 
-  getUsers(organisationId: string, searchData: string = null): Observable<User[]> {
+  getUsers(organisationId: string, searchData: string = null, machineUsers : boolean = false): Observable<User[]> {
     const vm = this;
+    var url = 'api/user/users';
+    if (machineUsers) {
+      url = 'api/user/machineUsers'
+    }
     let params = new URLSearchParams();
     params.set('organisationId', organisationId);
     params.set('searchData', searchData);
-    return vm.http.get('api/user/users', {search: params})
+    return vm.http.get(url, {search: params})
       .map((response) => response.json());
   }
 

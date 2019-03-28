@@ -36,6 +36,7 @@ export class UserComponent implements OnInit {
   paramOrganisation: string;
   searchTerm: string;
   selectedUserCreatedDate: string;
+  machineUsers = false;
 
   public activeProject: UserProject;
   admin = false;
@@ -93,7 +94,8 @@ export class UserComponent implements OnInit {
   getUsers(){
     let vm = this;
     vm.userList = null;
-    vm.userService.getUsers(vm.selectedOrg.uuid)
+    vm.filteredUserList = null;
+    vm.userService.getUsers(vm.selectedOrg.uuid, null, vm.machineUsers)
       .subscribe(
         (result) => {
           vm.userList = result;
@@ -275,5 +277,17 @@ export class UserComponent implements OnInit {
         },
         (error) => vm.log.error('Error loading user projects', error, 'Error')
       );
+  }
+
+  viewMachineUsers() {
+    const vm = this;
+    vm.machineUsers = true;
+    vm.getUsers();
+  }
+
+  viewHumanUsers() {
+    const vm = this;
+    vm.machineUsers = false;
+    vm.getUsers();
   }
 }

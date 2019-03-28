@@ -3,6 +3,7 @@ package org.endeavourhealth.usermanager.api.logic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
@@ -30,7 +31,7 @@ import static org.endeavourhealth.coreui.endpoints.AbstractEndpoint.clearLogback
 
 public class UserLogic {
 
-    public Response getUsers(String organisationId, String searchData) throws Exception {
+    public Response getUsers(String organisationId, String searchData, boolean machineUsers) throws Exception {
 
 
         List<String> usersAtOrg = new ArrayList<>();
@@ -49,14 +50,22 @@ public class UserLogic {
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
 
         if (searchData == null) {
-            users = keycloakClient.realms().users().getUsers("", 0, 100);
+            if (machineUsers) {
+                users = keycloakClient.realms().users().getUsers(ConfigManager.getConfiguration("machine_user_realm"), "", 0, 100);
+            } else {
+                users = keycloakClient.realms().users().getUsers("", 0, 100);
+            }
         } else {
-            users = keycloakClient.realms().users().getUsers(searchData, 0, 100);
+            if (machineUsers) {
+                users = keycloakClient.realms().users().getUsers(ConfigManager.getConfiguration("machine_user_realm"), searchData, 0, 100);
+            } else {
+                users = keycloakClient.realms().users().getUsers(searchData, 0, 100);
+            }
         }
 
         //Add as Json
         for (UserRepresentation user : users) {
-            if (searchData != null || usersAtOrg.contains(user.getId())) {
+            if (searchData != null || usersAtOrg.contains(user.getId()) || machineUsers) {
                 userList.add(new JsonUser(user));
             }
         }
@@ -203,7 +212,7 @@ public class UserLogic {
                 .build();
     }
 
-    public Response getUser(SecurityContext sc, String userId) throws Exception {
+    public Response getUser(SecurityContext sc, String userId, boolean machineUser) throws Exception {
 
         UUID currentUserUuid = getCurrentUserId(sc);
         if (!currentUserUuid.toString().equalsIgnoreCase(userId) )
@@ -213,7 +222,12 @@ public class UserLogic {
 
         //First up, get the user account representation
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
-        UserRepresentation userRep = keycloakClient.realms().users().getUser(userId);
+        UserRepresentation userRep = null;
+        if (machineUser) {
+            userRep = keycloakClient.realms().users().getUser(ConfigManager.getConfiguration("machine_user_realm"), userId);
+        } else {
+            userRep = keycloakClient.realms().users().getUser(userId);
+        }
 
         JsonUser user = new JsonUser(userRep);
 
