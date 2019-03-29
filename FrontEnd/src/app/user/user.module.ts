@@ -12,6 +12,7 @@ import {ModuleStateService} from 'eds-angular4/dist/common';
 import { UserViewComponent } from './user-view/user-view.component';
 import { UserBioComponent } from './user-bio/user-bio.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import {LinkifyPipe} from "./user-profile/linkify.pipe";
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     UserEditorComponent,
     UserViewComponent,
     UserBioComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    LinkifyPipe
   ],
   entryComponents: [
     UserEditorComponent

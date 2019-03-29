@@ -58,12 +58,12 @@
                       <strong>Project name: </strong> {{project.name}} <br>
                     </div>
                     <div class="card-body">
-                      <strong>Applications: </strong> {{getApplicationAccess(project.applicationPolicyAttributes)}} <br>
-                      <strong>Subscribers: </strong> {{getStringListFromArray(project.subscribers)}}<br>
-                      <strong>Publishers: </strong> {{getStringListFromArray(project.publishers)}}<br>
-                      <strong>Base population: </strong> {{getStringListFromArray(project.basePopulation)}}<br>
-                      <strong>Data set: </strong> {{getStringListFromArray(project.dataSet)}}<br>
-                      <strong>Data sharing agreement: </strong> {{getStringListFromArray(project.dsas)}}
+                      <p><strong>Applications: </strong> {{getApplicationAccess(project.applicationPolicyAttributes)}}</p>
+                      <p [innerHTML]="project.subscribers | linkify: 'organisation':'Subscribers'"></p>
+                      <p [innerHTML]="project.publishers | linkify: 'organisation':'Publishers'"></p>
+                      <p [innerHTML]="project.basePopulation | linkify: 'cohort':'Cohorts'"></p>
+                      <p [innerHTML]="project.dataSet | linkify: 'dataSet':'Data sets'"></p>
+                      <p [innerHTML]="project.dsas | linkify: 'dsa':'Data sharing agreements'"></p>
                     </div>
                   </div>
                 </div>
