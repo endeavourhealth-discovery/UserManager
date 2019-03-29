@@ -19,7 +19,7 @@ export class LinkifyPipe implements PipeTransform {
 
     var styledText = '<strong>' + title + '</strong>';
     for (let idx in dataArray) {
-      styledText += '<a href="' + url + '/data-sharing-manager/#/' + type + '/' + idx + '/edit">' + dataArray[idx] + '</a>,';
+      styledText += '<a target="_blank" href="' + url + '/data-sharing-manager/#/' + type + '/' + idx + '/edit">' + dataArray[idx] + '</a>,';
     }
 
     return styledText.substring(0, styledText.length -1);
