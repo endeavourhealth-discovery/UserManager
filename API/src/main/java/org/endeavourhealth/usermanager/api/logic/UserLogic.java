@@ -88,14 +88,14 @@ public class UserLogic {
         //This prevents security vunerability when an authenticated user could execute API outside of app without role
         if (editModeb){
             //get current authenticated user id and check for user editing role (currently eds_superuser for v1.1)  //TODO: v2 roles
-            UUID currentUserUuid = getCurrentUserId(sc);
+            /*UUID currentUserUuid = getCurrentUserId(sc);
             boolean superUser = hasRole(sc, "eds_superuser");
 
             //can only update other users with eds_superuser role
             if (!currentUserUuid.toString().equalsIgnoreCase(user.getUuid().toString()) && !superUser)
             {
                 throw new NotAllowedException("Save User not allowed with UserId mismatch");
-            }
+            }*/
         }
 
         //Set the basic user profile info
