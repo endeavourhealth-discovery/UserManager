@@ -42,7 +42,6 @@ export class ConfigurationService {
 
   saveApplication(application : Application, userRoleId: string): Observable<any> {
     const vm = this;
-    console.log(application);
     let params = new URLSearchParams();
     params.set('userRoleId', userRoleId);
     return vm.http.post('api/application/saveApplication', application, {search: params})

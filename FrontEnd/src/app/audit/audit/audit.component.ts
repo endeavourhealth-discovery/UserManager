@@ -59,7 +59,6 @@ export class AuditComponent implements OnInit {
 
   roleChanged() {
     const vm = this;
-    console.log(vm.activeProject.applicationPolicyAttributes);
     if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
       vm.admin = true;
       vm.superUser = true;
@@ -97,7 +96,6 @@ export class AuditComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
-    console.log(vm.superUser);
     vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeProject.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
@@ -119,7 +117,6 @@ export class AuditComponent implements OnInit {
       orgId = vm.selectedOrg.uuid;
       usrId = vm.selectedUser.uuid;
     }
-    console.log(vm.superUser);
     vm.auditService.getAuditCount(vm.superUser ? null : vm.activeProject.organisationId, orgId, usrId)
       .subscribe(
         (result) => {
@@ -141,16 +138,11 @@ export class AuditComponent implements OnInit {
   pageChanged($event) {
     const vm = this;
     vm.pageNumber = $event;
-    console.log(vm.pageNumber);
     vm.getAudit();
   }
 
   onDateSelect($event) {
     const vm = this;
-    console.log($event);
-    console.log(typeof vm.dateTo);
-    console.log(vm.dateFrom);
-    console.log();
   }
 
   getDelegatedOrganisations(){

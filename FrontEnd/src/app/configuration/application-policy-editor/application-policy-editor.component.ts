@@ -58,7 +58,6 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     }
     vm.resultRole = Object.assign({}, s.role);
     vm.editMode = s.editMode;
-    console.log(vm.resultRole);
 
     if (vm.editMode) {
       vm.getRoleTypeProfiles();
@@ -90,12 +89,10 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   getRoleTypeProfiles(){
     let vm = this;
-    console.log(vm.resultRole.id);
     vm.configurationService.getRoleTypeAccessProfiles(vm.resultRole.id)
       .subscribe(
         (result) => {
           vm.roleProfiles = result;
-          console.log(result);
         },
         (error) => vm.log.error('Loading role type access profiles failed. Please try again', error, 'Error')
       );
@@ -123,7 +120,6 @@ export class ApplicationPolicyEditorComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.appProfiles = result;
-          console.log(result);
           vm.checkAvailableAppProfiles();
         },
         (error) => vm.log.error('Loading application profiles failed. Please try again', error, 'Error')
@@ -195,7 +191,6 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   save(close: boolean) {
     const vm = this;
-    console.log(vm.resultRole);
     vm.configurationService.saveApplicationPolicy(vm.resultRole, vm.activeProject.id)
       .subscribe(
         (response) => {

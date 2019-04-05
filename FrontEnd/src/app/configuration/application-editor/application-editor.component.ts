@@ -143,7 +143,6 @@ export class ApplicationEditorComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.applicationProfiles = result;
-          console.log(result);
         },
         (error) => vm.log.error('Loading application profiles failed. Please try again', error, 'Error')
       );

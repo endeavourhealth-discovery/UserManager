@@ -39,7 +39,6 @@ export class UserService {
   saveUserProjects(userRoles: UserProject[], userRoleId: string): Observable<string> {
     const vm = this;
     let params = new URLSearchParams();
-    console.log(userRoles);
     params.set('userRoleId', userRoleId);
     return vm.http.post('api/user/users/saveProjects', userRoles, {search: params})
       .map((response) => response.text());

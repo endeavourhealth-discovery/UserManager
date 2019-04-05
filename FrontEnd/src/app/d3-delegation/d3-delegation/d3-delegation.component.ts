@@ -75,8 +75,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
       .subscribe(
         (result) => {
           vm.delegationRelationships = result;
-          vm.getDelegationDataD3(delegationId)
-          console.log(result);
+          vm.getDelegationDataD3(delegationId);
         },
         (error) => vm.log.error('Error loading delegations', error, 'Error')
       );
@@ -106,7 +105,6 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
       vm.selectedIsRoot = true;
     }
     vm.selectedRelationship = result;
-    console.log(vm.selectedRelationship);
   }
 
   addChildOrganisation() {

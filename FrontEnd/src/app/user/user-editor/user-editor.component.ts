@@ -489,7 +489,6 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       .subscribe(
         (result) => {
           vm.organisationProjects = result;
-          console.log(result);
           vm.checkAvailableProjects()
         },
         (error) => vm.log.error('Error loading organisation projects', error, 'Load organisation projects')

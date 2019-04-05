@@ -22,7 +22,6 @@ export class AuditDetailComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.displayItems = vm.getDetailsToShow(vm.audit.itemType);
-    console.log(vm.displayItems);
     vm.getDetails();
   }
 
@@ -49,12 +48,10 @@ export class AuditDetailComponent implements OnInit {
   getDetails() {
     let vm = this;
 
-    console.log(vm.audit);
     vm.auditService.getAuditDetails(vm.audit.id)
       .subscribe(
         (result) => {
           vm.auditDetails = result;
-          console.log(result);
         },
         (error) => {
           vm.log.error('Error loading audit details', error, 'Error');

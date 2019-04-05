@@ -83,7 +83,6 @@ export class UserProfileComponent implements OnInit {
         (result) => {
           vm.userProfile = result;
           vm.profileLoadingComplete = true;
-          console.log(result);
         },
         (error) => vm.log.error('Error loading user profiles', error, 'Error')
       );

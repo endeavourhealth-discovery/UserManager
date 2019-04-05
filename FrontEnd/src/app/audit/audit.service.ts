@@ -27,7 +27,6 @@ export class AuditService {
       params.set('userId', userId);
     }
     if (dateFrom != null) {
-      console.log(dateFrom.toString());
       params.set('dateFrom', this.datePipe.transform(dateFrom,"yyyy-MM-dd HH:mm:ss"));
     }
     if (dateTo!= null) {
@@ -42,7 +41,6 @@ export class AuditService {
     const vm = this;
     let params = new URLSearchParams();
 
-    console.log(userOrganisationId);
     if (userOrganisationId != null) {
       params.set('userOrganisationId', userOrganisationId);
     }

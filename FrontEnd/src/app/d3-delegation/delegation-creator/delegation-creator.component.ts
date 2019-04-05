@@ -56,12 +56,10 @@ export class DelegationCreatorComponent implements OnInit {
   ok() {
     this.resultData.rootOrganisation = this.selectedOrg.uuid;
     this.activeModal.close(this.resultData);
-    console.log('OK Pressed');
   }
 
   cancel() {
     this.activeModal.dismiss('cancel');
-    console.log('Cancel Pressed');
   }
 
 }

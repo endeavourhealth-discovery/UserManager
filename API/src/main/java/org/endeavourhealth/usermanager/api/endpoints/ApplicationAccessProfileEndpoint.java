@@ -52,7 +52,7 @@ public class ApplicationAccessProfileEndpoint extends AbstractEndpoint {
         userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "application(s)");
 
-        List<ApplicationAccessProfileEntity> applications = new ApplicationAccessProfileDAL().getAllApplicationProfiles();
+        List<ApplicationAccessProfileEntity> applications = new ApplicationAccessProfileDAL().getApplicationProfiles(applicationId);
 
         clearLogbackMarkers();
         return Response

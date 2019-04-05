@@ -109,7 +109,6 @@ export class UserBioComponent implements OnInit {
       .subscribe(
         (result) => {
           vm.accessProfiles = result;
-          console.log(result);
         },
         (error) => vm.log.error('Error loading access profiles', error, 'Error')
       );
@@ -136,7 +135,6 @@ export class UserBioComponent implements OnInit {
     vm.selectedProfile = profile;
     vm.selectedProfileTree = JSON.parse(profile.profileTree);
     vm.selectedSharingAgreement = null;
-    console.log(vm.selectedProfileTree);
   }
 
   selectAgreement(agreement: any) {
