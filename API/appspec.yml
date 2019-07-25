@@ -8,3 +8,7 @@ hooks:
     - location: cleanup
       timeout: 300
       runas: root
+  AfterInstall:
+    - location: permissions
+      timeout: 300
+      runas: root

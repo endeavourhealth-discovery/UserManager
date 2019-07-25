@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /dist
-    destination: //var/www/html/user-manager
+    destination: //usr/share/nginx/html/user-manager
 hooks:
   BeforeInstall:
     - location: cleanup
