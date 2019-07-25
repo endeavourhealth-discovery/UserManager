@@ -2,6 +2,7 @@ package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
 import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
@@ -32,6 +33,8 @@ public class UserProjectDAL {
         entityManager.getTransaction().commit();
 
         entityManager.close();
+
+        UserCache.clearUserCache(userProject.getUserId());
 
         if (userProject.isDeleted()) {
             new SecurityAuditDAL().addToAuditTrail(userProjectId,

@@ -169,6 +169,8 @@ public class UserLogic {
             auditUserAdd(userRep, userRoleId);
         }
 
+        UserCache.clearUserCache(userId);
+
         clearLogbackMarkers();
 
         return Response
@@ -205,6 +207,8 @@ public class UserLogic {
         boolean success = keycloakClient.realms().users().deleteUser(userId);
 
         auditUserDelete(deletedUser, userRoleId);
+
+        UserCache.clearUserCache(userId);
 
         return Response
                 .ok()

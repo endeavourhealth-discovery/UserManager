@@ -108,6 +108,8 @@ public class ApplicationAccessProfileDAL {
 
         entityManager.close();
 
+        ApplicationProfileCache.clearApplicationProfileCache(applicationProfile.getId());
+
     }
 
     public void setExistingApplicationProfileToDeleted(String applicationProfileId) throws Exception {
@@ -124,6 +126,9 @@ public class ApplicationAccessProfileDAL {
 
             query.executeUpdate();
             entityManager.getTransaction().commit();
+
+
+            ApplicationProfileCache.clearApplicationProfileCache(applicationProfileId);
 
 
         } finally {

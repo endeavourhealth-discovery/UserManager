@@ -60,6 +60,8 @@ public class ApplicationPolicyDAL {
         entityManager.getTransaction().commit();
 
         entityManager.close();
+
+        ApplicationPolicyCache.clearApplicationPolicyCache(roleType.getId());
     }
 
     public void deleteApplicationPolicy(String applicationPolicyId, String userRoleId) throws Exception {

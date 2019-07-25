@@ -40,6 +40,8 @@ public class UserRegionDAL {
 
         entityManager.close();
 
+        UserCache.clearUserCache(userRegion.getUserId());
+
         String auditJson = getAuditJsonForRegionChange(oldRegion, new UserRegionEntity(userRegion));
 
         new SecurityAuditDAL().addToAuditTrail(userProjectId,

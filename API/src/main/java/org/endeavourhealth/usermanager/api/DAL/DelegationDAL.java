@@ -104,6 +104,8 @@ public class DelegationDAL {
 
         entityManager.close();
 
+        DelegationCache.clearDelegationCache(delegation.getUuid());
+
         if (delegation.isDeleted()) {
             new SecurityAuditDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.DELEGATION, delegation.getUuid(), null, null);

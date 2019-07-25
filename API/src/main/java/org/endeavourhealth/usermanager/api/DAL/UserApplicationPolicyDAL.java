@@ -39,6 +39,8 @@ public class UserApplicationPolicyDAL {
 
         entityManager.close();
 
+        UserCache.clearUserCache(userApplicationPolicy.getUserId());
+
         String auditJson = getAuditJsonForApplicationPolicyChange(oldPolicy, new UserApplicationPolicyEntity(userApplicationPolicy));
 
         new SecurityAuditDAL().addToAuditTrail(userProjectId,

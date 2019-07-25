@@ -88,6 +88,8 @@ public class ApplicationDAL {
 
         entityManager.close();
 
+        ApplicationCache.clearApplicationCache(application.getId());
+
     }
 
     public void setExistingApplicationToDeleted(String applicationId) throws Exception {
@@ -105,6 +107,7 @@ public class ApplicationDAL {
             query.executeUpdate();
             entityManager.getTransaction().commit();
 
+            ApplicationCache.clearApplicationCache(applicationId);
 
         } finally {
             entityManager.close();
