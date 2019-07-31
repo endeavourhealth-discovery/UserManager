@@ -21,18 +21,23 @@ public class UserProjectDAL {
     public void saveUserProject(JsonUserProject userProject, String userProjectId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        entityManager.getTransaction().begin();
-        UserProjectEntity userProjectEntity = new UserProjectEntity();
-        userProjectEntity.setId(userProject.getId());
-        userProjectEntity.setUserId(userProject.getUserId());
-        userProjectEntity.setOrganisationId(userProject.getOrganisationId());
-        userProjectEntity.setProjectId(userProject.getProjectId());
-        userProjectEntity.setIsDeleted(userProject.isDeleted() ? (byte)1 : (byte)0);
-        userProjectEntity.setIsDefault(userProject.isDefault() ? (byte)1 : (byte)0);
-        entityManager.merge(userProjectEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        try {
+            entityManager.getTransaction().begin();
+            UserProjectEntity userProjectEntity = new UserProjectEntity();
+            userProjectEntity.setId(userProject.getId());
+            userProjectEntity.setUserId(userProject.getUserId());
+            userProjectEntity.setOrganisationId(userProject.getOrganisationId());
+            userProjectEntity.setProjectId(userProject.getProjectId());
+            userProjectEntity.setIsDeleted(userProject.isDeleted() ? (byte) 1 : (byte) 0);
+            userProjectEntity.setIsDefault(userProject.isDefault() ? (byte) 1 : (byte) 0);
+            entityManager.merge(userProjectEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         UserCache.clearUserCache(userProject.getUserId());
 
@@ -48,19 +53,21 @@ public class UserProjectDAL {
     public List<UserProjectEntity> getUsersAtOrganisation(String organisationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
-        Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
+            Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("organisationId"), organisationId),
-                cb.equal(rootEntry.get("isDeleted"), (byte)0));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("organisationId"), organisationId),
+                    cb.equal(rootEntry.get("isDeleted"), (byte) 0));
 
-        cq.where(predicate);
-        TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
-        List<UserProjectEntity> ret = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
+            List<UserProjectEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

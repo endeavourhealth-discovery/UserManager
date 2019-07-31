@@ -170,6 +170,7 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       vm.userService.saveUser(vm.resultData, vm.editMode, vm.activeProject.id)
         .subscribe(
           (response) => {
+            response.password = '';  // blank out password on save
             vm.resultData = response;
             vm.saveRegion();
             vm.saveApplicationPolicy();

@@ -23,20 +23,23 @@ public class ApplicationPolicyAttributeDAL {
     public List<ApplicationPolicyAttributeEntity> getAllRoleAccessProfiles() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ApplicationPolicyAttributeEntity> cq = cb.createQuery(ApplicationPolicyAttributeEntity.class);
-        Root<ApplicationPolicyAttributeEntity> rootEntry = cq.from(ApplicationPolicyAttributeEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ApplicationPolicyAttributeEntity> cq = cb.createQuery(ApplicationPolicyAttributeEntity.class);
+            Root<ApplicationPolicyAttributeEntity> rootEntry = cq.from(ApplicationPolicyAttributeEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<ApplicationPolicyAttributeEntity> query = entityManager.createQuery(cq);
-        List<ApplicationPolicyAttributeEntity> ret = query.getResultList();
+            TypedQuery<ApplicationPolicyAttributeEntity> query = entityManager.createQuery(cq);
+            List<ApplicationPolicyAttributeEntity> ret = query.getResultList();
 
-        entityManager.close();
+            return ret;
 
-        return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public String saveRoleAccessProfile(JsonApplicationPolicyAttribute roleAccessProfile, String userRoleId) throws Exception {
@@ -76,17 +79,22 @@ public class ApplicationPolicyAttributeDAL {
     public void saveRoleAccessProfileInDatabase(JsonApplicationPolicyAttribute jsonApplicationPolicyAttribute) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationPolicyAttributeEntity roleAccessEntity = new ApplicationPolicyAttributeEntity();
-        roleAccessEntity.setId(jsonApplicationPolicyAttribute.getId());
-        roleAccessEntity.setApplicationPolicyId(jsonApplicationPolicyAttribute.getApplicationPolicyId());
-        roleAccessEntity.setApplicationAccessProfileId(jsonApplicationPolicyAttribute.getApplicationAccessProfileId());
-        roleAccessEntity.setProfileTree(jsonApplicationPolicyAttribute.getProfileTree());
-        roleAccessEntity.setIsDeleted(jsonApplicationPolicyAttribute.getIsDeleted() ? (byte) 1 : (byte) 0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(roleAccessEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        try {
+            ApplicationPolicyAttributeEntity roleAccessEntity = new ApplicationPolicyAttributeEntity();
+            roleAccessEntity.setId(jsonApplicationPolicyAttribute.getId());
+            roleAccessEntity.setApplicationPolicyId(jsonApplicationPolicyAttribute.getApplicationPolicyId());
+            roleAccessEntity.setApplicationAccessProfileId(jsonApplicationPolicyAttribute.getApplicationAccessProfileId());
+            roleAccessEntity.setProfileTree(jsonApplicationPolicyAttribute.getProfileTree());
+            roleAccessEntity.setIsDeleted(jsonApplicationPolicyAttribute.getIsDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(roleAccessEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
     }
 
@@ -114,11 +122,13 @@ public class ApplicationPolicyAttributeDAL {
     public ApplicationPolicyAttributeEntity getRoleTypeAccessProfile(String profileId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationPolicyAttributeEntity ret = entityManager.find(ApplicationPolicyAttributeEntity.class, profileId);
+        try {
+            ApplicationPolicyAttributeEntity ret = entityManager.find(ApplicationPolicyAttributeEntity.class, profileId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public void deleteRoleAccessProfile(String profileId, String userRoleId) throws Exception {

@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 public class UserApplicationPolicyDAL {
 
     public static void saveUserApplicationPolicyId(JsonUserApplicationPolicy userApplicationPolicy, String userProjectId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
         UserApplicationPolicyEntity oldPolicy = UserCache.getUserApplicationPolicy(userApplicationPolicy.getUserId());
 
@@ -30,14 +29,21 @@ public class UserApplicationPolicyDAL {
             }
         }
 
-        entityManager.getTransaction().begin();
-        UserApplicationPolicyEntity userApplicationPolicyEntity = new UserApplicationPolicyEntity();
-        userApplicationPolicyEntity.setUserId(userApplicationPolicy.getUserId());
-        userApplicationPolicyEntity.setApplicationPolicyId(userApplicationPolicy.getApplicationPolicyId());
-        entityManager.merge(userApplicationPolicyEntity);
-        entityManager.getTransaction().commit();
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        entityManager.close();
+        try {
+            entityManager.getTransaction().begin();
+            UserApplicationPolicyEntity userApplicationPolicyEntity = new UserApplicationPolicyEntity();
+            userApplicationPolicyEntity.setUserId(userApplicationPolicy.getUserId());
+            userApplicationPolicyEntity.setApplicationPolicyId(userApplicationPolicy.getApplicationPolicyId());
+            entityManager.merge(userApplicationPolicyEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         UserCache.clearUserCache(userApplicationPolicy.getUserId());
 

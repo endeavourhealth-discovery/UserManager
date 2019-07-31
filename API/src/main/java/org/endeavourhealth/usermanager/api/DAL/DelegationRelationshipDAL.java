@@ -22,44 +22,47 @@ public class DelegationRelationshipDAL {
     public List<DelegationRelationshipEntity> getAllRelationshipsForDelegation(String delegationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
-        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+            Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("delegation"), delegationId),
-                (cb.equal(rootEntry.get("isDeleted"), 0)));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("delegation"), delegationId),
+                    (cb.equal(rootEntry.get("isDeleted"), 0)));
 
-        cq.where(predicate);
-        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
-        List<DelegationRelationshipEntity> ret = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+            List<DelegationRelationshipEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<DelegationRelationshipEntity> getDelegatedOrganisations(String organisationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
-        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+            Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("parentUuid"), organisationId);
+            Predicate predicate = cb.equal(rootEntry.get("parentUuid"), organisationId);
 
-        cq.where(predicate);
-        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
-        List<DelegationRelationshipEntity> ret = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+            List<DelegationRelationshipEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public void saveDelegationRelationship(JsonDelegationRelationship delegationRelationship,
                                                   String userRoleId) throws Exception {
 
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
         boolean added = false;
         String originalUuid = delegationRelationship.getUuid();
@@ -75,23 +78,29 @@ public class DelegationRelationshipDAL {
 
         }
 
-        DelegationRelationshipEntity relationshipEntity = new DelegationRelationshipEntity();
-        relationshipEntity.setUuid(delegationRelationship.getUuid());
-        relationshipEntity.setDelegation(delegationRelationship.getDelegation());
-        relationshipEntity.setParentUuid(delegationRelationship.getParentUuid());
-        relationshipEntity.setParentType(delegationRelationship.getParentType());
-        relationshipEntity.setChildUuid(delegationRelationship.getChildUuid());
-        relationshipEntity.setChildType(delegationRelationship.getChildType());
-        relationshipEntity.setIncludeAllChildren(delegationRelationship.isIncludeAllChildren() ? (byte)1 : (byte)0);
-        relationshipEntity.setCreateSuperUsers(delegationRelationship.isCreateSuperUsers() ? (byte)1 : (byte)0);
-        relationshipEntity.setCreateUsers(delegationRelationship.isCreateUsers() ? (byte)1 : (byte)0);
-        relationshipEntity.setIsDeleted(delegationRelationship.getIsDeleted() ? (byte)1 : (byte)0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(relationshipEntity);
-        entityManager.getTransaction().commit();
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        entityManager.close();
-
+        try {
+            DelegationRelationshipEntity relationshipEntity = new DelegationRelationshipEntity();
+            relationshipEntity.setUuid(delegationRelationship.getUuid());
+            relationshipEntity.setDelegation(delegationRelationship.getDelegation());
+            relationshipEntity.setParentUuid(delegationRelationship.getParentUuid());
+            relationshipEntity.setParentType(delegationRelationship.getParentType());
+            relationshipEntity.setChildUuid(delegationRelationship.getChildUuid());
+            relationshipEntity.setChildType(delegationRelationship.getChildType());
+            relationshipEntity.setIncludeAllChildren(delegationRelationship.isIncludeAllChildren() ? (byte) 1 : (byte) 0);
+            relationshipEntity.setCreateSuperUsers(delegationRelationship.isCreateSuperUsers() ? (byte) 1 : (byte) 0);
+            relationshipEntity.setCreateUsers(delegationRelationship.isCreateUsers() ? (byte) 1 : (byte) 0);
+            relationshipEntity.setIsDeleted(delegationRelationship.getIsDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(relationshipEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         if (delegationRelationship.getIsDeleted()) {
             new SecurityAuditDAL().addToAuditTrail(userRoleId,
@@ -129,52 +138,60 @@ public class DelegationRelationshipDAL {
     public DelegationRelationshipEntity getDelegationRelationship(String relationshipId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        DelegationRelationshipEntity ret = entityManager.find(DelegationRelationshipEntity.class, relationshipId);
+        try {
+            DelegationRelationshipEntity ret = entityManager.find(DelegationRelationshipEntity.class, relationshipId);
 
-        entityManager.close();
+            return ret;
 
-        return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public void deleteAllDelegationRelationships(String delegationId, String userRoleId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
-        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+            Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("delegation"), delegationId);
+            Predicate predicate = cb.equal(rootEntry.get("delegation"), delegationId);
 
-        cq.where(predicate);
-        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
-        List<DelegationRelationshipEntity> results = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+            List<DelegationRelationshipEntity> results = query.getResultList();
 
 
-        for (DelegationRelationshipEntity result : results) {
-            JsonDelegationRelationship rel = new JsonDelegationRelationship(result);
-            rel.setIsDeleted(true);
-            saveDelegationRelationship(rel, userRoleId);
+            for (DelegationRelationshipEntity result : results) {
+                JsonDelegationRelationship rel = new JsonDelegationRelationship(result);
+                rel.setIsDeleted(true);
+                saveDelegationRelationship(rel, userRoleId);
 
+            }
+
+        } finally {
+            entityManager.close();
         }
-
-        entityManager.close();
     }
 
     public List<DelegationRelationshipEntity> getAllRelationshipsOrganisationsForGodMode() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
-        Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
+            Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
-        TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
-        List<DelegationRelationshipEntity> ret = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
+            List<DelegationRelationshipEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

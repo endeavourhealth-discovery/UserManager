@@ -23,20 +23,23 @@ public class ApplicationDAL {
     public List<ApplicationEntity> getAllApplications() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ApplicationEntity> cq = cb.createQuery(ApplicationEntity.class);
-        Root<ApplicationEntity> rootEntry = cq.from(ApplicationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ApplicationEntity> cq = cb.createQuery(ApplicationEntity.class);
+            Root<ApplicationEntity> rootEntry = cq.from(ApplicationEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<ApplicationEntity> query = entityManager.createQuery(cq);
-        List<ApplicationEntity> ret = query.getResultList();
+            TypedQuery<ApplicationEntity> query = entityManager.createQuery(cq);
+            List<ApplicationEntity> ret = query.getResultList();
 
-        entityManager.close();
+            return ret;
 
-        return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public String saveApplication(JsonApplication application, String userRoleId) throws Exception {
@@ -76,17 +79,22 @@ public class ApplicationDAL {
     public void saveApplicationInDatabase(JsonApplication application) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationEntity applicationEntity = new ApplicationEntity();
-        applicationEntity.setId(application.getId());
-        applicationEntity.setName(application.getName());
-        applicationEntity.setDescription(application.getDescription());
-        applicationEntity.setApplicationTree(application.getApplicationTree());
-        applicationEntity.setIsDeleted(application.getIsDeleted() ? (byte)1 : (byte)0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(applicationEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        try {
+            ApplicationEntity applicationEntity = new ApplicationEntity();
+            applicationEntity.setId(application.getId());
+            applicationEntity.setName(application.getName());
+            applicationEntity.setDescription(application.getDescription());
+            applicationEntity.setApplicationTree(application.getApplicationTree());
+            applicationEntity.setIsDeleted(application.getIsDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(applicationEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         ApplicationCache.clearApplicationCache(application.getId());
 

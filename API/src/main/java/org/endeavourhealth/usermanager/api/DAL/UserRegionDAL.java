@@ -20,8 +20,6 @@ import javax.persistence.EntityManager;
 public class UserRegionDAL {
 
     public static void saveUserRegion(JsonUserRegion userRegion, String userProjectId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
-
         UserRegionEntity oldRegion = new SecurityUserRegionDAL().getUserRegion(userRegion.getUserId());
 
         if (oldRegion != null) {
@@ -31,14 +29,21 @@ public class UserRegionDAL {
             }
         }
 
-        entityManager.getTransaction().begin();
-        UserRegionEntity userRegionEntity = new UserRegionEntity();
-        userRegionEntity.setUserId(userRegion.getUserId());
-        userRegionEntity.setRegionId(userRegion.getRegionId());
-        entityManager.merge(userRegionEntity);
-        entityManager.getTransaction().commit();
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        entityManager.close();
+        try {
+            entityManager.getTransaction().begin();
+            UserRegionEntity userRegionEntity = new UserRegionEntity();
+            userRegionEntity.setUserId(userRegion.getUserId());
+            userRegionEntity.setRegionId(userRegion.getRegionId());
+            entityManager.merge(userRegionEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         UserCache.clearUserCache(userRegion.getUserId());
 

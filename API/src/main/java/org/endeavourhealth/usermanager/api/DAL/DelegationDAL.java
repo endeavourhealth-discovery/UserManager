@@ -29,20 +29,22 @@ public class DelegationDAL {
     public List<DelegationEntity> getAllDelegations() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
-        Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
+            Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
-        List<DelegationEntity> ret = query.getResultList();
+            TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
+            List<DelegationEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<DelegationEntity> getSelectedDelegations(String organisationId) throws Exception {
@@ -75,34 +77,42 @@ public class DelegationDAL {
     public String getRootOrganisation(String delegationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
-        Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DelegationEntity> cq = cb.createQuery(DelegationEntity.class);
+            Root<DelegationEntity> rootEntry = cq.from(DelegationEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("uuid"), delegationId);
+            Predicate predicate = cb.equal(rootEntry.get("uuid"), delegationId);
 
-        cq.where(predicate);
-        TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
-        List<DelegationEntity> ret = query.getResultList();
+            cq.where(predicate);
+            TypedQuery<DelegationEntity> query = entityManager.createQuery(cq);
+            List<DelegationEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret.get(0).getRootOrganisation();
+            return ret.get(0).getRootOrganisation();
+        } finally {
+            entityManager.close();
+        }
     }
 
     public void saveDelegation(JsonDelegation delegation, String userRoleId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        DelegationEntity delegationEntity = new DelegationEntity();
-        delegationEntity.setUuid(delegation.getUuid());
-        delegationEntity.setName(delegation.getName());
-        delegationEntity.setRootOrganisation(delegation.getRootOrganisation());
-        delegationEntity.setIsDeleted(delegation.isDeleted() ? (byte)1 : (byte)0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(delegationEntity);
-        entityManager.getTransaction().commit();
 
-        entityManager.close();
+        try {
+            DelegationEntity delegationEntity = new DelegationEntity();
+            delegationEntity.setUuid(delegation.getUuid());
+            delegationEntity.setName(delegation.getName());
+            delegationEntity.setRootOrganisation(delegation.getRootOrganisation());
+            delegationEntity.setIsDeleted(delegation.isDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(delegationEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         DelegationCache.clearDelegationCache(delegation.getUuid());
 

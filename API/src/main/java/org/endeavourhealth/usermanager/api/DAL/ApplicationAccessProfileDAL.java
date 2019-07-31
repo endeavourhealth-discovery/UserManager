@@ -23,40 +23,44 @@ public class ApplicationAccessProfileDAL {
     public List<ApplicationAccessProfileEntity> getAllApplicationProfiles() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ApplicationAccessProfileEntity> cq = cb.createQuery(ApplicationAccessProfileEntity.class);
-        Root<ApplicationAccessProfileEntity> rootEntry = cq.from(ApplicationAccessProfileEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ApplicationAccessProfileEntity> cq = cb.createQuery(ApplicationAccessProfileEntity.class);
+            Root<ApplicationAccessProfileEntity> rootEntry = cq.from(ApplicationAccessProfileEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<ApplicationAccessProfileEntity> query = entityManager.createQuery(cq);
-        List<ApplicationAccessProfileEntity> ret = query.getResultList();
+            TypedQuery<ApplicationAccessProfileEntity> query = entityManager.createQuery(cq);
+            List<ApplicationAccessProfileEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<ApplicationAccessProfileEntity> getApplicationProfiles(String applicationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ApplicationAccessProfileEntity> cq = cb.createQuery(ApplicationAccessProfileEntity.class);
-        Root<ApplicationAccessProfileEntity> rootEntry = cq.from(ApplicationAccessProfileEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ApplicationAccessProfileEntity> cq = cb.createQuery(ApplicationAccessProfileEntity.class);
+            Root<ApplicationAccessProfileEntity> rootEntry = cq.from(ApplicationAccessProfileEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("isDeleted"), 0),
-                (cb.equal(rootEntry.get("applicationId"), applicationId)));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("isDeleted"), 0),
+                    (cb.equal(rootEntry.get("applicationId"), applicationId)));
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<ApplicationAccessProfileEntity> query = entityManager.createQuery(cq);
-        List<ApplicationAccessProfileEntity> ret = query.getResultList();
+            TypedQuery<ApplicationAccessProfileEntity> query = entityManager.createQuery(cq);
+            List<ApplicationAccessProfileEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public void saveApplicationProfile(JsonApplicationAccessProfile applicationProfile, String userRoleId) throws Exception {
@@ -95,18 +99,24 @@ public class ApplicationAccessProfileDAL {
     public void saveApplicationProfileInDatabase(JsonApplicationAccessProfile applicationProfile) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationAccessProfileEntity applicationEntity = new ApplicationAccessProfileEntity();
-        applicationEntity.setId(applicationProfile.getId());
-        applicationEntity.setName(applicationProfile.getName());
-        applicationEntity.setApplicationId(applicationProfile.getApplicationId());
-        applicationEntity.setDescription(applicationProfile.getDescription());
-        applicationEntity.setProfileTree(applicationProfile.getProfileTree());
-        applicationEntity.setIsDeleted(applicationProfile.getIsDeleted() ? (byte)1 : (byte)0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(applicationEntity);
-        entityManager.getTransaction().commit();
+        try {
+            ApplicationAccessProfileEntity applicationEntity = new ApplicationAccessProfileEntity();
+            applicationEntity.setId(applicationProfile.getId());
+            applicationEntity.setName(applicationProfile.getName());
+            applicationEntity.setApplicationId(applicationProfile.getApplicationId());
+            applicationEntity.setDescription(applicationProfile.getDescription());
+            applicationEntity.setProfileTree(applicationProfile.getProfileTree());
+            applicationEntity.setIsDeleted(applicationProfile.getIsDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(applicationEntity);
+            entityManager.getTransaction().commit();
 
-        entityManager.close();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         ApplicationProfileCache.clearApplicationProfileCache(applicationProfile.getId());
 

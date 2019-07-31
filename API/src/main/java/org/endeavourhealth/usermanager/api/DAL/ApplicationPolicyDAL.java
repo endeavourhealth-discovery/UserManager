@@ -49,17 +49,22 @@ public class ApplicationPolicyDAL {
     public void saveApplicationPolicyInDatabase(JsonApplicationPolicy roleType) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationPolicyEntity applicationPolicyEntity = new ApplicationPolicyEntity();
-        applicationPolicyEntity.setId(roleType.getId());
-        applicationPolicyEntity.setName(roleType.getName());
-        applicationPolicyEntity.setDescription(roleType.getDescription());
-        applicationPolicyEntity.setJobCategoryId(roleType.getJobCategoryId());
-        applicationPolicyEntity.setIsDeleted(roleType.getIsDeleted() ? (byte)1 : (byte)0);
-        entityManager.getTransaction().begin();
-        entityManager.merge(applicationPolicyEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        try {
+            ApplicationPolicyEntity applicationPolicyEntity = new ApplicationPolicyEntity();
+            applicationPolicyEntity.setId(roleType.getId());
+            applicationPolicyEntity.setName(roleType.getName());
+            applicationPolicyEntity.setDescription(roleType.getDescription());
+            applicationPolicyEntity.setJobCategoryId(roleType.getJobCategoryId());
+            applicationPolicyEntity.setIsDeleted(roleType.getIsDeleted() ? (byte) 1 : (byte) 0);
+            entityManager.getTransaction().begin();
+            entityManager.merge(applicationPolicyEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
 
         ApplicationPolicyCache.clearApplicationPolicyCache(roleType.getId());
     }

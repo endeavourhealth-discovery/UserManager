@@ -17,7 +17,6 @@ public class AuditDAL {
                                           String organisationId, String userId,
                                           Timestamp startDate, Timestamp endDate) throws Exception {
 
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
         List<String> filterOrgs = new ArrayList<>();
 
@@ -32,6 +31,8 @@ public class AuditDAL {
 
             filterOrgs.add(userOrganisationId);
         }
+
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
         try {
             String orderby = " order by a.timestamp desc ";
@@ -111,7 +112,7 @@ public class AuditDAL {
     }
 
     public long getAuditCount(String userOrganisationId, String organisationId, String userId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
+
 
         List<String> filterOrgs = new ArrayList<>();
 
@@ -127,6 +128,7 @@ public class AuditDAL {
             filterOrgs.add(userOrganisationId);
         }
 
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
         try {
             String whereAnd = " where ";
             String sql = "select count (a.id)" +
