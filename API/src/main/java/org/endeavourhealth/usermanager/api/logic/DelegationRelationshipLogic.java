@@ -18,17 +18,13 @@ public class DelegationRelationshipLogic {
 
     public Response getDelegationTreeData(String delegationId) throws Exception {
 
-        System.out.println("getting data for delegation: " + delegationId);
-
         List<DelegationRelationshipEntity> delegations = new DelegationRelationshipDAL().getAllRelationshipsForDelegation(delegationId);
 
         JsonOrganisationDelegation organisationDelegation = null;
 
         if (delegations.isEmpty()) {
-            System.out.println("No delegations");
             organisationDelegation = processEmptyDelegation(delegationId);
         } else {
-            System.out.println("Found delegations :" + delegations.size());
             organisationDelegation = processDelegationOrganisations(delegations);
         }
 
