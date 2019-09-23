@@ -48,7 +48,8 @@ public class DelegationRelationshipDAL {
             CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
             Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
 
-            Predicate predicate = cb.equal(rootEntry.get("parentUuid"), organisationId);
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), organisationId),
+                    (cb.equal(rootEntry.get("isDeleted"), 0)));
 
             cq.where(predicate);
             TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
