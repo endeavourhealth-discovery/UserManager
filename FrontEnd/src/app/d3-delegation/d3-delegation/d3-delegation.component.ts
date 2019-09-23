@@ -86,6 +86,7 @@ export class D3DelegationComponent implements OnInit, AfterViewInit {
     vm.delegationService.getTreeData(delegationId)
       .subscribe(
         (result) => {
+          console.log(result);
           vm.root = result;
           vm.d3Tree.setData(result);
           vm.d3Tree.draw();
