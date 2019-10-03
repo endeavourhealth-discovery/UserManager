@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
-import static org.endeavourhealth.common.security.SecurityUtils.hasRole;
 import static org.endeavourhealth.coreui.endpoints.AbstractEndpoint.clearLogbackMarkers;
 
 public class UserLogic {

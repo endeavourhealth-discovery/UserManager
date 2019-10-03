@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserRegionDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.RegionCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserApplicationPolicyEntity;
@@ -187,7 +186,7 @@ public final class UserEndpoint extends AbstractEndpoint {
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "User Region", "User Id", userId);
 
-        UserRegionEntity userRegion = new SecurityUserRegionDAL().getUserRegion(userId);
+        UserRegionEntity userRegion = UserCache.getUserRegion(userId);
         if (userRegion == null) {
             userRegion = new UserRegionEntity();
         }

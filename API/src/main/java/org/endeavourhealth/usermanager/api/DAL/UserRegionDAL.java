@@ -20,7 +20,7 @@ import javax.persistence.EntityManager;
 public class UserRegionDAL {
 
     public static void saveUserRegion(JsonUserRegion userRegion, String userProjectId) throws Exception {
-        UserRegionEntity oldRegion = new SecurityUserRegionDAL().getUserRegion(userRegion.getUserId());
+        UserRegionEntity oldRegion = UserCache.getUserRegion(userRegion.getUserId());
 
         if (oldRegion != null) {
             if (oldRegion.getRegionId().equals(userRegion.getRegionId())) {
