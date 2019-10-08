@@ -149,14 +149,14 @@ export class ConfigurationComponent implements OnInit {
     )
   }
 
-  flushCache(){
+  checkAccess(appName: string){
     let vm = this;
-    vm.configurationService.flushCache()
+    vm.configurationService.checkAccess(vm.activeProject.userId, vm.activeProject.projectId, appName)
       .subscribe(
         (result) => {
-          vm.log.success('Successfully flushed cache', 'Flush cache')
+          vm.log.success('Access granted : ' + result, 'Access')
         },
-        (error) => vm.log.error('Flushing cache failed. Please try again.', error, 'Flush cache')
+        (error) => vm.log.error('Check access failed. Please try again.', error, 'Flush cache')
       );
   }
 

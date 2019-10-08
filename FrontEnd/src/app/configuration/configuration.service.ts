@@ -89,13 +89,4 @@ export class ConfigurationService {
       .map((response) => response.text());
   }
 
-  flushCache(): Observable<any> {
-    const vm = this;
-    vm.http.get('api/application/flushCache')
-      .map((response) => response.text());
-
-    return vm.http.get('api/userManager/flushCache')
-      .map((response) => response.text());
-  }
-
 }
