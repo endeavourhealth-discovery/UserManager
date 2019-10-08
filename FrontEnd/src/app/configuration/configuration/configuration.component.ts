@@ -149,15 +149,4 @@ export class ConfigurationComponent implements OnInit {
     )
   }
 
-  checkAccess(appName: string){
-    let vm = this;
-    vm.configurationService.checkAccess(vm.activeProject.userId, vm.activeProject.projectId, appName)
-      .subscribe(
-        (result) => {
-          vm.log.success('Access granted : ' + result, 'Access')
-        },
-        (error) => vm.log.error('Check access failed. Please try again.', error, 'Flush cache')
-      );
-  }
-
 }
