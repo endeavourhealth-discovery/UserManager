@@ -207,11 +207,8 @@ CREATE TABLE audit
     item_after varchar(36),
     item_type tinyint,
     audit_json text,
-    CONSTRAINT pk_item_type PRIMARY KEY (id, user_role_id, timestamp)
+    CONSTRAINT pk_item_type PRIMARY KEY (id, user_project_id, timestamp)
 );
-
-CREATE INDEX ix_audit_organisation_timestamp_id
-ON audit (organisation_id, timestamp, id);
 
 CREATE TABLE active_item
 (

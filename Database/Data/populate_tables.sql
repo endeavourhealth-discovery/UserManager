@@ -23,7 +23,7 @@ values
 (9, 'User application policy'),
 (10, 'Application policy');
 
-insert into user_manager.role_type (id, name, description, job_category_id, is_deleted)
+insert into user_manager.application_policy (id, name, description, job_category_id, is_deleted)
 values 
 ('00972413-8f50-11e8-839e-80fa5b320513', 'User', 'Ability to log on to applications only', 'f0be26ef-8f18-11e8-839e-80fa5b320513', 0),
 ('f0bc6f4a-8f18-11e8-839e-80fa5b320513', 'Super User', 'Abilty to add, edit and delete users', 'f0bc6fc8-8f18-11e8-839e-80fa5b320513', 0),
