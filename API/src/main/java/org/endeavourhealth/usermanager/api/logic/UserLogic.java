@@ -160,6 +160,8 @@ public class UserLogic {
         //Blank out password for audit object
         user.setPassword("*********");
 
+        keycloakClient.realms().users().putUserUpdatePasswordEmail(userRep);
+
         // populate the username for audit purposes
         userRep.setUsername(user.getUsername());
         if (editModeb) {
@@ -334,5 +336,18 @@ public class UserLogic {
         } catch (Exception e) {
             throw new Exception("Converting Json to String failed : " + e.getMessage() );
         }
+    }
+
+    public Response sendUserPasswordEmail(SecurityContext sc, String userId) throws Exception {
+
+        UserRepresentation userRep = UserCache.getUserDetails(userId);
+
+
+        KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
+        keycloakClient.realms().users().putUserUpdatePasswordEmail(userRep);
+
+        return Response
+                .ok()
+                .build();
     }
 }

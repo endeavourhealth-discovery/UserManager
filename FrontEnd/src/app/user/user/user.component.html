@@ -151,6 +151,7 @@
             <div class="card-header">
               User details
               <div class="pull-right">
+                <button *ngIf="selectedUser && admin" class="btn btn-info" (click)="resendEmail(selectedUser)">Resend password</button>
                 <button *ngIf="selectedUser && admin" class="btn btn-info" (click)="viewProfile(selectedUser)">View profile</button>
                 <button *ngIf="selectedUser && admin" class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
                 <button *ngIf="selectedUser && admin" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>

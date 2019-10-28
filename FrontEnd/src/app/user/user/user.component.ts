@@ -218,6 +218,18 @@ export class UserComponent implements OnInit {
     this.router.navigate(['userProfile']);
   }
 
+  resendEmail(user: User) {
+    const vm = this;
+    vm.userService.sendUserPasswordEmail(user.uuid)
+      .subscribe(
+        (result) => {
+          vm.log.success('Reset password email sent successfully', null, 'Sending email');
+          vm.loadingRolesCompleted = true;
+        },
+        (error) => vm.log.error('Error sending reset password email', error, 'Sending email')
+      );
+  }
+
   deleteUser(user:User) {
     let vm = this;
     let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;

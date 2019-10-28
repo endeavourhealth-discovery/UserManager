@@ -124,4 +124,12 @@ export class UserService {
       .map((response) => response.json());
   }
 
+  sendUserPasswordEmail(userId: string): Observable<string> {
+    const vm = this;
+    let params = new URLSearchParams();
+    params.set('userId', userId);
+    return vm.http.get('api/user/sendUpdatePasswordEmail', {search: params})
+      .map((response) => response.text());
+  }
+
 }
