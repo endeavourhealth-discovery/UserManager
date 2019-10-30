@@ -121,6 +121,8 @@ public class UserLogic {
         if (!editModeb) {
             try {
                 userRep = keycloakClient.realms().users().postUser(userRep);
+
+                keycloakClient.realms().users().putUserUpdatePasswordEmail(userRep);
             }
             catch (Exception e) {
                 // TODO REMOVE ONCE DEV IS COMPLETE OR FIND OUT WHY THIS DOESN'T WORK LOCALLY
@@ -159,8 +161,6 @@ public class UserLogic {
 
         //Blank out password for audit object
         user.setPassword("*********");
-
-        keycloakClient.realms().users().putUserUpdatePasswordEmail(userRep);
 
         // populate the username for audit purposes
         userRep.setUsername(user.getUsername());
