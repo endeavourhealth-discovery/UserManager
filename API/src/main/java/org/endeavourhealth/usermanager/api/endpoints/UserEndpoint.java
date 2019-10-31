@@ -297,13 +297,14 @@ public final class UserEndpoint extends AbstractEndpoint {
     @Path("/sendUpdatePasswordEmail")
     @ApiOperation(value = "Returns the data sharing manager region associated with the user")
     public Response sendUpdatePasswordEmail(@Context SecurityContext sc,
-                                  @ApiParam(value = "User id to send the email to") @QueryParam("userId") String userId) throws Exception {
+                                  @ApiParam(value = "User id to send the email to") @QueryParam("userId") String userId,
+                                            @ApiParam(value = "userProjectId of the user making the change") @QueryParam("userProjectId") String userProjectId) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
                 "User Region", "User Id", userId);
 
-        return new UserLogic().sendUserPasswordEmail(sc, userId);
+        return new UserLogic().sendUserPasswordEmail(sc, userId, userProjectId);
     }
 
     private Response getAvailableRegions() throws Exception {

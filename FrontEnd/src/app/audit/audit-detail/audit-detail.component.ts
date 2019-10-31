@@ -81,6 +81,7 @@ export class AuditDetailComponent implements OnInit {
       case "User region": return dd.getUserRegionDisplayDetails();
       case "User application policy": return dd.getUserApplicationPolicyDisplayDetails();
       case "Application policy": return dd.getApplicationPolicyDisplayDetails();
+      case "User Password Email": return dd.getUserPasswordDisplayDetails();
     }
   }
 

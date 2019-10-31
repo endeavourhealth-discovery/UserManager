@@ -135,7 +135,7 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     newRoleTypeProfile.applicationAccessProfileName = appProfile.name;
     newRoleTypeProfile.name = appProfile.name;
     newRoleTypeProfile.application = vm.selectedApp.name;
-    newRoleTypeProfile.profileTree = '';
+    newRoleTypeProfile.applicationAccessProfileSuperUser = appProfile.superUser;
     newRoleTypeProfile.applicationId = appProfile.applicationId;
 
     let i = vm.appProfiles.indexOf(appProfile);
@@ -156,11 +156,14 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
     vm.getApplicationProfiles();
 
-
   }
 
   checkAvailableAppProfiles() {
     const vm = this;
+
+    if (!vm.superUsers) {
+      vm.appProfiles = vm.appProfiles.filter(p => !p.superUser);
+    }
 
     if (vm.roleProfiles) {
       for (let profile of vm.roleProfiles) {

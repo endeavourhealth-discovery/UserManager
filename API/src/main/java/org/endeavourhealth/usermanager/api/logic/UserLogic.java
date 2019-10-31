@@ -304,6 +304,25 @@ public class UserLogic {
 
     }
 
+    private void auditUserPasswordSend(UserRepresentation userRep, String userRoleId) throws Exception {
+
+        JsonNode afterJson = generateUserAuditJson(userRep);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.createObjectNode();
+
+        ((ObjectNode)rootNode).put("title", "User password reset email sent");
+
+        if (afterJson != null) {
+            ((ObjectNode) rootNode).set("after", afterJson);
+        }
+
+        new SecurityAuditDAL().addToAuditTrail(userRoleId,
+                AuditAction.ADD,
+                ItemType.USER_PASSWORD_EMAIL, null, null, prettyPrintJsonString(rootNode));
+
+    }
+
     private JsonNode generateUserAuditJson(UserRepresentation user) throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -338,13 +357,15 @@ public class UserLogic {
         }
     }
 
-    public Response sendUserPasswordEmail(SecurityContext sc, String userId) throws Exception {
+    public Response sendUserPasswordEmail(SecurityContext sc, String userId, String userProjectId) throws Exception {
 
         UserRepresentation userRep = UserCache.getUserDetails(userId);
 
 
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
         keycloakClient.realms().users().putUserUpdatePasswordEmail(userRep);
+
+        auditUserPasswordSend(userRep, userProjectId);
 
         return Response
                 .ok()

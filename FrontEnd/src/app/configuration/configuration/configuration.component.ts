@@ -25,7 +25,6 @@ export class ConfigurationComponent implements OnInit {
   appProfiles: ApplicationPolicy[];
   applications: Application[];
 
-  public editorOptions: JsonEditorOptions;
   public data: any;
 
   public activeProject: UserProject;
@@ -42,13 +41,7 @@ export class ConfigurationComponent implements OnInit {
 
   ngOnInit() {
     const vm = this;
-    vm.getApplicationPolicies();
-    vm.getApplications();
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
-    this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
-
-    this.userManagerNotificationService.activeUserProject.subscribe(active => {
+    vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });
@@ -67,11 +60,29 @@ export class ConfigurationComponent implements OnInit {
       vm.admin = false;
       vm.superUser = false;
     }
+
+    if (vm.superUser) {
+      vm.getApplicationPolicies();
+    } else {
+      vm.getNonSuperUserApplicationPolicies();
+    }
+    vm.getApplications();
   }
 
   getApplicationPolicies(){
     let vm = this;
     vm.configurationService.getApplicationPolicies()
+      .subscribe(
+        (result) => {
+          vm.appProfiles = result;
+        },
+        (error) => vm.log.error('Loading application policies failed. Please try again', error, 'Load application policies')
+      );
+  }
+
+  getNonSuperUserApplicationPolicies(){
+    let vm = this;
+    vm.configurationService.getNonSuperUserApplicationPolicies()
       .subscribe(
         (result) => {
           vm.appProfiles = result;

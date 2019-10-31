@@ -133,7 +133,6 @@ export class UserBioComponent implements OnInit {
   selectProfile(profile: ApplicationPolicyAttribute) {
     const vm = this;
     vm.selectedProfile = profile;
-    vm.selectedProfileTree = JSON.parse(profile.profileTree);
     vm.selectedSharingAgreement = null;
   }
 

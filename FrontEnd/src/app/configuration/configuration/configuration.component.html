@@ -8,44 +8,6 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header text-white">
-              Applications
-              <div class="pull-right">
-                <button *ngIf="admin" class="btn btn-success" (click)="addApplication()">Add new application</button>
-              </div>
-            </div>
-            <div class="card-body" style="overflow:hidden;  min-height: 720px; max-height: 720px">
-              <div class="scroll-box-500">
-                <loadingIndicator [done]="applications">
-                  <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                      <th class="w-25">Name</th>
-                      <th class="w-75">Description</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                      <tr *ngFor="let app of applications" class="hover-box show-child-on-hover">
-
-                        <td (click)="editApp(app)">{{app.name}}</td>
-                        <td (click)="editApp(app)">{{app.description}}</td>
-                        <td>
-                          <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="deleteApplication(app)">
-                            <span class="fa fa-sm fa-remove"></span>
-                          </button>
-                        </td>
-
-                      </tr>
-                    </tbody>
-                  </table>
-                </loadingIndicator>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header text-white">
               Application policies
               <div class="pull-right">
                 <button *ngIf="admin" class="btn btn-success" (click)="addApplicationPolicy()">Add new application policy</button>
@@ -69,6 +31,44 @@
                       <td (click)="editApplicationPolicy(profile)">{{profile.description}}</td>
                       <td>
                         <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="deleteApplicationPolicy(profile)">
+                          <span class="fa fa-sm fa-remove"></span>
+                        </button>
+                      </td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+                </loadingIndicator>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="superUser" class="col-md-6">
+          <div class="card">
+            <div class="card-header text-white">
+              Applications
+              <div class="pull-right">
+                <button *ngIf="admin" class="btn btn-success" (click)="addApplication()">Add new application</button>
+              </div>
+            </div>
+            <div class="card-body" style="overflow:hidden;  min-height: 720px; max-height: 720px">
+              <div class="scroll-box-500">
+                <loadingIndicator [done]="applications">
+                  <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                      <th class="w-25">Name</th>
+                      <th class="w-75">Description</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let app of applications" class="hover-box show-child-on-hover">
+
+                      <td (click)="editApp(app)">{{app.name}}</td>
+                      <td (click)="editApp(app)">{{app.description}}</td>
+                      <td>
+                        <button type="button" class="btn btn-xs btn-danger pull-right child-to-show" (click)="deleteApplication(app)">
                           <span class="fa fa-sm fa-remove"></span>
                         </button>
                       </td>

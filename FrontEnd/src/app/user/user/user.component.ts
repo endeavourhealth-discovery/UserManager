@@ -220,7 +220,7 @@ export class UserComponent implements OnInit {
 
   resendEmail(user: User) {
     const vm = this;
-    vm.userService.sendUserPasswordEmail(user.uuid)
+    vm.userService.sendUserPasswordEmail(user.uuid, vm.activeProject.id)
       .subscribe(
         (result) => {
           vm.log.success('Reset password email sent successfully', null, 'Sending email');

@@ -80,14 +80,13 @@ public class ApplicationPolicyAttributeDAL {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
         try {
-            ApplicationPolicyAttributeEntity roleAccessEntity = new ApplicationPolicyAttributeEntity();
-            roleAccessEntity.setId(jsonApplicationPolicyAttribute.getId());
-            roleAccessEntity.setApplicationPolicyId(jsonApplicationPolicyAttribute.getApplicationPolicyId());
-            roleAccessEntity.setApplicationAccessProfileId(jsonApplicationPolicyAttribute.getApplicationAccessProfileId());
-            roleAccessEntity.setProfileTree(jsonApplicationPolicyAttribute.getProfileTree());
-            roleAccessEntity.setIsDeleted(jsonApplicationPolicyAttribute.getIsDeleted() ? (byte) 1 : (byte) 0);
+            ApplicationPolicyAttributeEntity applicationPolicyAttributeEntity = new ApplicationPolicyAttributeEntity();
+            applicationPolicyAttributeEntity.setId(jsonApplicationPolicyAttribute.getId());
+            applicationPolicyAttributeEntity.setApplicationPolicyId(jsonApplicationPolicyAttribute.getApplicationPolicyId());
+            applicationPolicyAttributeEntity.setApplicationAccessProfileId(jsonApplicationPolicyAttribute.getApplicationAccessProfileId());
+            applicationPolicyAttributeEntity.setIsDeleted(jsonApplicationPolicyAttribute.getIsDeleted() ? (byte) 1 : (byte) 0);
             entityManager.getTransaction().begin();
-            entityManager.merge(roleAccessEntity);
+            entityManager.merge(applicationPolicyAttributeEntity);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();

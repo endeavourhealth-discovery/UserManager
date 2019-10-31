@@ -7,6 +7,6 @@ export class ApplicationPolicyAttribute {
   applicationAccessProfileId : string;
   applicationAccessProfileName : string;
   applicationAccessProfileDescription : string;
-  profileTree : string;
+  applicationAccessProfileSuperUser : boolean;
   isDeleted: boolean;
 }

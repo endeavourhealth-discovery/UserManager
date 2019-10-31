@@ -118,12 +118,16 @@ CREATE TABLE application_policy_attribute
 	id varchar(36) NOT NULL,
 	application_policy_id varchar(36) NOT NULL,
 	application_access_profile_id varchar(36) NOT NULL,
-	profile_tree text NOT NULL,
     is_deleted boolean,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'A mapping table between application policy and application attributes';
 
+/*
+-- remove unused column
+alter table user_manager.application_policy_attribute
+drop column profile_tree;
+*/
 
 CREATE TABLE application_access_profile
 (
@@ -131,13 +135,20 @@ CREATE TABLE application_access_profile
 	name varchar(100) NOT NULL,
     description varchar(500) NOT NULL,
 	application_id varchar(36) NOT NULL,
-	profile_tree text NOT NULL,
     is_deleted boolean,
+	super_user boolean NOT NULL default false,
 
 	CONSTRAINT pk_id PRIMARY KEY (id)
 )comment 'Access profiles for a particular application. One application may have many profile definitions';
 
+/*
+ -- remove unused column and add a new one to signify that that profile gives super user privilges
+alter table user_manager.application_access_profile
+drop column profile_tree;
 
+alter table user_manager.application_access_profile
+add column super_user boolean not null default false;
+*/
 CREATE TABLE application
 (
 	id varchar(36) NOT NULL,

@@ -96,4 +96,14 @@ export class DisplayDetails {
       { label: 'Application policy', property: 'applicationPolicy'}
     ]
   }
+
+  getUserPasswordDisplayDetails(): any[] {
+    return [
+      { label: 'User id', property: 'id'},
+      { label: 'Username', property: 'username'},
+      { label: 'Forename', property: 'forename'},
+      { label: 'Surname', property: 'surname'},
+      { label: 'E-mail', property: 'email'}
+    ]
+  }
 }

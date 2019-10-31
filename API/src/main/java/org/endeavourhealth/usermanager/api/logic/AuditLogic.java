@@ -118,12 +118,21 @@ public class AuditLogic {
             case 8: return getJsonForUserRegionAudit(auditEntity);
             case 9: return getJsonForUserApplicationPolicyAudit(auditEntity);
             case 10: return getJsonForApplicationPolicyAudit(auditEntity);
+            case 11: return getJsonForUserPasswordEmailAudit(auditEntity);
             default: throw new Exception("Unknown audit type");
         }
 
     }
 
     private Response getJsonForUserAudit(AuditEntity audit) throws Exception {
+
+        return Response
+                .ok()
+                .entity(audit.getAuditJson())
+                .build();
+    }
+
+    private Response getJsonForUserPasswordEmailAudit(AuditEntity audit) throws Exception {
 
         return Response
                 .ok()
@@ -369,7 +378,7 @@ public class AuditLogic {
         ((ObjectNode)auditJson).put("name", applicationProfile.getName());
         ((ObjectNode)auditJson).put("description", applicationProfile.getDescription());
         ((ObjectNode)auditJson).put("applicationName", applicationEntity.getName());
-        ((ObjectNode)auditJson).put("profileTree", applicationProfile.getProfileTree());
+        ((ObjectNode)auditJson).put("gives super user access", applicationProfile.getSuperUser() == 1 ? "true" : "false");
 
         return auditJson;
     }

@@ -78,13 +78,16 @@
                           </div>
                         </div>
                       </div>
-                      <!--<div class="row">
-                        <div class="col-md-12">
-                          <div class="scroll-box-500">
-                            <json-editor [options]="editorOptions" [data]="profileData" #applicationEditor></json-editor>
+                      <div class="row">
+                        <div *ngIf="superUser" class="col-md-5">
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox form-control-plaintext">
+                              <input type="checkbox" class="custom-control-input" [(ngModel)]="selectedProfile.superUser" id="superUser" name="superUser">
+                              <label class="custom-control-label" for="superUser">Grants Super User</label>
+                            </div>
                           </div>
                         </div>
-                      </div>-->
+                      </div>
                     </div>
                   </form>
                 </div>

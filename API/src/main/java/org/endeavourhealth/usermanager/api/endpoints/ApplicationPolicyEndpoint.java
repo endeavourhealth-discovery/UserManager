@@ -58,6 +58,26 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
                 .entity(applicationPolicies)
                 .build();
 
+    }@GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.ApplicationPolicyEndpoint.getNonSuperUserApplicationPolicies")
+    @Path("/getNonSuperUserApplicationPolicies")
+    @ApiOperation(value = "Returns a list of application policies that don't contain a super user profile")
+    public Response getNonSuperUserApplicationPolicies(@Context SecurityContext sc) throws Exception {
+
+        super.setLogbackMarkers(sc);
+        userAudit.save(SecurityUtils.getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Load,
+                "application policy(s)");
+
+        List<ApplicationPolicyEntity> applicationPolicies = ApplicationPolicyCache.getNonSUApplicationPolicies();
+
+        clearLogbackMarkers();
+        return Response
+                .ok()
+                .entity(applicationPolicies)
+                .build();
+
     }
 
     @POST

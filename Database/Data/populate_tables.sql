@@ -21,7 +21,8 @@ values
 (7, 'Application policy attribute'),
 (8, 'User region'),
 (9, 'User application policy'),
-(10, 'Application policy');
+(10, 'Application policy'),
+(11, 'User Password Email');
 
 insert into user_manager.application_policy (id, name, description, job_category_id, is_deleted)
 values 

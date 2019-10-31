@@ -163,7 +163,7 @@ export class ApplicationEditorComponent implements OnInit {
     newProfile.description = '';
     newProfile.applicationId = vm.resultApp.id;
     newProfile.isDeleted = false;
-    newProfile.profileTree = '';
+    newProfile.superUser = false;
     vm.profileData = '';
 
     vm.applicationProfiles.push(newProfile);
@@ -172,8 +172,6 @@ export class ApplicationEditorComponent implements OnInit {
 
   saveProfile() {
     const vm = this;
-    // const changedJson = this.applicationEditor.get();
-    vm.selectedProfile.profileTree = ''; // JSON.stringify(changedJson);
     vm.editedProfiles.push(vm.selectedProfile);
   }
 

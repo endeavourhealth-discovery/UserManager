@@ -105,7 +105,7 @@ public class ApplicationAccessProfileDAL {
             applicationEntity.setName(applicationProfile.getName());
             applicationEntity.setApplicationId(applicationProfile.getApplicationId());
             applicationEntity.setDescription(applicationProfile.getDescription());
-            applicationEntity.setProfileTree(applicationProfile.getProfileTree());
+            applicationEntity.setSuperUser(applicationProfile.getIsSuperUser() ? (byte)1 : (byte)0);
             applicationEntity.setIsDeleted(applicationProfile.getIsDeleted() ? (byte) 1 : (byte) 0);
             entityManager.getTransaction().begin();
             entityManager.merge(applicationEntity);

@@ -78,10 +78,6 @@ public class UserBioEndpoint extends AbstractEndpoint {
                 applicationProfile.setApplicationName(profile.getApplication());
                 userProfiles.add(applicationProfile);
             }
-            if (!applicationProfile.isCanAccessData()) {  //Only check if false...once we get a positive, move on
-                applicationProfile.setCanAccessData(checkForDataAccess(profile.getProfileTree()));
-            }
-            applicationProfile.addRoleTypeAccessProfile(processAccessProfile(profile, organisationId));
 
         }
 
@@ -89,66 +85,6 @@ public class UserBioEndpoint extends AbstractEndpoint {
                 .ok()
                 .entity(userProfiles)
                 .build();
-    }
-
-    private boolean checkForDataAccess(String profileTree) throws Exception {
-        JsonNode profileNode = null;
-        if (!StringUtils.isNullOrEmpty(profileTree)) {
-            profileNode = ObjectMapperPool.getInstance().readTree(profileTree);
-            boolean accessToData = profileNode.get("accessToData").asBoolean();
-
-            return accessToData;
-
-        } else {
-            return false;
-        }
-    }
-
-    private JsonApplicationPolicyAttribute processAccessProfile(JsonApplicationPolicyAttribute profile, String organisationId) throws Exception {
-        if (!StringUtils.isNullOrEmpty(profile.getProfileTree())) {
-            JsonNode profileTreeNode = ObjectMapperPool.getInstance().readTree(profile.getProfileTree());
-            if (profileTreeNode.get("accessToData").asBoolean()) {
-                //get sharing agreement and insert it into the json
-                String sharingAgreementLevel = profileTreeNode.get("sharingAgreementLevel").asText("organisation");
-                if (sharingAgreementLevel.equals("organisation")) {
-                    JsonNode sharingAgreements = getSharingAgreementsForOrganisationLevel(profileTreeNode, organisationId);
-                    if (sharingAgreements != null) {
-                        ((ObjectNode) profileTreeNode).set("sharingAgreementsHasAccess", sharingAgreements);
-                        profile.setProfileTree(prettyPrintJsonString(profileTreeNode));
-                    }
-                } else if (sharingAgreementLevel.equals("agreement")) {
-                    //sharing agreement specific
-                    JsonNode sharingAgreements = getSpecificSharingAgreement(profileTreeNode, organisationId);
-                    if (sharingAgreements != null) {
-                        ((ObjectNode) profileTreeNode).set("sharingAgreementsHasAccess", sharingAgreements);
-                        profile.setProfileTree(prettyPrintJsonString(profileTreeNode));
-                    }
-                }
-            }
-            return profile;
-        } else
-            return profile;
-    }
-
-    private JsonNode getSpecificSharingAgreement(JsonNode profileTreeNode, String organisationId) throws Exception {
-        JsonNode agreements = profileTreeNode.get("sharingAgreementsCanAccess");
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreementsHasAccess");
-
-        if (agreements.isArray()) {
-            for (JsonNode agreement : agreements) {
-                JsonNode sharingAgreementNode = checkOrgCanAccessSharingAgreement(agreement.get("sharingAgreementId").asText(), organisationId);
-
-                if (sharingAgreementNode != null) {
-                    ((ArrayNode) sharingAgreements).add(sharingAgreementNode);
-                    return sharingAgreements;
-                }
-            }
-        }
-
-        return null;
     }
 
     private JsonNode checkOrgCanAccessSharingAgreement(String agreementId, String organisationId) throws Exception {
@@ -166,28 +102,6 @@ public class UserBioEndpoint extends AbstractEndpoint {
 
                 return getOrganisationsForSharingAgreement(dsa);
             }
-        }
-
-        return null;
-    }
-
-    private JsonNode getSharingAgreementsForOrganisationLevel(JsonNode profileTreeNode, String organisationId) throws Exception {
-        List<String> dsaUuids = new SecurityMasterMappingDAL().getParentMappings(organisationId, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType());
-        List<DataSharingAgreementEntity> ret = new ArrayList<>();
-
-        if (dsaUuids.size() > 0) {
-            ret = DataSharingAgreementCache.getDSADetails(dsaUuids);
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            JsonNode sharingAgreements = mapper.createObjectNode().putArray("sharingAgreementsHasAccess");
-
-            for (DataSharingAgreementEntity dsa : ret) {
-                JsonNode sharingAgreement = getOrganisationsForSharingAgreement(dsa);
-                ((ArrayNode) sharingAgreements).add(sharingAgreement);
-                System.out.println(prettyPrintJsonString(sharingAgreements));
-            }
-            return sharingAgreements;
         }
 
         return null;
@@ -212,17 +126,5 @@ public class UserBioEndpoint extends AbstractEndpoint {
         ((ObjectNode) sharingAgreement).set("organisations", orgsNode);
 
         return sharingAgreement;
-
-
-    }
-
-    private static String prettyPrintJsonString(JsonNode jsonNode) throws Exception {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Object json = mapper.readValue(jsonNode.toString(), Object.class);
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        } catch (Exception e) {
-            throw new Exception("Converting Json to String failed : " + e.getMessage() );
-        }
     }
 }

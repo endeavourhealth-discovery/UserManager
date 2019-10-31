@@ -17,6 +17,12 @@ export class ConfigurationService {
       .map((response) => response.json());
   }
 
+  getNonSuperUserApplicationPolicies(): Observable<ApplicationPolicy[]> {
+    const vm = this;
+    return vm.http.get('api/applicationPolicy/getNonSuperUserApplicationPolicies')
+      .map((response) => response.json());
+  }
+
   deleteApplicationPolicy(applicationPolicyId: string, userRoleId: string): Observable<any> {
     const vm = this;
     let params = new URLSearchParams();
@@ -85,6 +91,7 @@ export class ConfigurationService {
     const vm = this;
     let params = new URLSearchParams();
     params.set('userRoleId', userRoleId);
+    console.log('hete');
     return vm.http.post('api/roleTypeAccessProfile/saveRoleTypeAccessProfiles', roleProfiles, {search: params})
       .map((response) => response.text());
   }

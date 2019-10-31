@@ -3,6 +3,6 @@ export class ApplicationProfile {
   name: string;
   applicationId: string;
   description: string;
-  profileTree: string;
+  superUser: boolean;
   isDeleted : boolean;
 }

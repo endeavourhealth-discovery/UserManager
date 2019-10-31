@@ -88,8 +88,6 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
     this.selfEdit = s.selfEdit;
 
     let vm = this;
-    vm.getAvailableRegions();
-    vm.getAvailableApplicationPolicies();
 
     vm.userManagerNotificationService.activeUserProject.subscribe(active => {
       vm.activeProject = active;
@@ -147,6 +145,14 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
       vm.getGodModeOrganisations();
     } else {
       vm.getDelegatedOrganisations();
+    }
+
+    vm.getAvailableRegions();
+
+    if (vm.superUser) {
+      vm.getAvailableApplicationPolicies();
+    } else {
+      vm.getNonSuperUserAvailableApplicationPolicies();
     }
   }
 
@@ -271,6 +277,22 @@ export class UserEditorComponent implements OnInit, AfterViewInit {
   getAvailableApplicationPolicies() {
     const vm = this;
     vm.configurationService.getApplicationPolicies()
+      .subscribe(
+        (result) => {
+          vm.availablePolicies = result;
+          if (vm.editMode && !vm.existing) {
+            vm.getUserApplicationPolicy();
+          }
+        },
+        (error) => {
+          vm.log.error('Available application policies could not be loaded. Please try again.', error, 'Load available application policies');
+        }
+      );
+  }
+
+  getNonSuperUserAvailableApplicationPolicies() {
+    const vm = this;
+    vm.configurationService.getNonSuperUserApplicationPolicies()
       .subscribe(
         (result) => {
           vm.availablePolicies = result;
