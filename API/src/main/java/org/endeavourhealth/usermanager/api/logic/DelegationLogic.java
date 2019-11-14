@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanager.api.logic;
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegatedOrganisation;
@@ -20,7 +21,7 @@ public class DelegationLogic {
 
     public Response getDelegatedOrganisations(String organisationId) throws Exception {
 
-        List<DelegationRelationshipEntity> relationships = new DelegationRelationshipDAL().getDelegatedOrganisations(organisationId);
+        List<DelegationRelationshipEntity> relationships = new SecurityDelegationRelationshipDAL().getDelegatedOrganisations(organisationId);
 
         List<String> orgs = relationships.stream()
                 .map(DelegationRelationshipEntity::getChildUuid)

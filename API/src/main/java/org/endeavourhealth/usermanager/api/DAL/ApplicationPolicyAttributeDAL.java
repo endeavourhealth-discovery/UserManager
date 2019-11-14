@@ -1,6 +1,7 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
+import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityApplicationPolicyAttributeDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
@@ -118,21 +119,9 @@ public class ApplicationPolicyAttributeDAL {
         }
     }
 
-    public ApplicationPolicyAttributeEntity getRoleTypeAccessProfile(String profileId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
-
-        try {
-            ApplicationPolicyAttributeEntity ret = entityManager.find(ApplicationPolicyAttributeEntity.class, profileId);
-
-            return ret;
-        } finally {
-            entityManager.close();
-        }
-    }
-
     public void deleteRoleAccessProfile(String profileId, String userRoleId) throws Exception {
 
-        JsonApplicationPolicyAttribute accessProfile = new JsonApplicationPolicyAttribute(getRoleTypeAccessProfile(profileId));
+        JsonApplicationPolicyAttribute accessProfile = new JsonApplicationPolicyAttribute(new SecurityApplicationPolicyAttributeDAL().getRoleTypeAccessProfile(profileId));
 
         accessProfile.setDeleted(true);
 

@@ -40,27 +40,6 @@ public class DelegationRelationshipDAL {
         }
     }
 
-    public List<DelegationRelationshipEntity> getDelegatedOrganisations(String organisationId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
-
-        try {
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<DelegationRelationshipEntity> cq = cb.createQuery(DelegationRelationshipEntity.class);
-            Root<DelegationRelationshipEntity> rootEntry = cq.from(DelegationRelationshipEntity.class);
-
-            Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), organisationId),
-                    (cb.equal(rootEntry.get("isDeleted"), 0)));
-
-            cq.where(predicate);
-            TypedQuery<DelegationRelationshipEntity> query = entityManager.createQuery(cq);
-            List<DelegationRelationshipEntity> ret = query.getResultList();
-
-            return ret;
-        } finally {
-            entityManager.close();
-        }
-    }
-
     public void saveDelegationRelationship(JsonDelegationRelationship delegationRelationship,
                                                   String userRoleId) throws Exception {
 
@@ -130,19 +109,6 @@ public class DelegationRelationshipDAL {
             query.executeUpdate();
             entityManager.getTransaction().commit();
 
-
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    public DelegationRelationshipEntity getDelegationRelationship(String relationshipId) throws Exception {
-        EntityManager entityManager = ConnectionManager.getUmEntityManager();
-
-        try {
-            DelegationRelationshipEntity ret = entityManager.find(DelegationRelationshipEntity.class, relationshipId);
-
-            return ret;
 
         } finally {
             entityManager.close();

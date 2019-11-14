@@ -53,7 +53,7 @@
                   <tr *ngFor="let audit of auditSummaries" class="hover-box show-child-on-hover" (click)="showDetails(audit)">
 
                     <td>{{audit.userName}}</td>
-                    <td>{{audit.userProject}}</td>
+                    <td>{{audit.project}}</td>
                     <td>{{audit.organisation}}</td>
                     <td>{{audit.timestamp}}</td>
                     <td>{{audit.auditAction}} {{audit.itemType}}</td>

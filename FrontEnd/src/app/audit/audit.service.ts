@@ -33,7 +33,7 @@ export class AuditService {
       params.set('dateTo', this.datePipe.transform(dateTo,"yyyy-MM-dd HH:mm:ss"));
     }
 
-    return vm.http.get('api/audit/getAudit', {search: params})
+    return vm.http.get('api/uiaudit/getUIAudit', {search: params})
       .map((response) => response.json());
   }
 
@@ -51,7 +51,7 @@ export class AuditService {
       params.set('userId', userId);
     }
 
-    return vm.http.get('api/audit/auditCount', {search: params})
+    return vm.http.get('api/uiaudit/getUIAuditCount', {search: params})
       .map((response) => response.json());
   }
 
@@ -59,7 +59,7 @@ export class AuditService {
     const vm = this;
     let params = new URLSearchParams();
     params.set('auditId', id);
-    return vm.http.get('api/audit/getAuditDetail', {search: params})
+    return vm.http.get('api/uiaudit/getUIAuditDetail', {search: params})
       .map((response) => response.json());
   }
 

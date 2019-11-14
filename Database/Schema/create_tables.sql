@@ -211,7 +211,9 @@ ON delegation_relationship (delegation, child_uuid, child_type, parent_uuid, par
 CREATE TABLE audit
 (
     id varchar(36),
-    user_project_id varchar(36),
+    user_id varchar(36),
+    organisation_id varchar(36),
+    project_id varchar(36),
     timestamp datetime,
     audit_type tinyint,
     item_before varchar(36),
