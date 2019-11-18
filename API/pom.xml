@@ -36,8 +36,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.endeavourhealth.common</groupId>
-      <artifactId>UI-AuditTrail</artifactId>
+      <groupId>org.endeavourhealth.UI-AuditTrail</groupId>
+      <artifactId>API</artifactId>
     </dependency>
 
     <!-- Java servlet -->
