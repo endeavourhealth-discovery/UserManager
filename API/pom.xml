@@ -40,7 +40,7 @@
       <artifactId>UI-AuditTrail</artifactId>
     </dependency>
 
-     Java servlet
+    <!-- Java servlet -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
