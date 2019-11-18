@@ -35,12 +35,12 @@
       <artifactId>security</artifactId>
     </dependency>
 
-    <!--<dependency>
+    <dependency>
       <groupId>org.endeavourhealth.common</groupId>
       <artifactId>UI-AuditTrail</artifactId>
-    </dependency>-->
+    </dependency>
 
-    <!-- Java servlet -->
+     Java servlet
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
