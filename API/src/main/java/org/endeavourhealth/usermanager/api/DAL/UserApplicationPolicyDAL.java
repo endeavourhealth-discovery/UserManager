@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserApplicationPolicyEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserApplicationPolicy;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import javax.persistence.EntityManager;
@@ -49,7 +49,7 @@ public class UserApplicationPolicyDAL {
 
         String auditJson = getAuditJsonForApplicationPolicyChange(oldPolicy, new UserApplicationPolicyEntity(userApplicationPolicy));
 
-        new SecurityAuditDAL().addToAuditTrail(userProjectId,
+        new UIAuditJDBCDAL().addToAuditTrail(userProjectId,
                 AuditAction.EDIT, ItemType.USER_APPLICATION_POLICY, null, null, auditJson);
 
     }

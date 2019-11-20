@@ -1,12 +1,12 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.DelegationCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegation;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -117,10 +117,10 @@ public class DelegationDAL {
         DelegationCache.clearDelegationCache(delegation.getUuid());
 
         if (delegation.isDeleted()) {
-            new SecurityAuditDAL().addToAuditTrail(userRoleId,
+            new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.DELEGATION, delegation.getUuid(), null, null);
         } else {
-            new SecurityAuditDAL().addToAuditTrail(userRoleId,
+            new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.ADD, ItemType.DELEGATION, null, delegation.getUuid(), null);
         }
     }

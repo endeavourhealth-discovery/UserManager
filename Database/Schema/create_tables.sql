@@ -220,7 +220,7 @@ CREATE TABLE audit
     item_after varchar(36),
     item_type tinyint,
     audit_json text,
-    CONSTRAINT pk_item_type PRIMARY KEY (id, user_project_id, timestamp)
+    CONSTRAINT pk_item_type PRIMARY KEY (id, user_id, timestamp)
 );
 
 CREATE TABLE active_item

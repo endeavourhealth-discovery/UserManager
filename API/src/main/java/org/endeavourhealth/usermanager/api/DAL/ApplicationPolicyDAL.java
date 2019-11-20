@@ -1,12 +1,12 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicy;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 
 import javax.persistence.EntityManager;
 import java.util.UUID;
@@ -34,13 +34,13 @@ public class ApplicationPolicyDAL {
         }
 
         if (applicationPolicy.getIsDeleted()) {
-            new SecurityAuditDAL().addToAuditTrail(userRoleId,
+            new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), null, null);
         } else if (added) {
-            new SecurityAuditDAL().addToAuditTrail(userRoleId,
+            new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.ADD, ItemType.APPLICATION_POLICY, null, applicationPolicy.getId(), null);
         } else {
-            new SecurityAuditDAL().addToAuditTrail(userRoleId,
+            new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.EDIT, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), originalUuid, null);
         }
 

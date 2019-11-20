@@ -1,12 +1,12 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserProject;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -42,10 +42,10 @@ public class UserProjectDAL {
         UserCache.clearUserCache(userProject.getUserId());
 
         if (userProject.isDeleted()) {
-            new SecurityAuditDAL().addToAuditTrail(userProjectId,
+            new UIAuditJDBCDAL().addToAuditTrail(userProjectId,
                     AuditAction.DELETE, ItemType.USER_PROJECT, userProject.getId(), null, null);
         } else {
-            new SecurityAuditDAL().addToAuditTrail(userProjectId,
+            new UIAuditJDBCDAL().addToAuditTrail(userProjectId,
                     AuditAction.ADD, ItemType.USER_PROJECT, null, userProject.getId(), null);
         }
     }

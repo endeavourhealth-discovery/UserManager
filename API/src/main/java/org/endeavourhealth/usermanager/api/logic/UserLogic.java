@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityAuditDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserProject;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 import org.endeavourhealth.usermanager.api.DAL.UserProjectDAL;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -260,7 +260,7 @@ public class UserLogic {
             ((ObjectNode) rootNode).set("before", beforeJson);
         }
 
-        new SecurityAuditDAL().addToAuditTrail(userRoleId,
+        new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                 AuditAction.EDIT,
                 ItemType.USER, null, null, prettyPrintJsonString(rootNode));
 
@@ -279,7 +279,7 @@ public class UserLogic {
             ((ObjectNode) rootNode).set("after", afterJson);
         }
 
-        new SecurityAuditDAL().addToAuditTrail(userRoleId,
+        new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                 AuditAction.ADD,
                 ItemType.USER, null, null, prettyPrintJsonString(rootNode));
 
@@ -298,7 +298,7 @@ public class UserLogic {
             ((ObjectNode) rootNode).set("after", afterJson);
         }
 
-        new SecurityAuditDAL().addToAuditTrail(userRoleId,
+        new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                 AuditAction.DELETE,
                 ItemType.USER, null, null, prettyPrintJsonString(rootNode));
 
@@ -317,7 +317,7 @@ public class UserLogic {
             ((ObjectNode) rootNode).set("after", afterJson);
         }
 
-        new SecurityAuditDAL().addToAuditTrail(userRoleId,
+        new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                 AuditAction.ADD,
                 ItemType.USER_PASSWORD_EMAIL, null, null, prettyPrintJsonString(rootNode));
 
