@@ -84,13 +84,13 @@ public class DelegationRelationshipDAL {
 
         if (delegationRelationship.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.DELEGATION_RELATIONSHIP, delegationRelationship.getUuid(), null, null);
+                    AuditAction.DELETE, ItemType.DELEGATION_RELATIONSHIP, delegationRelationship.getUuid(), null);
         } else if (added) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.DELEGATION_RELATIONSHIP, null, delegationRelationship.getUuid(), null);
+                    AuditAction.ADD, ItemType.DELEGATION_RELATIONSHIP, null, delegationRelationship.getUuid());
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.DELEGATION_RELATIONSHIP, originalUuid, delegationRelationship.getUuid(), null);
+                    AuditAction.EDIT, ItemType.DELEGATION_RELATIONSHIP, originalUuid, delegationRelationship.getUuid());
         }
     }
 

@@ -43,10 +43,10 @@ public class UserProjectDAL {
 
         if (userProject.isDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userProjectId,
-                    AuditAction.DELETE, ItemType.USER_PROJECT, userProject.getId(), null, null);
+                    AuditAction.DELETE, ItemType.USER_PROJECT, userProject.getId(), null);
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userProjectId,
-                    AuditAction.ADD, ItemType.USER_PROJECT, null, userProject.getId(), null);
+                    AuditAction.ADD, ItemType.USER_PROJECT, null, userProject.getId());
         }
     }
 

@@ -85,13 +85,13 @@ public class ApplicationAccessProfileDAL {
 
         if (applicationProfile.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), null, null);
+                    AuditAction.DELETE, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), null);
         } else if (added) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION_PROFILE, null, applicationProfile.getId(), null);
+                    AuditAction.ADD, ItemType.APPLICATION_PROFILE, null, applicationProfile.getId());
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), originalUuid, null);
+                    AuditAction.EDIT, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), originalUuid);
         }
 
     }

@@ -64,13 +64,13 @@ public class ApplicationPolicyAttributeDAL {
 
         if (roleAccessProfile.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), null, null);
+                    AuditAction.DELETE, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), null);
         } else if (added) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION_POLICY_ATTRIBUTE, null, roleAccessProfile.getId(), null);
+                    AuditAction.ADD, ItemType.APPLICATION_POLICY_ATTRIBUTE, null, roleAccessProfile.getId());
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), originalUuid, null);
+                    AuditAction.EDIT, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), originalUuid);
         }
 
         return roleAccessProfile.getId();

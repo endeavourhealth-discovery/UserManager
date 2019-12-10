@@ -35,13 +35,13 @@ public class ApplicationPolicyDAL {
 
         if (applicationPolicy.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), null, null);
+                    AuditAction.DELETE, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), null);
         } else if (added) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION_POLICY, null, applicationPolicy.getId(), null);
+                    AuditAction.ADD, ItemType.APPLICATION_POLICY, null, applicationPolicy.getId());
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), originalUuid, null);
+                    AuditAction.EDIT, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), originalUuid);
         }
 
     }

@@ -63,13 +63,13 @@ public class ApplicationDAL {
 
         if (application.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.APPLICATION, application.getId(), null, null);
+                    AuditAction.DELETE, ItemType.APPLICATION, application.getId(), null);
         } else if (added) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.APPLICATION, null, application.getId(), null);
+                    AuditAction.ADD, ItemType.APPLICATION, null, application.getId());
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.EDIT, ItemType.APPLICATION, application.getId(), originalUuid, null);
+                    AuditAction.EDIT, ItemType.APPLICATION, application.getId(), originalUuid);
         }
 
         return application.getId();

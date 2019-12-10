@@ -118,10 +118,10 @@ public class DelegationDAL {
 
         if (delegation.isDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.DELETE, ItemType.DELEGATION, delegation.getUuid(), null, null);
+                    AuditAction.DELETE, ItemType.DELEGATION, delegation.getUuid(), null);
         } else {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
-                    AuditAction.ADD, ItemType.DELEGATION, null, delegation.getUuid(), null);
+                    AuditAction.ADD, ItemType.DELEGATION, null, delegation.getUuid());
         }
     }
 
