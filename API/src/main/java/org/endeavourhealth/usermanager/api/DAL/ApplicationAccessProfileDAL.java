@@ -83,6 +83,7 @@ public class ApplicationAccessProfileDAL {
             applicationProfile.setDeleted(false);
         }
 
+
         if (applicationProfile.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.APPLICATION_PROFILE, applicationProfile.getId(), null);
