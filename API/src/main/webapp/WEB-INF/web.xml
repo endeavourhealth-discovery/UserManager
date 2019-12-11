@@ -142,6 +142,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--
     <filter>
         <filter-name>AppAccessFilter</filter-name>
         <filter-class>org.endeavourhealth.coreui.framework.AppAccessFilter</filter-class>
@@ -154,7 +155,7 @@
         <filter-name>AppAccessFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+    -->
 
     <listener>
         <listener-class>org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener</listener-class>
