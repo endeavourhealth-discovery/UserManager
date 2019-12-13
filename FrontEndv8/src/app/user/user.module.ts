@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import { OrganisationComponent } from './organisation/organisation.component';
-import { OrganisationService } from './organisation.service';
+import {UserComponent} from './user/user.component';
+import {UserService} from "./user.service";
 import {
   MatButtonModule,
   MatCardModule, MatCheckboxModule, MatDialogModule,
@@ -49,14 +49,15 @@ import {BrowserModule} from "@angular/platform-browser";
     MatProgressBarModule
   ],
   declarations: [
-    OrganisationComponent,
+    UserComponent,
     GenericTableComponent,
     GenericTableSspComponent
   ],
-  entryComponents : [
+  entryComponents: [
   ],
   providers: [
-    OrganisationService,
-    DatePipe]
+    UserService,
+    DatePipe
+  ]
 })
-export class OrganisationModule { }
+export class UserModule { }
