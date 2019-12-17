@@ -1,10 +1,50 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>Users</mat-card-title>
+    <mat-card-subtitle>Users currently defined in the organisation</mat-card-subtitle>
+    <div fxFlex></div>
+    <mat-menu #visualiseMenu="matMenu">
+      <button *ngIf="superUser && !machineUsers" mat-menu-item (click)="viewMachineUsers()">View machine users</button>
+      <button *ngIf="superUser && machineUsers" mat-menu-item (click)="viewHumanUsers()">View human users</button>
+    </mat-menu>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill>
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef> Username</th>
+          <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+        </ng-container>
+        <ng-container matColumnDef="surname">
+          <th mat-header-cell *matHeaderCellDef> Surname</th>
+          <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
+        </ng-container>
+        <ng-container matColumnDef="forename">
+          <th mat-header-cell *matHeaderCellDef> Forename</th>
+          <td mat-cell *matCellDef="let element"> {{element.forename}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+
+  </mat-card-content>
+</mat-card>
+<!--
 <div class="module">
   <div class="container-fluid">
     <div class="module-heading">
       Users
       <div class="pull-right">
-        <button *ngIf="superUser && !machineUsers" class="btn btn-success" (click)="viewMachineUsers()">View machine users</button>
-        <button *ngIf="superUser && machineUsers" class="btn btn-success" (click)="viewHumanUsers()">View human users</button>
+        <button *ngIf="superUser && !machineUsers" class="btn btn-success" (click)="viewMachineUsers()">View machine
+          users
+        </button>
+        <button *ngIf="superUser && machineUsers" class="btn btn-success" (click)="viewHumanUsers()">View human users
+        </button>
       </div>
     </div>
     <div class="module-body">
@@ -13,38 +53,8 @@
           <div class="card" *ngIf="!machineUsers">
             <div class="card-header">
               Organisation users
-              <div class="pull-right">
-                <button *ngIf="admin" class="btn btn-success" (click)="addUser()">Add new user</button>
-                <button *ngIf="admin" class="btn btn-success" (click)="addExisting()">Add existing user</button>
-              </div>
             </div>
             <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="control-label">Select organisation</label>
-                    <select class="form-control" [(ngModel)]="selectedOrg" name="selectedOrg" (change)="getUsers()">
-                      <option *ngFor="let del of delegatedOrganisations" [ngValue]="del">{{del.name}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="control-label">Search users</label>
-                    <div class="input-group">
-                      <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
-                      <span class="input-group-append" (click)="searchUsers()">
-                          <em class="fa fa-search input-group-text" title="Search"></em>
-                        </span>
-                      <span class="input-group-append" (click)="clearSearch()">
-                          <em class="fa fa-remove input-group-text" title="Clear search"></em>
-                         </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="row">
                 <div class="col-md-12">
                   <div class="scroll-box-500">
@@ -52,7 +62,7 @@
                       <table class="table table-striped table-sm">
                         <thead>
                         <tr class="d-flex">
-                          <th class="col-4"  (click)="sort('username');">Username
+                          <th class="col-4" (click)="sort('username');">Username
                             <span class="fa fa-sort" style="cursor: pointer"></span>
                           </th>
                           <th class="col-4" (click)="sort('surname');">Surname
@@ -86,27 +96,8 @@
           <div class="card" *ngIf="machineUsers">
             <div class="card-header">
               Machine users
-              <div class="pull-right">
-                <button *ngIf="admin" class="btn btn-success" (click)="addUser()">Add new user</button>
-              </div>
             </div>
             <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="control-label">Search users</label>
-                    <div class="input-group">
-                      <input class="form-control" type="text" [(ngModel)]="searchTerm" (keyup)="searchUsers()" name="searchTerm" placeholder="Search term..." #searchBox>
-                      <span class="input-group-append" (click)="searchUsers()">
-                          <em class="fa fa-search input-group-text" title="Search"></em>
-                        </span>
-                      <span class="input-group-append" (click)="clearSearch()">
-                          <em class="fa fa-remove input-group-text" title="Clear search"></em>
-                         </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="row">
                 <div class="col-md-12">
                   <div class="scroll-box-500">
@@ -114,7 +105,7 @@
                       <table class="table table-striped table-sm">
                         <thead>
                         <tr class="d-flex">
-                          <th class="col-4"  (click)="sort('username');">Username
+                          <th class="col-4" (click)="sort('username');">Username
                             <span class="fa fa-sort" style="cursor: pointer"></span>
                           </th>
                           <th class="col-4" (click)="sort('surname');">Surname
@@ -145,83 +136,8 @@
             </div>
           </div>
         </div>
-
-        <div class="col-md-6">
-          <div class="card h-100">
-            <div class="card-header">
-              User details
-              <div class="pull-right">
-                <button *ngIf="selectedUser && admin" class="btn btn-info" (click)="resendEmail(selectedUser)">Resend password</button>
-                <button *ngIf="selectedUser && admin" class="btn btn-info" (click)="viewProfile(selectedUser)">View profile</button>
-                <button *ngIf="selectedUser && admin" class="btn btn-success" (click)="editUser(selectedUser)">Edit</button>
-                <button *ngIf="selectedUser && admin" class="btn btn-danger" (click)="deleteUser(selectedUser)">Delete</button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12" *ngIf="selectedUser==null">No user selected</div>
-              </div>
-              <div class="row" *ngIf="selectedUser">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label">Username</label>
-                    <input type="text" readonly class="form-control" placeholder="Username" [(ngModel)]="selectedUser.username" name="username">
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label">Forename</label>
-                    <input type="text" readonly class="form-control" placeholder="Forename" [(ngModel)]="selectedUser.forename" name="forename">
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label">Surname</label>
-                    <input type="text" readonly class="form-control" placeholder="Surname" [(ngModel)]="selectedUser.surname" name="surname">
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label">Email</label>
-                    <input type="text" readonly class="form-control" placeholder="Email" [(ngModel)]="selectedUser.email" name="email">
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label">Date user created</label>
-                    <input type="text" readonly class="form-control" placeholder="Date created" [(ngModel)]="selectedUserCreatedDate" name="createdTimeStamp">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label">Photo</label>
-                    <input type="text" readonly class="form-control" placeholder="Photo URL" [(ngModel)]="selectedUser.photo" name="photo">
-                    <img src="{{selectedUser.photo}}" class="img-rounded" height="156px" width="156px" alt="User photo">
-                  </div>
-                  <div class="form-group">
-                    <label class="control-label">Mobile</label>
-                    <input type="text" readonly class="form-control" placeholder="Mobile" [(ngModel)]="selectedUser.mobile" name="mobile">
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <label class="control-label">Projects</label>
-                  <loadingIndicator [done]="loadingRolesCompleted">
-                    <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length==0">No roles assigned</div>
-                    <div class="col-md-12" *ngIf="selectedUser.userProjects!=null&&selectedUser.userProjects.length>0">
-                      <div class="scroll-box-150">
-                        <table class="table table-striped table-sm">
-                        <thead>
-                          <th class="w-50">Organisation</th>
-                          <th class="w-50">Project</th>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let proj of selectedUser.userProjects" class="hover-box show-child-on-hover">
-                            <td>{{proj.organisationName}}</td>
-                            <td>{{proj.projectName}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      </div>
-                    </div>
-                  </loadingIndicator>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
+-->

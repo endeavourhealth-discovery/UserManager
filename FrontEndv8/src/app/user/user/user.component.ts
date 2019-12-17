@@ -15,14 +15,15 @@ import {LoggerService, UserManagerService} from "dds-angular8";
 //import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
 //import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {UserProject} from "../../models/UserProject";
-import {DelegatedOrganisation} from "../../models/DelegatedOrganisation";
+import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
+import {DelegationService} from "../../d3-delegation/delegation.service";
 import {ReplaySubject} from "rxjs";
 
-
 /*import {ConfigurationService} from "../../configuration/configuration.service";
-import {DelegationService} from "../../d3-delegation/delegation.service";
 
 */
+
+import {MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-user',
@@ -46,6 +47,9 @@ export class UserComponent implements OnInit {
   selectedUserCreatedDate: string;
   machineUsers = false;
 
+  dataSource: MatTableDataSource<any>;
+  displayedColumns: string[] = ['username','surname','forename'];
+
   public activeProject: UserProject;
   admin = false;
   superUser = false;
@@ -54,7 +58,7 @@ export class UserComponent implements OnInit {
               private userService: UserService,
               //private securityService: SecurityService,
               //private configurationService: ConfigurationService,
-              //private delegationService: DelegationService,
+              private delegationService: DelegationService,
               //private $modal : NgbModal,
               private router: Router,
               private route: ActivatedRoute,
@@ -95,12 +99,11 @@ export class UserComponent implements OnInit {
       vm.superUser = false;
     }
 
-    /*
     if (vm.superUser) {
       vm.getGodModeOrganisations();
     } else {
       vm.getDelegatedOrganisations();
-    }*/
+    }
   }
 
   //gets all users in the selected organisation
@@ -117,23 +120,23 @@ export class UserComponent implements OnInit {
         },
         (error) => vm.log.error('Error loading users and roles' + error + 'Error')
       );
+    this.dataSource = new MatTableDataSource<any>(this.userList);
   }
 
-  searchUsers() {
+  /*searchUsers() {
     const vm = this;
     vm.filteredUserList = vm.userList;
     vm.filteredUserList = vm.filteredUserList.filter(
       user => user.username.includes(vm.searchTerm) || user.forename.includes(vm.searchTerm) || user.surname.includes(vm.searchTerm)
     );
-  }
+  }*/
 
-  clearSearch() {
+  /*clearSearch() {
     const vm = this;
     vm.searchTerm = '';
     vm.filteredUserList = vm.userList;
-  }
+  }*/
 
-  /*
   getDelegatedOrganisations() {
     let vm = this;
     let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeProject.organisationId;
@@ -167,9 +170,9 @@ export class UserComponent implements OnInit {
         },
         (error) => vm.log.error('Error loading delegated organisations' + error + 'Error')
       );
-  }*/
+  }
 
-  sort(property: string) {
+  /*sort(property: string) {
     const vm = this;
     vm.sortField = property;
     vm.sortReverse = !vm.sortReverse;
@@ -182,10 +185,9 @@ export class UserComponent implements OnInit {
         return result;
       }
     })
-  }
+  }*/
 
-  /*
-  selectTopUser(){
+  /*selectTopUser(){
     let vm = this;
     if (vm.filteredUserList != null && vm.filteredUserList.length > 0)
     {
@@ -199,8 +201,7 @@ export class UserComponent implements OnInit {
     }
   }*/
 
-  /*
-  hasPermission(role : string) : boolean {
+  /*hasPermission(role : string) : boolean {
     return this.securityService.hasPermission('eds-user-manager', role);
   }
 
@@ -232,11 +233,9 @@ export class UserComponent implements OnInit {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
     this.state.setState('userProfile', {user: user});
     this.router.navigate(['userProfile']);
-  }
-  */
+  }*/
 
-  /*
-  resendEmail(user: User) {
+  /*resendEmail(user: User) {
     const vm = this;
     vm.userService.sendUserPasswordEmail(user.uuid, vm.activeProject.id)
       .subscribe(
@@ -248,8 +247,7 @@ export class UserComponent implements OnInit {
       );
   }*/
 
-  /*
-  deleteUser(user:User) {
+  /*deleteUser(user:User) {
     let vm = this;
     let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;
     if (user.uuid == loggedOnUserUuid)

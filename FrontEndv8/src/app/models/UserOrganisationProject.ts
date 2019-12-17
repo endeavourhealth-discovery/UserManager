@@ -1,5 +1,5 @@
-import {Project} from "../../configuration/models/Project";
-import {Organisation} from "../../organisation/models/Organisation";
+import {Project} from "../models/Project";
+import {Organisation} from "../models/Organisation";
 
 export class UserOrganisationProject {
   organisation: Organisation;
