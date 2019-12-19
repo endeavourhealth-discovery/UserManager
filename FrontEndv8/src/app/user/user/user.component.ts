@@ -12,16 +12,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/User";
 import {UserService} from "../user.service";
 import {LoggerService, UserManagerService} from "dds-angular8";
-//import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
-//import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
-import {UserProject} from "../../models/UserProject";
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
-import {ReplaySubject} from "rxjs";
-
-/*import {ConfigurationService} from "../../configuration/configuration.service";
-
-*/
+//import {ConfigurationService} from "../../configuration/configuration.service";
 
 import {MatTableDataSource} from '@angular/material';
 
@@ -63,7 +57,6 @@ export class UserComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               //private state: ModuleStateService,
-              //private userManagerNotificationService: UserManagerNotificationService,
               private userManagerService: UserManagerService,
   ) {
 
@@ -76,10 +69,7 @@ export class UserComponent implements OnInit {
         this.paramOrganisation = params['organisationId'];
       });
 
-    let activeUserProject: ReplaySubject<UserProject> = new ReplaySubject<UserProject>(1);
-
-      //this.userManagerNotificationService.activeUserProject.subscribe(active => {
-      activeUserProject.subscribe(active => {
+    this.userManagerService.onProjectChange.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });
@@ -116,11 +106,11 @@ export class UserComponent implements OnInit {
         (result) => {
           vm.userList = result;
           vm.filteredUserList = result;
+          this.dataSource = new MatTableDataSource<any>(result);
           //vm.selectTopUser();
         },
         (error) => vm.log.error('Error loading users and roles' + error + 'Error')
       );
-    this.dataSource = new MatTableDataSource<any>(this.userList);
   }
 
   /*searchUsers() {
@@ -138,37 +128,35 @@ export class UserComponent implements OnInit {
   }*/
 
   getDelegatedOrganisations() {
-    let vm = this;
-    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeProject.organisationId;
-    vm.delegationService.getDelegatedOrganisations(vm.activeProject.organisationId)
+    let orgSelector = this.paramOrganisation != null ? this.paramOrganisation : this.activeProject.organisationId;
+    this.delegationService.getDelegatedOrganisations(this.activeProject.organisationId)
       .subscribe(
         (result) => {
-          vm.delegatedOrganisations = result;
-          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+          this.delegatedOrganisations = result;
+          this.selectedOrg = this.delegatedOrganisations.find(r => {
             return r.uuid === orgSelector;
           });
-          vm.getUsers();
+          this.getUsers();
         },
-        (error) => vm.log.error('Error loading delegated organisations' + error + 'Error')
+        (error) => this.log.error('Error loading delegated organisations' + error + 'Error')
       );
   }
 
   getGodModeOrganisations() {
-    let vm = this;
-    let orgSelector = vm.paramOrganisation != null ? vm.paramOrganisation : vm.activeProject.organisationId;
-    vm.delegationService.getGodModeOrganisations()
+    let orgSelector = this.paramOrganisation != null ? this.paramOrganisation : this.activeProject.organisationId;
+    this.delegationService.getGodModeOrganisations()
       .subscribe(
         (result) => {
-          vm.delegatedOrganisations = result;
-          vm.selectedOrg = vm.delegatedOrganisations.find(r => {
+          this.delegatedOrganisations = result;
+          this.selectedOrg = this.delegatedOrganisations.find(r => {
             return r.uuid === orgSelector;
           });
-          if (vm.selectedOrg == null) {
-            vm.selectedOrg = vm.delegatedOrganisations[0];
+          if (this.selectedOrg == null) {
+            this.selectedOrg = this.delegatedOrganisations[0];
           }
-          vm.getUsers();
+          this.getUsers();
         },
-        (error) => vm.log.error('Error loading delegated organisations' + error + 'Error')
+        (error) => this.log.error('Error loading delegated organisations' + error + 'Error')
       );
   }
 
@@ -309,14 +297,12 @@ export class UserComponent implements OnInit {
   }*/
 
   viewMachineUsers() {
-    const vm = this;
-    vm.machineUsers = true;
-    vm.getUsers();
+    this.machineUsers = true;
+    this.getUsers();
   }
 
   viewHumanUsers() {
-    const vm = this;
-    vm.machineUsers = false;
-    vm.getUsers();
+    this.machineUsers = false;
+    this.getUsers();
   }
 }

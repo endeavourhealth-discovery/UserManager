@@ -8,8 +8,8 @@ export class AppMenuService implements  AbstractMenuProvider {
   static getRoutes(): Routes {
     return [
       { path: '', redirectTo : 'user', pathMatch: 'full' }, // Default route
-      { path: 'user', component: UserComponent, data: {role: 'Viewer'}},
-      { path: 'user/:organisationId', component: UserComponent, data: {role: 'Viewer'}}
+      { path: 'user', component: UserComponent, data: {role: 'User'}},
+      { path: 'user/:organisationId', component: UserComponent, data: {role: 'User'}}
     ];
   }
 

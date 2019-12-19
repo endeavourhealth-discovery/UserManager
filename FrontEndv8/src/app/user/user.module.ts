@@ -20,6 +20,7 @@ import {GenericTableComponent} from "../generic-table/generic-table.component";
 import {GenericTableSspComponent} from "../generic-table-ssp/generic-table-ssp.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
+import {DelegationService} from "../d3-delegation/delegation.service";
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import {BrowserModule} from "@angular/platform-browser";
   ],
   providers: [
     UserService,
+    DelegationService,
     DatePipe
   ]
 })

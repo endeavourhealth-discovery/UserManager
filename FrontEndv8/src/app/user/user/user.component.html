@@ -4,12 +4,16 @@
       <mat-icon>account_box</mat-icon>
     </div>
     <mat-card-title>Users</mat-card-title>
-    <mat-card-subtitle>Users currently defined in the organisation</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="!machineUsers">Users currently defined in the organisation</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="machineUsers">Machine users</mat-card-subtitle>
     <div fxFlex></div>
     <mat-menu #visualiseMenu="matMenu">
       <button *ngIf="superUser && !machineUsers" mat-menu-item (click)="viewMachineUsers()">View machine users</button>
       <button *ngIf="superUser && machineUsers" mat-menu-item (click)="viewHumanUsers()">View human users</button>
     </mat-menu>
+    <div fxLayoutAlign="center" class="mat-action" matRipple>
+      <mat-icon [matMenuTriggerFor]="visualiseMenu">more_vert</mat-icon>
+    </div>
   </mat-card-header>
   <mat-card-content>
     <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
@@ -29,9 +33,17 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      <div>
+      </div>
+      <mat-paginator [length]="filteredUserList.length"
+                     [pageSize]="15"
+                     [pageIndex]="0"
+                     [pageSizeOptions]="[10, 50, 100]"
+                     [showFirstLastButtons]="true"
+                     fxFlex="100"
+                     fxFill>
+      </mat-paginator>
     </div>
-
-
   </mat-card-content>
 </mat-card>
 <!--
