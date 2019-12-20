@@ -3,10 +3,8 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {DelegationData} from "./models/DelegationData";
 import {Delegation} from "./models/Delegation";
-import {Organisation} from "../models/Organisation";
 import {DelegationRelationship} from "./models/DelegationRelationship";
 import {DelegatedOrganisation} from "./models/DelegatedOrganisation";
-import {User} from "../models/User";
 
 @Injectable()
 export class DelegationService {
@@ -15,7 +13,7 @@ export class DelegationService {
 
   constructor(private http: HttpClient) { }
 
-  /* updateSelectedOrganisation(organisationId: string) {
+  updateSelectedOrganisation(organisationId: string) {
     this.selectedOrganisation = organisationId;
   }
 
@@ -24,77 +22,60 @@ export class DelegationService {
   }
 
   getDelegationRelationships(delegationId: string): Observable<DelegationRelationship[]> {
-    const vm = this;
-    let params = new URLSearchParams();
+    const url = 'api/delegationRelationship/get';
+    let params = new HttpParams();
     params.set('delegationId', delegationId);
-    return vm.http.get('api/delegationRelationship/get', {search: params})
-      .map((response) => response.json());
+    return this.http.get<DelegationRelationship[]>(url,{params});
   }
 
   getTreeData(delegationId: string): Observable<DelegationData> {
-    const vm = this;
-    let params = new URLSearchParams();
-    params.set('delegationId', delegationId);
-    return vm.http.get('api/delegationRelationship/getd3', {search: params})
-      .map((response) => response.json());
+    const url = 'api/delegationRelationship/getd3';
+    let params = new HttpParams();
+    if (delegationId) params.append('delegationId', delegationId);
+    return this.http.get<DelegationData>(url,{params});
   }
 
-  getDelegations(organisationId: string = null): Observable<Delegation[]> {
-    const vm = this;
-    let params = new URLSearchParams();
+ getDelegations(organisationId: string = null): Observable<Delegation[]> {
+    const url = 'api/delegation/get';
+    let params = new HttpParams();
     if (organisationId != null) {
-      params.set('organisationId', organisationId);
+      params.append('organisationId', organisationId);
     }
-    return vm.http.get('api/delegation/get', {search: params})
-      .map((response) => response.json());
-  }*/
+    return this.http.get<Delegation[]>(url,{params});
+  }
 
   getDelegatedOrganisations(organisationId: string): Observable<DelegatedOrganisation[]> {
-    //const vm = this;
-    var url = 'api/delegation/getDelegatedOrganisations';
-    //let params = new URLSearchParams();
-    //params.set('organisationId', organisationId);
-    //return vm.http.get('api/delegation/getDelegatedOrganisations', {search: params})
-    //  .map((response) => response.json());
-
+    const url = 'api/delegation/getDelegatedOrganisations';
     let params = new HttpParams();
     if (organisationId) params = params.append('organisationId', organisationId);
-
     return this.http.get<DelegatedOrganisation[]>(url,{params});
   }
 
   getGodModeOrganisations(): Observable<DelegatedOrganisation[]> {
-    // const vm = this;
-    var url = 'api/delegationRelationship/getGodModeOrganisations'
-    //return vm.http.get('api/delegationRelationship/getGodModeOrganisations')
-    //  .map((response) => response.json());
-
+    const url = 'api/delegationRelationship/getGodModeOrganisations'
     return this.http.get<DelegatedOrganisation[]>(url);
   }
 
-  /*saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
-    const vm = this;
-    let params = new URLSearchParams();
-    params.set('userRoleId', userRoleId);
-    return vm.http.post('api/delegationRelationship/saveRelationship', relationship, {search: params})
-      .map((response) => response.text());
+  saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
+    const url = 'api/delegationRelationship/saveRelationship';
+    let params = new HttpParams();
+    if (userRoleId) params.append('userRoleId', userRoleId);
+    return this.http.post<any>(url, relationship,{params});
   }
 
   saveDelegation(delegation: Delegation, userRoleId: string): Observable<any> {
-    const vm = this;
-    let params = new URLSearchParams();
-    params.set('userRoleId', userRoleId);
-    return vm.http.post('api/delegation/saveDelegation', delegation, {search: params})
-      .map((response) => response.text());
+    const url = 'api/delegation/saveDelegation';
+    let params = new HttpParams();
+    if (userRoleId) params.append('userRoleId', userRoleId);
+    return this.http.post<any>(url, delegation,{params});
   }
 
   deleteDelegation(delegation: string, userRoleId: string): Observable<any> {
-    const vm = this;
-    let params = new URLSearchParams();
-    params.set('delegationId', delegation);
-    params.set('userRoleId', userRoleId);
-    return vm.http.delete('api/delegation/deleteDelegation', {search: params})
-      .map((response) => response.text());
-  }*/
+    const url = 'api/delegation/deleteDelegation';
+    let params = new HttpParams();
+    if (delegation) params.append('delegationId', delegation);
+    if (userRoleId) params.append('userRoleId', userRoleId);
+    return this.http.delete<any>(url,{params});
+  }
 
 }

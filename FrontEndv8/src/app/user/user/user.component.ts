@@ -9,7 +9,7 @@ import {Component, OnInit} from '@angular/core';
 //import {ModuleStateService} from 'eds-angular4/dist/common';
 //import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../models/User";
+import {User} from "../models/User";
 import {UserService} from "../user.service";
 import {LoggerService, UserManagerService} from "dds-angular8";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
@@ -76,40 +76,38 @@ export class UserComponent implements OnInit {
   }
 
   roleChanged() {
-    const vm = this;
 
-    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
-      vm.admin = true;
-      vm.superUser = true;
-    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
-      vm.admin = true;
-      vm.superUser = false;
+    if (this.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
+      this.admin = true;
+      this.superUser = true;
+    } else if (this.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
+      this.admin = true;
+      this.superUser = false;
     } else {
-      vm.admin = false;
-      vm.superUser = false;
+      this.admin = false;
+      this.superUser = false;
     }
 
-    if (vm.superUser) {
-      vm.getGodModeOrganisations();
+    if (this.superUser) {
+      this.getGodModeOrganisations();
     } else {
-      vm.getDelegatedOrganisations();
+      this.getDelegatedOrganisations();
     }
   }
 
   //gets all users in the selected organisation
   getUsers(){
-    let vm = this;
-    vm.userList = null;
-    vm.filteredUserList = null;
-    vm.userService.getUsers(vm.selectedOrg.uuid, null, vm.machineUsers)
+    this.userList = null;
+    this.filteredUserList = null;
+    this.userService.getUsers(this.selectedOrg.uuid, null, this.machineUsers)
       .subscribe(
         (result) => {
-          vm.userList = result;
-          vm.filteredUserList = result;
+          this.userList = result;
+          this.filteredUserList = result;
           this.dataSource = new MatTableDataSource<any>(result);
           //vm.selectTopUser();
         },
-        (error) => vm.log.error('Error loading users and roles' + error + 'Error')
+        (error) => this.log.error('Error loading users and roles' + error + 'Error')
       );
   }
 

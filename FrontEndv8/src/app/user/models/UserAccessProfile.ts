@@ -1,4 +1,4 @@
-import {ApplicationPolicyAttribute} from "../models/ApplicationPolicyAttribute";
+import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
 
 export class UserAccessProfile {
   applicationName: string;
