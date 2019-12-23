@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
@@ -7,33 +7,21 @@ import {SelectionModel} from "@angular/cdk/collections";
   templateUrl: './generic-table.component.html',
   styleUrls: ['./generic-table.component.scss']
 })
-export class GenericTableComponent implements OnInit {
+export class GenericTableComponent implements OnInit, OnChanges {
   @Input() items : any[] = [];
-  @Input() typeDescription : string = '';
-  @Input() model : string = '';
-  @Input() primary : string = 'name';
-  @Input() primaryOrderText : string = this.primary;
   @Input() detailsToShow : any[] = [];
-  @Input() displayClass : string = 'region';
-  @Input() secondary : string;
-  @Input() secondaryOrderText : string = this.secondary;
   @Input() pageSize : number = 20;
-  @Input() allowDelete : boolean = false;
-  @Input() allowEdit : boolean = false;
-  @Input() noLink : boolean = false;
-  @Input() noSearch: boolean = false;
-  @Input() showEditButton: boolean = true;
+  @Input() allowSelect : boolean = false;
 
-  @Output() deleted: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() clicked: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onshowPicker: EventEmitter<string> = new EventEmitter<string>();
 
-
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   propertiesToShow: string[] = [];
 
-  public filterText : string = "";
+  public filterText : string = '';
+  filtered  = false;
   dataSource: any;
   selection = new SelectionModel<any>(true, []);
 
@@ -41,21 +29,28 @@ export class GenericTableComponent implements OnInit {
 
   }
 
+  updateRows() {
+    this.dataSource = new MatTableDataSource(this.items);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    if (this.table) {
+      this.table.renderRows();
+    }
+  }
+
   ngOnInit() {
     this.propertiesToShow = this.detailsToShow.map(x => x.property);
   }
 
   ngOnChanges(changes) {
-    this.dataSource = new MatTableDataSource(this.items);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
 
+    this.updateRows();
     var selectIndex: number = this.propertiesToShow.indexOf('select');
 
     // only allow items to be selected if user has admin rights
-    if (this.allowDelete) {
+    if (this.allowSelect) {
       if (selectIndex < 0) {
-        this.propertiesToShow.push('select');
+        this.propertiesToShow.unshift('select');
       }
     } else {
       if (selectIndex > -1) {
@@ -67,6 +62,8 @@ export class GenericTableComponent implements OnInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    this.filtered = true;
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -74,11 +71,8 @@ export class GenericTableComponent implements OnInit {
 
   clear() {
     this.filterText = '';
+    this.filtered = false;
     this.applyFilter('');
-  }
-
-  deleteItems() {
-    this.deleted.emit(this.selection.selected);
   }
 
   clickItem(row: any) {

@@ -1,13 +1,10 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {UserComponent} from './user/user.component';
-import {UserService} from "./user.service";
-import {DelegationService} from "../d3-delegation/delegation.service";
-//import {UserEditorComponent} from './user-editor/user-editor.component';
-//import {UserViewComponent} from './user-view/user-view.component';
-//import {UserBioComponent} from './user-bio/user-bio.component';
-//import {UserProfileComponent} from './user-profile/user-profile.component';
+import {D3TreeGraphModule} from "../d3-tree-graph/d3-tree-graph.module";
+import {DelegationService} from "./delegation.service";
+//import {D3DelegationComponent} from "./d3-delegation/d3-delegation.component";
+//import {DelegationCreatorComponent} from './delegation-creator/delegation-creator.component';
 import {
   MatButtonModule,
   MatCardModule, MatCheckboxModule,
@@ -52,20 +49,21 @@ import {BrowserModule} from "@angular/platform-browser";
     CoreModule,
     MatButtonModule,
     MatTreeModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    D3TreeGraphModule
   ],
   declarations: [
-    UserComponent,
+    //D3DelegationComponent,
+    //DelegationCreatorComponent,
     GenericTableComponent,
     GenericTableSspComponent
   ],
   entryComponents: [
-    //UserEditorComponent
+    //DelegationCreatorComponent
   ],
   providers: [
-    UserService,
     DelegationService,
     DatePipe
   ]
 })
-export class UserModule { }
+export class D3DelegationModule { }

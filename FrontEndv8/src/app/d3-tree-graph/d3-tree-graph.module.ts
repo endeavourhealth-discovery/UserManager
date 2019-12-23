@@ -1,13 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {UserComponent} from './user/user.component';
-import {UserService} from "./user.service";
-import {DelegationService} from "../d3-delegation/delegation.service";
-//import {UserEditorComponent} from './user-editor/user-editor.component';
-//import {UserViewComponent} from './user-view/user-view.component';
-//import {UserBioComponent} from './user-bio/user-bio.component';
-//import {UserProfileComponent} from './user-profile/user-profile.component';
+//import {D3TreeGraphComponent} from "./d3-tree-graph/d3-tree-graph.component";
+//import {NvD3Module} from 'ng2-nvd3';
+//import 'd3';
+//import 'nvd3';
+
 import {
   MatButtonModule,
   MatCardModule, MatCheckboxModule,
@@ -53,19 +51,21 @@ import {BrowserModule} from "@angular/platform-browser";
     MatButtonModule,
     MatTreeModule,
     MatProgressBarModule
+    //NvD3Module
   ],
   declarations: [
-    UserComponent,
+    //D3TreeGraphComponent,
     GenericTableComponent,
     GenericTableSspComponent
   ],
+  exports: [
+    //D3TreeGraphComponent
+  ],
   entryComponents: [
-    //UserEditorComponent
+    //D3TreeGraphComponent
   ],
   providers: [
-    UserService,
-    DelegationService,
     DatePipe
   ]
 })
-export class UserModule { }
+export class D3TreeGraphModule { }

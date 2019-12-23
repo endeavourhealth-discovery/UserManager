@@ -1,13 +1,10 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {UserComponent} from './user/user.component';
-import {UserService} from "./user.service";
-import {DelegationService} from "../d3-delegation/delegation.service";
-//import {UserEditorComponent} from './user-editor/user-editor.component';
-//import {UserViewComponent} from './user-view/user-view.component';
-//import {UserBioComponent} from './user-bio/user-bio.component';
-//import {UserProfileComponent} from './user-profile/user-profile.component';
+//import {ApplicationEditorComponent} from './application-editor/application-editor.component';
+//import {ApplicationPolicyEditorComponent} from './application-policy-editor/application-policy-editor.component';
+//import {ConfigurationComponent} from './configuration/configuration.component';
+import {ConfigurationService} from "./configuration.service";
 import {
   MatButtonModule,
   MatCardModule, MatCheckboxModule,
@@ -55,17 +52,17 @@ import {BrowserModule} from "@angular/platform-browser";
     MatProgressBarModule
   ],
   declarations: [
-    UserComponent,
+    //ConfigurationComponent,
+    //ApplicationEditorComponent,
+    //ApplicationPolicyEditorComponent,
     GenericTableComponent,
     GenericTableSspComponent
   ],
   entryComponents: [
-    //UserEditorComponent
   ],
   providers: [
-    UserService,
-    DelegationService,
+    ConfigurationService,
     DatePipe
   ]
 })
-export class UserModule { }
+export class ConfigurationModule { }

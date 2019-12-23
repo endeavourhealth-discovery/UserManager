@@ -5,6 +5,9 @@ import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {AbstractMenuProvider, LayoutComponent, LayoutModule, LoggerModule, SecurityModule, UserManagerModule} from 'dds-angular8';
 import {UserModule} from "./user/user.module";
+//import {OrganisationModule} from "./organisation/organisation.module";
+//import {D3DelegationModule} from "./d3-delegation/d3-delegation.module";
+//import {ConfigurationModule} from "./configuration/configuration.module";
 
 const keycloakService = new KeycloakService();
 
@@ -18,6 +21,9 @@ const keycloakService = new KeycloakService();
     LoggerModule,
     UserManagerModule,
     UserModule,
+    //OrganisationModule,
+    //D3DelegationModule,
+    //ConfigurationModule,
 
     RouterModule.forRoot(AppMenuService.getRoutes(), {useHash: true}),
   ],

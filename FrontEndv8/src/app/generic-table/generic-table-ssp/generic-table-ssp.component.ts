@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {SelectionModel} from "@angular/cdk/collections";
-import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 
 @Component({
   selector: 'app-generic-table-ssp',
@@ -10,35 +10,25 @@ import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
 export class GenericTableSspComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() items : any[] = [];
   @Input() totalItems : number;
-  @Input() typeDescription : string = '';
-  @Input() model : string = '';
-  @Input() primary : string = 'name';
-  @Input() primaryOrderText : string = this.primary;
   @Input() detailsToShow : any[] = [];
-  @Input() displayClass : string = 'region';
-  @Input() secondary : string;
-  @Input() secondaryOrderText : string = this.secondary;
   @Input() pageSize : number = 20;
-  @Input() allowDelete : boolean = false;
-  @Input() allowEdit : boolean = false;
-  @Input() noLink : boolean = false;
-  @Input() noSearch: boolean = false;
-  @Input() showEditButton: boolean = true;
+  @Input() allowSelect : boolean = false;
 
   @Output() deleted: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() clicked: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onshowPicker: EventEmitter<string> = new EventEmitter<string>();
   @Output() onPageChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() onPageSizeChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
   @Output() onOrderChange: EventEmitter<any> = new EventEmitter<any>();
 
 
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   propertiesToShow: string[] = [];
 
   public filterText : string = "";
+  filtered  = false;
   dataSource: any;
   selection = new SelectionModel<any>(true, []);
 
@@ -50,9 +40,17 @@ export class GenericTableSspComponent implements OnInit, AfterViewInit, OnChange
     this.propertiesToShow = this.detailsToShow.map(x => x.property);
   }
 
-  ngAfterViewInit() {
+  updateRows() {
+    this.dataSource = new MatTableDataSource(this.items);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    if (this.table) {
+      this.table.renderRows();
+    }
+  }
+
+  ngAfterViewInit() {
+    this.updateRows();
 
     this.sort.sortChange.subscribe(order => {
       this.onOrderChange.emit(order);
@@ -60,16 +58,15 @@ export class GenericTableSspComponent implements OnInit, AfterViewInit, OnChange
   }
 
   ngOnChanges(changes) {
-    console.log('total items changed', this.totalItems);
 
     this.dataSource = new MatTableDataSource(this.items);
 
     var selectIndex: number = this.propertiesToShow.indexOf('select');
 
     // only allow items to be selected if user has admin rights
-    if (this.allowDelete) {
+    if (this.allowSelect) {
       if (selectIndex < 0) {
-        this.propertiesToShow.push('select');
+        this.propertiesToShow.unshift('select');
       }
     } else {
       if (selectIndex > -1) {
@@ -85,18 +82,17 @@ export class GenericTableSspComponent implements OnInit, AfterViewInit, OnChange
   applyFilter(filterValue: string) {
     this.search.emit(filterValue.trim().toLowerCase());
 
+    this.filtered = true;
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
   clear() {
+    this.filtered = false;
     this.filterText = '';
     this.applyFilter('');
-  }
-
-  deleteItems() {
-    this.deleted.emit(this.selection.selected);
   }
 
   clickItem(row: any) {
