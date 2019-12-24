@@ -24,7 +24,7 @@ export class DelegationService {
   getDelegationRelationships(delegationId: string): Observable<DelegationRelationship[]> {
     const url = 'api/delegationRelationship/get';
     let params = new HttpParams();
-    params.set('delegationId', delegationId);
+    if (delegationId) params = params.append('delegationId', delegationId);
     return this.http.get<DelegationRelationship[]>(url,{params});
   }
 
