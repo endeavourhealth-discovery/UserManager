@@ -24,15 +24,15 @@ export class ConfigurationService {
   deleteApplicationPolicy(applicationPolicyId: string, userRoleId: string): Observable<any> {
     const url = 'api/applicationPolicy/deleteApplicationPolicy';
     let params = new HttpParams();
-    if (applicationPolicyId) params.append('applicationPolicyId', applicationPolicyId);
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (applicationPolicyId) params = params.append('applicationPolicyId', applicationPolicyId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.get<any>(url,{params});
   }
 
   saveApplicationPolicy(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
     const url = 'api/applicationPolicy/saveApplicationPolicy';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<any>(url, roleType,{params});
   }
 
@@ -44,43 +44,43 @@ export class ConfigurationService {
   saveApplication(application : Application, userRoleId: string): Observable<any> {
     const url = 'api/application/saveApplication';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<any>(url, application, {params});
   }
 
   deleteApplication(applicationId: string, userRoleId: string): Observable<any> {
     const url = 'api/application/deleteApplication';
     let params = new HttpParams();
-    if (applicationId) params.append('applicationId', applicationId);
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (applicationId) params = params.append('applicationId', applicationId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.delete<any>(url, {params});
   }
 
   getApplicationProfiles(applicationId: string): Observable<ApplicationProfile[]> {
     const url = 'api/applicationProfile/getApplicationProfiles';
     let params = new HttpParams();
-    if (applicationId) params.append('applicationId', applicationId);
+    if (applicationId) params = params.append('applicationId', applicationId);
     return this.http.get<ApplicationProfile[]>(url, {params});
   }
 
   saveApplicationProfiles(profiles: ApplicationProfile[], userRoleId: string): Observable<string> {
     const url = 'api/applicationProfile/saveApplicationProfiles';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<string>(url, profiles, {params});
   }
 
   getRoleTypeAccessProfiles(applicationPolicyId: string): Observable<ApplicationPolicyAttribute[]> {
     const url = 'api/roleTypeAccessProfile/getRoleTypeAccessProfiles';
     let params = new HttpParams();
-    if (applicationPolicyId) params.append('applicationPolicyId', applicationPolicyId);
+    if (applicationPolicyId) params = params.append('applicationPolicyId', applicationPolicyId);
     return this.http.get<ApplicationPolicyAttribute[]>(url,{params});
   }
 
   saveRoleTypeAccessProfiles(roleProfiles: ApplicationPolicyAttribute[], userRoleId: string): Observable<string> {
     const url = 'api/roleTypeAccessProfile/saveRoleTypeAccessProfiles';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     //console.log('hete');
     return this.http.post<string>(url, roleProfiles,{params});
   }

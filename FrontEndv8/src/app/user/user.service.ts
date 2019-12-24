@@ -28,59 +28,59 @@ export class UserService {
   saveUser(editedUser: User, editMode: boolean, userRoleId: string): Observable<User> {
     const url = 'api/user/users/save';
     let params = new HttpParams();
-    if (editMode) params.append('editMode', editMode == true ? "1":"0");
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (editMode) params = params.append('editMode', editMode == true ? "1":"0");
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<User>(url, editedUser,{params});
   }
 
   saveUserProjects(userRoles: UserProject[], userRoleId: string): Observable<string> {
     const url = 'api/user/users/saveProjects';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<string>(url, userRoles, {params});
   }
 
   deleteUser(userId: string, userRoleId: string) {
     const url = 'api/user/users/delete';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userId) params = params.append('userId', userId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.delete(url, {params});
   }
 
   getUserRoles(userId: string): Observable<UserProject[]> {
     const url = 'api/userManager/getRoles';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
+    if (userId) params = params.append('userId', userId);
     return this.http.get<UserProject[]>(url, {params});
   }
 
   getUser(userId: string): Observable<User> {
     const url = 'api/user/users/user';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
+    if (userId) params = params.append('userId', userId);
     return this.http.get<User>(url, {params});
   }
 
   getRoleAccessProfile(roleTypeId: string, organisationId: string): Observable<UserAccessProfile[]> {
     const url = 'api/userBio/getAccessProfile';
     let params = new HttpParams();
-    if (roleTypeId) params.append('applicationPolicyId', roleTypeId);
-    if (organisationId) params.append('organisationId', organisationId);
+    if (roleTypeId) params = params.append('applicationPolicyId', roleTypeId);
+    if (organisationId) params = params.append('organisationId', organisationId);
     return this.http.get<UserAccessProfile[]>(url, {params});
   }
 
   getUserRegion(userId: string): Observable<UserRegion> {
     const url = 'api/user/userRegion';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
+    if (userId) params = params.append('userId', userId);
     return this.http.get<UserRegion>(url, {params});
   }
 
   saveUserRegion(userRegion: UserRegion, userProjectId: string): Observable<string> {
     const url = 'api/user/setUserRegion';
     let params = new HttpParams();
-    if (userProjectId) params.append('userProjectId', userProjectId);
+    if (userProjectId) params = params.append('userProjectId', userProjectId);
     return this.http.post<string>(url, userRegion, {params});
   }
 
@@ -92,29 +92,29 @@ export class UserService {
   getUserApplicationPolicy(userId: string): Observable<UserApplicationPolicy> {
     const url = 'api/user/userApplicationPolicy';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
+    if (userId) params = params.append('userId', userId);
     return this.http.get<UserApplicationPolicy>(url, {params});
   }
 
   saveUserApplicationPolicy(userApplicationPolicy: UserApplicationPolicy, userProjectId: string): Observable<string> {
     const url = 'api/user/setUserApplicationPolicy';
     let params = new HttpParams();
-    if (userProjectId) params.append('userProjectId', userProjectId);
+    if (userProjectId) params = params.append('userProjectId', userProjectId);
     return this.http.post<string>(url, userApplicationPolicy, {params});
   }
 
   getUserProfile(userId: string): Observable<UserProfile> {
     const url = 'api/userManager/getUserProfile';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
+    if (userId) params = params.append('userId', userId);
     return this.http.get<UserProfile>(url, {params});
   }
 
   sendUserPasswordEmail(userId: string, userProjectId: string): Observable<string> {
     const url = 'api/user/sendUpdatePasswordEmail';
     let params = new HttpParams();
-    if (userId) params.append('userId', userId);
-    if (userProjectId) params.append('userProjectId', userProjectId);
+    if (userId) params = params.append('userId', userId);
+    if (userProjectId) params = params.append('userProjectId', userProjectId);
     return this.http.get<string>(url, {params});
   }
 

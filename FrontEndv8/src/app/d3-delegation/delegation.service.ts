@@ -31,7 +31,7 @@ export class DelegationService {
   getTreeData(delegationId: string): Observable<DelegationData> {
     const url = 'api/delegationRelationship/getd3';
     let params = new HttpParams();
-    if (delegationId) params.append('delegationId', delegationId);
+    if (delegationId) params = params.append('delegationId', delegationId);
     return this.http.get<DelegationData>(url,{params});
   }
 
@@ -39,7 +39,7 @@ export class DelegationService {
     const url = 'api/delegation/get';
     let params = new HttpParams();
     if (organisationId != null) {
-      params.append('organisationId', organisationId);
+      params = params.append('organisationId', organisationId);
     }
     return this.http.get<Delegation[]>(url,{params});
   }
@@ -59,22 +59,22 @@ export class DelegationService {
   saveRelationship(relationship: DelegationRelationship, userRoleId: string): Observable<any> {
     const url = 'api/delegationRelationship/saveRelationship';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<any>(url, relationship,{params});
   }
 
   saveDelegation(delegation: Delegation, userRoleId: string): Observable<any> {
     const url = 'api/delegation/saveDelegation';
     let params = new HttpParams();
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<any>(url, delegation,{params});
   }
 
   deleteDelegation(delegation: string, userRoleId: string): Observable<any> {
     const url = 'api/delegation/deleteDelegation';
     let params = new HttpParams();
-    if (delegation) params.append('delegationId', delegation);
-    if (userRoleId) params.append('userRoleId', userRoleId);
+    if (delegation) params = params.append('delegationId', delegation);
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.delete<any>(url,{params});
   }
 
