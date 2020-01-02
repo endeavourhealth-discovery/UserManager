@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {User} from "./models/User";
-import {UserProject} from "./models/UserProject";
-import {UserAccessProfile} from "./models/UserAccessProfile";
-import {UserRegion} from "./models/UserRegion";
-import {Region} from "./models/Region";
-import {UserProfile} from "./models/UserProfile";
-import {UserApplicationPolicy} from "./models/UserApplicationPolicy";
+import {User} from "../models/User";
+import {UserProject} from "../models/UserProject";
+import {UserAccessProfile} from "../models/UserAccessProfile";
+import {UserRegion} from "../models/UserRegion";
+import {Region} from "../models/Region";
+import {UserProfile} from "../models/UserProfile";
+import {UserApplicationPolicy} from "../models/UserApplicationPolicy";
 
 @Injectable()
 export class UserService {
@@ -116,6 +116,13 @@ export class UserService {
     if (userId) params = params.append('userId', userId);
     if (userProjectId) params = params.append('userProjectId', userProjectId);
     return this.http.get<string>(url, {params});
+  }
+
+  loadUserProjects(userId: string): Observable<UserProject[]> {
+    const vm = this;
+    let params = new HttpParams();
+    params = params.append('userId', userId);
+    return vm.http.get<UserProject[]>('api/userManager/getProjects', {params: params});
   }
 
 }

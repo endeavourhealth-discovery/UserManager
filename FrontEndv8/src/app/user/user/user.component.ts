@@ -1,23 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-/*import {
-  LoggerService,
-  MessageBoxDialog,
-  SecurityService,
-  UserManagerNotificationService,
-  UserManagerService
-} from "eds-angular4";*/
-//import {ModuleStateService} from 'eds-angular4/dist/common';
-//import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../models/User";
+import {User} from "../../models/User";
 import {UserService} from "../user.service";
 import {LoggerService, UserManagerService} from "dds-angular8";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
-//import {ConfigurationService} from "../../configuration/configuration.service";
 
-import {MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-user',
@@ -27,22 +16,17 @@ import {MatTableDataSource} from '@angular/material';
 export class UserComponent implements OnInit {
   private paramSubscriber: any;
 
-  userList: User[];
+  userList: User[] = [];
   selectedUser : User = null;
   selectedOrg: DelegatedOrganisation;
-  filteredUserList : User[];
   delegatedOrganisations: DelegatedOrganisation[];
-  sortReverse : boolean;
-  sortField = 'username';
-  searched : boolean;
   loadingRolesCompleted: boolean;
   paramOrganisation: string;
-  searchTerm: string;
   selectedUserCreatedDate: string;
   machineUsers = false;
 
-  dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['username','surname','forename'];
+  userDetailsToShow = new User().getDisplayItems();
+  userProjectDetailsToShow = new User().getUserProjectDisplayItems();
 
   public activeProject: UserProject;
   admin = false;
@@ -50,13 +34,9 @@ export class UserComponent implements OnInit {
 
   constructor(public log: LoggerService,
               private userService: UserService,
-              //private securityService: SecurityService,
-              //private configurationService: ConfigurationService,
               private delegationService: DelegationService,
-              //private $modal : NgbModal,
               private router: Router,
               private route: ActivatedRoute,
-              //private state: ModuleStateService,
               private userManagerService: UserManagerService,
   ) {
 
@@ -97,33 +77,16 @@ export class UserComponent implements OnInit {
 
   //gets all users in the selected organisation
   getUsers(){
-    this.userList = null;
-    this.filteredUserList = null;
     this.userService.getUsers(this.selectedOrg.uuid, null, this.machineUsers)
       .subscribe(
         (result) => {
           this.userList = result;
-          this.filteredUserList = result;
-          this.dataSource = new MatTableDataSource<any>(result);
-          //vm.selectTopUser();
+          console.log(result);
+          this.selectTopUser();
         },
         (error) => this.log.error('Error loading users and roles' + error + 'Error')
       );
   }
-
-  /*searchUsers() {
-    const vm = this;
-    vm.filteredUserList = vm.userList;
-    vm.filteredUserList = vm.filteredUserList.filter(
-      user => user.username.includes(vm.searchTerm) || user.forename.includes(vm.searchTerm) || user.surname.includes(vm.searchTerm)
-    );
-  }*/
-
-  /*clearSearch() {
-    const vm = this;
-    vm.searchTerm = '';
-    vm.filteredUserList = vm.userList;
-  }*/
 
   getDelegatedOrganisations() {
     let orgSelector = this.paramOrganisation != null ? this.paramOrganisation : this.activeProject.organisationId;
@@ -158,37 +121,17 @@ export class UserComponent implements OnInit {
       );
   }
 
-  /*sort(property: string) {
-    const vm = this;
-    vm.sortField = property;
-    vm.sortReverse = !vm.sortReverse;
-
-    vm.filteredUserList.sort(function(a, b) {
-      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-      if (vm.sortReverse) {
-        return result * -1;
-      } else {
-        return result;
-      }
-    })
-  }*/
-
-  /*selectTopUser(){
-    let vm = this;
-    if (vm.filteredUserList != null && vm.filteredUserList.length > 0)
+  selectTopUser() {
+    if (this.userList != null && this.userList.length > 0)
     {
-      let topUserInList = vm.filteredUserList[0];
-      vm.selectedUser = topUserInList;
-      vm.getUserRoles(vm.selectedUser.uuid);
-      vm.convertDateForSelectedUser();
+      let topUserInList = this.userList[0];
+      this.selectedUser = topUserInList;
+      this.getUserRoles(this.selectedUser.uuid);
+      this.convertDateForSelectedUser();
     }
     else {
-      vm.selectedUser = null;
+      this.selectedUser = null;
     }
-  }*/
-
-  /*hasPermission(role : string) : boolean {
-    return this.securityService.hasPermission('eds-user-manager', role);
   }
 
   addUser() {
@@ -209,90 +152,84 @@ export class UserComponent implements OnInit {
     this.router.navigate(['userEdit']);
   }
 
-  viewBio(user: User) {
-    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    this.state.setState('userBio', {user: user});
-    this.router.navigate(['userBio']);
-  }
-
   viewProfile(user: User) {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
     this.state.setState('userProfile', {user: user});
     this.router.navigate(['userProfile']);
-  }*/
+  }
 
-  /*resendEmail(user: User) {
-    const vm = this;
-    vm.userService.sendUserPasswordEmail(user.uuid, vm.activeProject.id)
+  resendEmail(user: User) {
+
+    this.userService.sendUserPasswordEmail(user.uuid, this.activeProject.id)
       .subscribe(
         (result) => {
-          vm.log.success('Reset password email sent successfully' + null + 'Sending email');
-          vm.loadingRolesCompleted = true;
+          this.log.success('Reset password email sent successfully' + null + 'Sending email');
+          this.loadingRolesCompleted = true;
         },
-        (error) => vm.log.error('Error sending reset password email' + error + 'Sending email')
+        (error) => this.log.error('Error sending reset password email' + error + 'Sending email')
       );
-  }*/
+  }
 
-  /*deleteUser(user:User) {
-    let vm = this;
+  deleteUser(user:User) {
+
     let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;
     if (user.uuid == loggedOnUserUuid)
     {
-      vm.log.warning("You cannot delete yourself!");
+      this.log.warning("You cannot delete yourself!");
     }
     else {
       let userName = user.forename + " " + user.surname;
 
-      MessageBoxDialog.open(vm.$modal, "Confirmation", "Delete user: " + userName.trim() + "?", "Yes", "No")
+      /*MessageBoxDialog.open(this.$modal, "Confirmation", "Delete user: " + userName.trim() + "?", "Yes", "No")
         .result.then(
         (result) => {
           let userId = user.uuid;
-          vm.userService.deleteUser(userId, vm.activeProject.id)
+          this.userService.deleteUser(userId, this.activeProject.id)
             .subscribe(
               (result) => {
-                vm.getUsers();
-                vm.selectedUser = null;
-                vm.log.info("User deleted");
+                this.getUsers();
+                this.selectedUser = null;
+                this.log.info("User deleted");
               },
-              (error) => vm.log.error('Error deleting user' + error + 'Error')
+              (error) => this.log.error('Error deleting user' + error + 'Error')
             );
         },
         (reason) => {
         }
-      );
+      );*/
     }
-  }*/
+  }
 
-  /*changeSelectedUser(user: User) {
-    const vm = this;
-    vm.selectedUser = user;
-    vm.getUserRoles(user.uuid)
-    vm.convertDateForSelectedUser();
-  }*/
+  changeSelectedUser(user: User) {
 
-  /*convertDateForSelectedUser() {
-    const vm = this;
-    var d = new Date(vm.selectedUser.createdTimeStamp);
-    vm.selectedUserCreatedDate = d.toLocaleString();
+    this.selectedUser = user;
+    this.getUserRoles(user.uuid)
+    this.convertDateForSelectedUser();
+  }
 
-  }*/
+  convertDateForSelectedUser() {
 
-  /*getUserRoles(userId: string){
-    let vm = this;
-    vm.loadingRolesCompleted = false;
-    if (vm.selectedUser.userProjects) {
-      vm.loadingRolesCompleted = true;
+    var d = new Date(this.selectedUser.createdTimeStamp);
+    this.selectedUserCreatedDate = d.toLocaleString();
+
+  }
+
+  getUserRoles(userId: string){
+
+    this.loadingRolesCompleted = false;
+    if (this.selectedUser.userProjects) {
+      this.loadingRolesCompleted = true;
       return;
     }
-    vm.userManagerService.getUserProjects(userId)
+    this.userService.loadUserProjects(userId)
       .subscribe(
         (result) => {
-          vm.selectedUser.userProjects = result;
-          vm.loadingRolesCompleted = true;
+          this.selectedUser.userProjects = result;
+          this.loadingRolesCompleted = true;
         },
-        (error) => vm.log.error('Error loading user projects' + error + 'Error')
+        (error) => this.log.error('Error loading user projects' + error + 'Error')
       );
-  }*/
+  }
 
   viewMachineUsers() {
     this.machineUsers = true;

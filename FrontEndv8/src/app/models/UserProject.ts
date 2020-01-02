@@ -1,4 +1,4 @@
-import {ApplicationPolicyAttribute} from "../../configuration/models/ApplicationPolicyAttribute";
+import {ApplicationPolicyAttribute} from "../configuration/models/ApplicationPolicyAttribute";
 
 export class UserProject {
 	id: string;

@@ -31,4 +31,20 @@ export class User {
 
 		return displayName.trim();
 	}
+
+  getDisplayItems(): any[] {
+    return [
+      {label: 'Username', property: 'username'},
+      {label: 'Forename', property: 'forename'},
+      {label: 'Surname', property: 'surname'}
+    ];
+  }
+
+  getUserProjectDisplayItems(): any[] {
+    return [
+      {label: 'Organisation', property: 'organisationName'},
+      {label: 'Project', property: 'projectName'}
+    ];
+  }
+
 }

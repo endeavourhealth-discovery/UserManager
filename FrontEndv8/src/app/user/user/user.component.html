@@ -16,140 +16,102 @@
     </div>
   </mat-card-header>
   <mat-card-content>
+
     <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill>
-        <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef> Username</th>
-          <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-        </ng-container>
-        <ng-container matColumnDef="surname">
-          <th mat-header-cell *matHeaderCellDef> Surname</th>
-          <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-        </ng-container>
-        <ng-container matColumnDef="forename">
-          <th mat-header-cell *matHeaderCellDef> Forename</th>
-          <td mat-cell *matCellDef="let element"> {{element.forename}} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <div>
+      <div fxFlex="50">
+        <mat-card>
+          <mat-card-header>
+            <mat-menu #orgUserMenu="matMenu">
+              <button *ngIf="admin" mat-menu-item (click)="addUser()">Add new user</button>
+              <button *ngIf="admin" mat-menu-item (click)="addExisting()">Add existing user</button>
+            </mat-menu>
+            <mat-card-title>Organisation users</mat-card-title>
+            <mat-card-subtitle>Users that belong to the selected organisation</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="orgUserMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+              <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Organisation type</mat-label>
+                <mat-select matInput name="status" [(ngModel)]="selectedOrg" name="selectedOrg" (selectionChange)="getUsers()">
+                  <mat-option *ngFor="let del of delegatedOrganisations" [value]="del">{{del.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+              <app-generic-table
+                [items]="userList"
+                [detailsToShow]="userDetailsToShow"
+                (clicked)="changeSelectedUser($event)"
+                [allowSelect]="false"></app-generic-table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
       </div>
-      <mat-paginator [length]="filteredUserList.length"
-                     [pageSize]="20"
-                     [pageIndex]="0"
-                     [pageSizeOptions]="[10, 20, 50, 100]"
-                     [showFirstLastButtons]="true"
-                     fxFlex="100"
-                     fxFill>
-      </mat-paginator>
+      <div fxFlex="50">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar class="avatar" [src]="selectedUser?.photo" [class.default-avatar]="user == null || user.photo == null">
+            <mat-menu #userEditMenu="matMenu">
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="resendEmail(selectedUser)">Resend password</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="viewProfile(selectedUser)">View profile</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="editUser(selectedUser)">Edit</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="deleteUser(selectedUser)">Delete</button>
+            </mat-menu>
+            <mat-card-title>User details</mat-card-title>
+            <mat-card-subtitle>Full details of the selected user</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="userEditMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngIf="selectedUser" class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Forename</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.forename" placeholder="Forename" name="forename">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Surname</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.surname" placeholder="Surname" name="surname">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Username</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.username" placeholder="Username" name="username">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Email</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.email" placeholder="Email" name="email">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Mobile</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.mobile" placeholder="Mobile" name="mobile">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Date user created</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUserCreatedDate" placeholder="Date user created" name="selectedUserCreatedDate">
+              </mat-form-field>
+
+              <app-generic-table
+                [items]="selectedUser.userProjects"
+                [detailsToShow]="userProjectDetailsToShow"
+                [allowSelect]="false"></app-generic-table>
+
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
-<!--
-<div class="module">
-  <div class="container-fluid">
-    <div class="module-heading">
-      Users
-      <div class="pull-right">
-        <button *ngIf="superUser && !machineUsers" class="btn btn-success" (click)="viewMachineUsers()">View machine
-          users
-        </button>
-        <button *ngIf="superUser && machineUsers" class="btn btn-success" (click)="viewHumanUsers()">View human users
-        </button>
-      </div>
-    </div>
-    <div class="module-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card" *ngIf="!machineUsers">
-            <div class="card-header">
-              Organisation users
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="scroll-box-500">
-                    <loadingIndicator [done]="filteredUserList">
-                      <table class="table table-striped table-sm">
-                        <thead>
-                        <tr class="d-flex">
-                          <th class="col-4" (click)="sort('username');">Username
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                          <th class="col-4" (click)="sort('surname');">Surname
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                          <th class="col-4" (click)="sort('forename')">Forename
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                        </tr>
-                        </thead>
 
-                        <tbody>
-                        <tr *ngFor="let user of filteredUserList" class="hover-box show-child-on-hover d-flex"
-                            (click)="changeSelectedUser(user)"
-                            [ngClass]="{'selection': user == selectedUser}">
-
-                          <td class="col-4">{{user.username}}</td>
-                          <td class="col-4">{{user.surname}}</td>
-                          <td class="col-4">{{user.forename}}</td>
-
-                        </tr>
-                        </tbody>
-                      </table>
-                    </loadingIndicator>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" *ngIf="machineUsers">
-            <div class="card-header">
-              Machine users
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="scroll-box-500">
-                    <loadingIndicator [done]="filteredUserList">
-                      <table class="table table-striped table-sm">
-                        <thead>
-                        <tr class="d-flex">
-                          <th class="col-4" (click)="sort('username');">Username
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                          <th class="col-4" (click)="sort('surname');">Surname
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                          <th class="col-4" (click)="sort('forename')">Forename
-                            <span class="fa fa-sort" style="cursor: pointer"></span>
-                          </th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <tr *ngFor="let user of filteredUserList" class="hover-box show-child-on-hover d-flex"
-                            (click)="changeSelectedUser(user)"
-                            [ngClass]="{'selection': user == selectedUser}">
-
-                          <td class="col-4">{{user.username}}</td>
-                          <td class="col-4">{{user.surname}}</td>
-                          <td class="col-4">{{user.forename}}</td>
-
-                        </tr>
-                        </tbody>
-                      </table>
-                    </loadingIndicator>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
--->
