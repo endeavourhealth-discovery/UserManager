@@ -1,0 +1,62 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>Configuration</mat-card-title>
+    <mat-card-subtitle>Configuration of the system</mat-card-subtitle>
+    <div fxFlex></div>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+      <div fxFlex="50">
+        <mat-card>
+          <mat-card-header>
+            <mat-menu #appPolicyMenu="matMenu">
+              <button *ngIf="admin" mat-menu-item (click)="addApplicationPolicy()">Add new application policy</button>
+            </mat-menu>
+            <mat-card-title>Application policies</mat-card-title>
+            <mat-card-subtitle>Manage application policies</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="appPolicyMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+
+              <app-generic-table
+                [items]="appProfiles"
+                [detailsToShow]="appPolicyDetailsToShow"
+                (clicked)="editApplicationPolicy($event)"
+                [allowSelect]="false"></app-generic-table>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+      <div fxFlex="50">
+        <mat-card>
+          <mat-card-header>
+            <mat-menu #appMenu="matMenu">
+              <button *ngIf="admin" mat-menu-item (click)="addApplication()">Add new application</button>
+            </mat-menu>
+            <mat-card-title>Applications</mat-card-title>
+            <mat-card-subtitle>Manage applications</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="appMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+
+            <app-generic-table
+              [items]="applications"
+              [detailsToShow]="appDetailsToShow"
+              (clicked)="editApp($event)"
+              [allowSelect]="false"></app-generic-table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

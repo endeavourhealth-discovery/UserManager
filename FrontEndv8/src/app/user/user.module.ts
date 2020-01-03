@@ -4,10 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {UserComponent} from './user/user.component';
 import {UserService} from "./user.service";
 import {DelegationService} from "../d3-delegation/delegation.service";
-//import {UserEditorComponent} from './user-editor/user-editor.component';
-//import {UserViewComponent} from './user-view/user-view.component';
-//import {UserBioComponent} from './user-bio/user-bio.component';
-//import {UserProfileComponent} from './user-profile/user-profile.component';
 import {
   MatButtonModule,
   MatCardModule, MatCheckboxModule,
@@ -22,10 +18,10 @@ import {
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
 import {CoreModule} from "dds-angular8";
-import {GenericTableComponent} from "../generic-table/generic-table/generic-table.component";
-import {GenericTableSspComponent} from "../generic-table/generic-table-ssp/generic-table-ssp.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
+import {GenericTableModule} from "../generic-table/generic-table.module";
+import { UserEditorComponent } from './user-editor/user-editor.component';
 
 @NgModule({
   imports: [
@@ -52,15 +48,16 @@ import {BrowserModule} from "@angular/platform-browser";
     CoreModule,
     MatButtonModule,
     MatTreeModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    GenericTableModule
   ],
   declarations: [
     UserComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
+    UserEditorComponent,
+    // UserEditorComponent,
   ],
   entryComponents: [
-    //UserEditorComponent
+    // UserEditorComponent
   ],
   providers: [
     UserService,

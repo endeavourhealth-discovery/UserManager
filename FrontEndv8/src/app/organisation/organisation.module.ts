@@ -17,8 +17,6 @@ import {
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
 import {CoreModule} from "dds-angular8";
-import {GenericTableComponent} from "../generic-table/generic-table/generic-table.component";
-import {GenericTableSspComponent} from "../generic-table/generic-table-ssp/generic-table-ssp.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
 
@@ -51,8 +49,6 @@ import {BrowserModule} from "@angular/platform-browser";
   ],
   declarations: [
     //OrganisationPickerComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
   ],
   entryComponents: [
     //OrganisationPickerComponent

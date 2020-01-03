@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {User} from "../models/User";
-import {UserProject} from "../models/UserProject";
 import {UserAccessProfile} from "../models/UserAccessProfile";
 import {UserRegion} from "../models/UserRegion";
 import {Region} from "../models/Region";
 import {UserProfile} from "../models/UserProfile";
 import {UserApplicationPolicy} from "../models/UserApplicationPolicy";
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 
 @Injectable()
 export class UserService {

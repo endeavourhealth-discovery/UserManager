@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {ApplicationPolicy} from "./models/ApplicationPolicy";
-import {Application} from "./models/Application";
-import {ApplicationProfile} from "./models/ApplicationProfile";
-import {ApplicationPolicyAttribute} from "./models/ApplicationPolicyAttribute";
+import {ApplicationPolicy} from "../models/ApplicationPolicy";
+import {Application} from "../models/Application";
+import {ApplicationProfile} from "../models/ApplicationProfile";
+import {ApplicationPolicyAttribute} from "../models/ApplicationPolicyAttribute";
 
 @Injectable()
 export class ConfigurationService {

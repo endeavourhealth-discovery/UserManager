@@ -3,9 +3,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/User";
 import {UserService} from "../user.service";
 import {LoggerService, UserManagerService} from "dds-angular8";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 
 
 @Component({
@@ -136,26 +136,26 @@ export class UserComponent implements OnInit {
 
   addUser() {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    this.state.setState('userEdit', {user: null, editMode: false});
-    this.router.navigate(['userEdit']);
+    // this.state.setState('userEdit', {user: null, editMode: false});
+    this.router.navigate(['userEdit'], {state: {user: null, editMode: false}});
   }
 
   addExisting() {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    this.state.setState('userEdit', {user: null, editMode: true, existing: true});
-    this.router.navigate(['userEdit']);
+    // this.state.setState('userEdit', {user: null, editMode: true, existing: true});
+    this.router.navigate(['userEdit'], {state: {user: null, editMode: true, existing: true}});
   }
 
   editUser(user:User) {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    this.state.setState('userEdit', {user: user, editMode: true});
-    this.router.navigate(['userEdit']);
+    // this.state.setState('userEdit', {user: user, editMode: true});
+    this.router.navigate(['userEdit'], {state: {user: user, editMode: true}});
   }
 
   viewProfile(user: User) {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    this.state.setState('userProfile', {user: user});
-    this.router.navigate(['userProfile']);
+    // this.state.setState('userProfile', {user: user});
+    this.router.navigate(['userProfile'], {state: {user: user}});
   }
 
   resendEmail(user: User) {
@@ -172,10 +172,10 @@ export class UserComponent implements OnInit {
 
   deleteUser(user:User) {
 
-    let loggedOnUserUuid = this.securityService.getCurrentUser().uuid;
+    let loggedOnUserUuid = this.activeProject.userId;
     if (user.uuid == loggedOnUserUuid)
     {
-      this.log.warning("You cannot delete yourself!");
+      this.log.error("You cannot delete yourself!");
     }
     else {
       let userName = user.forename + " " + user.surname;

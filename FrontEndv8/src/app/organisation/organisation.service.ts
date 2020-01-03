@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Organisation} from "./models/Organisation";
-import {Project} from "../configuration/models/Project";
+import {Project} from "../models/Project";
 
 @Injectable()
 export class OrganisationService {

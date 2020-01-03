@@ -1,9 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-//import {ApplicationEditorComponent} from './application-editor/application-editor.component';
-//import {ApplicationPolicyEditorComponent} from './application-policy-editor/application-policy-editor.component';
-//import {ConfigurationComponent} from './configuration/configuration.component';
+import {ConfigurationComponent} from './configuration/configuration.component';
 import {ConfigurationService} from "./configuration.service";
 import {
   MatButtonModule,
@@ -19,10 +17,11 @@ import {
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
 import {CoreModule} from "dds-angular8";
-import {GenericTableComponent} from "../generic-table/generic-table/generic-table.component";
-import {GenericTableSspComponent} from "../generic-table/generic-table-ssp/generic-table-ssp.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
+import {GenericTableModule} from "../generic-table/generic-table.module";
+import {ApplicationEditorComponent} from "./application-editor/application-editor.component";
+import {ApplicationPolicyEditorComponent} from "./application-policy-editor/application-policy-editor.component";
 
 @NgModule({
   imports: [
@@ -49,14 +48,13 @@ import {BrowserModule} from "@angular/platform-browser";
     CoreModule,
     MatButtonModule,
     MatTreeModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    GenericTableModule
   ],
   declarations: [
-    //ConfigurationComponent,
-    //ApplicationEditorComponent,
-    //ApplicationPolicyEditorComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
+    ConfigurationComponent,
+    ApplicationEditorComponent,
+    ApplicationPolicyEditorComponent,
   ],
   entryComponents: [
   ],

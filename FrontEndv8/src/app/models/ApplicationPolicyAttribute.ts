@@ -9,4 +9,11 @@ export class ApplicationPolicyAttribute {
   applicationAccessProfileDescription : string;
   applicationAccessProfileSuperUser : boolean;
   isDeleted: boolean;
+
+  getDisplayItems(): any[] {
+    return [
+      {label: 'Application name', property: 'application'},
+      {label: 'Profile name', property: 'applicationAccessProfileName'}
+    ];
+  }
 }

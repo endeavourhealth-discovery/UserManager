@@ -1,4 +1,5 @@
-import {UserProject} from "./UserProject";
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+
 export class User {
 
 			constructor() {

@@ -17,7 +17,7 @@ export class GenericTableComponent implements OnInit, OnChanges {
 
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   propertiesToShow: string[] = [];
 
   public filterText : string = '';

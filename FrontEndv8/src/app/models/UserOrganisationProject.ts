@@ -1,4 +1,4 @@
-import {Project} from "../configuration/models/Project";
+import {Project} from "./Project";
 import {Organisation} from "./Organisation";
 
 export class UserOrganisationProject {
