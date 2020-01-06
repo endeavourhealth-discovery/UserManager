@@ -55,7 +55,7 @@
       <div fxFlex="50">
         <mat-card>
           <mat-card-header>
-            <img mat-card-avatar class="avatar" [src]="selectedUser?.photo" [class.default-avatar]="user == null || user.photo == null">
+            <img mat-card-avatar class="avatar" [src]="selectedUser?.photo" [class.default-avatar]="selectedUser == null || !selectedUser.photo">
             <mat-menu #userEditMenu="matMenu">
               <button *ngIf="selectedUser && admin" mat-menu-item (click)="resendEmail(selectedUser)">Resend password</button>
               <button *ngIf="selectedUser && admin" mat-menu-item (click)="viewProfile(selectedUser)">View profile</button>

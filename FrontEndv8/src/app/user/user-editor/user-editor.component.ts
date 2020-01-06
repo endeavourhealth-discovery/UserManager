@@ -43,6 +43,9 @@ export class UserEditorComponent implements OnInit {
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
 
+  userDetailsToShow = new User().getDisplayItems();
+  userProjectDetailsToShow = new User().getUserProjectDisplayItems();
+
   activeProject: UserProject;
   admin = false;
   superUser = false;
@@ -178,6 +181,10 @@ export class UserEditorComponent implements OnInit {
           (error) => this.log.error('User details could not be saved. Please try again.')
         );
     }
+  }
+
+  clear() {
+    this.searchTerm = '';
   }
 
   saveRegion() {
@@ -492,7 +499,7 @@ export class UserEditorComponent implements OnInit {
           this.selectedOrg = this.delegatedOrganisations.find(r => {
             return r.uuid === this.delegationService.getSelectedOrganisation();
           });
-          this.getOrganisationProjects(this.selectedOrg.uuid);
+          // this.getOrganisationProjects(this.selectedOrg.uuid);
 
         },
         (error) => this.log.error('Error loading delegated organisations')

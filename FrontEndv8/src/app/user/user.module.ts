@@ -13,7 +13,7 @@ import {
   MatMenuModule,
   MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
   MatSelectModule, MatSnackBarModule, MatSortModule,
-  MatTableModule, MatTreeModule
+  MatTableModule, MatTabsModule, MatTooltipModule, MatTreeModule
 } from '@angular/material';
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
@@ -22,6 +22,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
 import {GenericTableModule} from "../generic-table/generic-table.module";
 import { UserEditorComponent } from './user-editor/user-editor.component';
+import {UserProfileComponent} from "./user-profile/user-profile.component";
+import {LinkifyPipe} from "./user-profile/linkify.pipe";
 
 @NgModule({
   imports: [
@@ -48,12 +50,16 @@ import { UserEditorComponent } from './user-editor/user-editor.component';
     CoreModule,
     MatButtonModule,
     MatTreeModule,
+    MatTooltipModule,
+    MatTabsModule,
     MatProgressBarModule,
     GenericTableModule
   ],
   declarations: [
     UserComponent,
     UserEditorComponent,
+    UserProfileComponent,
+    LinkifyPipe
     // UserEditorComponent,
   ],
   entryComponents: [

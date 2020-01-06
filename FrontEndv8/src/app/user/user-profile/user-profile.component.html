@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>User profile</mat-card-title>
+    <mat-card-subtitle>Configure users</mat-card-subtitle>
+    <div fxFlex></div>
+    <mat-menu #visualiseMenu="matMenu">
+      <button *ngIf="admin || selfEdit" mat-menu-item (click)="save(false)">Save</button>
+      <button *ngIf="admin || selfEdit" mat-menu-item (click)="save(true)">Save & close</button>
+      <button mat-menu-item (click)="close(true)">Close</button>
+    </mat-menu>
+    <div fxLayoutAlign="center" class="mat-action" matRipple>
+      <mat-icon [matMenuTriggerFor]="visualiseMenu">more_vert</mat-icon>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-card *ngIf="userProfile">
+      <mat-card-header>
+        <mat-card-title>{{userProfile.forename}} {{userProfile.surname}} ({{userProfile.username}})</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+            <mat-label>Forename</mat-label>
+            <input matInput disabled [(ngModel)]="userProfile.forename" placeholder="Forename" name="forename">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+            <mat-label>Surname</mat-label>
+            <input matInput disabled [(ngModel)]="userProfile.surname" placeholder="Surname" name="surname">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+            <mat-label>Username</mat-label>
+            <input matInput disabled [(ngModel)]="userProfile.username" placeholder="Username" name="username">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+            <mat-label>Email</mat-label>
+            <input matInput disabled [(ngModel)]="userProfile.email" placeholder="Email" name="email">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+            <mat-label>Mobile</mat-label>
+            <input matInput disabled [(ngModel)]="userProfile.mobile" placeholder="Mobile" name="mobile">
+          </mat-form-field>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+    <mat-tab-group dynamicHeight *ngIf="userProfile?.organisationProjects">
+      <mat-tab *ngFor="let profile of userProfile.organisationProjects">
+        <ng-template mat-tab-label>
+          <span>{{profile.organisation.name}}</span>
+        </ng-template>
+        <mat-card *ngFor="let project of profile.projects">
+          <mat-card-header>
+            <mat-card-title>{{project.name}}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>Applications: </strong> {{getApplicationAccess(project.applicationPolicyAttributes)}}</p>
+            <p [innerHTML]="project.subscribers | linkify: 'organisation':'Subscribers'"></p>
+            <p [innerHTML]="project.publishers | linkify: 'organisation':'Publishers'"></p>
+            <p [innerHTML]="project.basePopulation | linkify: 'cohort':'Cohorts'"></p>
+            <p [innerHTML]="project.dataSet | linkify: 'dataSet':'Data sets'"></p>
+            <p [innerHTML]="project.dsas | linkify: 'dsa':'Data sharing agreements'"></p>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>
