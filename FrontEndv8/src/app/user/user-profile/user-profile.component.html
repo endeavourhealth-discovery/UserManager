@@ -7,9 +7,7 @@
     <mat-card-subtitle>Configure users</mat-card-subtitle>
     <div fxFlex></div>
     <mat-menu #visualiseMenu="matMenu">
-      <button *ngIf="admin || selfEdit" mat-menu-item (click)="save(false)">Save</button>
-      <button *ngIf="admin || selfEdit" mat-menu-item (click)="save(true)">Save & close</button>
-      <button mat-menu-item (click)="close(true)">Close</button>
+      <button mat-menu-item (click)="close()">Close</button>
     </mat-menu>
     <div fxLayoutAlign="center" class="mat-action" matRipple>
       <mat-icon [matMenuTriggerFor]="visualiseMenu">more_vert</mat-icon>

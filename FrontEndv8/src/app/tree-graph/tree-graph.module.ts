@@ -50,8 +50,6 @@ import {BrowserModule} from "@angular/platform-browser";
   ],
   declarations: [
     //TreeGraphComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
   ],
   exports: [
     //TreeGraphComponent

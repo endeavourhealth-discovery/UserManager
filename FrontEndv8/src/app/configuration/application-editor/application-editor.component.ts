@@ -150,6 +150,10 @@ export class ApplicationEditorComponent implements OnInit {
     this.applicationEditor.set(JSON.parse(this.selectedProfile.profileTree));
   }*/
 
+  addProfile() {
+
+  }
+
   newProfile() {
 
     let newProfile: ApplicationProfile = new ApplicationProfile();

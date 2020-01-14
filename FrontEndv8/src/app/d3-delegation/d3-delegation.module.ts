@@ -55,8 +55,6 @@ import {BrowserModule} from "@angular/platform-browser";
   declarations: [
     //D3DelegationComponent,
     //DelegationCreatorComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
   ],
   entryComponents: [
     //DelegationCreatorComponent

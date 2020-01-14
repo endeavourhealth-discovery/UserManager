@@ -42,6 +42,7 @@ export class UserEditorComponent implements OnInit {
   userApplicationPolicy: UserApplicationPolicy;
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
+  role: any;
 
   userDetailsToShow = new User().getDisplayItems();
   userProjectDetailsToShow = new User().getUserProjectDisplayItems();
@@ -516,6 +517,10 @@ export class UserEditorComponent implements OnInit {
         },
         (error) => this.log.error('Error loading organisation projects')
       );
+  }
+
+  addProject() {
+
   }
 
   checkAvailableProjects() {

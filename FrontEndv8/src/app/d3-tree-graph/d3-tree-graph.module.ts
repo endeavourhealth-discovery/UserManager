@@ -55,8 +55,6 @@ import {BrowserModule} from "@angular/platform-browser";
   ],
   declarations: [
     //D3TreeGraphComponent,
-    GenericTableComponent,
-    GenericTableSspComponent
   ],
   exports: [
     //D3TreeGraphComponent

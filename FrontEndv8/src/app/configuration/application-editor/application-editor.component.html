@@ -42,10 +42,9 @@
                   <app-generic-table
                     [items]="applicationProfiles"
                     [detailsToShow]="appAttributeDetailsToShow"
-                    (clicked)="editAttribute($event)"
                     [allowSelect]="admin">
                     <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteProfile()"><mat-icon>delete</mat-icon></button>
-                    <button *ngIf="admin" mat-icon-button color="primary" (click)="addAddress()"><mat-icon>add</mat-icon></button>
+                    <button *ngIf="admin" mat-icon-button color="primary" (click)="addProfile()"><mat-icon>add</mat-icon></button>
                   </app-generic-table>
 
                 </div>
