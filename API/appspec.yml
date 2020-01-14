@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /target/API-0.0.1
-    destination: //opt/tomcat/webapps/user-manager
+    destination: //opt/tomcat/webapps/user-manager-v8
 hooks:
   BeforeInstall:
     - location: cleanup
