@@ -2,7 +2,6 @@ package org.endeavourhealth.usermanager.api.endpoints;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
-import io.astefanutti.metrics.aspectj.Metrics;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -16,7 +15,6 @@ import org.endeavourhealth.core.data.audit.models.AuditModule;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.ApplicationAccessProfileDAL;
 import org.endeavourhealth.usermanager.api.logic.ApplicationAccessProfileEntityLogic;
-import org.endeavourhealth.usermanager.api.metrics.UserManagerMetricListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,14 +28,12 @@ import java.util.List;
 import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
 
 @Path("/applicationProfile")
-@Metrics(registry = "UserManagerRegistry")
 @Api(value = "Application profile", description = "API endpoint related to the application profiles.")
 public class ApplicationAccessProfileEndpoint extends AbstractEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationAccessProfileEndpoint.class);
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
-    private static final MetricRegistry metricRegistry = UserManagerMetricListener.userManagerMetricRegistry;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
