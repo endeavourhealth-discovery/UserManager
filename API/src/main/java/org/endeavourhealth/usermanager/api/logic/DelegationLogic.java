@@ -1,13 +1,13 @@
 package org.endeavourhealth.usermanager.api.logic;
 
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegatedOrganisation;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegation;
+import org.endeavourhealth.core.database.dal.DalProvider;
+import org.endeavourhealth.core.database.dal.usermanager.DelegationRelationshipDalI;
+import org.endeavourhealth.core.database.dal.usermanager.caching.OrganisationCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonDelegatedOrganisation;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonDelegation;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationRelationshipEntity;
 import org.endeavourhealth.usermanager.api.DAL.DelegationDAL;
-import org.endeavourhealth.usermanager.api.DAL.DelegationRelationshipDAL;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
 import static org.endeavourhealth.coreui.endpoints.AbstractEndpoint.clearLogbackMarkers;
 
 public class DelegationLogic {
+    private static DelegationRelationshipDalI delegationRelationshipRepository = DalProvider.factoryUMDelegationRelationshipDal();
 
     public Response getDelegatedOrganisations(String organisationId) throws Exception {
 
-        List<DelegationRelationshipEntity> relationships = new SecurityDelegationRelationshipDAL().getDelegatedOrganisations(organisationId);
+        List<DelegationRelationshipEntity> relationships = delegationRelationshipRepository.getDelegatedOrganisations(organisationId);
 
         List<String> orgs = relationships.stream()
                 .map(DelegationRelationshipEntity::getChildUuid)

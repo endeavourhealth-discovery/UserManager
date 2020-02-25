@@ -1,9 +1,9 @@
 package org.endeavourhealth.usermanager.api.logic;
 
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonOrganisationDelegation;
+import org.endeavourhealth.core.database.dal.usermanager.caching.OrganisationCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonOrganisationDelegation;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationRelationshipEntity;
 import org.endeavourhealth.usermanager.api.DAL.DelegationDAL;
 import org.endeavourhealth.usermanager.api.DAL.DelegationRelationshipDAL;
 
