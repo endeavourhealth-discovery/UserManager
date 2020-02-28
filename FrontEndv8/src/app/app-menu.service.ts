@@ -8,6 +8,7 @@ import {ApplicationEditorComponent} from "./configuration/application-editor/app
 import {ApplicationPolicyEditorComponent} from "./configuration/application-policy-editor/application-policy-editor.component";
 import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {AuditComponent} from "./audit/audit/audit.component";
+import {DelegationComponent} from "./delegation/delegation/delegation.component";
 
 @Injectable()
 export class AppMenuService implements  AbstractMenuProvider {
@@ -22,6 +23,7 @@ export class AppMenuService implements  AbstractMenuProvider {
       { path: 'appPolicyEdit', component: ApplicationPolicyEditorComponent, data: {role: 'Admin'}},
       { path: 'userProfile', component: UserProfileComponent, data: {role: 'User'}},
       { path: 'audit', component: AuditComponent, data: {role: 'User'}},
+      { path: 'delegation', component: DelegationComponent, data: {role: 'Admin'}},
     ];
   }
 
@@ -41,6 +43,7 @@ export class AppMenuService implements  AbstractMenuProvider {
     return [
       {caption: 'Users', state: 'user', icon: 'account_box'},
       {caption: 'Configuration', state: 'configuration', icon: 'account_box'},
+      {caption: 'Delegation', state: 'delegation', icon: 'account_box'},
       {caption: 'Audit', state: 'audit', icon: 'account_box'}
     ];
   }

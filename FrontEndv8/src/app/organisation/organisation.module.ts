@@ -16,9 +16,10 @@ import {
 } from '@angular/material';
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
-import {CoreModule} from "dds-angular8";
+import {CoreModule, GenericTableModule} from "dds-angular8";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
+import {OrganisationPickerComponent} from "./organisation-picker/organisation-picker.component";
 
 @NgModule({
   imports: [
@@ -45,13 +46,14 @@ import {BrowserModule} from "@angular/platform-browser";
     CoreModule,
     MatButtonModule,
     MatTreeModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    GenericTableModule
   ],
   declarations: [
-    //OrganisationPickerComponent,
+    OrganisationPickerComponent,
   ],
   entryComponents: [
-    //OrganisationPickerComponent
+    OrganisationPickerComponent
   ],
   providers: [
     OrganisationService,

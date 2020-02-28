@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Add organisations</h1>
+<div mat-dialog-content>
+
+  <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+    <mat-form-field appearance="outline" fxFlex="100">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="searchData" (keyup.enter)="search()" placeholder="Search">
+      <button mat-button *ngIf="searchData" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <br>
+  <div class="scroll-box-400">
+    <app-generic-table #orgPicker
+                       [items]="searchResults"
+                       [detailsToShow]="orgDetailsToShow"
+                       [allowSearch]="false"
+                       [allowSelect]="true"
+                       [pageSize]="20">
+    </app-generic-table>
+  </div>
+  <br>
+
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button color="accent" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="accent" (click)="ok()">Add selected</button>
+</div>

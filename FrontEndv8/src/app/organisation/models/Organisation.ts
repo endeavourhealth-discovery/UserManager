@@ -26,14 +26,10 @@ export class Organisation {
     dsaSubscribing: { [key: string]: string; };
     addresses: Address[];
 
-    getDisplayItems(): any[] {
-        return [
-            {label: 'ODS code', property: 'odsCode'},
-            {label: 'Alternative name', property: 'alternativeName'},
-            {label: 'ICO code', property: 'icoCode'},
-            {label: 'IG toolkit status', property: 'igToolkitStatus'},
-            {label: 'Date of registration', property: 'dateOfRegistration'},
-            {label: 'Type', property: 'type'}
-        ];
-    }
+  getDisplayItems(): any[] {
+    return [
+      {label: 'Name', property: 'name', secondary: false},
+      {label: 'ODS code', property: 'odsCode', secondary: false}
+    ];
+  }
 }
