@@ -48,34 +48,34 @@
       <mat-card-content>
         <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Forename</mat-label>
-            <input matInput [(ngModel)]="resultData.forename" placeholder="Forename" name="forename" #forename>
+            <input matInput [(ngModel)]="resultData.forename" placeholder="Forename" name="forename" #forename readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Surname</mat-label>
-            <input matInput [(ngModel)]="resultData.surname" placeholder="Surname" name="surname" #surname>
+            <input matInput [(ngModel)]="resultData.surname" placeholder="Surname" name="surname" #surname readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Username</mat-label>
-            <input matInput [(ngModel)]="resultData.username" placeholder="Username" name="username" #username>
+            <input matInput [(ngModel)]="resultData.username" placeholder="Username" name="username" #username readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="resultData.email" placeholder="Email" name="email" #email>
+            <input matInput [(ngModel)]="resultData.email" placeholder="Email" name="email" #email readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Mobile</mat-label>
-            <input matInput [(ngModel)]="resultData.mobile" placeholder="Mobile" name="mobile" #mobile>
+            <input matInput [(ngModel)]="resultData.mobile" placeholder="Mobile" name="mobile" #mobile readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Photo</mat-label>
-            <input matInput [(ngModel)]="resultData.photo" placeholder="Photo" name="photo" #photo>
+            <input matInput [(ngModel)]="resultData.photo" placeholder="Photo" name="photo" #photo readonly>
           </mat-form-field>
 
         </div>

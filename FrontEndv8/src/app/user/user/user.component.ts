@@ -6,6 +6,9 @@ import {LoggerService, UserManagerService} from "dds-angular8";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import { MatDialog } from '@angular/material';
+import {UserDialogComponent} from "../user-dialog/user-dialog.component";
+import {UserPickerComponent} from "../user-picker/user-picker.component";
 
 
 @Component({
@@ -38,6 +41,7 @@ export class UserComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private userManagerService: UserManagerService,
+              public dialog: MatDialog
   ) {
 
   }
@@ -137,13 +141,36 @@ export class UserComponent implements OnInit {
   addUser() {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
     // this.state.setState('userEdit', {user: null, editMode: false});
-    this.router.navigate(['userEdit'], {state: {user: null, editMode: false}});
+    //this.router.navigate(['userEdit'], {state: {user: null, editMode: false}});
+    const dialogRef = this.dialog.open(UserDialogComponent, {
+      data: {editMode: false, user: null},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['userEdit'], {state: {user: result, editMode: true}});
+        this.log.success('User saved');
+      }
+    });
   }
 
   addExisting() {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
     // this.state.setState('userEdit', {user: null, editMode: true, existing: true});
-    this.router.navigate(['userEdit'], {state: {user: null, editMode: true, existing: true}});
+    // this.router.navigate(['userEdit'], {state: {user: null, editMode: true, existing: true}});
+    const dialogRef = this.dialog.open(UserPickerComponent, {
+      minWidth: '50vw',
+      data: {uuid: '', limit: 0, userId : this.selectedOrg.uuid, existing: this.userList},
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      for (let user of result) {
+        if (!this.userList.some(x => x.uuid === user.uuid)) {
+          this.userList.push(user);
+        }
+      }
+    })
   }
 
   editUser(user:User) {

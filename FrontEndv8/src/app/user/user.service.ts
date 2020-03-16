@@ -28,7 +28,7 @@ export class UserService {
   saveUser(editedUser: User, editMode: boolean, userRoleId: string): Observable<User> {
     const url = 'api/user/users/save';
     let params = new HttpParams();
-    if (editMode) params = params.append('editMode', editMode == true ? "1":"0");
+    params = params.append('editMode', editMode == true ? "1":"0");
     if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.post<User>(url, editedUser,{params});
   }

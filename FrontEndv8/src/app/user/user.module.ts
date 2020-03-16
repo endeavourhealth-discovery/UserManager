@@ -24,6 +24,8 @@ import {GenericTableModule} from "../generic-table/generic-table.module";
 import { UserEditorComponent } from './user-editor/user-editor.component';
 import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {LinkifyPipe} from "./user-profile/linkify.pipe";
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
+import { UserPickerComponent } from './user-picker/user-picker.component';
 
 @NgModule({
   imports: [
@@ -59,11 +61,15 @@ import {LinkifyPipe} from "./user-profile/linkify.pipe";
     UserComponent,
     UserEditorComponent,
     UserProfileComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    UserDialogComponent,
+    UserPickerComponent
     // UserEditorComponent,
   ],
   entryComponents: [
     // UserEditorComponent
+    UserDialogComponent,
+    UserPickerComponent
   ],
   providers: [
     UserService,
