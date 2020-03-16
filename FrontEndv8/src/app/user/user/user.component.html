@@ -42,7 +42,7 @@
               </mat-form-field>
 
 
-              <app-generic-table
+              <app-generic-table #userListTable
                 [items]="userList"
                 [detailsToShow]="userDetailsToShow"
                 (clicked)="changeSelectedUser($event)"

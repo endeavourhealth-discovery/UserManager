@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/User";
 import {UserService} from "../user.service";
-import {LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, UserManagerService} from "dds-angular8";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
@@ -17,6 +17,9 @@ import {UserPickerComponent} from "../user-picker/user-picker.component";
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
+
+  @ViewChild('userListTable', {static: false}) userListTable: GenericTableComponent;
+
   private paramSubscriber: any;
 
   userList: User[] = [];
@@ -159,7 +162,7 @@ export class UserComponent implements OnInit {
     // this.router.navigate(['userEdit'], {state: {user: null, editMode: true, existing: true}});
     const dialogRef = this.dialog.open(UserPickerComponent, {
       minWidth: '50vw',
-      data: {uuid: '', limit: 0, userId : this.selectedOrg.uuid, existing: this.userList},
+      data: {uuid: '', limit: 0, userId : null, existing: this.userList},
     })
     dialogRef.afterClosed().subscribe(result => {
       if (!result) {
@@ -168,6 +171,7 @@ export class UserComponent implements OnInit {
       for (let user of result) {
         if (!this.userList.some(x => x.uuid === user.uuid)) {
           this.userList.push(user);
+          this.userListTable.updateRows();
         }
       }
     })

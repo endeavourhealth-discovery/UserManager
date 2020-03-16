@@ -48,7 +48,7 @@ public class UserLogic {
 
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
 
-        if (searchData == null) {
+        if (searchData == null || searchData.equals("")) {
             if (machineUsers) {
                 users = keycloakClient.realms().users().getUsers(ConfigManager.getConfiguration("machine_user_realm"), "", 0, 100);
             } else {

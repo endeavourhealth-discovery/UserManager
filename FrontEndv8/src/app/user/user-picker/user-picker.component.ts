@@ -29,13 +29,22 @@ export class UserPickerComponent implements OnInit {
 
   ngOnInit() {
     this.searchResults = null;
-    this.userService.getUsers(this.organisationId, null)
+    this.userService.getUsers(this.organisationId, ' ')
       .subscribe(
         (result) => {
-          this.searchResults = result;
+          this.searchResults = this.filterResults(result);
         },
         (error) => this.log.error('Error loading users')
       );
+  }
+
+  filterResults(results: User[]) {
+    let filterResults: User[];
+    const existing = this.data.existing;
+
+    filterResults = results.filter((x) => !existing.filter(y => y.uuid === x.uuid).length);
+
+    return filterResults;
   }
 
   ok() {
