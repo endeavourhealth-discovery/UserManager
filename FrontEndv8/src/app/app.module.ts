@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {
   AbstractMenuProvider,
-  DialogsModule,
+  DialogsModule, GenericTableModule,
   LayoutComponent,
   LayoutModule,
   LoggerModule,
@@ -13,7 +13,6 @@ import {
   UserManagerModule
 } from 'dds-angular8';
 import {UserModule} from "./user/user.module";
-import {GenericTableModule} from "./generic-table/generic-table.module";
 import {ConfigurationModule} from "./configuration/configuration.module";
 import {OrganisationModule} from "./organisation/organisation.module";
 import {AuditModule} from "./audit/audit.module";

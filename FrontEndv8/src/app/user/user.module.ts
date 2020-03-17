@@ -17,15 +17,14 @@ import {
 } from '@angular/material';
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
-import {CoreModule} from "dds-angular8";
+import {CoreModule, GenericTableModule} from "dds-angular8";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
-import {GenericTableModule} from "../generic-table/generic-table.module";
-import { UserEditorComponent } from './user-editor/user-editor.component';
+import {UserEditorComponent} from './user-editor/user-editor.component';
 import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {LinkifyPipe} from "./user-profile/linkify.pipe";
-import { UserDialogComponent } from './user-dialog/user-dialog.component';
-import { UserPickerComponent } from './user-picker/user-picker.component';
+import {UserDialogComponent} from './user-dialog/user-dialog.component';
+import {UserPickerComponent} from './user-picker/user-picker.component';
 
 @NgModule({
   imports: [

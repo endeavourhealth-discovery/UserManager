@@ -88,7 +88,6 @@ export class UserComponent implements OnInit {
       .subscribe(
         (result) => {
           this.userList = result;
-          console.log(result);
           this.selectTopUser();
         },
         (error) => this.log.error('Error loading users and roles' + error + 'Error')

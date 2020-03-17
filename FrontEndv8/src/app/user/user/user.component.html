@@ -19,7 +19,7 @@
 
     <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
       <div fxFlex="50">
-        <mat-card>
+        <mat-card *ngIf="selectedOrg">
           <mat-card-header>
             <mat-menu #orgUserMenu="matMenu">
               <button *ngIf="admin" mat-menu-item (click)="addUser()">Add new user</button>
@@ -40,8 +40,8 @@
                   <mat-option *ngFor="let del of delegatedOrganisations" [value]="del">{{del.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-
-
+            </div>
+            <div>
               <app-generic-table #userListTable
                 [items]="userList"
                 [detailsToShow]="userDetailsToShow"
@@ -50,10 +50,9 @@
             </div>
           </mat-card-content>
         </mat-card>
-
       </div>
       <div fxFlex="50">
-        <mat-card>
+        <mat-card *ngIf="selectedUser">
           <mat-card-header>
             <img mat-card-avatar class="avatar" [src]="selectedUser?.photo" [class.default-avatar]="selectedUser == null || !selectedUser.photo">
             <mat-menu #userEditMenu="matMenu">
@@ -101,12 +100,12 @@
                 <mat-label>Date user created</mat-label>
                 <input matInput disabled [(ngModel)]="selectedUserCreatedDate" placeholder="Date user created" name="selectedUserCreatedDate">
               </mat-form-field>
-
+            </div>
+            <div>
               <app-generic-table
                 [items]="selectedUser.userProjects"
                 [detailsToShow]="userProjectDetailsToShow"
                 [allowSelect]="false"></app-generic-table>
-
             </div>
           </mat-card-content>
         </mat-card>
