@@ -5,11 +5,11 @@ import {UserService} from "../user.service";
 import {GenericTableComponent, LoggerService, UserManagerService} from "dds-angular8";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
-import { MatDialog } from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {UserDialogComponent} from "../user-dialog/user-dialog.component";
 import {UserPickerComponent} from "../user-picker/user-picker.component";
-
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import { UserProject_local } from 'src/app/models/UserProject_local';
 
 @Component({
   selector: 'app-user',
@@ -168,12 +168,35 @@ export class UserComponent implements OnInit {
         return;
       }
       for (let user of result) {
-        if (!this.userList.some(x => x.uuid === user.uuid)) {
-          this.userList.push(user);
-          this.userListTable.updateRows();
+        var project = new UserProject_local();
+        project.userId = user.uuid;
+        project.organisationId = this.selectedOrg.uuid;
+        project.organisationName = this.selectedOrg.name;
+        project.projectId = this.activeProject.projectId;
+        project.projectName = this.activeProject.projectName;
+        project.deleted = false;
+
+        project.default = false;
+        if (user.userProjects) {
+          user.userProjects.push(project);
+        } else {
+          user.userProjects = [];
+          user.userProjects.push(project);
         }
       }
-    })
+      this.userService.saveUsers(result, this.activeProject.id).subscribe(result => {
+        if (!result) {
+          return;
+        }
+        for (let user of result) {
+          if (!this.userList.some(x => x.uuid === user.uuid)) {
+            this.userList.push(user);
+            this.userListTable.updateRows();
+          }
+          this.log.success('Users added successfully.');
+        }
+      })
+    },(error) => this.log.error('Failed to add users.'));
   }
 
   editUser(user:User) {

@@ -100,6 +100,25 @@ public final class UserEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUsersProjects")
+    @Path("/users/saveUsersProjects")
+    @RequiresAdmin
+    @ApiOperation(value = "Updates the existing users projects")
+    public Response saveUsers(@Context SecurityContext sc,
+                                       List<JsonUser> users,
+                                       @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
+                "User", "User", users);
+
+        return new UserLogic().saveUsersProjects(users, userRoleId, sc);
+
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="UserManager.UserEndpoint.saveProjects")
     @Path("/users/saveProjects")
     @RequiresAdmin

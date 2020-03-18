@@ -33,6 +33,13 @@ export class UserService {
     return this.http.post<User>(url, editedUser,{params});
   }
 
+  saveUsers(users: User[], userRoleId: string): Observable<User[]> {
+    const url = 'api/user/users/saveUsersProjects';
+    let params = new HttpParams();
+    if (userRoleId) params = params.append('userRoleId', userRoleId);
+    return this.http.post<User[]>(url, users,{params});
+  }
+
   saveUserProjects(userRoles: UserProject[], userRoleId: string): Observable<string> {
     const url = 'api/user/users/saveProjects';
     let params = new HttpParams();

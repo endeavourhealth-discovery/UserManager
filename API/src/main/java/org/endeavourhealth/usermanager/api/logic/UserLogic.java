@@ -180,6 +180,17 @@ public class UserLogic {
                 .build();
     }
 
+    public Response saveUsersProjects(List<JsonUser> users, String userRoleId, SecurityContext sc) throws  Exception {
+
+        for (JsonUser user : users) {
+            saveProjects(user.getUserProjects(), userRoleId);
+        }
+        return Response
+                .ok()
+                .entity(users)
+                .build();
+    }
+
     public Response saveProjects(List<JsonUserProject> userProjects, String userRoleId) throws Exception {
 
         if (userProjects.size() > 0) {
