@@ -10,4 +10,6 @@ export class UserProject_local {
 	deleted: boolean;
   default: boolean;
   applicationPolicyAttributes: ApplicationPolicyAttribute[];
+
+
 }

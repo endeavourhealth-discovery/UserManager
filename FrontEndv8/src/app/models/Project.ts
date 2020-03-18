@@ -21,4 +21,10 @@ export class Project {
   dataSet: { [key: string]: string; };
   dsas: { [key: string]: string; };
   applicationPolicyAttributes: ApplicationPolicyAttribute[];
+
+  getProjectDisplayItems(): any[] {
+    return [
+      {label: 'Project', property: 'name'}
+    ];
+  }
 }

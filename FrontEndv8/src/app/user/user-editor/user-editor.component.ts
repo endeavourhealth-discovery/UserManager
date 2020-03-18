@@ -8,12 +8,14 @@ import {Project} from "../../models/Project";
 import {UserRegion} from "../../models/UserRegion";
 import {Region} from "../../models/Region";
 import {UserApplicationPolicy} from "../../models/UserApplicationPolicy";
-import {LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, UserManagerService} from "dds-angular8";
 import {Router} from "@angular/router";
 import {UserService} from "../user.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {ConfigurationService} from "../../configuration/configuration.service";
 import {OrganisationService} from "../../organisation/organisation.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ProjectPickerComponent} from "../project-picker/project-picker.component";
 
 @Component({
   selector: 'app-user-editor',
@@ -59,6 +61,7 @@ export class UserEditorComponent implements OnInit {
   @ViewChild('password1', { static: false }) password1Box;
   @ViewChild('password2', { static: false }) password2Box;
   @ViewChild('searchBox', { static: false }) searchBox;
+  @ViewChild('userProjects', { static: false }) userProjects: GenericTableComponent;
 
   constructor(private log: LoggerService,
               private router: Router,
@@ -67,7 +70,8 @@ export class UserEditorComponent implements OnInit {
               private delegationService: DelegationService,
               private configurationService: ConfigurationService,
               private userManagerNotificationService: UserManagerService,
-              private organisationService: OrganisationService) {
+              private organisationService: OrganisationService,
+              public dialog: MatDialog) {
 
     let s = this.router.getCurrentNavigation().extras.state;
 
@@ -520,7 +524,30 @@ export class UserEditorComponent implements OnInit {
   }
 
   addProject() {
-
+    const dialogRef = this.dialog.open(ProjectPickerComponent, {
+      minWidth: '50vw',
+      data: {delegatedOrganisations: this.delegatedOrganisations},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      for (let userProjects of result) {
+        if (this.resultData.userProjects) {
+          this.resultData.userProjects.push(userProjects);
+        } else {
+          this.resultData.userProjects = [];
+          this.resultData.userProjects.push(userProjects);
+        }
+      }
+      this.userService.saveUserProjects(this.resultData.userProjects, this.activeProject.id).subscribe(
+        result => {
+          this.userProjects.updateRows();
+          this.log.success('User saved');
+        },
+        (error) => this.log.error('User details could not be saved. Please try again.')
+      )
+    });
   }
 
   checkAvailableProjects() {

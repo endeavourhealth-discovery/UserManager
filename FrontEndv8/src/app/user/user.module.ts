@@ -25,6 +25,7 @@ import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {LinkifyPipe} from "./user-profile/linkify.pipe";
 import {UserDialogComponent} from './user-dialog/user-dialog.component';
 import {UserPickerComponent} from './user-picker/user-picker.component';
+import { ProjectPickerComponent } from './project-picker/project-picker.component';
 
 @NgModule({
   imports: [
@@ -62,13 +63,15 @@ import {UserPickerComponent} from './user-picker/user-picker.component';
     UserProfileComponent,
     LinkifyPipe,
     UserDialogComponent,
-    UserPickerComponent
+    UserPickerComponent,
+    ProjectPickerComponent
     // UserEditorComponent,
   ],
   entryComponents: [
     // UserEditorComponent
     UserDialogComponent,
-    UserPickerComponent
+    UserPickerComponent,
+    ProjectPickerComponent
   ],
   providers: [
     UserService,

@@ -175,7 +175,6 @@ export class UserComponent implements OnInit {
         project.projectId = this.activeProject.projectId;
         project.projectName = this.activeProject.projectName;
         project.deleted = false;
-
         project.default = false;
         if (user.userProjects) {
           user.userProjects.push(project);
