@@ -526,7 +526,7 @@ export class UserEditorComponent implements OnInit {
   addProject() {
     const dialogRef = this.dialog.open(ProjectPickerComponent, {
       minWidth: '50vw',
-      data: {delegatedOrganisations: this.delegatedOrganisations},
+      data: {delegatedOrganisations: this.delegatedOrganisations, userId: this.resultData.uuid},
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!result) {
