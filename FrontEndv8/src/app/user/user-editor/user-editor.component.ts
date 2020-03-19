@@ -8,7 +8,7 @@ import {Project} from "../../models/Project";
 import {UserRegion} from "../../models/UserRegion";
 import {Region} from "../../models/Region";
 import {UserApplicationPolicy} from "../../models/UserApplicationPolicy";
-import {GenericTableComponent, LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {Router} from "@angular/router";
 import {UserService} from "../user.service";
 import {DelegationService} from "../../d3-delegation/delegation.service";
@@ -16,6 +16,7 @@ import {ConfigurationService} from "../../configuration/configuration.service";
 import {OrganisationService} from "../../organisation/organisation.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ProjectPickerComponent} from "../project-picker/project-picker.component";
+import {UserDialogComponent} from "../user-dialog/user-dialog.component";
 
 @Component({
   selector: 'app-user-editor',
@@ -41,9 +42,11 @@ export class UserEditorComponent implements OnInit {
   userRegion: UserRegion;
   availableRegions: Region[];
   selectedRegion: Region;
+  selectedRegionValue: string;
   userApplicationPolicy: UserApplicationPolicy;
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
+  selectedApplicationPolicyValue: string;
   role: any;
   userProjectsFromDB: UserProject[] = [];
 
@@ -82,6 +85,7 @@ export class UserEditorComponent implements OnInit {
       return;
     }
     this.resultData = s.user;
+    console.log(this.resultData);
     this.editMode = s.editMode;
     this.existing = s.existing;
     this.selfEdit = s.selfEdit;
@@ -325,7 +329,7 @@ export class UserEditorComponent implements OnInit {
   }
 
   getUserRegion() {
-
+    this.selectedRegionValue = '';
     this.userService.getUserRegion(this.resultData.uuid)
       .subscribe(
         (result) => {
@@ -333,15 +337,16 @@ export class UserEditorComponent implements OnInit {
           this.selectedRegion = this.availableRegions.find(r => {
             return r.uuid === this.userRegion.regionId;
           });
+          this.selectedRegionValue = this.selectedRegion.name;
         },
         (error) => {
-          this.log.error('User region could not be loaded. Please try again.');
+          //this.log.error('User region could not be loaded. Please try again.');
         }
       );
   }
 
   getUserApplicationPolicy() {
-
+    this.selectedApplicationPolicyValue = '';
     this.userService.getUserApplicationPolicy(this.resultData.uuid)
       .subscribe(
         (result) => {
@@ -349,9 +354,10 @@ export class UserEditorComponent implements OnInit {
           this.selectedApplicationPolicy = this.availablePolicies.find(r => {
             return r.id === this.userApplicationPolicy.applicationPolicyId;
           });
+          this.selectedApplicationPolicyValue = this.selectedApplicationPolicy.name;
         },
         (error) => {
-          this.log.error('User application policy could not be loaded. Please try again.');
+          //this.log.error('User application policy could not be loaded. Please try again.');
         }
       );
   }
@@ -451,25 +457,33 @@ export class UserEditorComponent implements OnInit {
     return result;
   }
 
-  removeCurrentRole(currentRole: UserProject) {
-    /*let i = this.resultData.userProjects.indexOf(currentRole);
-    if (i !== -1) {
-      this.resultData.userProjects.splice(i, 1);
-    }
-    */
-
-    currentRole.deleted = true;
-    this.editedRoles.push(currentRole);
-
-    this.getOrganisationProjects(this.selectedOrg.uuid);
-
-    /*if (currentRole.organisationId == this.selectedOrg.uuid) {
-      var newRoleType: ApplicationPolicy = new ApplicationPolicy();
-      newRoleType.id = currentRole.projectId;
-      newRoleType.name = currentRole.projectName;
-
-      this.roleTypes.push(newRoleType);
-    }*/
+  removeCurrentRole() {
+    MessageBoxDialogComponent.open(this.dialog, 'Remove user projects', 'Are you sure you want to remove user projects?',
+      'Remove user projects', 'Cancel')
+      .subscribe(
+        (result) => {
+          if(result) {
+            for (var i = 0; i < this.userProjects.selection.selected.length; i++) {
+              let project = this.userProjects.selection.selected[i];
+              this.userProjectsFromDB.forEach( (item, index) => {
+                if(item === project) {
+                  item.deleted = true;
+                }
+              });
+            }
+            this.resultData.userProjects = this.userProjectsFromDB;
+            this.userService.saveUserProjects(this.resultData.userProjects, this.activeProject.id).subscribe(
+              result => {
+                this.getUserProjects(this.resultData.uuid);
+                this.log.success('User projects removed');
+              },
+              (error) => this.log.error('User details could not be saved. Please try again.')
+            )
+          } else {
+            this.log.success('Remove cancelled.')
+          }
+        },
+      );
   }
 
   //remove from available and add into current, i.e. add into resultData
@@ -656,6 +670,20 @@ export class UserEditorComponent implements OnInit {
     this.userApplicationPolicy = changedPolicy;
   }
 
+  editUser() {
+    const dialogRef = this.dialog.open(UserDialogComponent, {
+      data: {editMode: true, user: this.resultData,
+        availableRegions: this.availableRegions, availablePolicies: this.availablePolicies},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.resultData = result;
+        this.getUserRegion();
+        this.getUserApplicationPolicy();
+        this.log.success('User saved');
+      }
+    });
+  }
 }
 
 

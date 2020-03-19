@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {GenericTableComponent, LoggerService} from "dds-angular8";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent} from "dds-angular8";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {OrganisationService} from "../../organisation/organisation.service";
 import {Project} from "../../models/Project";
@@ -30,6 +30,7 @@ export class ProjectPickerComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ProjectPickerComponent>,
               @Inject(MAT_DIALOG_DATA) public data: DialogData,
               private log: LoggerService,
+              public dialog: MatDialog,
               private organisationService: OrganisationService) {
 
     this.delegatedOrganisations = data.delegatedOrganisations;
@@ -39,7 +40,15 @@ export class ProjectPickerComponent implements OnInit {
   ngOnInit() {
   }
 
-  getOrganisationProjects(){
+  getOrganisationProjects() {
+    if (this.picker.selection.selected.length > 0) {
+      MessageBoxDialogComponent.open(this.dialog, 'Change organisation', 'This would disregard previously selected projects?',
+        'Change organisation', 'Cancel')
+        .subscribe(
+          (result) => {
+            this.picker.selection = null;
+          });
+    }
     this.organisationService.getProjectsForOrganisation(this.selectedOrganisation.uuid)
       .subscribe(
         (result) => {
