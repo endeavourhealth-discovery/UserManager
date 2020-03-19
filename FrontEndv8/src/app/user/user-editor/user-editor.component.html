@@ -120,7 +120,7 @@
 
           <div fxFlex="100">
             <app-generic-table #userProjects
-              [items]="resultData.userProjects"
+              [items]="userProjectsFromDB"
               [detailsToShow]="userProjectDetailsToShow"
               [allowSelect]="admin">
               <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="removeCurrentRole(role)"><mat-icon>delete</mat-icon></button>

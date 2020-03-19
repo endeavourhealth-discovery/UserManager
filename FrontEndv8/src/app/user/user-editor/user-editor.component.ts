@@ -45,6 +45,7 @@ export class UserEditorComponent implements OnInit {
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
   role: any;
+  userProjectsFromDB: UserProject[] = [];
 
   userDetailsToShow = new User().getDisplayItems();
   userProjectDetailsToShow = new User().getUserProjectDisplayItems();
@@ -88,8 +89,6 @@ export class UserEditorComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-
     this.userManagerNotificationService.onProjectChange.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
@@ -114,6 +113,8 @@ export class UserEditorComponent implements OnInit {
     else {
       this.dialogTitle = "Edit user";
 
+      this.getUserProjects(this.resultData.uuid);
+
       this.resultData = {
         uuid: this.resultData.uuid,
         forename: this.resultData.forename,
@@ -126,6 +127,8 @@ export class UserEditorComponent implements OnInit {
         defaultOrgId: this.resultData.defaultOrgId == null ? '': this.resultData.defaultOrgId,
         userProjects: this.resultData.userProjects
       } as User;
+
+
     }
   }
 
@@ -186,6 +189,16 @@ export class UserEditorComponent implements OnInit {
           (error) => this.log.error('User details could not be saved. Please try again.')
         );
     }
+  }
+
+  getUserProjects(userId: string) {
+    this.userService.loadUserProjects(userId)
+      .subscribe(
+        (result) => {
+          this.userProjectsFromDB = result;
+        },
+        (error) => this.log.error('Error loading user projects' + error + 'Error')
+      );
   }
 
   clear() {
