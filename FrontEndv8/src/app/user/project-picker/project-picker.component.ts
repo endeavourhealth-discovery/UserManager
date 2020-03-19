@@ -42,11 +42,13 @@ export class ProjectPickerComponent implements OnInit {
 
   getOrganisationProjects() {
     if (this.picker.selection.selected.length > 0) {
-      MessageBoxDialogComponent.open(this.dialog, 'Change organisation', 'This would disregard previously selected projects?',
+      MessageBoxDialogComponent.open(this.dialog, 'Change organisation', 'This would clear previously selected projects?',
         'Change organisation', 'Cancel')
         .subscribe(
           (result) => {
-            this.picker.selection = null;
+            if (result) {
+              this.picker.selection.clear();
+            }
           });
     }
     this.organisationService.getProjectsForOrganisation(this.selectedOrganisation.uuid)
