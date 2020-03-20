@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/User";
 import {UserService} from "../user.service";
-import {GenericTableComponent, LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {DelegationService} from "../../d3-delegation/delegation.service";
 import {MatDialog} from '@angular/material';
@@ -90,7 +90,7 @@ export class UserComponent implements OnInit {
           this.userList = result;
           this.selectTopUser();
         },
-        (error) => this.log.error('Error loading users and roles' + error + 'Error')
+        (error) => this.log.error('Error loading users and roles')
       );
   }
 
@@ -105,7 +105,7 @@ export class UserComponent implements OnInit {
           });
           this.getUsers();
         },
-        (error) => this.log.error('Error loading delegated organisations' + error + 'Error')
+        (error) => this.log.error('Error loading delegated organisations')
       );
   }
 
@@ -123,7 +123,7 @@ export class UserComponent implements OnInit {
           }
           this.getUsers();
         },
-        (error) => this.log.error('Error loading delegated organisations' + error + 'Error')
+        (error) => this.log.error('Error loading delegated organisations.')
       );
   }
 
@@ -215,10 +215,10 @@ export class UserComponent implements OnInit {
     this.userService.sendUserPasswordEmail(user.uuid, this.activeProject.id)
       .subscribe(
         (result) => {
-          this.log.success('Reset password email sent successfully' + null + 'Sending email');
+          this.log.success('Reset password email sent successfully.');
           this.loadingRolesCompleted = true;
         },
-        (error) => this.log.error('Error sending reset password email' + error + 'Sending email')
+        (error) => this.log.error('Error sending reset password email.')
       );
   }
 
@@ -231,24 +231,23 @@ export class UserComponent implements OnInit {
     }
     else {
       let userName = user.forename + " " + user.surname;
-
-      /*MessageBoxDialog.open(this.$modal, "Confirmation", "Delete user: " + userName.trim() + "?", "Yes", "No")
-        .result.then(
-        (result) => {
-          let userId = user.uuid;
-          this.userService.deleteUser(userId, this.activeProject.id)
-            .subscribe(
-              (result) => {
-                this.getUsers();
-                this.selectedUser = null;
-                this.log.info("User deleted");
-              },
-              (error) => this.log.error('Error deleting user' + error + 'Error')
-            );
-        },
-        (reason) => {
-        }
-      );*/
+      MessageBoxDialogComponent.open(this.dialog, 'Delete user', 'Are you sure you want to delete user: ' + userName.trim() + '?',
+        'Delete user', 'No')
+        .subscribe(
+          (result) => {
+            if (result) {
+              let userId = user.uuid;
+              this.userService.deleteUser(userId, this.activeProject.id)
+                .subscribe(
+                  (result) => {
+                    this.getUsers();
+                    this.selectedUser = null;
+                    this.log.info("User deleted");
+                  },
+                  (error) => this.log.error('Error deleting user.')
+                );
+            }
+          });
     }
   }
 
@@ -279,7 +278,7 @@ export class UserComponent implements OnInit {
           this.selectedUser.userProjects = result;
           this.loadingRolesCompleted = true;
         },
-        (error) => this.log.error('Error loading user projects' + error + 'Error')
+        (error) => this.log.error('Error loading user projects.')
       );
   }
 

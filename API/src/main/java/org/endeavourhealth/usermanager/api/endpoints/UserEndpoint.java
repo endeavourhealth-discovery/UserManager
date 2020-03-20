@@ -307,7 +307,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.UserEndpoint.getUserRegion")
+    @Timed(absolute = true, name="UserManager.UserEndpoint.sendUpdatePasswordEmail")
     @Path("/sendUpdatePasswordEmail")
     @ApiOperation(value = "Returns the data sharing manager region associated with the user")
     public Response sendUpdatePasswordEmail(@Context SecurityContext sc,
