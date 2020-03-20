@@ -57,7 +57,7 @@ export class ApplicationProfileDialogComponent implements OnInit {
     }
   }
 
-  save(close: boolean) {
+  save() {
     this.configurationService.saveApplicationProfile(this.resultData, this.activeProject.id)
       .subscribe(
         (response) => {
