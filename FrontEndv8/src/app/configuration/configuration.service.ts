@@ -70,6 +70,13 @@ export class ConfigurationService {
     return this.http.post<string>(url, profiles, {params});
   }
 
+  saveApplicationProfile(profile: ApplicationProfile, userRoleId: string): Observable<string> {
+    let profiles: ApplicationProfile[] = [];
+    profiles.push(profile);
+
+    return this.saveApplicationProfiles(profiles, userRoleId);
+  }
+
   getRoleTypeAccessProfiles(applicationPolicyId: string): Observable<ApplicationPolicyAttribute[]> {
     const url = 'api/roleTypeAccessProfile/getRoleTypeAccessProfiles';
     let params = new HttpParams();

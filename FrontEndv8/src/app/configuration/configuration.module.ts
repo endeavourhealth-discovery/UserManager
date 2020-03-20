@@ -12,7 +12,7 @@ import {
   MatMenuModule,
   MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
   MatSelectModule, MatSnackBarModule, MatSortModule,
-  MatTableModule, MatTreeModule
+  MatTableModule, MatTabsModule, MatTooltipModule, MatTreeModule
 } from '@angular/material';
 import {FlexModule} from "@angular/flex-layout";
 import {RouterModule} from "@angular/router";
@@ -20,8 +20,9 @@ import {CoreModule} from "dds-angular8";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
 import {GenericTableModule} from "../generic-table/generic-table.module";
-import {ApplicationEditorComponent} from "./application-editor/application-editor.component";
+import {ApplicationEditorComponent} from "./application/application-editor/application-editor.component";
 import {ApplicationPolicyEditorComponent} from "./application-policy-editor/application-policy-editor.component";
+import {ApplicationProfileDialogComponent} from "./application/application-profile-dialog/application-profile-dialog.component";
 
 @NgModule({
   imports: [
@@ -48,6 +49,9 @@ import {ApplicationPolicyEditorComponent} from "./application-policy-editor/appl
     CoreModule,
     MatButtonModule,
     MatTreeModule,
+    MatTooltipModule,
+    MatTabsModule,
+    MatCheckboxModule,
     MatProgressBarModule,
     GenericTableModule
   ],
@@ -55,8 +59,10 @@ import {ApplicationPolicyEditorComponent} from "./application-policy-editor/appl
     ConfigurationComponent,
     ApplicationEditorComponent,
     ApplicationPolicyEditorComponent,
+    ApplicationProfileDialogComponent
   ],
   entryComponents: [
+    ApplicationProfileDialogComponent
   ],
   providers: [
     ConfigurationService,

@@ -4,7 +4,7 @@ import {AbstractMenuProvider, MenuOption} from 'dds-angular8';
 import {UserComponent} from './user/user/user.component';
 import {ConfigurationComponent} from "./configuration/configuration/configuration.component";
 import {UserEditorComponent} from "./user/user-editor/user-editor.component";
-import {ApplicationEditorComponent} from "./configuration/application-editor/application-editor.component";
+import {ApplicationEditorComponent} from "./configuration/application/application-editor/application-editor.component";
 import {ApplicationPolicyEditorComponent} from "./configuration/application-policy-editor/application-policy-editor.component";
 import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {AuditComponent} from "./audit/audit/audit.component";

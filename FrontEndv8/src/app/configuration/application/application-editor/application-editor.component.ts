@@ -1,11 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
-import {ConfigurationService} from "../configuration.service";
-import {Application} from "../../models/Application";
-import {ApplicationProfile} from "../../models/ApplicationProfile";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
-import {LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
+import {Application} from "../../../models/Application";
+import {ApplicationProfile} from "../../../models/ApplicationProfile";
+import {ConfigurationService} from "../../configuration.service";
+import {MatDialog} from "@angular/material";
+import {ApplicationProfileDialogComponent} from "../application-profile-dialog/application-profile-dialog.component";
 
 @Component({
   selector: 'app-application-editor',
@@ -24,18 +26,18 @@ export class ApplicationEditorComponent implements OnInit {
   editedProfiles: ApplicationProfile[] = [];
 
   appAttributeDetailsToShow = new ApplicationProfile().getDisplayItems();
+  @ViewChild('appProfileTable', { static: false }) appProfileTable: GenericTableComponent;
 
   public activeProject: UserProject;
   admin = false;
   superUser = false;
 
-  // @ViewChild(JsonEditorComponent) applicationEditor: JsonEditorComponent;
-
   constructor(private log: LoggerService,
               private userManagerNotificationService: UserManagerService,
               private router: Router,
               private location: Location,
-              private configurationService: ConfigurationService) {
+              private configurationService: ConfigurationService,
+              public dialog: MatDialog) {
 
     let s = this.router.getCurrentNavigation().extras.state;
 
@@ -142,16 +144,30 @@ export class ApplicationEditorComponent implements OnInit {
       );
   }
 
-  /*loadJsonForProfile() {
-
-    this.profileData = '';
-    console.log(this.selectedProfile.profileTree);
-    this.profileData = JSON.parse(this.selectedProfile.profileTree);
-    this.applicationEditor.set(JSON.parse(this.selectedProfile.profileTree));
-  }*/
+  editProfile(appProfile: ApplicationProfile) {
+    const dialogRef = this.dialog.open(ApplicationProfileDialogComponent, {
+      data: {editMode: true, profile: appProfile},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.appProfileTable.updateRows();
+      }
+    });
+  }
 
   addProfile() {
-
+    let appProfile = new ApplicationProfile;
+    appProfile.applicationId = this.resultApp.id;
+    const dialogRef = this.dialog.open(ApplicationProfileDialogComponent, {
+      data: {editMode: false, profile: appProfile},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.log.success('Application profile saved');
+        this.applicationProfiles.push(result);
+        this.appProfileTable.updateRows();
+      }
+    });
   }
 
   newProfile() {
@@ -175,19 +191,27 @@ export class ApplicationEditorComponent implements OnInit {
 
   deleteProfile() {
 
-    /*MessageBoxDialog.open(this.$modal, "Confirmation", "Delete profile: " + this.selectedProfile.name + "?", "Yes", "No")
-      .result.then(
-      (result) => {
-        let i = this.applicationProfiles.indexOf(this.selectedProfile);
-        if (i !== -1) {
-          this.applicationProfiles.splice(i, 1);
-        }
-        this.selectedProfile.isDeleted = true;
-        this.editedProfiles.push(this.selectedProfile);
-      },
-      (reason) => {
-      }
-    )*/
+    MessageBoxDialogComponent.open(this.dialog, 'Remove application profiles', 'Are you sure you want to remove the application profiles?',
+      'Delete application profiles', 'Cancel')
+      .subscribe(
+        (result) => {
+          if (result) {
+            for (var i = 0; i < this.appProfileTable.selection.selected.length; i++) {
+              let org = this.appProfileTable.selection.selected[i];
+              this.applicationProfiles.forEach((item, index) => {
+                if (item === org) {
+                  item.isDeleted = true;
+                  this.editedProfiles.push(item);
+                  this.applicationProfiles.splice(index, 1);
+                }
+              });
+            }
+            this.saveProfiles(false);
+            this.appProfileTable.updateRows();
+          }
+        },
+      );
+
   }
 
 }

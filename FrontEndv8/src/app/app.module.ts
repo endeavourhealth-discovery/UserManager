@@ -47,7 +47,8 @@ const keycloakService = new KeycloakService();
   providers: [
     { provide: AbstractMenuProvider, useClass : AppMenuService },
     { provide: KeycloakService, useValue: keycloakService }
-  ]
+  ],
+  declarations: []
 })
 export class AppModule implements DoBootstrap {
   ngDoBootstrap(appRef: ApplicationRef) {

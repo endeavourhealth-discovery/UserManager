@@ -39,10 +39,11 @@
                     <input matInput required [(ngModel)]="resultApp.description" placeholder="Description" name="description">
                   </mat-form-field>
 
-                  <app-generic-table
+                  <app-generic-table #appProfileTable
                     [items]="applicationProfiles"
                     [detailsToShow]="appAttributeDetailsToShow"
-                    [allowSelect]="admin">
+                    [allowSelect]="admin"
+                    (clicked)="editProfile($event)">
                     <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteProfile()"><mat-icon>delete</mat-icon></button>
                     <button *ngIf="admin" mat-icon-button color="primary" (click)="addProfile()"><mat-icon>add</mat-icon></button>
                   </app-generic-table>
