@@ -94,9 +94,9 @@ export class ConfigurationService {
 
   flushCache(): Observable<any> {
     const urlOne = 'api/application/flushCache';
-    this.http.get(urlOne);
-    const urlTwo = 'api/userManager/flushCache';
-    return this.http.get<any>(urlTwo);
+    return this.http.get(urlOne);
+    //const urlTwo = 'api/userManager/flushCache';
+    //return this.http.get<any>(urlTwo);
   }
 
 }

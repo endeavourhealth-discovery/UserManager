@@ -20,35 +20,35 @@
       </mat-card-header>
       <mat-card-content>
         <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Forename</mat-label>
-            <input matInput disabled [(ngModel)]="userProfile.forename" placeholder="Forename" name="forename">
+            <input matInput [(ngModel)]="userProfile.forename" placeholder="Forename" name="forename" readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Surname</mat-label>
-            <input matInput disabled [(ngModel)]="userProfile.surname" placeholder="Surname" name="surname">
+            <input matInput [(ngModel)]="userProfile.surname" placeholder="Surname" name="surname" readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Username</mat-label>
-            <input matInput disabled [(ngModel)]="userProfile.username" placeholder="Username" name="username">
+            <input matInput [(ngModel)]="userProfile.username" placeholder="Username" name="username" readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Email</mat-label>
-            <input matInput disabled [(ngModel)]="userProfile.email" placeholder="Email" name="email">
+            <input matInput [(ngModel)]="userProfile.email" placeholder="Email" name="email" readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" fxFlex="50" fxFill>
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
             <mat-label>Mobile</mat-label>
-            <input matInput disabled [(ngModel)]="userProfile.mobile" placeholder="Mobile" name="mobile">
+            <input matInput [(ngModel)]="userProfile.mobile" placeholder="Mobile" name="mobile" readonly>
           </mat-form-field>
         </div>
 
       </mat-card-content>
     </mat-card>
-
+    <br>
     <mat-tab-group dynamicHeight *ngIf="userProfile?.organisationProjects">
       <mat-tab *ngFor="let profile of userProfile.organisationProjects">
         <ng-template mat-tab-label>
