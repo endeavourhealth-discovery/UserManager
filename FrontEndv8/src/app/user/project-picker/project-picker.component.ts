@@ -18,6 +18,7 @@ export interface DialogData {
 })
 export class ProjectPickerComponent implements OnInit {
 
+  previousOrganisation: DelegatedOrganisation;
   selectedOrganisation: DelegatedOrganisation;
   delegatedOrganisations: DelegatedOrganisation[];
   userProjects: UserProject_local[];
@@ -48,17 +49,22 @@ export class ProjectPickerComponent implements OnInit {
           (result) => {
             if (result) {
               this.picker.selection.clear();
+              this.previousOrganisation = this.selectedOrganisation;
+            } else {
+              this.selectedOrganisation = this.previousOrganisation;
             }
           });
+    } else {
+      this.organisationService.getProjectsForOrganisation(this.selectedOrganisation.uuid)
+        .subscribe(
+          (result) => {
+            this.projects = result;
+            this.picker.updateRows();
+            this.previousOrganisation = this.selectedOrganisation;
+          },
+          (error) => this.log.error('Error loading organisation projects')
+        );
     }
-    this.organisationService.getProjectsForOrganisation(this.selectedOrganisation.uuid)
-      .subscribe(
-        (result) => {
-          this.projects = result;
-          this.picker.updateRows();
-        },
-        (error) => this.log.error('Error loading organisation projects')
-      );
   }
 
   ok() {

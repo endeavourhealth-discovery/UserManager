@@ -569,7 +569,7 @@ export class UserEditorComponent implements OnInit {
       }
       this.userService.saveUserProjects(this.resultData.userProjects, this.activeProject.id).subscribe(
         result => {
-          this.userProjects.updateRows();
+          this.getUserProjects(this.resultData.uuid);
           this.log.success('User saved');
         },
         (error) => this.log.error('User details could not be saved. Please try again.')
