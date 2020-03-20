@@ -50,6 +50,15 @@ export class ProjectPickerComponent implements OnInit {
             if (result) {
               this.picker.selection.clear();
               this.previousOrganisation = this.selectedOrganisation;
+              this.organisationService.getProjectsForOrganisation(this.selectedOrganisation.uuid)
+                .subscribe(
+                  (result) => {
+                    this.projects = result;
+                    this.picker.updateRows();
+                    this.previousOrganisation = this.selectedOrganisation;
+                  },
+                  (error) => this.log.error('Error loading organisation projects')
+                );
             } else {
               this.selectedOrganisation = this.previousOrganisation;
             }
