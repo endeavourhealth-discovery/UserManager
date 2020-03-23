@@ -21,12 +21,14 @@ export class ConfigurationService {
     return this.http.get<ApplicationPolicy[]>(url);
   }
 
-  deleteApplicationPolicy(applicationPolicyId: string, userRoleId: string): Observable<any> {
+  deleteApplicationPolicy(applicationPolicyIds: string[], userRoleId: string): Observable<any> {
     const url = 'api/applicationPolicy/deleteApplicationPolicy';
     let params = new HttpParams();
-    if (applicationPolicyId) params = params.append('applicationPolicyId', applicationPolicyId);
+    for (let ix in applicationPolicyIds) {
+      params = params.append('applicationPolicyIds', applicationPolicyIds[ix]);
+    }
     if (userRoleId) params = params.append('userRoleId', userRoleId);
-    return this.http.get<any>(url,{params});
+    return this.http.delete<any>(url,{params});
   }
 
   saveApplicationPolicy(roleType : ApplicationPolicy, userRoleId: string): Observable<any> {
@@ -48,10 +50,12 @@ export class ConfigurationService {
     return this.http.post<any>(url, application, {params});
   }
 
-  deleteApplication(applicationId: string, userRoleId: string): Observable<any> {
+  deleteApplication(applicationIds: string[], userRoleId: string): Observable<any> {
     const url = 'api/application/deleteApplication';
     let params = new HttpParams();
-    if (applicationId) params = params.append('applicationId', applicationId);
+    for (let ix in applicationIds) {
+      params = params.append('applicationIds', applicationIds[ix]);
+    }
     if (userRoleId) params = params.append('userRoleId', userRoleId);
     return this.http.delete<any>(url, {params});
   }

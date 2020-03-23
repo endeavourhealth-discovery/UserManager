@@ -23,12 +23,13 @@
             </div>
           </mat-card-header>
           <mat-card-content>
-
-              <app-generic-table
+              <app-generic-table #applicationPoliciesTable
                 [items]="appProfiles"
                 [detailsToShow]="appPolicyDetailsToShow"
                 (clicked)="editApplicationPolicy($event)"
-                [allowSelect]="false"></app-generic-table>
+                [allowSelect]="admin">
+                <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteApplicationPolicy()"><mat-icon>delete</mat-icon></button>
+              </app-generic-table>
           </mat-card-content>
         </mat-card>
 
@@ -48,11 +49,13 @@
           </mat-card-header>
           <mat-card-content>
 
-            <app-generic-table
+            <app-generic-table #applicationsTable
               [items]="applications"
               [detailsToShow]="appDetailsToShow"
               (clicked)="editApp($event)"
-              [allowSelect]="false"></app-generic-table>
+              [allowSelect]="admin">
+              <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteApplication()"><mat-icon>delete</mat-icon></button>
+            </app-generic-table>
           </mat-card-content>
         </mat-card>
       </div>

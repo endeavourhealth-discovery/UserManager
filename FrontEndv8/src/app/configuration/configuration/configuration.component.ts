@@ -4,8 +4,9 @@ import {Router} from "@angular/router";
 import {ApplicationPolicy} from "../../models/ApplicationPolicy";
 import {Application} from "../../models/Application";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
-import {LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {ApplicationProfile} from "../../models/ApplicationProfile";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-configuration',
@@ -25,10 +26,15 @@ export class ConfigurationComponent implements OnInit {
   appPolicyDetailsToShow = new ApplicationPolicy().getDisplayItems();
   appDetailsToShow = new Application().getDisplayItems();
 
+  @ViewChild('applicationPoliciesTable', { static: false }) applicationPoliciesTable: GenericTableComponent;
+  @ViewChild('applicationsTable', { static: false }) applicationsTable: GenericTableComponent;
+
+
   constructor(public log:LoggerService,
               private configurationService : ConfigurationService,
               private userManagerNotificationService: UserManagerService,
-              private router: Router) { }
+              private router: Router,
+              public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -113,42 +119,61 @@ export class ConfigurationComponent implements OnInit {
     this.router.navigate(['appPolicyEdit'], {state: {policy: policy, editMode: true}});
   }
 
-  deleteApplication(app: Application) {
-
-    /*MessageBoxDialog.open(this.$modal, "Confirmation", "Delete application: " + app.name + "?", "Yes", "No")
-      .result.then(
-      (result) => {
-        this.configurationService.deleteApplication(app.id, this.activeProject.id)
-          .subscribe(
-            (result) => {
-              this.log.success('Successfully deleted application');
-              this.getApplications();
-            },
-            (error) => this.log.error('Failed to delete application. Please try again')
-          );
-      },
-      (reason) => {
-      }
-    )*/
+  deleteApplication() {
+    MessageBoxDialogComponent.open(this.dialog, 'Delete applications', 'Are you sure you want to remove applications?',
+      'Remove applications', 'Cancel')
+      .subscribe(
+        (result) => {
+          if(result) {
+            let ids = [];
+            for (var i = 0; i < this.applicationsTable.selection.selected.length; i++) {
+              let application = this.applicationsTable.selection.selected[i];
+              this.applications.forEach( (item, index) => {
+                if(item === application) {
+                  this.applications.splice(index,1);
+                  this.applicationsTable.updateRows();
+                  ids.push(item.id);
+                }
+              });
+            }
+            this.configurationService.deleteApplication(ids, this.activeProject.id).subscribe(
+              () => {
+                this.log.success('Successfully deleted applications.');
+              }
+            );
+          } else {
+            this.log.success('Remove cancelled.')
+          }
+        },
+      );
   }
 
-  deleteApplicationPolicy(appProfile: ApplicationProfile) {
-
-    /*MessageBoxDialog.open(this.$modal, "Confirmation", "Delete application policy: " + appProfile.name + "?", "Yes", "No")
-      .result.then(
-      (result) => {
-        this.configurationService.deleteApplicationPolicy(appProfile.id, this.activeProject.id)
-          .subscribe(
-            (result) => {
-              this.log.success('Successfully deleted application policy', null, 'Delete application policy');
-              this.getApplicationPolicies();
-            },
-            (error) => this.log.error('Failed to delete application policy. Please try again', error, 'Delete application policy')
-          );
-      },
-      (reason) => {
-      }
-    )*/
+  deleteApplicationPolicy() {
+    MessageBoxDialogComponent.open(this.dialog, 'Delete application policies', 'Are you sure you want to delete application policies?',
+      'Delete application policies', 'Cancel')
+      .subscribe(
+        (result) => {
+          if(result) {
+            let ids = [];
+            for (var i = 0; i < this.applicationPoliciesTable.selection.selected.length; i++) {
+              let applicationPolicy = this.applicationPoliciesTable.selection.selected[i];
+              this.appProfiles.forEach( (item, index) => {
+                if(item === applicationPolicy) {
+                  this.appProfiles.splice(index,1);
+                  this.applicationPoliciesTable.updateRows();
+                  ids.push(item.id);
+                }
+              });
+            }
+            this.configurationService.deleteApplicationPolicy(ids, this.activeProject.id).subscribe(
+              () => {
+                this.log.success('Successfully deleted application policies.');
+              }
+            );
+          } else {
+            this.log.success('Remove cancelled.')
+          }
+        },
+      );
   }
-
 }

@@ -89,14 +89,16 @@ public class ApplicationEndpoint extends AbstractEndpoint {
     @RequiresAdmin
     @ApiOperation(value = "Deletes an application")
     public Response deleteApplication(@Context SecurityContext sc,
-                                     @ApiParam(value = "Application id to be deleted") @QueryParam("applicationId") String applicationId,
-                                     @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
+                                      @ApiParam(value = "Application ids to be deleted") @QueryParam("applicationIds") List<String> applicationIds,
+                                      @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
-                "User", "applicationId", applicationId, "userRoleId", userRoleId);
+                "User", "applicationIds", applicationIds, "userRoleId", userRoleId);
 
-        new ApplicationDAL().deleteApplication(applicationId, userRoleId);
+        for (String applicationId : applicationIds) {
+            new ApplicationDAL().deleteApplication(applicationId, userRoleId);
+        }
 
         clearLogbackMarkers();
 
