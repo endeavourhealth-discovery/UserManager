@@ -59,7 +59,7 @@ export class ApplicationPolicyDialogComponent implements OnInit {
     }
   }
 
-  save(close: boolean) {
+  save() {
 
     this.configurationService.saveApplicationPolicy(this.resultData, this.activeProject.id)
       .subscribe(

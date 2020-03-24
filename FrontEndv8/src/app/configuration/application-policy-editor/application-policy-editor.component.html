@@ -38,7 +38,7 @@
                     [items]="policyAttributes"
                     [detailsToShow]="appPolicyDetailsToShow"
                     [allowSelect]="admin">
-                    <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="removeAccessProfiles($event)"><mat-icon>delete</mat-icon></button>
+                    <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="removeAccessProfiles()"><mat-icon>delete</mat-icon></button>
                     <button *ngIf="admin" mat-icon-button color="primary" (click)="addAttribute()"><mat-icon>add</mat-icon></button>
                   </app-generic-table>
 
