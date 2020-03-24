@@ -23,6 +23,9 @@ import {GenericTableModule} from "../generic-table/generic-table.module";
 import {ApplicationEditorComponent} from "./application/application-editor/application-editor.component";
 import {ApplicationPolicyEditorComponent} from "./application-policy-editor/application-policy-editor.component";
 import {ApplicationProfileDialogComponent} from "./application/application-profile-dialog/application-profile-dialog.component";
+import { ApplicationProfilePickerComponent } from './application/application-profile-picker/application-profile-picker.component';
+import { ApplicationPolicyDialogComponent } from './application/application-policy-dialog/application-policy-dialog.component';
+import { ApplicationDialogComponent } from './application/application-dialog/application-dialog.component';
 
 @NgModule({
   imports: [
@@ -59,10 +62,16 @@ import {ApplicationProfileDialogComponent} from "./application/application-profi
     ConfigurationComponent,
     ApplicationEditorComponent,
     ApplicationPolicyEditorComponent,
-    ApplicationProfileDialogComponent
+    ApplicationProfileDialogComponent,
+    ApplicationProfilePickerComponent,
+    ApplicationPolicyDialogComponent,
+    ApplicationDialogComponent
   ],
   entryComponents: [
-    ApplicationProfileDialogComponent
+    ApplicationProfileDialogComponent,
+    ApplicationProfilePickerComponent,
+    ApplicationPolicyDialogComponent,
+    ApplicationDialogComponent
   ],
   providers: [
     ConfigurationService,

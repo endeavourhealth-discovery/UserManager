@@ -21,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
@@ -71,13 +72,18 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
                 "save application",
                 "roleTypeProfiles", roleTypeProfiles);
 
+        List<JsonApplicationPolicyAttribute> updatedPolicyAttributes = new ArrayList<>();
         for (JsonApplicationPolicyAttribute roleProfile : roleTypeProfiles) {
-            new ApplicationPolicyAttributeDAL().saveRoleAccessProfile(roleProfile, userRoleId);
+            JsonApplicationPolicyAttribute saved = new ApplicationPolicyAttributeDAL().saveRoleAccessProfile(roleProfile, userRoleId);
+            if (!saved.getIsDeleted()) {
+                updatedPolicyAttributes.add(saved);
+            }
         }
 
         clearLogbackMarkers();
         return Response
                 .ok()
+                .entity(updatedPolicyAttributes)
                 .build();
     }
 

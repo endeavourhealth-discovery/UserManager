@@ -5,6 +5,7 @@ export class ApplicationProfile {
   description: string;
   superUser: boolean;
   isDeleted : boolean;
+  applicationName: string;
 
   getDisplayItems(): any[] {
     return [

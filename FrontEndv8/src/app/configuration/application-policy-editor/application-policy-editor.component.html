@@ -5,14 +5,9 @@
     </div>
     <mat-card-title>{{dialogTitle}}</mat-card-title>
     <mat-card-subtitle>Configure the application policy</mat-card-subtitle>
-    <mat-menu #appPolicyEditMenu="matMenu">
-      <button *ngIf="admin" [disabled]="!f.valid" mat-menu-item (click)="save(false)">Save</button>
-      <button *ngIf="admin" [disabled]="!f.valid" mat-menu-item (click)="save(true)">Save & close</button>
-      <button mat-menu-item (click)="close(true)">Close</button>
-    </mat-menu>
     <div fxFlex></div>
-    <div fxLayoutAlign="center" class="mat-action" matRipple>
-      <mat-icon [matMenuTriggerFor]="appPolicyEditMenu">more_vert</mat-icon>
+    <div fxLayoutAlign="center" class="mat-action" matRipple (click)="editPolicy()">
+      <i class="fas fa-fw fa-pencil"></i>
     </div>
   </mat-card-header>
   <mat-card-content>
@@ -39,7 +34,7 @@
                     <input matInput required [(ngModel)]="resultPolicy.description" placeholder="Description" name="description">
                   </mat-form-field>
 
-                  <app-generic-table
+                  <app-generic-table #policyTable
                     [items]="policyAttributes"
                     [detailsToShow]="appPolicyDetailsToShow"
                     [allowSelect]="admin">

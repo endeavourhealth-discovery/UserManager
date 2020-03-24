@@ -5,14 +5,9 @@
     </div>
     <mat-card-title>{{dialogTitle}}</mat-card-title>
     <mat-card-subtitle>Configure the application</mat-card-subtitle>
-    <mat-menu #appEditMenu="matMenu">
-      <button *ngIf="admin" [disabled]="!f.valid" mat-menu-item (click)="save(false)">Save</button>
-      <button *ngIf="admin" [disabled]="!f.valid" mat-menu-item (click)="save(true)">Save & close</button>
-      <button mat-menu-item (click)="close(true)">Close</button>
-    </mat-menu>
     <div fxFlex></div>
-    <div fxLayoutAlign="center" class="mat-action" matRipple>
-      <mat-icon [matMenuTriggerFor]="appEditMenu">more_vert</mat-icon>
+    <div fxLayoutAlign="center" class="mat-action" matRipple (click)="editApplication()">
+      <i class="fas fa-fw fa-pencil"></i>
     </div>
   </mat-card-header>
   <mat-card-content>

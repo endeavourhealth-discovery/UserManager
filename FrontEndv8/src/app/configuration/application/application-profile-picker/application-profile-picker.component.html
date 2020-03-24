@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Add application profiles</h1>
+<div mat-dialog-content>
+  <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+    <mat-form-field appearance="outline" fxFlex="100">
+      <mat-label>Organisation</mat-label>
+      <mat-select matInput name="status" [(value)]="selectedApplication" name="selectedApplication" (selectionChange)="getApplicationProfiles()">
+        <mat-option *ngFor="let app of applications" [value]="app">{{app.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br/>
+  <div class="scroll-box-400">
+    <app-generic-table #picker
+                       [items]="profiles"
+                       [detailsToShow]="profileDetailsToShow"
+                       [allowSelect]="true">
+    </app-generic-table>
+  </div>
+  <br>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button color="accent" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="accent" [disabled]="picker.selection.selected.length < 1" (click)="ok()">Add selected</button>
+</div>

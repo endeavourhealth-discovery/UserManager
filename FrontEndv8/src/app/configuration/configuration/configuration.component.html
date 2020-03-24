@@ -12,15 +12,9 @@
       <div fxFlex="50">
         <mat-card>
           <mat-card-header>
-            <mat-menu #appPolicyMenu="matMenu">
-              <button *ngIf="admin" mat-menu-item (click)="addApplicationPolicy()">Add new application policy</button>
-            </mat-menu>
             <mat-card-title>Application policies</mat-card-title>
             <mat-card-subtitle>Manage application policies</mat-card-subtitle>
             <div fxFlex></div>
-            <div fxLayoutAlign="center" class="mat-action" matRipple>
-              <mat-icon [matMenuTriggerFor]="appPolicyMenu">more_vert</mat-icon>
-            </div>
           </mat-card-header>
           <mat-card-content>
               <app-generic-table #applicationPoliciesTable
@@ -28,7 +22,8 @@
                 [detailsToShow]="appPolicyDetailsToShow"
                 (clicked)="editApplicationPolicy($event)"
                 [allowSelect]="admin">
-                <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteApplicationPolicy()"><mat-icon>delete</mat-icon></button>
+                <button role="selectionOnly" *ngIf="superUser" mat-icon-button color="warn" (click)="deleteApplicationPolicy()"><mat-icon>delete</mat-icon></button>
+                <button *ngIf="superUser" mat-icon-button color="primary" (click)="addPolicy()"><mat-icon>add</mat-icon></button>
               </app-generic-table>
           </mat-card-content>
         </mat-card>
@@ -37,15 +32,9 @@
       <div fxFlex="50">
         <mat-card>
           <mat-card-header>
-            <mat-menu #appMenu="matMenu">
-              <button *ngIf="admin" mat-menu-item (click)="addApplication()">Add new application</button>
-            </mat-menu>
             <mat-card-title>Applications</mat-card-title>
             <mat-card-subtitle>Manage applications</mat-card-subtitle>
             <div fxFlex></div>
-            <div fxLayoutAlign="center" class="mat-action" matRipple>
-              <mat-icon [matMenuTriggerFor]="appMenu">more_vert</mat-icon>
-            </div>
           </mat-card-header>
           <mat-card-content>
 
@@ -54,7 +43,8 @@
               [detailsToShow]="appDetailsToShow"
               (clicked)="editApp($event)"
               [allowSelect]="admin">
-              <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteApplication()"><mat-icon>delete</mat-icon></button>
+              <button role="selectionOnly" *ngIf="superUser" mat-icon-button color="warn" (click)="deleteApplication()"><mat-icon>delete</mat-icon></button>
+              <button *ngIf="superUser" mat-icon-button color="primary" (click)="addApplication()"><mat-icon>add</mat-icon></button>
             </app-generic-table>
           </mat-card-content>
         </mat-card>

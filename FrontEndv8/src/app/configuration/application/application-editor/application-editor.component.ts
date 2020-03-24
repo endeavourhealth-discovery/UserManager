@@ -8,6 +8,7 @@ import {ApplicationProfile} from "../../../models/ApplicationProfile";
 import {ConfigurationService} from "../../configuration.service";
 import {MatDialog} from "@angular/material";
 import {ApplicationProfileDialogComponent} from "../application-profile-dialog/application-profile-dialog.component";
+import {ApplicationDialogComponent} from "../application-dialog/application-dialog.component";
 
 @Component({
   selector: 'app-application-editor',
@@ -96,20 +97,6 @@ export class ApplicationEditorComponent implements OnInit {
       this.location.back();
   }
 
-  save(close: boolean) {
-
-    // const changedJson = this.applicationEditor.get();
-    this.resultApp.applicationTree = ''; // JSON.stringify(changedJson);
-    this.configurationService.saveApplication(this.resultApp, this.activeProject.id)
-      .subscribe(
-        (response) => {
-          this.log.success('Application details successfully saved.');
-          this.saveProfiles(close);
-        },
-        (error) => this.log.error('Application details could not be saved. Please try again.')
-      );
-  }
-
   saveProfiles(close: boolean) {
 
     if (this.editedProfiles.length > 0) {
@@ -163,7 +150,7 @@ export class ApplicationEditorComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.log.success('Application profile saved');
+        this.log.success('Application policy saved');
         this.applicationProfiles.push(result);
         this.appProfileTable.updateRows();
       }
@@ -212,6 +199,16 @@ export class ApplicationEditorComponent implements OnInit {
         },
       );
 
+  }
+
+  editApplication() {
+    const dialogRef = this.dialog.open(ApplicationDialogComponent, {
+      minWidth: '50vw',
+      data: {application: this.resultApp, editMode: true}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      return;
+    })
   }
 
 }

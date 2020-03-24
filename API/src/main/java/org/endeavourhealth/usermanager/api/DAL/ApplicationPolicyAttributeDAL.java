@@ -2,6 +2,7 @@ package org.endeavourhealth.usermanager.api.DAL;
 
 import org.endeavourhealth.core.database.dal.DalProvider;
 import org.endeavourhealth.core.database.dal.usermanager.ApplicationPolicyAttributeDalI;
+import org.endeavourhealth.core.database.dal.usermanager.caching.ApplicationPolicyCache;
 import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.core.database.rdbms.ConnectionManager;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.ApplicationPolicyAttributeEntity;
@@ -45,7 +46,7 @@ public class ApplicationPolicyAttributeDAL {
         }
     }
 
-    public String saveRoleAccessProfile(JsonApplicationPolicyAttribute roleAccessProfile, String userRoleId) throws Exception {
+    public JsonApplicationPolicyAttribute saveRoleAccessProfile(JsonApplicationPolicyAttribute roleAccessProfile, String userRoleId) throws Exception {
 
         boolean added = false;
         String originalUuid = roleAccessProfile.getId();
@@ -64,6 +65,8 @@ public class ApplicationPolicyAttributeDAL {
             roleAccessProfile.setDeleted(false);
         }
 
+        ApplicationPolicyCache.clearApplicationPolicyCache(roleAccessProfile.getApplicationPolicyId());
+
         if (roleAccessProfile.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), null);
@@ -75,7 +78,7 @@ public class ApplicationPolicyAttributeDAL {
                     AuditAction.EDIT, ItemType.APPLICATION_POLICY_ATTRIBUTE, roleAccessProfile.getId(), originalUuid);
         }
 
-        return roleAccessProfile.getId();
+        return roleAccessProfile;
 
     }
 

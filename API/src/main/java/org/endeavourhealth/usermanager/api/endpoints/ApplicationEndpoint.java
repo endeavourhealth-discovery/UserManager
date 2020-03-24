@@ -72,12 +72,13 @@ public class ApplicationEndpoint extends AbstractEndpoint {
                 "save application",
                 "application", application);
 
-        String newId = new ApplicationDAL().saveApplication(application, userRoleId);
+        // String newId = new ApplicationDAL().saveApplication(application, userRoleId);
+        JsonApplication app = new ApplicationDAL().saveApplication(application, userRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(newId)
+                .entity(app)
                 .build();
     }
 

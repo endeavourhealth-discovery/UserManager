@@ -5,8 +5,9 @@ import {ApplicationPolicy} from "../../models/ApplicationPolicy";
 import {Application} from "../../models/Application";
 import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
-import {ApplicationProfile} from "../../models/ApplicationProfile";
 import {MatDialog} from "@angular/material/dialog";
+import {ApplicationPolicyDialogComponent} from "../application/application-policy-dialog/application-policy-dialog.component";
+import {ApplicationDialogComponent} from "../application/application-dialog/application-dialog.component";
 
 @Component({
   selector: 'app-configuration',
@@ -99,16 +100,6 @@ export class ConfigurationComponent implements OnInit {
       );
   }
 
-  addApplication() {
-    // this.state.setState('applicationEdit', {application: null, editMode: false});
-    this.router.navigate(['appEdit'], {state: {application: null, editMode: false}});
-  }
-
-  addApplicationPolicy() {
-    // this.state.setState('roleTypeEdit', {role: null, editMode: false});
-    this.router.navigate(['appPolicyEdit'], {state: {policy: null, editMode: false}});
-  }
-
   editApp(app: Application) {
     // this.state.setState('applicationEdit', {application: app, editMode: true});
     this.router.navigate(['appEdit'], {state: {application: app, editMode: true}});
@@ -175,5 +166,33 @@ export class ConfigurationComponent implements OnInit {
           }
         },
       );
+  }
+
+  addPolicy() {
+    const dialogRef = this.dialog.open(ApplicationPolicyDialogComponent, {
+      minWidth: '50vw',
+      data: {policy: null, editMode: false}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      this.router.navigate(['appPolicyEdit'], {state: {policy: result, editMode: true}});
+    })
+  }
+
+  addApplication() {
+    const dialogRef = this.dialog.open(ApplicationDialogComponent, {
+      minWidth: '50vw',
+      data: {policy: null, editMode: false}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+
+      this.router.navigate(['appEdit'], {state: {application: result, editMode: true}});
+    })
   }
 }

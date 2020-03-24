@@ -43,11 +43,11 @@ export class ConfigurationService {
     return this.http.get<Application[]>(url);
   }
 
-  saveApplication(application : Application, userRoleId: string): Observable<any> {
+  saveApplication(application : Application, userRoleId: string): Observable<Application> {
     const url = 'api/application/saveApplication';
     let params = new HttpParams();
     if (userRoleId) params = params.append('userRoleId', userRoleId);
-    return this.http.post<any>(url, application, {params});
+    return this.http.post<Application>(url, application, {params});
   }
 
   deleteApplication(applicationIds: string[], userRoleId: string): Observable<any> {
@@ -88,12 +88,12 @@ export class ConfigurationService {
     return this.http.get<ApplicationPolicyAttribute[]>(url,{params});
   }
 
-  saveRoleTypeAccessProfiles(roleProfiles: ApplicationPolicyAttribute[], userRoleId: string): Observable<string> {
+  saveRoleTypeAccessProfiles(roleProfiles: ApplicationPolicyAttribute[], userRoleId: string): Observable<ApplicationPolicyAttribute[]> {
     const url = 'api/roleTypeAccessProfile/saveRoleTypeAccessProfiles';
     let params = new HttpParams();
     if (userRoleId) params = params.append('userRoleId', userRoleId);
-    //console.log('hete');
-    return this.http.post<string>(url, roleProfiles,{params});
+
+    return this.http.post<ApplicationPolicyAttribute[]>(url, roleProfiles,{params});
   }
 
   flushCache(): Observable<any> {

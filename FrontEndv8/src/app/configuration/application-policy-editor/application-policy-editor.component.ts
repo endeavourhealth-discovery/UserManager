@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {ConfigurationService} from "../configuration.service";
@@ -7,7 +7,10 @@ import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {ApplicationPolicyAttribute} from "../../models/ApplicationPolicyAttribute";
 import {Application} from "../../models/Application";
 import {ApplicationProfile} from "../../models/ApplicationProfile";
-import {LoggerService, UserManagerService} from "dds-angular8";
+import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
+import {ApplicationProfilePickerComponent} from "../application/application-profile-picker/application-profile-picker.component";
+import {MatDialog} from "@angular/material";
+import {ApplicationPolicyDialogComponent} from "../application/application-policy-dialog/application-policy-dialog.component";
 
 @Component({
   selector: 'app-role-type-editor',
@@ -26,17 +29,19 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   policyAttributes: ApplicationPolicyAttribute[];
   editedProfiles: ApplicationPolicyAttribute[] = [];
-  applications: Application[];
   appProfiles: ApplicationProfile[];
   selectedApp: Application;
 
   appPolicyDetailsToShow = new ApplicationPolicyAttribute().getDisplayItems();
 
+  @ViewChild('policyTable', { static: false }) policyTable: GenericTableComponent;
+
   constructor(private log: LoggerService,
               private userManagerNotificationService: UserManagerService,
               private router: Router,
               private location: Location,
-              private configurationService: ConfigurationService) {
+              private configurationService: ConfigurationService,
+              public dialog: MatDialog) {
 
     let s = this.router.getCurrentNavigation().extras.state;
 
@@ -51,13 +56,10 @@ export class ApplicationPolicyEditorComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.userManagerNotificationService.onProjectChange.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();
     });
-
-    this.getApplications();
 
     if (this.editMode) {
       this.getRoleTypeProfiles();
@@ -93,36 +95,9 @@ export class ApplicationPolicyEditorComponent implements OnInit {
       .subscribe(
         (result) => {
           this.policyAttributes = result;
+          this.policyTable.updateRows();
         },
         (error) => this.log.error('Loading role type access profiles failed. Please try again')
-      );
-  }
-
-  getApplications(){
-
-    this.configurationService.getApplications()
-      .subscribe(
-        (result) => {
-          this.applications = result;
-          if (this.applications.length > 0) {
-            this.selectedApp = this.applications[0];
-            this.getApplicationProfiles();
-          }
-        },
-        (error) => this.log.error('Loading applications failed. Please try again.')
-      );
-  }
-
-  getApplicationProfiles(){
-
-    this.appProfiles = null;
-    this.configurationService.getApplicationProfiles(this.selectedApp.id)
-      .subscribe(
-        (result) => {
-          this.appProfiles = result;
-          this.checkAvailableAppProfiles();
-        },
-        (error) => this.log.error('Loading application profiles failed. Please try again')
       );
   }
 
@@ -134,104 +109,86 @@ export class ApplicationPolicyEditorComponent implements OnInit {
     newRoleTypeProfile.applicationAccessProfileId = appProfile.id;
     newRoleTypeProfile.applicationAccessProfileName = appProfile.name;
     newRoleTypeProfile.name = appProfile.name;
-    newRoleTypeProfile.application = this.selectedApp.name;
+    newRoleTypeProfile.application = appProfile.applicationName;
     newRoleTypeProfile.applicationAccessProfileSuperUser = appProfile.superUser;
     newRoleTypeProfile.applicationId = appProfile.applicationId;
 
-    let i = this.appProfiles.indexOf(appProfile);
-    if (i !== 1) {
-      this.appProfiles.splice(i, 1);
-    }
-
-    this.policyAttributes.push(newRoleTypeProfile);
     this.editedProfiles.push(newRoleTypeProfile);
 
   }
 
-  removeAccessProfiles(applicationProfile: ApplicationPolicyAttribute) {
+  removeAccessProfiles() {
 
+    this.editedProfiles = [];
 
-    applicationProfile.isDeleted = true;
-    this.editedProfiles.push(applicationProfile);
+    MessageBoxDialogComponent.open(this.dialog, 'Remove application profiles', 'Are you sure you want to remove application profiles?',
+      'Remove application profiles', 'Cancel')
+      .subscribe(
+        (result) => {
+          if(result) {
+            for (var i = 0; i < this.policyTable.selection.selected.length; i++) {
+              let project = this.policyTable.selection.selected[i];
+              this.policyAttributes.forEach( (item, index) => {
+                if(item === project) {
+                  item.isDeleted = true;
+                  this.editedProfiles.push(item);
+                }
+              });
+            }
 
-    this.getApplicationProfiles();
-
+            console.log('edited', this.editedProfiles);
+            console.log('policies', this.policyAttributes);
+            this.policyAttributes = this.policyAttributes.filter((x) => !this.editedProfiles.filter(y => y.applicationAccessProfileId === x.applicationAccessProfileId).length);
+            this.saveProfiles(false, this.activeProject.id);
+          } else {
+            this.log.success('Remove cancelled.')
+          }
+        },
+      );
   }
 
   addAttribute() {
-
-  }
-
-  checkAvailableAppProfiles() {
-
-
-    if (!this.superUsers) {
-      this.appProfiles = this.appProfiles.filter(p => !p.superUser);
-    }
-
-    if (this.policyAttributes) {
-      for (let profile of this.policyAttributes) {
-        if (!profile.isDeleted && profile.application === this.selectedApp.name) {
-          var profileToDelete = this.appProfiles.find(e => e.id === profile.applicationAccessProfileId);
-          if (profileToDelete != null) {
-            let i = this.appProfiles.indexOf(profileToDelete);
-            if (i !== -1) {
-              this.appProfiles.splice(i, 1);
-            }
-          }
+    const dialogRef = this.dialog.open(ApplicationProfilePickerComponent, {
+      minWidth: '50vw',
+      data: {existing: this.policyAttributes}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      for (let prof of result) {
+        if (!this.editedProfiles.some(x => x.id === prof.id)) {
+          this.addAvailableProfile(prof);
         }
       }
-    }
-  }
-
-  close(withConfirm: boolean) {
-
-    /*if (withConfirm)
-      MessageBoxDialog.open(this.$modal, this.dialogTitle, "Any unsaved changes will be lost. Do you want to close without saving?", "Close without saving", "Continue editing")
-        .result.then(
-        (result) => this.location.back(),
-        (reason) => {}
-      );
-    else*/
-      this.location.back();
-  }
-
-  save(close: boolean) {
-
-    this.configurationService.saveApplicationPolicy(this.resultPolicy, this.activeProject.id)
-      .subscribe(
-        (response) => {
-          this.log.success('Application details successfully saved.');
-          this.saveProfiles(close, response);
-        },
-        (error) => this.log.error('Application details could not be saved. Please try again.')
-      );
+      this.saveProfiles(false, this.activeProject.id);
+    })
   }
 
   saveProfiles(close: boolean, roleTypeId: string) {
 
     if (this.editedProfiles.length > 0) {
-      /*if (this.resultPolicy.id != roleTypeId) {
-        this.resultPolicy.id = roleTypeId;
-        this.editedProfiles.forEach(x => x.applicationPolicyId = roleTypeId);
-      }*/
       this.configurationService.saveRoleTypeAccessProfiles(this.editedProfiles, this.activeProject.id)
         .subscribe(
           (response) => {
-            this.successfullySavedApplication(close);
+            this.policyAttributes = this.policyAttributes.concat(response);
+            this.policyTable.updateRows();
+            this.log.success('Application profiles updated.');
+
           },
           (error) => this.log.error('Application profiles could not be saved. Please try again.')
         );
-    } else {
-      this.successfullySavedApplication(close);
     }
   }
 
-  successfullySavedApplication(close: boolean) {
-
-    this.log.success('Application saved');
-    if (close)
-      this.close(false);
+  editPolicy() {
+    const dialogRef = this.dialog.open(ApplicationPolicyDialogComponent, {
+      minWidth: '50vw',
+      data: {policy: this.resultPolicy, editMode: true}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      return;
+    })
   }
 
 }

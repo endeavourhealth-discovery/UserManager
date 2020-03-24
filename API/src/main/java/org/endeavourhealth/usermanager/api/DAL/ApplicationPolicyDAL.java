@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class ApplicationPolicyDAL {
 
-    public void saveApplicationPolicy(JsonApplicationPolicy applicationPolicy, String userRoleId) throws Exception {
+    public JsonApplicationPolicy saveApplicationPolicy(JsonApplicationPolicy applicationPolicy, String userRoleId) throws Exception {
 
         boolean added = false;
         String originalUuid = applicationPolicy.getId();
@@ -22,6 +22,7 @@ public class ApplicationPolicyDAL {
             added = true;
         }
 
+        JsonApplicationPolicy savedPolicy = applicationPolicy;
         // store the profile in the DB
         saveApplicationPolicyInDatabase(applicationPolicy);
 
@@ -33,6 +34,9 @@ public class ApplicationPolicyDAL {
             applicationPolicy.setDeleted(false);
         }
 
+
+        ApplicationPolicyCache.clearApplicationPolicyCache(savedPolicy.getId());
+
         if (applicationPolicy.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), null);
@@ -43,6 +47,8 @@ public class ApplicationPolicyDAL {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.EDIT, ItemType.APPLICATION_POLICY, applicationPolicy.getId(), originalUuid);
         }
+
+        return savedPolicy;
 
     }
 

@@ -91,11 +91,12 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
                 "Role Type",
                 "roleType", applicationPolicy);
 
-        new ApplicationPolicyDAL().saveApplicationPolicy(applicationPolicy, userRoleId);
+        JsonApplicationPolicy newPolicy = new ApplicationPolicyDAL().saveApplicationPolicy(applicationPolicy, userRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
+                .entity(newPolicy)
                 .build();
     }
 
