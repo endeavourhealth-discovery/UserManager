@@ -30,9 +30,15 @@ export class ApplicationProfileDialogComponent implements OnInit {
               private datePipe: DatePipe,
               private userManagerService: UserManagerService,
               public dialog: MatDialog) {
-    this.resultData = data.profile;
-    if (!this.resultData) {
-      this.resultData = new ApplicationProfile();
+    this.resultData = new ApplicationProfile();
+    if (data.profile) {
+      this.resultData.superUser = data.profile.superUser;
+      this.resultData.name = data.profile.name;
+      this.resultData.isDeleted = data.profile.isDeleted;
+      this.resultData.id = data.profile.id;
+      this.resultData.description = data.profile.description;
+      this.resultData.applicationId = data.profile.applicationId;
+      this.resultData.applicationName = data.profile.applicationName;
     }
     this.editMode = data.editMode;
   }

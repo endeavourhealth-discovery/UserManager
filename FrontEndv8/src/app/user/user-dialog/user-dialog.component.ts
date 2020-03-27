@@ -54,9 +54,21 @@ export class UserDialogComponent implements OnInit {
               private userManagerService: UserManagerService,
               public dialog: MatDialog,
               private linkageService: ItemLinkageService) {
-    this.resultData = data.user;
-    if (!this.resultData) {
-      this.resultData = new User();
+    this.resultData = new User();
+    if (data.user) {
+      this.resultData.uuid = data.user.uuid;
+      this.resultData.forename = data.user.forename;
+      this.resultData.surname = data.user.surname;
+      this.resultData.username = data.user.username;
+      this.resultData.password = data.user.password;
+      this.resultData.email = data.user.email;
+      this.resultData.mobile = data.user.mobile;
+      this.resultData.photo = data.user.photo;
+      this.resultData.defaultOrgId = data.user.defaultOrgId;
+      this.resultData.createdTimeStamp = data.user.createdTimeStamp;
+      this.resultData.userProjects = data.user.userProjects;
+      this.resultData.isSuperUser = data.user.isSuperUser;
+      this.resultData.permissions = data.user.permissions;
     }
     this.editMode = data.editMode;
     this.availableRegions = data.availableRegions;

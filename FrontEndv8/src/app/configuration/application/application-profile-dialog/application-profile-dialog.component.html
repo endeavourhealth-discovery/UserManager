@@ -4,11 +4,11 @@
     <div class="flex" fxLayout="row wrap" fxLayoutGap="16px grid" fxLayoutAlign="start">
       <mat-form-field appearance="outline" fxFlex="50" fxFill>
         <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="resultData.name" placeholder="Name" name="name" #name>
+        <input matInput required [(ngModel)]="resultData.name" placeholder="Name" name="name" #name>
       </mat-form-field>
       <mat-form-field appearance="outline" fxFlex="50" fxFill>
         <mat-label>Description</mat-label>
-        <input matInput [(ngModel)]="resultData.description" placeholder="Description" name="description" #description>
+        <input matInput required [(ngModel)]="resultData.description" placeholder="Description" name="description" #description>
       </mat-form-field>
       <mat-checkbox class="example-margin" [(ngModel)]="resultData.superUser" name="superUser">Grants super user</mat-checkbox>
     </div>

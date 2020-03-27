@@ -31,9 +31,14 @@ export class ApplicationDialogComponent implements OnInit {
               private datePipe: DatePipe,
               private userManagerService: UserManagerService,
               public dialog: MatDialog) {
-    this.resultData = data.application;
-    if (!this.resultData) {
+    this.resultData = new Application();
+    if (data.application) {
       this.resultData = new Application();
+      this.resultData.id = data.application.id;
+      this.resultData.isDeleted = data.application.isDeleted;
+      this.resultData.applicationTree = data.application.applicationTree;
+      this.resultData.description = data.application.description;
+      this.resultData.name = data.application.name;
     }
     this.editMode = data.editMode;
   }

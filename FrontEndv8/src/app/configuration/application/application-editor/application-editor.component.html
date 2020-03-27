@@ -24,27 +24,25 @@
               <mat-card-content>
                 <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
 
-                  <mat-form-field appearance="outline" fxFlex="100" fxFill>
+                  <mat-form-field appearance="outline" fxFlex="100" fxFill mat-readonly>
                     <mat-label>Name</mat-label>
-                    <input matInput required [(ngModel)]="resultApp.name" placeholder="Name" name="name">
+                    <input matInput [(ngModel)]="resultApp.name" placeholder="Name" name="name" readonly>
                   </mat-form-field>
 
-                  <mat-form-field appearance="outline" fxFlex="100" fxFill>
+                  <mat-form-field appearance="outline" fxFlex="100" fxFill mat-readonly>
                     <mat-label>Description</mat-label>
-                    <input matInput required [(ngModel)]="resultApp.description" placeholder="Description" name="description">
+                    <input matInput [(ngModel)]="resultApp.description" placeholder="Description" name="description" readonly>
                   </mat-form-field>
-
-                  <app-generic-table #appProfileTable
-                    [items]="applicationProfiles"
-                    [detailsToShow]="appAttributeDetailsToShow"
-                    [allowSelect]="admin"
-                    (clicked)="editProfile($event)">
-                    <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteProfile()"><mat-icon>delete</mat-icon></button>
-                    <button *ngIf="admin" mat-icon-button color="primary" (click)="addProfile()"><mat-icon>add</mat-icon></button>
-                  </app-generic-table>
-
                 </div>
               </mat-card-content>
+              <app-generic-table #appProfileTable
+                                 [items]="applicationProfiles"
+                                 [detailsToShow]="appAttributeDetailsToShow"
+                                 [allowSelect]="admin"
+                                 (clicked)="editProfile($event)">
+                <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteProfile()"><mat-icon>delete</mat-icon></button>
+                <button *ngIf="admin" mat-icon-button color="primary" (click)="addProfile()"><mat-icon>add</mat-icon></button>
+              </app-generic-table>
             </mat-card>
 
           </div>

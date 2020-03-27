@@ -31,9 +31,12 @@ export class ApplicationPolicyDialogComponent implements OnInit {
               private datePipe: DatePipe,
               private userManagerService: UserManagerService,
               public dialog: MatDialog) {
-    this.resultData = data.policy;
-    if (!this.resultData) {
-      this.resultData = new ApplicationPolicy();
+    this.resultData = new ApplicationPolicy();
+    if (data.policy) {
+      this.resultData.id = data.policy.id;
+      this.resultData.name = data.policy.name;
+      this.resultData.description = data.policy.description;
+      this.resultData.isDeleted = data.policy.isDeleted;
       this.resultData.jobCategoryId = '';
     }
     this.editMode = data.editMode;

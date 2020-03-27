@@ -137,6 +137,7 @@ export class ApplicationEditorComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        appProfile = result;
         this.appProfileTable.updateRows();
       }
     });
@@ -207,7 +208,9 @@ export class ApplicationEditorComponent implements OnInit {
       data: {application: this.resultApp, editMode: true}
     })
     dialogRef.afterClosed().subscribe(result => {
-      return;
+      if (result) {
+        this.resultApp = result;
+      }
     })
   }
 

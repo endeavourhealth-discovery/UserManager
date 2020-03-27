@@ -187,7 +187,10 @@ export class ApplicationPolicyEditorComponent implements OnInit {
       data: {policy: this.resultPolicy, editMode: true}
     })
     dialogRef.afterClosed().subscribe(result => {
-      return;
+      if (result) {
+        this.resultPolicy = result;
+        return;
+      }
     })
   }
 
