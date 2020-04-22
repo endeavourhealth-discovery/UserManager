@@ -1,0 +1,56 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>{{dialogTitle}}</mat-card-title>
+    <mat-card-subtitle>Configure the application</mat-card-subtitle>
+    <div fxFlex></div>
+    <div fxLayoutAlign="center" class="mat-action" matRipple (click)="editApplication()">
+      <i class="fas fa-fw fa-pencil"></i>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="form" #f="ngForm" novalidate>
+      <div class="form-group" #fgName="ngModelGroup" ngModelGroup="application" [class.has-error]="!fgName.valid">
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+          <div fxFlex="100">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Details</mat-card-title>
+                <mat-card-subtitle>Details of the application</mat-card-subtitle>
+                <div fxFlex></div>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+                  <mat-form-field appearance="outline" fxFlex="100" fxFill>
+                    <mat-label>Name</mat-label>
+                    <input matInput required [(ngModel)]="resultApp.name" placeholder="Name" name="name">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" fxFlex="100" fxFill>
+                    <mat-label>Description</mat-label>
+                    <input matInput required [(ngModel)]="resultApp.description" placeholder="Description" name="description">
+                  </mat-form-field>
+
+                  <app-generic-table #appProfileTable
+                    [items]="applicationProfiles"
+                    [detailsToShow]="appAttributeDetailsToShow"
+                    [allowSelect]="admin"
+                    (clicked)="editProfile($event)">
+                    <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="deleteProfile()"><mat-icon>delete</mat-icon></button>
+                    <button *ngIf="admin" mat-icon-button color="primary" (click)="addProfile()"><mat-icon>add</mat-icon></button>
+                  </app-generic-table>
+
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </mat-card-content>
+</mat-card>

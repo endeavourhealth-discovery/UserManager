@@ -1,0 +1,171 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>{{dialogTitle}}</mat-card-title>
+    <mat-card-subtitle>Configure users</mat-card-subtitle>
+    <div fxFlex></div>
+    <div fxLayoutAlign="center" class="mat-action" matRipple (click)="editUser()">
+      <mat-icon>create</mat-icon>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-card *ngIf="existing">
+      <mat-card-header>
+        <mat-card-title>Search existing users</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+          <mat-form-field appearance="outline" fxFlex="100" fxFill>
+            <mat-label>Search</mat-label>
+            <input matInput [(ngModel)]="searchTerm" (keyup.enter)="searchUsers()" placeholder="Search" #searchBox>
+            <button mat-button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <!--<app-generic-table
+          [items]="userList"
+          [detailsToShow]="userDetailsToShow"
+          [allowSelect]="false"
+          (clicked)="selectUser($event)"></app-generic-table>-->
+      </mat-card-content>
+    </mat-card>
+
+    <!-- USER PROFILE DETAILS -->
+    <mat-card *ngIf="!existing">
+      <mat-card-header>
+        <img mat-card-avatar class="avatar" [src]="resultData?.photo" [class.default-avatar]="resultData == null || resultData.photo == null">
+        <mat-card-title>Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Forename</mat-label>
+            <input matInput [(ngModel)]="resultData.forename" placeholder="Forename" name="forename" #forename readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Surname</mat-label>
+            <input matInput [(ngModel)]="resultData.surname" placeholder="Surname" name="surname" #surname readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="resultData.username" placeholder="Username" name="username" #username readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="resultData.email" placeholder="Email" name="email" #email readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Mobile</mat-label>
+            <input matInput [(ngModel)]="resultData.mobile" placeholder="Mobile" name="mobile" #mobile readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Photo</mat-label>
+            <input matInput [(ngModel)]="resultData.photo" placeholder="Photo" name="photo" #photo readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Data sharing manager region</mat-label>
+            <input matInput [(ngModel)]="selectedRegionValue" placeholder="Data sharing manager region" name="selectedRegion" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Application policy</mat-label>
+            <input matInput [(ngModel)]="selectedApplicationPolicyValue" placeholder="Application policy" name="selectedApplicationPolicy" readonly>
+          </mat-form-field>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- USER CREDENTIALS -->
+    <!--
+    <mat-card *ngIf="!existing">
+      <mat-card-header>
+        <mat-card-title>Password</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Password</mat-label>
+            <input matInput type="password" placeholder="Password" name="passwordNew" #password1 readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" fxFill mat-readonly>
+            <mat-label>Password confirmation</mat-label>
+            <input matInput type="password" [(ngModel)]="resultData.password" placeholder="Password" name="passwordConf" #password2 readonly>
+          </mat-form-field>
+
+          <button mat-icon-button
+                  matTooltip="The password must be at least eight characters long, include at least one digit and one Uppercase letter."
+                  aria-label="Button that displays a tooltip when focused or hovered over">
+            <mat-icon>info</mat-icon>
+          </button>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+    -->
+
+    <!-- PROJECTS -->
+    <mat-card *ngIf="!existing">
+      <mat-card-header>
+        <mat-card-title>Projects</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+          <div fxFlex="100">
+            <app-generic-table #userProjects
+              [items]="userProjectsFromDB"
+              [detailsToShow]="userProjectDetailsToShow"
+              [allowSelect]="admin">
+              <button role="selectionOnly" *ngIf="admin" mat-icon-button color="warn" (click)="removeCurrentRole()"><mat-icon>delete</mat-icon></button>
+              <button *ngIf="admin" mat-icon-button color="primary" (click)="addProject()"><mat-icon>add</mat-icon></button>
+            </app-generic-table>
+          </div>
+
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+    <!-- REGION AND APPLICATION POLICY -->
+    <!--
+    <mat-card *ngIf="!existing">
+      <mat-card-header>
+        <mat-card-title>Application access</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Data sharing manager region</mat-label>
+            <mat-select matInput name="status" [(ngModel)]="selectedRegion" name="selectedRegion" (selectionChange)="changeUserRegion(selectedRegion.uuid)">
+              <mat-option *ngFor="let reg of availableRegions" [value]="reg">{{reg.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Application policy</mat-label>
+            <mat-select matInput name="status" [(ngModel)]="selectedApplicationPolicy" name="selectedApplicationPolicy" (selectionChange)="changeUserApplicationPolicy(selectedApplicationPolicy.id)">
+              <mat-option *ngFor="let pol of availablePolicies" [value]="pol">{{pol.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+    -->
+  </mat-card-content>
+</mat-card>

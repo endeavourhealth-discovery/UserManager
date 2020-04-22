@@ -1,18 +1,17 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicy;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.usermanager.caching.ApplicationPolicyCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplicationPolicy;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.ApplicationPolicyEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.ApplicationPolicyDAL;
 import org.slf4j.Logger;
@@ -92,11 +91,12 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
                 "Role Type",
                 "roleType", applicationPolicy);
 
-        new ApplicationPolicyDAL().saveApplicationPolicy(applicationPolicy, userRoleId);
+        JsonApplicationPolicy newPolicy = new ApplicationPolicyDAL().saveApplicationPolicy(applicationPolicy, userRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
+                .entity(newPolicy)
                 .build();
     }
 
@@ -108,14 +108,16 @@ public class ApplicationPolicyEndpoint extends AbstractEndpoint {
     @RequiresAdmin
     @ApiOperation(value = "Deletes an application")
     public Response deleteApplicationPolicy(@Context SecurityContext sc,
-                                      @ApiParam(value = "Application policy id to be deleted") @QueryParam("applicationPolicyId") String applicationPolicyId,
+                                      @ApiParam(value = "Application policy ids to be deleted") @QueryParam("applicationPolicyIds") List<String> applicationPolicyIds,
                                       @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
-                "User", "applicationId", applicationPolicyId, "userRoleId", userRoleId);
+                "User", "applicationPolicyIds", applicationPolicyIds, "userRoleId", userRoleId);
 
-        new ApplicationPolicyDAL().deleteApplicationPolicy(applicationPolicyId, userRoleId);
+        for (String applicationPolicyId : applicationPolicyIds) {
+            new ApplicationPolicyDAL().deleteApplicationPolicy(applicationPolicyId, userRoleId);
+        }
 
         clearLogbackMarkers();
         return Response

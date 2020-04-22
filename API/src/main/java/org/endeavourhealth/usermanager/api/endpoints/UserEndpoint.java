@@ -1,23 +1,22 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.RegionCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.UserApplicationPolicyEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.UserRegionEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserApplicationPolicy;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserProject;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserRegion;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.usermanager.caching.RegionCache;
+import org.endeavourhealth.core.database.dal.usermanager.caching.UserCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserApplicationPolicy;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserProject;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserRegion;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.RegionEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.UserApplicationPolicyEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.UserRegionEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.UserApplicationPolicyDAL;
 import org.endeavourhealth.usermanager.api.DAL.UserRegionDAL;
@@ -95,6 +94,25 @@ public final class UserEndpoint extends AbstractEndpoint {
                 "User", "User", user);
 
         return new UserLogic().saveUser(user, editMode, userRoleId, sc);
+
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUsersProjects")
+    @Path("/users/saveUsersProjects")
+    @RequiresAdmin
+    @ApiOperation(value = "Updates the existing users projects")
+    public Response saveUsers(@Context SecurityContext sc,
+                                       List<JsonUser> users,
+                                       @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
+        super.setLogbackMarkers(sc);
+
+        userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Save,
+                "User", "User", users);
+
+        return new UserLogic().saveUsersProjects(users, userRoleId, sc);
 
     }
 
@@ -289,7 +307,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.UserEndpoint.getUserRegion")
+    @Timed(absolute = true, name="UserManager.UserEndpoint.sendUpdatePasswordEmail")
     @Path("/sendUpdatePasswordEmail")
     @ApiOperation(value = "Returns the data sharing manager region associated with the user")
     public Response sendUpdatePasswordEmail(@Context SecurityContext sc,

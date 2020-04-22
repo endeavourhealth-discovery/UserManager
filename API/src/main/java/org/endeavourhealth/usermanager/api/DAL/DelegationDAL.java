@@ -1,9 +1,9 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
-import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.DelegationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegation;
+import org.endeavourhealth.core.database.dal.usermanager.caching.DelegationCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonDelegation;
+import org.endeavourhealth.core.database.rdbms.ConnectionManager;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationEntity;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.enums.AuditAction;
 import org.endeavourhealth.uiaudit.enums.ItemType;

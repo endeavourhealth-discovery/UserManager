@@ -1,0 +1,116 @@
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon>account_box</mat-icon>
+    </div>
+    <mat-card-title>Users</mat-card-title>
+    <mat-card-subtitle *ngIf="!machineUsers">Users currently defined in the organisation</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="machineUsers">Machine users</mat-card-subtitle>
+    <div fxFlex></div>
+    <mat-menu #visualiseMenu="matMenu">
+      <button *ngIf="superUser && !machineUsers" mat-menu-item (click)="viewMachineUsers()">View machine users</button>
+      <button *ngIf="superUser && machineUsers" mat-menu-item (click)="viewHumanUsers()">View human users</button>
+    </mat-menu>
+    <div fxLayoutAlign="center" class="mat-action" matRipple>
+      <mat-icon [matMenuTriggerFor]="visualiseMenu">more_vert</mat-icon>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+
+    <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+      <div fxFlex="50">
+        <mat-card *ngIf="selectedOrg">
+          <mat-card-header>
+            <mat-menu #orgUserMenu="matMenu">
+              <button *ngIf="admin" mat-menu-item (click)="addUser()">Add new user</button>
+              <button *ngIf="admin" mat-menu-item (click)="addExisting()">Add existing user</button>
+            </mat-menu>
+            <mat-card-title>Organisation users</mat-card-title>
+            <mat-card-subtitle>Users that belong to the selected organisation</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="orgUserMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+              <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Organisation type</mat-label>
+                <mat-select matInput name="status" [(ngModel)]="selectedOrg" name="selectedOrg" (selectionChange)="getUsers()">
+                  <mat-option *ngFor="let del of delegatedOrganisations" [value]="del">{{del.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <app-generic-table #userListTable
+                [items]="userList"
+                [detailsToShow]="userDetailsToShow"
+                (clicked)="changeSelectedUser($event)"
+                [allowSelect]="false"></app-generic-table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxFlex="50">
+        <mat-card *ngIf="selectedUser">
+          <mat-card-header>
+            <img mat-card-avatar class="avatar" [src]="selectedUser?.photo" [class.default-avatar]="selectedUser == null || !selectedUser.photo">
+            <mat-menu #userEditMenu="matMenu">
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="resendEmail(selectedUser)">Resend password</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="viewProfile(selectedUser)">View profile</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="editUser(selectedUser)">Edit</button>
+              <button *ngIf="selectedUser && admin" mat-menu-item (click)="deleteUser(selectedUser)">Delete</button>
+            </mat-menu>
+            <mat-card-title>User details</mat-card-title>
+            <mat-card-subtitle>Full details of the selected user</mat-card-subtitle>
+            <div fxFlex></div>
+            <div fxLayoutAlign="center" class="mat-action" matRipple>
+              <mat-icon [matMenuTriggerFor]="userEditMenu">more_vert</mat-icon>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngIf="selectedUser" class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Forename</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.forename" placeholder="Forename" name="forename">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Surname</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.surname" placeholder="Surname" name="surname">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Username</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.username" placeholder="Username" name="username">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Email</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.email" placeholder="Email" name="email">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Mobile</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUser.mobile" placeholder="Mobile" name="mobile">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="50" fxFill>
+                <mat-label>Date user created</mat-label>
+                <input matInput disabled [(ngModel)]="selectedUserCreatedDate" placeholder="Date user created" name="selectedUserCreatedDate">
+              </mat-form-field>
+            </div>
+            <div>
+              <app-generic-table
+                [items]="selectedUser.userProjects"
+                [detailsToShow]="userProjectDetailsToShow"
+                [allowSelect]="false"></app-generic-table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+

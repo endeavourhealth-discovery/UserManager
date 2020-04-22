@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>User details</h1>
+<form #form="ngForm">
+  <div mat-dialog-content>
+    <div class="flex" fxLayout="row wrap" fxLayoutGap="16px grid" fxLayoutAlign="start">
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Forename</mat-label>
+        <input required matInput [(ngModel)]="resultData.forename" placeholder="Forename" name="forename" #forename>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Surname</mat-label>
+        <input required matInput [(ngModel)]="resultData.surname" placeholder="Surname" name="surname" #surname>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Username</mat-label>
+        <input required matInput [(ngModel)]="resultData.username" placeholder="Username" name="username" #username>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Email</mat-label>
+        <input required matInput [(ngModel)]="resultData.email" placeholder="Email" name="email" #email>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Mobile</mat-label>
+        <input matInput [(ngModel)]="resultData.mobile" placeholder="Mobile" name="mobile" #mobile>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Photo</mat-label>
+        <input matInput [(ngModel)]="resultData.photo" placeholder="Photo" name="photo" #photo>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="Password" name="passwordNew" #password1>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" fxFill>
+        <mat-label>Password confirmation</mat-label>
+        <input matInput type="password" [(ngModel)]="resultData.password" placeholder="Password" name="passwordConf" #password2>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" *ngIf="editMode">
+        <mat-label>Data sharing manager region</mat-label>
+        <mat-select required matInput name="status" [(ngModel)]="selectedRegion" name="selectedRegion" (selectionChange)="changeUserRegion(selectedRegion.uuid)">
+          <mat-option *ngFor="let reg of availableRegions" [value]="reg">{{reg.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="50" *ngIf="editMode">
+        <mat-label>Application policy</mat-label>
+        <mat-select required matInput name="status" [(ngModel)]="selectedApplicationPolicy" name="selectedApplicationPolicy" (selectionChange)="changeUserApplicationPolicy(selectedApplicationPolicy.id)">
+          <mat-option *ngFor="let pol of availablePolicies" [value]="pol">{{pol.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<div mat-dialog-actions align="end">
+  <button mat-button color="accent" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="accent" [disabled]="form.invalid" (click)="ok()">Save user</button>
+</div>
+

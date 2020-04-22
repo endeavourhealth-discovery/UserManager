@@ -1,0 +1,51 @@
+import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+
+export class User {
+
+			constructor() {
+	}
+
+	uuid:string;
+	forename:string;
+	surname:string;
+	username:string;
+	password:string;
+	email:string;
+	mobile:string;
+	photo:string;
+	defaultOrgId: string;
+  createdTimeStamp: number;
+	userProjects: UserProject[];
+
+	isSuperUser:boolean;
+	permissions:string[];
+
+	displayName():string {
+		if(this.forename == null && this.surname == null) {
+			if(this.uuid != null) {
+				return this.uuid;
+			}
+			return 'Unknown User';
+		}
+
+		var displayName = this.forename + ' ' + this.surname;
+
+		return displayName.trim();
+	}
+
+  getDisplayItems(): any[] {
+    return [
+      {label: 'Username', property: 'username'},
+      {label: 'Forename', property: 'forename'},
+      {label: 'Surname', property: 'surname'}
+    ];
+  }
+
+  getUserProjectDisplayItems(): any[] {
+    return [
+      {label: 'Organisation', property: 'organisationName'},
+      {label: 'Project', property: 'projectName'}
+    ];
+  }
+
+}

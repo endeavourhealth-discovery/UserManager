@@ -1,18 +1,18 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityOrganisationDAL;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityProjectDAL;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.DalProvider;
+import org.endeavourhealth.core.database.dal.datasharingmanager.OrganisationDalI;
+import org.endeavourhealth.core.database.dal.datasharingmanager.ProjectDalI;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.ProjectEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +29,8 @@ import java.util.UUID;
 @Api(value = "Organisation", description = "API endpoint related to the organisations.")
 public class OrganisationEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OrganisationEndpoint.class);
+    private static OrganisationDalI organisationRepository = DalProvider.factoryDSMOrganisationDal();
+    private static ProjectDalI projectRepository = DalProvider.factoryDSMProjectDal();
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
 
@@ -70,7 +72,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     private Response searchOrganisations(String searchData, UUID userId) throws Exception {
 
-        List<OrganisationEntity> organisations = new SecurityOrganisationDAL().searchOrganisations(searchData, false,
+        List<OrganisationEntity> organisations = organisationRepository.searchOrganisations(searchData, false,
                 (byte)0, 1, 50, "name", false, userId);
 
         clearLogbackMarkers();
@@ -82,7 +84,7 @@ public class OrganisationEndpoint extends AbstractEndpoint {
 
     private Response getProjectsForOrganisation(String organisationId) throws Exception {
 
-        List<ProjectEntity> projects = new SecurityProjectDAL().getProjectsForOrganisation(organisationId);
+        List<ProjectEntity> projects = projectRepository.getProjectsForOrganisation(organisationId);
 
         clearLogbackMarkers();
         return Response

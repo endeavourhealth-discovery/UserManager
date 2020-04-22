@@ -1,0 +1,61 @@
+
+<div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+  <mat-form-field *ngIf="totalItems > pageSize || filtered" appearance="outline" fxFlex="50" fxFill>
+    <mat-label>Search</mat-label>
+    <input matInput [(ngModel)]="filterText" (keyup.enter)="applyFilter($event.target.value)" placeholder="Search">
+    <button mat-button *ngIf="filterText" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+  <div *ngIf="allowSelect" class="toolbarCheckbox">
+
+    <mat-checkbox class="toolbarOptions" (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                  [aria-label]="checkboxLabel()">
+    </mat-checkbox>
+    <ng-content *ngIf="selection.selected.length > 0" select="button[role=selectionOnly]"></ng-content>
+    <ng-content></ng-content>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact"
+         fxFlex="100" fxFill matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+    <ng-container *ngFor="let disCol of detailsToShow;" matColumnDef="{{disCol.property}}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{disCol.label}}</th>
+      <td mat-cell *matCellDef="let element"> {{(element[disCol.property]?.length > 200) ? (element[disCol.property] | slice:0:200)+"...":element[disCol.property]}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="propertiesToShow"></tr>
+    <tr mat-row *matRowDef="let row; columns: propertiesToShow;"
+        (click)="clickItem(row)"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                 [showFirstLastButtons]="true"
+                 [pageSize]="pageSize"
+                 [length]="totalItems"
+                 (page)="changePage($event)"
+                 fxFlex="100"
+                 fxFill></mat-paginator>
+</div>

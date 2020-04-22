@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserProject;
+import org.endeavourhealth.core.database.dal.usermanager.caching.UserCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserProject;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.UserProjectEntity;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.enums.AuditAction;
 import org.endeavourhealth.uiaudit.enums.ItemType;
@@ -48,7 +48,7 @@ public class UserLogic {
 
         KeycloakAdminClient keycloakClient = new KeycloakAdminClient();
 
-        if (searchData == null) {
+        if (searchData == null || searchData.equals("")) {
             if (machineUsers) {
                 users = keycloakClient.realms().users().getUsers(ConfigManager.getConfiguration("machine_user_realm"), "", 0, 100);
             } else {
@@ -177,6 +177,17 @@ public class UserLogic {
         return Response
                 .ok()
                 .entity(user)
+                .build();
+    }
+
+    public Response saveUsersProjects(List<JsonUser> users, String userRoleId, SecurityContext sc) throws  Exception {
+
+        for (JsonUser user : users) {
+            saveProjects(user.getUserProjects(), userRoleId);
+        }
+        return Response
+                .ok()
+                .entity(users)
                 .build();
     }
 

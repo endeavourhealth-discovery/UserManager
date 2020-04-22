@@ -1,6 +1,6 @@
 package org.endeavourhealth.usermanager.api.logic;
 
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationAccessProfile;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplicationAccessProfile;
 import org.endeavourhealth.usermanager.api.DAL.ApplicationAccessProfileDAL;
 
 import javax.ws.rs.core.Response;

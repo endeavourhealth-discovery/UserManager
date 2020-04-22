@@ -1,17 +1,16 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonDelegation;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonDelegation;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.DelegationDAL;
 import org.endeavourhealth.usermanager.api.logic.DelegationLogic;

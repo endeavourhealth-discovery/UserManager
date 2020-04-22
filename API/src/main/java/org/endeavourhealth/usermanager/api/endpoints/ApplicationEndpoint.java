@@ -7,12 +7,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplication;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.usermanager.caching.*;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplication;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.ApplicationEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.ApplicationDAL;
 import org.slf4j.Logger;
@@ -72,12 +72,13 @@ public class ApplicationEndpoint extends AbstractEndpoint {
                 "save application",
                 "application", application);
 
-        String newId = new ApplicationDAL().saveApplication(application, userRoleId);
+        // String newId = new ApplicationDAL().saveApplication(application, userRoleId);
+        JsonApplication app = new ApplicationDAL().saveApplication(application, userRoleId);
 
         clearLogbackMarkers();
         return Response
                 .ok()
-                .entity(newId)
+                .entity(app)
                 .build();
     }
 
@@ -89,14 +90,16 @@ public class ApplicationEndpoint extends AbstractEndpoint {
     @RequiresAdmin
     @ApiOperation(value = "Deletes an application")
     public Response deleteApplication(@Context SecurityContext sc,
-                                     @ApiParam(value = "Application id to be deleted") @QueryParam("applicationId") String applicationId,
-                                     @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
+                                      @ApiParam(value = "Application ids to be deleted") @QueryParam("applicationIds") List<String> applicationIds,
+                                      @ApiParam(value = "User Role Id who is making the change") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
 
         userAudit.save(getCurrentUserId(sc), getOrganisationUuidFromToken(sc), AuditAction.Delete,
-                "User", "applicationId", applicationId, "userRoleId", userRoleId);
+                "User", "applicationIds", applicationIds, "userRoleId", userRoleId);
 
-        new ApplicationDAL().deleteApplication(applicationId, userRoleId);
+        for (String applicationId : applicationIds) {
+            new ApplicationDAL().deleteApplication(applicationId, userRoleId);
+        }
 
         clearLogbackMarkers();
 

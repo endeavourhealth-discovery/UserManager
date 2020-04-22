@@ -1,6 +1,5 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,18 +9,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataSharingAgreementEntity;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataSharingAgreementCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUserAccessProfile;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.DalProvider;
+import org.endeavourhealth.core.database.dal.datasharingmanager.MasterMappingDalI;
+import org.endeavourhealth.core.database.dal.datasharingmanager.enums.MapType;
+import org.endeavourhealth.core.database.dal.usermanager.caching.ApplicationPolicyCache;
+import org.endeavourhealth.core.database.dal.usermanager.caching.DataSharingAgreementCache;
+import org.endeavourhealth.core.database.dal.usermanager.caching.OrganisationCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplicationPolicyAttribute;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserAccessProfile;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.DataSharingAgreementEntity;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,7 @@ import java.util.List;
 @Api(value = "User bio", description = "API endpoint related to the user bio.")
 public class UserBioEndpoint extends AbstractEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(UserBioEndpoint.class);
+    private static MasterMappingDalI masterMappingRepository = DalProvider.factoryDSMMasterMappingDal();
 
     private static final UserAuditRepository userAudit = new UserAuditRepository(AuditModule.EdsUiModule.User);
 
@@ -81,7 +82,7 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode checkOrgCanAccessSharingAgreement(String agreementId, String organisationId) throws Exception {
-        List<String> publisherUuids = new SecurityMasterMappingDAL().getChildMappings(agreementId, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
+        List<String> publisherUuids = masterMappingRepository.getChildMappings(agreementId, MapType.DATASHARINGAGREEMENT.getMapType(), MapType.SUBSCRIBER.getMapType());
 
         List<OrganisationEntity> ret = new ArrayList<>();
 
@@ -101,7 +102,7 @@ public class UserBioEndpoint extends AbstractEndpoint {
     }
 
     private JsonNode getOrganisationsForSharingAgreement(DataSharingAgreementEntity dsa) throws Exception {
-        List<String> publisherUuids = new SecurityMasterMappingDAL().getChildMappings(dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
+        List<String> publisherUuids = masterMappingRepository.getChildMappings(dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PUBLISHER.getMapType());
 
         List<OrganisationEntity> ret = new ArrayList<>();
 

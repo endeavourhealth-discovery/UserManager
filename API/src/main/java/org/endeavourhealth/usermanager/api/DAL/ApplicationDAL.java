@@ -1,9 +1,9 @@
 package org.endeavourhealth.usermanager.api.DAL;
 
-import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplication;
+import org.endeavourhealth.core.database.dal.usermanager.caching.ApplicationCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplication;
+import org.endeavourhealth.core.database.rdbms.ConnectionManager;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.ApplicationEntity;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.enums.AuditAction;
 import org.endeavourhealth.uiaudit.enums.ItemType;
@@ -42,7 +42,7 @@ public class ApplicationDAL {
         }
     }
 
-    public String saveApplication(JsonApplication application, String userRoleId) throws Exception {
+    public JsonApplication saveApplication(JsonApplication application, String userRoleId) throws Exception {
 
         boolean added = false;
         String originalUuid = application.getId();
@@ -61,6 +61,8 @@ public class ApplicationDAL {
             application.setDeleted(false);
         }
 
+        ApplicationCache.clearApplicationCache(application.getId());
+
         if (application.getIsDeleted()) {
             new UIAuditJDBCDAL().addToAuditTrail(userRoleId,
                     AuditAction.DELETE, ItemType.APPLICATION, application.getId(), null);
@@ -72,7 +74,7 @@ public class ApplicationDAL {
                     AuditAction.EDIT, ItemType.APPLICATION, application.getId(), originalUuid);
         }
 
-        return application.getId();
+        return application;
 
     }
 

@@ -1,17 +1,16 @@
 package org.endeavourhealth.usermanager.api.endpoints;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.endeavourhealth.common.security.SecurityUtils;
 import org.endeavourhealth.common.security.annotations.RequiresAdmin;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.ApplicationPolicyCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.core.data.audit.UserAuditRepository;
 import org.endeavourhealth.core.data.audit.models.AuditAction;
 import org.endeavourhealth.core.data.audit.models.AuditModule;
+import org.endeavourhealth.core.database.dal.usermanager.caching.ApplicationPolicyCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonApplicationPolicyAttribute;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.ApplicationPolicyAttributeDAL;
 import org.slf4j.Logger;
@@ -22,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.endeavourhealth.common.security.SecurityUtils.getCurrentUserId;
@@ -72,13 +72,18 @@ public class RoleTypeAccessProfileEndpoint extends AbstractEndpoint {
                 "save application",
                 "roleTypeProfiles", roleTypeProfiles);
 
+        List<JsonApplicationPolicyAttribute> updatedPolicyAttributes = new ArrayList<>();
         for (JsonApplicationPolicyAttribute roleProfile : roleTypeProfiles) {
-            new ApplicationPolicyAttributeDAL().saveRoleAccessProfile(roleProfile, userRoleId);
+            JsonApplicationPolicyAttribute saved = new ApplicationPolicyAttributeDAL().saveRoleAccessProfile(roleProfile, userRoleId);
+            if (!saved.getIsDeleted()) {
+                updatedPolicyAttributes.add(saved);
+            }
         }
 
         clearLogbackMarkers();
         return Response
                 .ok()
+                .entity(updatedPolicyAttributes)
                 .build();
     }
 
