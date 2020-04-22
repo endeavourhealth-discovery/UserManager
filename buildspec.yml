@@ -20,7 +20,7 @@ phases:
       - IP=$(curl http://checkip.amazonaws.com)/32
       - echo $IP of CodeBuild Instance
       - echo Packaging application
-      - cd FrontEndv8
+      - cd FrontEnd
       - zip -r frontend.zip appspec.yml cleanup dist/
       - mv frontend.zip frontend
       - echo Packaging core
