@@ -47,6 +47,7 @@
 
   <modules>
     <module>API</module>
+    <module>FrontEnd</module>
     <module>FrontEndv8</module>
   </modules>
 
