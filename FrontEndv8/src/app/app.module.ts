@@ -53,7 +53,7 @@ const keycloakService = new KeycloakService();
 export class AppModule implements DoBootstrap {
   ngDoBootstrap(appRef: ApplicationRef) {
     keycloakService
-      .init({config: 'public/wellknown/authconfigraw', initOptions: {onLoad: 'login-required'}})
+      .init({config: 'public/wellknown/authconfigraw', initOptions: {onLoad: 'login-required', 'checkLoginIframe':false}})
       .then((authenticated) => {
         if (authenticated)
           appRef.bootstrap(LayoutComponent);
