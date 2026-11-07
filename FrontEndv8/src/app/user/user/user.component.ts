@@ -8,8 +8,10 @@ import {DelegationService} from "../../d3-delegation/delegation.service";
 import {MatDialog} from '@angular/material';
 import {UserDialogComponent} from "../user-dialog/user-dialog.component";
 import {UserPickerComponent} from "../user-picker/user-picker.component";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
-import { UserProject_local } from 'src/app/models/UserProject_local';
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
+import {UserProject_local} from 'src/app/models/UserProject_local';
+import {NewUserDialogComponent} from "../new-user-dialog/new-user-dialog.component";
+import {Project} from "../../models/Project";
 
 @Component({
   selector: 'app-user',
@@ -23,7 +25,7 @@ export class UserComponent implements OnInit {
   private paramSubscriber: any;
 
   userList: User[] = [];
-  selectedUser : User = null;
+  selectedUser: User = null;
   selectedOrg: DelegatedOrganisation;
   delegatedOrganisations: DelegatedOrganisation[];
   loadingRolesCompleted: boolean;
@@ -33,6 +35,8 @@ export class UserComponent implements OnInit {
 
   userDetailsToShow = new User().getDisplayItems();
   userProjectDetailsToShow = new User().getUserProjectDisplayItems();
+  userProjectsFromDB: UserProject[] = [];
+  organisationProjects: Project[];
 
   public activeProject: UserProject;
   admin = false;
@@ -83,7 +87,7 @@ export class UserComponent implements OnInit {
   }
 
   //gets all users in the selected organisation
-  getUsers(){
+  getUsers() {
     this.userService.getUsers(this.selectedOrg.uuid, null, this.machineUsers)
       .subscribe(
         (result) => {
@@ -128,31 +132,29 @@ export class UserComponent implements OnInit {
   }
 
   selectTopUser() {
-    if (this.userList != null && this.userList.length > 0)
-    {
+    if (this.userList != null && this.userList.length > 0) {
       let topUserInList = this.userList[0];
       this.selectedUser = topUserInList;
       this.getUserRoles(this.selectedUser.uuid);
       this.convertDateForSelectedUser();
-    }
-    else {
+    } else {
       this.selectedUser = null;
     }
   }
 
   addUser() {
-    this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
-    // this.state.setState('userEdit', {user: null, editMode: false});
-    //this.router.navigate(['userEdit'], {state: {user: null, editMode: false}});
-    const dialogRef = this.dialog.open(UserDialogComponent, {
-      data: {editMode: false, user: null},
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.router.navigate(['userEdit'], {state: {user: result, editMode: true}});
-        this.log.success('User saved');
-      }
-    });
+    // this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
+    //this.state.setState('userEdit', {user: null, editMode: false});
+    this.router.navigate(['userEdit'], {state: {user: null, editMode: false}});
+    // const dialogRef = this.dialog.open(NewUserDialogComponent, {
+    //   data: {editMode: false, user: null},
+    // });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.router.navigate(['userEdit'], {state: {user: result, editMode: true}});
+    //     this.log.success('User saved');
+    //   }
+    // });
   }
 
   addExisting() {
@@ -161,44 +163,51 @@ export class UserComponent implements OnInit {
     // this.router.navigate(['userEdit'], {state: {user: null, editMode: true, existing: true}});
     const dialogRef = this.dialog.open(UserPickerComponent, {
       minWidth: '50vw',
-      data: {uuid: '', limit: 0, userId : null, existing: this.userList},
+      data: {uuid: '', limit: 0, userId: null, existing: this.userList},
     })
     dialogRef.afterClosed().subscribe(result => {
       if (!result) {
         return;
       }
-      for (let user of result) {
-        var project = new UserProject_local();
-        project.userId = user.uuid;
-        project.organisationId = this.selectedOrg.uuid;
-        project.organisationName = this.selectedOrg.name;
-        project.projectId = this.activeProject.projectId;
-        project.projectName = this.activeProject.projectName;
-        project.deleted = false;
-        project.default = false;
-        if (user.userProjects) {
-          user.userProjects.push(project);
-        } else {
-          user.userProjects = [];
-          user.userProjects.push(project);
-        }
-      }
-      this.userService.saveUsers(result, this.activeProject.id).subscribe(result => {
-        if (!result) {
-          return;
-        }
+      if (result.length ==1){
+        this.selectedUser = result[0];
+        this.getUserRoles(this.selectedUser.uuid)
+        this.convertDateForSelectedUser();
+        this.router.navigate(['userEdit'], {state: {user: this.selectedUser, editMode: true}});
+      } else {
         for (let user of result) {
-          if (!this.userList.some(x => x.uuid === user.uuid)) {
-            this.userList.push(user);
-            this.userListTable.updateRows();
+          var project = new UserProject_local();
+          project.userId = user.uuid;
+          project.organisationId = this.selectedOrg.uuid;
+          project.organisationName = this.selectedOrg.name;
+          project.projectId = this.activeProject.projectId;
+          project.projectName = this.activeProject.projectName;
+          project.deleted = false;
+          project.default = false;
+          if (user.userProjects) {
+            user.userProjects.push(project);
+          } else {
+            user.userProjects = [];
+            user.userProjects.push(project);
           }
-          this.log.success('Users added successfully.');
         }
-      })
-    },(error) => this.log.error('Failed to add users.'));
+        this.userService.saveUsers(result, this.activeProject.id).subscribe(result => {
+          if (!result) {
+            return;
+          }
+          for (let user of result) {
+            if (!this.userList.some(x => x.uuid === user.uuid)) {
+              this.userList.push(user);
+              this.userListTable.updateRows();
+            }
+            this.log.success('Users added successfully.');
+          }
+        })
+      }
+    }, (error) => this.log.error('Failed to add users.'));
   }
 
-  editUser(user:User) {
+  editUser(user: User) {
     this.delegationService.updateSelectedOrganisation(this.selectedOrg.uuid);
     // this.state.setState('userEdit', {user: user, editMode: true});
     this.router.navigate(['userEdit'], {state: {user: user, editMode: true}});
@@ -222,14 +231,12 @@ export class UserComponent implements OnInit {
       );
   }
 
-  deleteUser(user:User) {
+  deleteUser(user: User) {
 
     let loggedOnUserUuid = this.activeProject.userId;
-    if (user.uuid == loggedOnUserUuid)
-    {
+    if (user.uuid == loggedOnUserUuid) {
       this.log.error("You cannot delete yourself!");
-    }
-    else {
+    } else {
       let userName = user.forename + " " + user.surname;
       MessageBoxDialogComponent.open(this.dialog, 'Delete user', 'Are you sure you want to delete user: ' + userName.trim() + '?',
         'Delete user', 'No')
@@ -265,7 +272,7 @@ export class UserComponent implements OnInit {
 
   }
 
-  getUserRoles(userId: string){
+  getUserRoles(userId: string) {
 
     this.loadingRolesCompleted = false;
     if (this.selectedUser.userProjects) {

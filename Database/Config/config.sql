@@ -29,8 +29,8 @@ values ('user-manager','keycloak',
 insert into config.config
 select 'user-manager', 'keycloak_proxy',
 '{
-  "user" : "eds-ui",
-  "pass" : "bd285adbc36842d7a27088e93c36c13e29ed69fa63a6",
+  "user" : "USERNAME",
+  "pass" : "PASSWORD",
   "url" : "https://devauth.endeavourhealth.net/auth"
  }';
  
@@ -39,5 +39,4 @@ insert into config (app_id, config_id, config_data)
 values ('user-manager','machine_user_realm',
 'DiscoveryAPI'
 );
- 
  

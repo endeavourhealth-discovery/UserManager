@@ -3,7 +3,7 @@ import {ConfigurationService} from "../configuration.service";
 import {Router} from "@angular/router";
 import {ApplicationPolicy} from "../../models/ApplicationPolicy";
 import {Application} from "../../models/Application";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {MatDialog} from "@angular/material/dialog";
 import {ApplicationPolicyDialogComponent} from "../application/application-policy-dialog/application-policy-dialog.component";

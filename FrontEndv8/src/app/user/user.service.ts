@@ -7,7 +7,7 @@ import {UserRegion} from "../models/UserRegion";
 import {Region} from "../models/Region";
 import {UserProfile} from "../models/UserProfile";
 import {UserApplicationPolicy} from "../models/UserApplicationPolicy";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 
 @Injectable()
 export class UserService {
@@ -132,4 +132,11 @@ export class UserService {
     return vm.http.get<UserProject[]>('api/userManager/getProjects', {params: params});
   }
 
+  getUserFromOrgList(username: string, orgID: string) {
+    const vm = this;
+    let params = new HttpParams();
+    params = params.append('username', username);
+    params = params.append('orgId', orgID);
+    return vm.http.get<User>('api/userManager/getUserFromOrg', {params: params});
+  }
 }

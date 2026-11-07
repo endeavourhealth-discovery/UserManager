@@ -24,6 +24,7 @@ import {UserEditorComponent} from './user-editor/user-editor.component';
 import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {LinkifyPipe} from "./user-profile/linkify.pipe";
 import {UserDialogComponent} from './user-dialog/user-dialog.component';
+import {NewUserDialogComponent} from "./new-user-dialog/new-user-dialog.component";
 import {UserPickerComponent} from './user-picker/user-picker.component';
 import { ProjectPickerComponent } from './project-picker/project-picker.component';
 
@@ -63,6 +64,7 @@ import { ProjectPickerComponent } from './project-picker/project-picker.componen
     UserProfileComponent,
     LinkifyPipe,
     UserDialogComponent,
+    NewUserDialogComponent,
     UserPickerComponent,
     ProjectPickerComponent
     // UserEditorComponent,
@@ -70,6 +72,7 @@ import { ProjectPickerComponent } from './project-picker/project-picker.componen
   entryComponents: [
     // UserEditorComponent
     UserDialogComponent,
+    NewUserDialogComponent,
     UserPickerComponent,
     ProjectPickerComponent
   ],

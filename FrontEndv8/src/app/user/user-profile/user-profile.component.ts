@@ -6,7 +6,7 @@ import {UserService} from "../user.service";
 import {Router} from "@angular/router";
 import {User} from "../../models/User";
 import {UserProfile} from "../../models/UserProfile";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {LoggerService, UserManagerService} from "dds-angular8";
 import {ApplicationPolicyAttribute} from "../../models/ApplicationPolicyAttribute";
 
@@ -45,7 +45,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.userManagerService.onProjectChange.subscribe(active => {
       this.activeProject = active;
       this.roleChanged();

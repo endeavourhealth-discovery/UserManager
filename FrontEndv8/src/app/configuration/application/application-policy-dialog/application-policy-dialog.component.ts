@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {LoggerService, UserManagerService} from "dds-angular8";
 import {ApplicationProfileDialogComponent} from "../application-profile-dialog/application-profile-dialog.component";
 import {ConfigurationService} from "../../configuration.service";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {DatePipe} from "@angular/common";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ApplicationPolicy} from "../../../models/ApplicationPolicy";

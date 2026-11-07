@@ -3,7 +3,7 @@ import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserMan
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ConfigurationService} from "../../configuration.service";
 import {ApplicationProfile} from "../../../models/ApplicationProfile";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {Application} from "../../../models/Application";
 import {MatDialog} from "@angular/material/dialog";
 

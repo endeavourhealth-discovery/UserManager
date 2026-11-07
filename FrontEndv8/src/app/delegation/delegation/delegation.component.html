@@ -5,17 +5,25 @@
     </div>
     <mat-card-title>Delegation</mat-card-title>
     <mat-card-subtitle>Which organisations have delegated permissions to administer users</mat-card-subtitle>
+    <button *ngIf="admin" mat-icon-button (click)="createDelegation()">
+      <mat-icon>add</mat-icon>
+    </button>
     <div fxFlex></div>
   </mat-card-header>
   <mat-card-content>
-    <button *ngIf="admin && this.checklistSelection?.selected.length > 0" mat-icon-button color="warn" (click)="deleteChildOrganisation()"><mat-icon>delete</mat-icon></button>
+    <button *ngIf="admin && this.checklistSelection?.selected.length > 0" mat-icon-button color="warn"
+            (click)="deleteChildOrganisation()">
+      <mat-icon>delete</mat-icon>
+    </button>
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
         <button mat-icon-button disabled></button>
         <mat-checkbox class="checklist-leaf-node"
                       [checked]="checklistSelection.isSelected(node)"
                       [disabled]="node.disabled">{{node.name}}</mat-checkbox>
-        <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+        <button mat-icon-button (click)="addNewItem(node)">
+          <mat-icon>add</mat-icon>
+        </button>
       </mat-tree-node>
 
       <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
@@ -27,7 +35,7 @@
         <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
       </mat-tree-node>
 
-      <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+      <mat-tree-node *matTreeNodeDef="let node; when: hasChild " matTreeNodePadding>
         <button mat-icon-button matTreeNodeToggle
                 [attr.aria-label]="'toggle ' + node.filename">
           <mat-icon class="mat-icon-rtl-mirror">
@@ -37,8 +45,76 @@
         <mat-checkbox [checked]="checklistSelection.isSelected(node)"
                       (change)="todoItemSelectionToggle(node)"
                       [disabled]="node.disabled">{{node.name}}</mat-checkbox>
-        <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+        <button mat-icon-button (click)="addNewItem(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-tree-node>
+      <mat-tree-node *matTreeNodeDef="let node; when: hasNoChild" matTreeNodePadding>
+        <button disabled mat-icon-button matTreeNodeToggle></button>
+        <mat-checkbox [checked]="checklistSelection.isSelected(node)"
+                      (change)="todoItemSelectionToggle(node)"
+                      [disabled]="node.disabled">{{node.name}}</mat-checkbox>
+        <button mat-icon-button (click)="addNewItem(node)">
+          <mat-icon>add</mat-icon>
+        </button>
       </mat-tree-node>
     </mat-tree>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar>
+      <i class="fad fa-folders"></i>
+    </div>
+    <mat-card-title>Selected Organisation</mat-card-title>
+    <!--    <mat-card-subtitle>Which organisations have delegated permissions to administer users</mat-card-subtitle>-->
+    <div fxFlex></div>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row" *ngIf="selectedOrganisation">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header text-white">Selected organisation: {{selectedOrganisation.name}}</div>
+          <div class="card-body">
+            <p>{{selectedOrganisation.name}}</p>
+            <div *ngIf="!selectedIsRoot">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="custom-control custom-checkbox form-control-plaintext">
+                    <input [disabled]="!admin" type="checkbox" class="custom-control-input"
+                           [(ngModel)]="selectedRelationship.createSuperUsers" id="chkCreateSuperUsers"
+                           name="createSuperUsers">
+                    <label class="custom-control-label" for="chkCreateSuperUsers">Create Super Users</label>
+                  </div>
+                  <div class="custom-control custom-checkbox form-control-plaintext">
+                    <input [disabled]="!admin" type="checkbox" class="custom-control-input"
+                           [(ngModel)]="selectedRelationship.createUsers" id="chkCreateUsers" name="createUsers">
+                    <label class="custom-control-label" for="chkCreateUsers">Create Users</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pull-left">
+              <button mat-flat-button *ngIf="admin && !selectedIsRoot" type="button" class="btn btn-sm btn-success"
+                      (click)="saveRelationship()">Save
+              </button>
+              <button mat-button *ngIf="selectedOrganisation.uuid" type="button" class="btn btn-sm btn-info"
+                      (click)="goToOrganisation()">View users at this
+                organisation
+              </button>
+              <button mat-flat-button *ngIf="admin && selectedOrganisation.uuid" type="button" class="btn btn-sm btn-success"
+                      (click)="addChildOrganisation()">Add
+                child
+              </button>
+              <button mat-flat-button *ngIf="admin && !selectedOrganisation.children &&selectedOrganisation.uuid" type="button"
+                      class="btn btn-sm btn-danger"
+                      (click)="deleteChildOrganisation()">Delete
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>

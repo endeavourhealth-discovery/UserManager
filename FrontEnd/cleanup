@@ -1,1 +1,1 @@
-rm -rf /var/www/html/user-manager
+rm -rf /usr/share/nginx/html/user-manager

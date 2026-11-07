@@ -16,11 +16,14 @@ import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserProject;
 import org.endeavourhealth.core.database.dal.usermanager.models.JsonUserRegion;
 import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.RegionEntity;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.UserApplicationPolicyEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.UserProjectEntity;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.UserRegionEntity;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.endeavourhealth.usermanager.api.DAL.UserApplicationPolicyDAL;
+import org.endeavourhealth.usermanager.api.DAL.UserProjectDAL;
 import org.endeavourhealth.usermanager.api.DAL.UserRegionDAL;
 import org.endeavourhealth.usermanager.api.logic.UserLogic;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +84,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
+        @Timed(absolute = true, name="UserManager.UserEndpoint.saveUser")
     @Path("/users/save")
     @RequiresAdmin
     @ApiOperation(value = "Saves a user or updates an existing user")
@@ -126,7 +129,7 @@ public final class UserEndpoint extends AbstractEndpoint {
     public Response saveProjects(@Context SecurityContext sc, List<JsonUserProject> userProjects,
                              @ApiParam(value = "User Role Id") @QueryParam("userRoleId") String userRoleId) throws Exception {
         super.setLogbackMarkers(sc);
-
+//called on edit save
         return new UserLogic().saveProjects(userProjects, userRoleId);
     }
 
@@ -167,6 +170,20 @@ public final class UserEndpoint extends AbstractEndpoint {
         return new UserLogic().getUser(sc, userId, false);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="UserManager.UserEndpoint.getUserProfile")
+    @Path("users/getUserProfile")
+    @ApiOperation(value = "")
+    public Response getUserProfile(@Context SecurityContext sc,
+                                   @ApiParam(value = "User id to be retrieved") @QueryParam("userId") String userId){
+        try {
+            return new UserLogic().getUserProfile(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

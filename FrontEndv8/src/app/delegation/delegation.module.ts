@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ChecklistDatabase, DelegationComponent} from './delegation/delegation.component';
 import {
   MatButtonModule, MatCardModule,
@@ -9,19 +9,21 @@ import {
   MatSnackBarModule, MatSortModule,
   MatTableModule, MatTreeModule
 } from "@angular/material";
-import {CoreModule, MessageBoxDialogComponent} from "dds-angular8";
+import {CoreModule, GenericTableComponent, GenericTableModule, MessageBoxDialogComponent} from "dds-angular8";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {FlexModule} from "@angular/flex-layout";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DelegationService} from "./delegation.service";
-
+import {NewDelegationDialogComponent} from "./delegation/NewDelegationDialog.component";
+import {OrganisationModule} from "../organisation/organisation.module";
 
 
 @NgModule({
-  declarations: [DelegationComponent],
+  declarations: [DelegationComponent, NewDelegationDialogComponent],
   imports: [
+    OrganisationModule,
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
@@ -45,10 +47,13 @@ import {DelegationService} from "./delegation.service";
     CoreModule,
     MatButtonModule,
     MatTreeModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    GenericTableModule
   ],
   entryComponents: [
-    MessageBoxDialogComponent
+    MessageBoxDialogComponent,
+    NewDelegationDialogComponent,
+    GenericTableComponent
   ],
   providers: [
     DelegationService,
@@ -56,4 +61,5 @@ import {DelegationService} from "./delegation.service";
   ]
 
 })
-export class DelegationModule { }
+export class DelegationModule {
+}

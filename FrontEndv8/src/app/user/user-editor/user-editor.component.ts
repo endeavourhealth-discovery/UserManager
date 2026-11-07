@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {User} from "../../models/User";
 import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
 import {ApplicationPolicy} from "../../models/ApplicationPolicy";
@@ -37,7 +37,7 @@ export class UserEditorComponent implements OnInit {
   userList: User[];
   loadingRolesCompleted: boolean = true;
   editedRoles: UserProject[] = [];
-  defaultRoleChange : UserProject;
+  defaultRoleChange: UserProject;
   organisationProjects: Project[];
   userRegion: UserRegion;
   availableRegions: Region[];
@@ -57,15 +57,15 @@ export class UserEditorComponent implements OnInit {
   admin = false;
   superUser = false;
 
-  @ViewChild('username', { static: false }) usernameBox;
-  @ViewChild('forename', { static: false }) forenameBox;
-  @ViewChild('surname', { static: false }) surnameBox;
-  @ViewChild('email', { static: false }) emailBox;
-  @ViewChild('photo', { static: false }) photoURLBox;
-  @ViewChild('password1', { static: false }) password1Box;
-  @ViewChild('password2', { static: false }) password2Box;
-  @ViewChild('searchBox', { static: false }) searchBox;
-  @ViewChild('userProjects', { static: false }) userProjects: GenericTableComponent;
+  @ViewChild('username', {static: false}) usernameBox;
+  @ViewChild('forename', {static: false}) forenameBox;
+  @ViewChild('surname', {static: false}) surnameBox;
+  @ViewChild('email', {static: false}) emailBox;
+  @ViewChild('photo', {static: false}) photoURLBox;
+  @ViewChild('password1', {static: false}) password1Box;
+  @ViewChild('password2', {static: false}) password2Box;
+  @ViewChild('searchBox', {static: false}) searchBox;
+  @ViewChild('userProjects', {static: false}) userProjects: GenericTableComponent;
 
   constructor(private log: LoggerService,
               private router: Router,
@@ -113,8 +113,8 @@ export class UserEditorComponent implements OnInit {
         defaultOrgId: '',
         userProjects: []
       } as User;
-    }
-    else {
+      this.editUser();
+    } else {
       this.dialogTitle = "Edit user";
 
       this.getUserProjects(this.resultData.uuid);
@@ -127,8 +127,8 @@ export class UserEditorComponent implements OnInit {
         password: '',
         email: this.resultData.email,
         mobile: this.resultData.mobile,
-        photo: this.resultData.photo == null ? '': this.resultData.photo,
-        defaultOrgId: this.resultData.defaultOrgId == null ? '': this.resultData.defaultOrgId,
+        photo: this.resultData.photo == null ? '' : this.resultData.photo,
+        defaultOrgId: this.resultData.defaultOrgId == null ? '' : this.resultData.defaultOrgId,
         userProjects: this.resultData.userProjects
       } as User;
 
@@ -164,7 +164,7 @@ export class UserEditorComponent implements OnInit {
     }
   }
 
-  isEditMode(){
+  isEditMode() {
     return this.editMode;
   }
 
@@ -233,7 +233,7 @@ export class UserEditorComponent implements OnInit {
         (response) => {
 
         },
-        (error) => this.log.error('User application policy could not be saved. Please try again.')
+        (error) => this.log.error('User application policy could not be saved. Please try again. \n' + error)
       );
   }
 
@@ -337,7 +337,9 @@ export class UserEditorComponent implements OnInit {
           this.selectedRegion = this.availableRegions.find(r => {
             return r.uuid === this.userRegion.regionId;
           });
-          this.selectedRegionValue = this.selectedRegion.name;
+          if (this.selectedRegion) {
+            this.selectedRegionValue = this.selectedRegion.name;
+          }
         },
         (error) => {
           //this.log.error('User region could not be loaded. Please try again.');
@@ -354,7 +356,9 @@ export class UserEditorComponent implements OnInit {
           this.selectedApplicationPolicy = this.availablePolicies.find(r => {
             return r.id === this.userApplicationPolicy.applicationPolicyId;
           });
-          this.selectedApplicationPolicyValue = this.selectedApplicationPolicy.name;
+          if (this.selectedApplicationPolicy) {
+            this.selectedApplicationPolicyValue = this.selectedApplicationPolicy.name;
+          }
         },
         (error) => {
           //this.log.error('User application policy could not be loaded. Please try again.');
@@ -364,7 +368,11 @@ export class UserEditorComponent implements OnInit {
 
   successfullySavedUser(close: boolean) {
     let msg = (!this.editMode) ? 'Add user' : 'Edit user';
-    this.log.success('User saved');
+    if (!this.editMode) {
+      this.log.success('User saved, please add projects');
+    } else {
+      this.log.success('User saved');
+    }
     if (close)
       this.close(false);
   }
@@ -377,10 +385,10 @@ export class UserEditorComponent implements OnInit {
         (reason) => {}
       );
     else*/
-      this.location.back();
+    this.location.back();
   }
 
-  validateFormInput(){
+  validateFormInput() {
     //go down each tab. check content and flip to and highlight if not complete
     var vm = this;
     var result = true;
@@ -391,19 +399,19 @@ export class UserEditorComponent implements OnInit {
       this.usernameBox.nativeElement.focus();
       result = false;
     } else
-    //forename is mandatory
+      //forename is mandatory
     if (this.resultData.forename.trim() == '') {
       this.log.error('Forename must not be blank');
       this.forenameBox.nativeElement.focus();
       result = false;
     } else
-    //surname is mandatory
+      //surname is mandatory
     if (this.resultData.surname.trim() == '') {
       this.log.error('Surname must not be blank');
       this.surnameBox.nativeElement.focus();
       result = false;
     } else
-    //email is mandatory
+      //email is mandatory
     if (this.resultData.email.trim() == '') {
       this.log.error('Email address must not be blank');
       this.emailBox.nativeElement.focus();
@@ -414,13 +422,12 @@ export class UserEditorComponent implements OnInit {
     } else if (!this.selectedApplicationPolicy) {
       this.log.error('User application policy must be selected');
       result = false;
-    } else
-    if (this.resultData.photo != null && this.resultData.photo.length>100) {
+    } else if (this.resultData.photo != null && this.resultData.photo.length > 100) {
       this.log.error('Length of image URL is too long. Consider using bitly or similar to shorten it');
       this.photoURLBox.nativeElement.focus();
       result = false;
     } else
-    //check changed passwords match and are valid for a new user addition
+      //check changed passwords match and are valid for a new user addition
     {
       let passwordInput = this.resultData.password.trim();
       if (passwordInput == '') {
@@ -430,7 +437,7 @@ export class UserEditorComponent implements OnInit {
           result = false;
         }*/
       } else
-      //passwords must match and map onto the password policy (1 upper, 1 digit, 8 length and not be the same as username)
+        //passwords must match and map onto the password policy (1 upper, 1 digit, 8 length and not be the same as username)
       if (this.password2Box.nativeElement.value != this.password1Box.nativeElement.value) {
         this.log.error('Passwords must match');
         this.password2Box.nativeElement.focus();
@@ -462,11 +469,11 @@ export class UserEditorComponent implements OnInit {
       'Remove user projects', 'Cancel')
       .subscribe(
         (result) => {
-          if(result) {
+          if (result) {
             for (var i = 0; i < this.userProjects.selection.selected.length; i++) {
               let project = this.userProjects.selection.selected[i];
-              this.userProjectsFromDB.forEach( (item, index) => {
-                if(item === project) {
+              this.userProjectsFromDB.forEach((item, index) => {
+                if (item === project) {
                   item.deleted = true;
                 }
               });
@@ -538,7 +545,7 @@ export class UserEditorComponent implements OnInit {
       );
   }
 
-  getOrganisationProjects(organisationId: string){
+  getOrganisationProjects(organisationId: string) {
 
     this.organisationService.getProjectsForOrganisation(organisationId)
       .subscribe(
@@ -633,7 +640,7 @@ export class UserEditorComponent implements OnInit {
     this.searched = true;
   }
 
-  clearSearch(){
+  clearSearch() {
 
     this.searched = true;
     this.searchTerm = "";
@@ -672,8 +679,10 @@ export class UserEditorComponent implements OnInit {
 
   editUser() {
     const dialogRef = this.dialog.open(UserDialogComponent, {
-      data: {editMode: true, user: this.resultData,
-        availableRegions: this.availableRegions, availablePolicies: this.availablePolicies},
+      data: {
+        editMode: this.editMode, user: this.resultData,
+        availableRegions: this.availableRegions, availablePolicies: this.availablePolicies
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

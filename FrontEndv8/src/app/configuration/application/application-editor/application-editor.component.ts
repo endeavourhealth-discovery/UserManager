@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Location} from "@angular/common";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {GenericTableComponent, LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {Application} from "../../../models/Application";
 import {ApplicationProfile} from "../../../models/ApplicationProfile";

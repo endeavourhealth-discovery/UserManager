@@ -8,20 +8,20 @@ import {SelectionModel} from "@angular/cdk/collections";
   styleUrls: ['./generic-table.component.scss']
 })
 export class GenericTableComponent implements OnInit, OnChanges {
-  @Input() items : any[] = [];
-  @Input() detailsToShow : any[] = [];
-  @Input() pageSize : number = 20;
-  @Input() allowSelect : boolean = false;
+  @Input() items: any[] = [];
+  @Input() detailsToShow: any[] = [];
+  @Input() pageSize: number = 20;
+  @Input() allowSelect: boolean = false;
 
   @Output() clicked: EventEmitter<any> = new EventEmitter<any>();
 
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  @ViewChild(MatTable, {static: false}) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   propertiesToShow: string[] = [];
 
-  public filterText : string = '';
-  filtered  = false;
+  public filterText: string = '';
+  filtered = false;
   dataSource: any;
   selection = new SelectionModel<any>(true, []);
 
@@ -35,6 +35,20 @@ export class GenericTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     if (this.table) {
       this.table.renderRows();
+    }
+  }
+
+  deselectDeletedItems() {
+    for (let i = 0; i < this.selection.selected.length; i++) {
+      let selectedExists = false;
+      for (let j = 0; j < this.items.length; j++) {
+        if (this.selection.selected[i].id === this.items[j].id) {
+          selectedExists = true;
+        }
+      }
+      if (!selectedExists) {
+        this.selection.deselect(this.selection.selected[i]);
+      }
     }
   }
 
@@ -81,6 +95,7 @@ export class GenericTableComponent implements OnInit, OnChanges {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
+    this.deselectDeletedItems();
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;

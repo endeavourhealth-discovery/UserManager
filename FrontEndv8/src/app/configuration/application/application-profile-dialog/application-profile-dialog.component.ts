@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ItemLinkageService, LoggerService, UserManagerService} from "dds-angular8";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {DatePipe} from "@angular/common";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {ApplicationProfile} from "../../../models/ApplicationProfile";
 import {ConfigurationService} from "../../configuration.service";
 

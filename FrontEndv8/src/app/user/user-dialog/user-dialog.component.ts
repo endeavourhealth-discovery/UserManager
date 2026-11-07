@@ -4,11 +4,16 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {ItemLinkageService, LoggerService, UserManagerService} from "dds-angular8";
 import {DatePipe} from "@angular/common";
 import {UserService} from "../user.service";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {Region} from "../../models/Region";
 import {ApplicationPolicy} from "../../models/ApplicationPolicy";
 import {UserRegion} from "../../models/UserRegion";
 import {UserApplicationPolicy} from "../../models/UserApplicationPolicy";
+import {DelegationService} from "../../d3-delegation/delegation.service";
+import {ConfigurationService} from "../../configuration/configuration.service";
+import {OrganisationService} from "../../organisation/organisation.service";
+import {DelegatedOrganisation} from "../../d3-delegation/models/DelegatedOrganisation";
+import {Project} from "../../models/Project";
 
 export interface DialogData {
   user: User;
@@ -37,14 +42,19 @@ export class UserDialogComponent implements OnInit {
   userApplicationPolicy: UserApplicationPolicy;
   availablePolicies: ApplicationPolicy[];
   selectedApplicationPolicy: ApplicationPolicy;
+  userProjectsFromDB: UserProject[] = [];
+  delegatedOrganisations: DelegatedOrganisation[];
+  selectedOrg: DelegatedOrganisation;
+  organisationProjects: Project[];
+  userProjectDetailsToShow = new User().getUserProjectDisplayItems();
 
-  @ViewChild('username', { static: false }) usernameBox;
-  @ViewChild('forename', { static: false }) forenameBox;
-  @ViewChild('surname', { static: false }) surnameBox;
-  @ViewChild('email', { static: false }) emailBox;
-  @ViewChild('photo', { static: false }) photoURLBox;
-  @ViewChild('password1', { static: false }) password1Box;
-  @ViewChild('password2', { static: false }) password2Box;
+  @ViewChild('username', {static: false}) usernameBox;
+  @ViewChild('forename', {static: false}) forenameBox;
+  @ViewChild('surname', {static: false}) surnameBox;
+  @ViewChild('email', {static: false}) emailBox;
+  @ViewChild('photo', {static: false}) photoURLBox;
+  @ViewChild('password1', {static: false}) password1Box;
+  @ViewChild('password2', {static: false}) password2Box;
 
   constructor(public dialogRef: MatDialogRef<UserDialogComponent>,
               private log: LoggerService,
@@ -53,7 +63,10 @@ export class UserDialogComponent implements OnInit {
               private datePipe: DatePipe,
               private userManagerService: UserManagerService,
               public dialog: MatDialog,
-              private linkageService: ItemLinkageService) {
+              private linkageService: ItemLinkageService,
+              private delegationService: DelegationService,
+              private organisationService: OrganisationService,
+              private configurationService: ConfigurationService) {
     this.resultData = data.user;
     if (!this.resultData) {
       this.resultData = new User();
@@ -84,6 +97,14 @@ export class UserDialogComponent implements OnInit {
     if (this.editMode) {
       this.getUserRegion();
       this.getUserApplicationPolicy();
+    } else {
+      this.getAvailableRegions();
+      this.getAvailableApplicationPolicies();
+      if (this.superUser) {
+        this.getGodModeOrganisations();
+      } else {
+        this.getDelegatedOrganisations();
+      }
     }
   }
 
@@ -101,7 +122,7 @@ export class UserDialogComponent implements OnInit {
     this.userApplicationPolicy = changedPolicy;
   }
 
-  validateFormInput(){
+  validateFormInput() {
     //go down each tab. check content and flip to and highlight if not complete
     var vm = this;
     var result = true;
@@ -135,8 +156,7 @@ export class UserDialogComponent implements OnInit {
     } else if (!this.selectedApplicationPolicy && this.editMode) {
       this.log.error('User application policy must be selected');
       result = false;
-    } else
-    if (this.resultData.photo != null && this.resultData.photo.length>100) {
+    } else if (this.resultData.photo != null && this.resultData.photo.length > 100) {
       this.log.error('Length of image URL is too long. Consider using bitly or similar to shorten it');
       this.photoURLBox.nativeElement.focus();
       result = false;
@@ -145,7 +165,7 @@ export class UserDialogComponent implements OnInit {
     {
       let passwordInput = this.resultData.password.trim();
       if (passwordInput == '') {
-        /*if (!this.isEditMode()) {
+        /*if (!this.editMode) {
           this.log.warning('Password must not be blank');
           this.password1Box.nativeElement.focus();
           result = false;
@@ -239,18 +259,103 @@ export class UserDialogComponent implements OnInit {
           (response) => {
             response.password = '';  // blank out password on save
             this.resultData = response;
-            if (this.editMode) {
-              this.saveRegion();
-              this.saveApplicationPolicy();
-            }
+            this.saveRegion();
+            this.saveApplicationPolicy();
+
             this.dialogRef.close(this.resultData);
           },
-          (error) => this.log.error('User details could not be saved. Please try again.')
+          (error) => this.log.error('User details could not be saved. Please try again.\n' + error)
         );
     }
   }
 
   cancel() {
     this.dialogRef.close();
+  }
+
+  private getAvailableRegions() {
+    this.userService.getAvailableRegions()
+      .subscribe(
+        (result) => {
+          this.availableRegions = result;
+        },
+        (error) => {
+          this.log.error('Available regions could not be loaded. Please try again.');
+        }
+      );
+  }
+
+  getAvailableApplicationPolicies() {
+    const vm = this;
+    vm.configurationService.getApplicationPolicies()
+      .subscribe(
+        (result) => {
+          vm.availablePolicies = result;
+        },
+        (error) => {
+          vm.log.error('Available application policies could not be loaded. Please try again.\n' + error);
+        }
+      );
+  }
+
+  getGodModeOrganisations() {
+
+    this.delegationService.getGodModeOrganisations()
+      .subscribe(
+        (result) => {
+          this.delegatedOrganisations = result;
+          this.selectedOrg = this.delegatedOrganisations.find(r => {
+            return r.uuid === this.delegationService.getSelectedOrganisation();
+          });
+          // this.getOrganisationProjects(this.selectedOrg.uuid);
+
+        },
+        (error) => this.log.error('Error loading delegated organisations')
+      );
+  }
+
+  getDelegatedOrganisations() {
+
+    this.delegationService.getDelegatedOrganisations(this.activeProject.organisationId)
+      .subscribe(
+        (result) => {
+          this.delegatedOrganisations = result;
+          this.selectedOrg = this.delegatedOrganisations.find(r => {
+            return r.uuid === this.delegationService.getSelectedOrganisation();
+          });
+          this.getOrganisationProjects(this.selectedOrg.uuid);
+
+        },
+        (error) => this.log.error('Error loading delegated organisations')
+      );
+  }
+
+  getOrganisationProjects(organisationId: string) {
+    let vm = this;
+    vm.organisationService.getProjectsForOrganisation(organisationId)
+      .subscribe(
+        (result) => {
+          vm.organisationProjects = result;
+          vm.checkAvailableProjects()
+        },
+        (error) => vm.log.error('Error loading organisation projects \n' + error)
+      );
+  }
+
+  checkAvailableProjects() {
+    const vm = this;
+    if (vm.resultData.userProjects) {
+      for (let role of vm.resultData.userProjects) {
+        if (!role.deleted && role.organisationId === vm.selectedOrg.uuid) {
+          var roleToDelete = vm.organisationProjects.find(e => e.uuid === role.projectId);
+          if (roleToDelete != null) {
+            let i = vm.organisationProjects.indexOf(roleToDelete);
+            if (i !== -1) {
+              vm.organisationProjects.splice(i, 1);
+            }
+          }
+        }
+      }
+    }
   }
 }

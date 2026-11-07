@@ -3,7 +3,7 @@ import {DelegationData} from "../../d3-delegation/models/DelegationData";
 import {Delegation} from "../../d3-delegation/models/Delegation";
 import {Organisation} from "../../organisation/models/Organisation";
 import {DelegationRelationship} from "../../d3-delegation/models/DelegationRelationship";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {LoggerService, MessageBoxDialogComponent, UserManagerService} from "dds-angular8";
 import {DelegationService} from "../delegation.service";
 import {Router} from "@angular/router";
@@ -12,6 +12,7 @@ import {FlatTreeControl} from "@angular/cdk/tree";
 import {SelectionModel} from "@angular/cdk/collections";
 import {BehaviorSubject} from "rxjs/Rx";
 import {OrganisationPickerComponent} from "../../organisation/organisation-picker/organisation-picker.component";
+import {NewDelegationDialogComponent} from "./NewDelegationDialog.component";
 
 
 /**
@@ -43,9 +44,9 @@ export class DelegationComponent implements OnInit {
   delegationData: DelegationData;
   delegations: Delegation[];
   selectedDelegation: Delegation;
-  selectedOrganisation: DelegationData;
+  selectedOrganisation: DelegationNode;
   selectedOrgs: Organisation[];
-  delegationRelationships : DelegationRelationship[];
+  delegationRelationships: DelegationRelationship[];
   selectedRelationship: DelegationRelationship;
   selectedIsRoot: boolean;
   newDelegation: Delegation;
@@ -54,19 +55,20 @@ export class DelegationComponent implements OnInit {
   public activeProject: UserProject;
   admin = false;
   superUser = false;
+  private oldTreeDescendants: DelegationFlatNode[];
+  private selectedOrganisationNode: DelegationFlatNode;
 
-  constructor(public log:LoggerService,
+  constructor(public log: LoggerService,
               private delegationService: DelegationService,
               private router: Router,
               private userManagerService: UserManagerService,
               public dialog: MatDialog,
               private _database: ChecklistDatabase) {
-
+    this.oldTreeDescendants = [];
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<DelegationFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
     _database.dataChange.subscribe(data => {
       this.dataSource.data = data;
       console.log(data);
@@ -96,8 +98,7 @@ export class DelegationComponent implements OnInit {
     this.getDelegations();
   }
 
-  getDelegationRelationships(delegationId: string){
-
+  getDelegationRelationships(delegationId: string) {
     this.delegationService.getDelegationRelationships(delegationId)
       .subscribe(
         (result) => {
@@ -109,14 +110,35 @@ export class DelegationComponent implements OnInit {
       );
   }
 
-  getDelegationDataD3(delegationId: string){
+  getDelegationDataD3(delegationId: string) {
 
     this.delegationService.getTreeData(delegationId)
       .subscribe(
         (result) => {
           this.root = result;
+          this.treeData.length = 0;
           this.treeData.push(result);
           this._database.initialize(this.treeData);
+          let newDescendants = this.treeControl.getDescendants(this.nestedNodeMap.get(this.treeData[0]));
+          let newUUids = [];
+          let oldUUids = [];
+          if (this.oldTreeDescendants.length > 0 && this.oldTreeDescendants.length < newDescendants.length) {
+            let difference = [];
+            for (let i = 0; i < newDescendants.length; i++) {
+              newUUids.push(newDescendants[i].uuid)
+            }
+            for (let i = 0; i < this.oldTreeDescendants.length; i++) {
+              oldUUids.push(newDescendants[i].uuid)
+            }
+            for (let i = 0; i < newDescendants.length; i++) {
+              if (!oldUUids.includes(newUUids[i])) {
+                difference.push(newDescendants[i]);
+              }
+            }
+            this.todoItemSelectionToggle(difference[0]);
+            this.treeControl.expand(difference[0]);
+
+          }
         },
         (error) => this.log.error('Error loading delegations')
       );
@@ -125,16 +147,44 @@ export class DelegationComponent implements OnInit {
   deleteChildOrganisation() {
 
     console.log(this.checklistSelection.selected);
-    /*if (this.selectedOrganisation == null) {
+    if (this.selectedOrganisation == null) {
       MessageBoxDialogComponent.open(this.dialog, 'Select an organisation', 'You must select an organisation before deleting', 'Ok', '')
         .subscribe(
           (result) => {
-              return}
-      );
+            return
+          }
+        );
     } else {
       this.selectedRelationship.isDeleted = true;
       this.saveRelationship(true);
-    }*/
+    }
+  }
+
+  saveRelationship(deleting: boolean = false) {
+    const vm = this;
+    let message = 'Successfully saved changes to organisation';
+    let title = 'Save organisation';
+    let errorMessage = 'The organisation could not be saved. Please try again.'
+    if (deleting) {
+      message = 'Successfully deleted organisation.';
+      title = 'Delete organisation';
+      errorMessage = 'The organisation could not be deleted. Please try again.';
+    }
+    vm.delegationService.saveRelationship(vm.selectedRelationship, vm.activeProject.id)
+      .subscribe(
+        (result) => {
+          vm.log.success(message);
+          vm.loadDelegation();
+          if (deleting) {
+            this.checklistSelection.selected.length = 0;
+            this.selectedRelationship = null;
+            this.selectedOrganisation = null;
+          } else {
+            this.todoItemSelectionToggle(this.nestedNodeMap.get(this.selectedOrganisation));
+          }
+        },
+        (error) => vm.log.error(errorMessage)
+      );
   }
 
   goToOrganisation() {
@@ -144,7 +194,7 @@ export class DelegationComponent implements OnInit {
 
   getDelegations() {
 
-    this.delegationService.getDelegations(this.superUser ? null :  this.activeProject.organisationId)
+    this.delegationService.getDelegations(this.superUser ? null : this.activeProject.organisationId)
       .subscribe(
         (result) => {
           this.delegations = result;
@@ -162,12 +212,10 @@ export class DelegationComponent implements OnInit {
   }
 
   loadDelegation() {
-
     this.getDelegationRelationships(this.selectedDelegation.uuid);
   }
 
   saveNewRelationship(parentUUID: string, childUUID: string) {
-
     let childRel = new DelegationRelationship();
     childRel.parentUuid = parentUUID;
     childRel.parentType = 0;
@@ -182,6 +230,7 @@ export class DelegationComponent implements OnInit {
       .subscribe(
         (result) => {
           this.log.success('Successfully saved changes')
+          this.loadDelegation();
         },
         (error) => this.log.error('Error saving details')
       );
@@ -212,6 +261,8 @@ export class DelegationComponent implements OnInit {
   getChildren = (node: DelegationNode): DelegationNode[] => node.children;
 
   hasChild = (_: number, _nodeData: DelegationFlatNode) => _nodeData.expandable;
+
+  hasNoChild = (_: number, _nodeData: DelegationFlatNode) => !_nodeData.expandable;
 
   hasNoContent = (_: number, _nodeData: DelegationFlatNode) => _nodeData.name === '';
 
@@ -265,6 +316,20 @@ export class DelegationComponent implements OnInit {
         child.disabled = this.checklistSelection.isSelected(node);
       }
     );
+
+    if (this.checklistSelection.isSelected(node)) {
+      this.selectedOrganisationNode = node;
+      this.selectedOrganisation = this.flatNodeMap.get(node);
+      var result = this.delegationRelationships.find(e => e.childUuid === node.uuid);
+      if (result == null) {
+        result = this.delegationRelationships.find(e => e.parentUuid === node.uuid);
+        this.selectedIsRoot = true;
+      }
+      this.selectedRelationship = result;
+    } else {
+      this.selectedOrganisation = null;
+      this.selectedRelationship = null;
+    }
     this.checkAllParentsSelection(node);
   }
 
@@ -273,8 +338,37 @@ export class DelegationComponent implements OnInit {
     let parent: DelegationFlatNode | null = this.getParentNode(node);
     while (parent) {
       this.checkRootNodeSelection(parent);
+      this.treeControl.expand(parent);
       parent = this.getParentNode(parent);
     }
+  }
+
+  createDelegation() {
+    const dialogRef = this.dialog.open(NewDelegationDialogComponent, {
+      minWidth: '50vw',
+      data: {existing: []}  // fix this
+    })
+    const vm = this;
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      } else {
+        vm.newDelegation = result;
+        vm.saveDelegation();
+      }
+    })
+  }
+
+  saveDelegation() {
+    const vm = this;
+    vm.delegationService.saveDelegation(vm.newDelegation, vm.activeProject.id)
+      .subscribe(
+        (result) => {
+          vm.log.success('Successfully saved changes');
+          vm.getDelegations();
+        },
+        (error) => vm.log.error('Error saving details')
+      );
   }
 
   /** Check root node checked state and change it accordingly */
@@ -291,7 +385,8 @@ export class DelegationComponent implements OnInit {
     }
   }
 
-  /* Get the parent node of a node */
+  /* Get the parent node of a node */;
+
   getParentNode(node: DelegationFlatNode): DelegationFlatNode | null {
     const currentLevel = this.getLevel(node);
 
@@ -314,12 +409,13 @@ export class DelegationComponent implements OnInit {
   /** Select the category so we can insert the new item. */
   addNewItem(node: DelegationFlatNode) {
 
+    this.oldTreeDescendants = this.treeControl.getDescendants(this.nestedNodeMap.get(this.treeData[0]));
     this.selectedOrgs = [];
     const parentNode = this.flatNodeMap.get(node);
     let parent = this.selectedOrganisation;
     const dialogRef = this.dialog.open(OrganisationPickerComponent, {
       minWidth: '50vw',
-      data: { existing: [] }  // fix this
+      data: {existing: []}  // fix this
     })
     dialogRef.afterClosed().subscribe(result => {
       if (!result) {
@@ -338,6 +434,24 @@ export class DelegationComponent implements OnInit {
     const nestedNode = this.flatNodeMap.get(node);
     this._database.updateItem(nestedNode!, itemValue);
   }
+
+  addChildOrganisation() {
+    const dialogRef = this.dialog.open(OrganisationPickerComponent, {
+      minWidth: '50vw',
+      data: {existing: []}  // fix this
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      for (let org of result) {
+        let parentNode = this.flatNodeMap.get(this.selectedOrganisationNode)
+        this._database.insertItem(parentNode!, org.name, org.uuid);
+        this.treeControl.expand(this.selectedOrganisationNode);
+        this.saveNewRelationship(this.selectedOrganisationNode.uuid, org.uuid);
+      }
+    })
+  }
 }
 
 /**
@@ -349,7 +463,9 @@ export class DelegationComponent implements OnInit {
 export class ChecklistDatabase {
   dataChange = new BehaviorSubject<DelegationNode[]>([]);
 
-  get data(): DelegationNode[] { return this.dataChange.value; }
+  get data(): DelegationNode[] {
+    return this.dataChange.value;
+  }
 
   constructor() {
     // this.initialize(TREE_DATA);
@@ -368,7 +484,7 @@ export class ChecklistDatabase {
    * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
    * The return value is the list of `DelegationNode`.
    */
-  buildFileTree(obj: {[key: string]: any}, level: number): DelegationNode[] {
+  buildFileTree(obj: { [key: string]: any }, level: number): DelegationNode[] {
     return Object.keys(obj).reduce<DelegationNode[]>((accumulator, key) => {
       const value = obj[key];
       const node = new DelegationNode();

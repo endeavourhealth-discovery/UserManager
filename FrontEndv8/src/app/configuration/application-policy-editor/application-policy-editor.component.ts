@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {ConfigurationService} from "../configuration.service";
 import {ApplicationPolicy} from "../../models/ApplicationPolicy";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
+import {UserProject} from "dds-angular8/user-manager/models/UserProject";
 import {ApplicationPolicyAttribute} from "../../models/ApplicationPolicyAttribute";
 import {Application} from "../../models/Application";
 import {ApplicationProfile} from "../../models/ApplicationProfile";
